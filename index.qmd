@@ -1,0 +1,3 @@
+# Welcome {.unnumbered}
+
+Lecture notes for NBIC58 (Analysis of Biological Data) at Linköping University, organized into the beginnings of a book. This work is preliminary, so any feedback is much appreciated!

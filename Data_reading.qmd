@@ -1,0 +1,177 @@
+# Reading tabular data from disk {#sec-reading}
+
+## The `tidyverse` package suite
+
+A suite of R packages, sharing the same design philosophy, are collected under the name `tidyverse`. In case this is not yet installed on your computer, type
+
+```{r}
+#| eval: false
+install.packages("tidyverse")
+```
+
+at the R console and press Enter. After making sure that the package is installed, you must load it. This is done via the function call
+
+```{r}
+library(tidyverse)
+```
+
+As you see, eight packages are now loaded, called `ggplot2`, `tibble`, and so on. We will get to know these in more detail throughout the course.
+
+There are actually even more packages that are part of the tidyverse. Typing and executing `tidyverse_packages()` will show all such packages. Of all these options, only eight are loaded by default when invoking `library(tidyverse)`. The others must be loaded separately. For example, `readxl` is a tidyverse package for loading Excel files in R. To use it, execute `library(readxl)`.
+
+In general, it is a good idea to load all necessary packages at the top of your R script. There are two reasons for this. First, once you close RStudio, it forgets the packages, which do not get automatically reloaded after reopening RStudio. Second, often other users will run the scripts you write on their own computers, and they will not be able to do so unless the proper packages are loaded first. It is then helpful to others if the necessary packages are all listed right at the top, showing what is needed to run your program.
+
+
+## Reading tabular data
+
+One of the packages loaded by default with `tidyverse` is called `readr`. This package contains tools for loading data files, and writing them to disk. To see how it works, download the files `Goldberg2010_data.csv`, `Goldberg2010_data.xlsx`, and `Smith2003_data.txt` from Lisam. Then set the working directory in RStudio to the folder where you have saved them (as a reminder, you can do this by executing `setwd(/path/to/files)`, where you should substitute in your own path in place of `/path/to/files`).
+
+### The CSV file format
+
+Goldberg et al. (2010)^[Goldberg, E. E. et al. (2010). Species Selection Maintains Self-Incompatibility. *Science* 330, 493.] collected data on self-incompatibility in the family *Solanaceae* (nightshades). It contains a list of 356 species, along with a flag determining self-incompatibility status (0: self-incompatible; 1: self-compatible; 2-5: more complicated selfing scenarios). The data are in the file `Goldberg2010_data.csv`. This is a so-called *comma-separated value* (CSV) file, meaning that the different columns of the data are separated by commas. One can see this by viewing the file in any simple text editor. For example, this can be done in RStudio itself, by clicking on the file in the **Files** panel in the lower right part of the RStudio window, and then choosing the option "View file" (ignore the other option called "Import dataset..."). Having done this, a new tab opens in your editor panel (upper left region) where you should see something like the following:
+
+```
+Species,Status
+Acnistus_arborescens,1
+Anisodus_tanguticus,1
+Atropa_belladonna,1
+Brachistus_stramonifolius,1
+Brugmansia_aurea,0
+Brugmansia_sanguinea,0
+Capsicum_annuum,1
+Capsicum_baccatum,1
+Capsicum_cardenasii,2
+Capsicum_chacoense,1
+```
+
+And so on. As you can see, the first line (`Species,Status`) is actually an indicator of what the corresponding columns of data will contain: the first column has the species name, and the second one the numerical flag indicating self-compatibility status. The subsequent rows hold the actual data. Notice that the boundary between the columns is always indicated by a comma. This is what gave rise to the name "comma-separated value" (CSV) file.
+
+The above raw format is not yet amenable to processing within R. To make it so, we first need to import the data. For comma-separated value files, there is a convenient function, `read_csv`, that makes this especially simple:^[Warning: there exists a similarly-named function called `read.csv` which is part of base R. It does much the same thing as `read_csv`; however, its use is far clunkier and less flexible. You can think of `read_csv` as a `tidyverse`-provided upgrade to the original `read.csv`. My recommendation is to stick with using just `read_csv`---it is simpler and at the same time more powerful than its predecessor.]
+
+```{r}
+#| message: false
+read_csv("Goldberg2010_data.csv")
+```
+
+(We will interpret the output in the next subsection.) The above line loads the data, but does not save it into a variable. That is perfectly fine in case we immediately start performing operations on it via function composition (we will see many, many examples later on). However, in case we do want to assign the result to a variable, we can do so without problems. For instance, to put the table into the variable `dat`, we simply write:
+
+```{r}
+#| message: false
+dat <- read_csv("Goldberg2010_data.csv")
+```
+
+
+### The `tibble` data structure
+
+Look at the output produced by `read_csv("Goldberg2010_data.csv")` above. You can mostly ignore the top part of that output---it simply provides information on how it interpreted the data it just read in. Instead, the interesting part starts with `A tibble: 356 x 2`. A *tibble* (or *data frame*^[There is a nuance of a difference between a data frame (which is a feature of base R) and a tibble (a `tidyverse` construct). The two are mostly equivalent, but tibbles offer some features that are absent from data frames, and omit certain things which data frames do but are usually not needed. Like with `read_csv` and `read.csv`, tibbles can be thought of as a slightly upgraded and more user-friendly version of data frames. You do not need to be overly concerned with the precise differences between the two; in this course, we will mostly be using tibbles anyway.]) is the R-equivalent of an Excel-style spreadsheets. In this case, it has 356 rows and 2 columns (hence the `356 x 2`). The simplest way to conceive of a tibble is as a collection of vectors, glued together side-by-side to form a table of data. Importantly, although each vector must consist of entries of the same type, as usual (e.g., they can be vectors of numbers, vectors of strings, or vectors of logical values), the different columns need not share types. For example, in the above table, the first column consists of character strings, but the second one consists of numerical values. This can be seen right below the header information. Below `Species`, you can see `<chr>`, which stands for "character string". Below `Status`, we have `<dbl>` which, confusing as it may look at first sight, refers simply to ordinary numbers.^[The abbreviation `<dbl>` happens to stand for [double-precision numerical value](https://en.wikipedia.org/wiki/Double-precision_floating-point_format), a standard way of representing numbers on computers.] In turn, columns comprising of logical values would have the tag `<lgl>` underneath them (in this case though, we don't have such a column). The point is that by looking at the type information below the header, you can see how R has interpreted each of the columns at a glance.
+
+The fact that the individual columns are simply vectors can be made explicit, by relying on the `$`-notation. To access a given column of the table as a vector, we write the name of the table, followed by the `$` symbol, followed by the name of the column in question. For example, we can access the `Status` column from the `dat` table as a vector of numbers like this:
+
+```{r}
+dat$Status
+```
+
+Here `dat$Status` is really just a vector, and can be treated as such. For example, to get the 9th entry of this vector, we can use the usual bracket notation:
+
+```{r}
+dat$Status[9]
+```
+
+The result is an ordinary numerical value.
+
+Finally, let us take one more look at the output again:
+
+```{r}
+print(dat)
+```
+
+When displaying large tibbles, R will not dump all the data at you. Instead, it will display the first 10 rows, with a message indicating how many more rows remain (in our case, we have `...with 346 more rows` written at the end of the printout). The system is still aware of the other rows; it just does not show them. To get a full view of a tibble in a more digestible, spreadsheet-like style, one can use the `view` function. Try running `view(dat)` and see what happens!
+
+### The TSV file format {#sec-tsv}
+
+Another type of file is one where the columns are separated by tabulators instead of commas. These are called *tab-separated value* (TSV) files. An example is provided by the file associated with data from Smith et al. (2003).^[Smith, F. A. et al. (2003). Body mass of late Quaternary mammals. *Ecology* 84:3403-3403.] The authors compiled a database of the body mass of mammals of the late Quaternary period. The data file is `Smith2003_data.txt`. Its rows are the different mammal species; its columns are: the species' native continent; whether the species is still alive or extinct; the order, family, genus, and species names; the base-10 log body mass; the actual body mass (in grams); and numbered references representing research papers which served as the source of the data.
+
+Viewing the TSV file `Smith2003_data.txt` in its raw form begins something like the following:
+
+```
+AF	extant	Artiodactyla	Bovidae	Addax	nasomaculatus	4.85	70000.3	60
+AF	extant	Artiodactyla	Bovidae	Aepyceros	melampus	4.72	52500.1	"63, 70"
+AF	extant	Artiodactyla	Bovidae	Alcelaphus	buselaphus	5.23	171001.5	"63, 70"
+AF	extant	Artiodactyla	Bovidae	Ammodorcas	clarkei	4.45	28049.8	60
+AF	extant	Artiodactyla	Bovidae	Ammotragus	lervia	4.68	48000	75
+AF	extant	Artiodactyla	Bovidae	Antidorcas	marsupialis	4.59	39049.9	60
+AF	extinct	Artiodactyla	Bovidae	Antidorcas	bondi	4.53	34000	1
+AF	extinct	Artiodactyla	Bovidae	Antidorcas	australis	4.6	40000	2
+AF	extant	Artiodactyla	Bovidae	Bos	taurus	5.95	900000	-999
+AF	extant	Artiodactyla	Bovidae	Capra	walie	5	100000	-999
+```
+
+Since the file is tab- and not comma-separated, trying to load it using `read_csv` will not work correctly:
+
+```{r}
+read_csv("Smith2003_data.txt")
+```
+
+As you can see, there is even a warning at the top about "One or more parsing issues", meaning that `read_csv` had a hard time reading in the file. Below the message, you can also see that the attempted read is a mess, with all data in the rows treated as being part of a single column.
+
+Instead, to correctly read TSV files, one should use `read_tsv`:
+
+```{r}
+#| message: false
+read_tsv("Smith2003_data.txt")
+```
+
+This is now a neatly formatted table, with 9 columns as needed.
+
+There is a problem though. This file does not contain a header---a row, which is the first in a data file, specifying the names of the various columns. (Recall that the first row of `Goldberg2010_data.csv` contained not data, but the names of the columns.) Instead, the first row is itself part of the data. To override the default behavior of treating the first row as one of column names, one can use the `col_names = FALSE` option:
+
+```{r}
+#| message: false
+read_tsv("Smith2003_data.txt", col_names = FALSE)
+```
+
+The `col_names` argument is set by default to `TRUE`; in case we wish to override this, we must explicitly change is, just like above.
+
+### Renaming columns {#sec-rename}
+
+While the above works, the column names now default to the moderately informative labels `X1`, `X2`, and so on. Fortunately, columns can be renamed using the `rename` function from the `tidyverse`. This function takes a tibble as its first argument, and a renaming instruction as its second, of the form `new_name = old_name`. For example, to rename the first column (which, as you may remember, refers to the continent of the corresponding mammal):
+
+```{r, message=FALSE}
+smithData <- read_tsv("Smith2003_data.txt", col_names = FALSE)
+rename(smithData, Continent = X1) # Rename column "X1" to "Continent"
+```
+
+As seen, the name of the first column now reads `Continent` instead of `X1`. One can similarly rename other columns as well.
+
+### Excel tables
+
+Finally, although their use is discouraged in science, one should know how to read in data from an Excel spreadsheet. To do this, one needs to load the `readxl` package. This package is part of the `tidyverse`, but does not get automatically loaded when executing `library(tidyverse)`. Therefore, we first load the package:
+
+```{r}
+library(readxl)
+```
+
+We can now load Excel files with the function `read_excel()`. At the start, we downloaded an Excel version of the data from Goldberg et al. (2010), called `Goldberg2010_data.xlsx`. It holds the exact same data as the original CSV file, just saved in Excel format for instructive purposes. Let us load this file:
+
+```{r}
+read_excel("Goldberg2010_data.xlsx")
+```
+
+The functions `read_csv`, `read_tsv`, and `read_excel` have several further options. For example, given an Excel table with multiple sheets, one can specify which one to import, using the `sheet` argument. Check the help pages of these functions, and experiment with their options.
+
+### Writing data to files
+
+Finally, data can not only be read from a file, but also written out to one. Then, instead of `read_csv`, `read_tsv` and the like, one uses `write_csv`, `write_tsv`, and so on. For instance, to save `dat` in CSV form:
+
+```{r}
+#| eval: false
+write_csv(dat, "/path/to/file.csv")
+```
+
+where `/path/to/file.csv` should be replaced by the path and file name with which the data should be saved.
+
+
+## Exercises
+
+1. Load the data from the file `Smith2003_data.txt`. Note that the file is tab-separated and lacks headers!
+2. The columns of this file are, in order: Continent (AF=Africa, etc.), Status (extinct, historical, introduction, or extant), Order, Family, Genus, Species, Base-10 Log Mass, Combined Mass (grams), and Reference (numbers, referring to a numerically ordered list of published works -- no need to worry about the details). Rename each column appropriately, using the `rename()` function.

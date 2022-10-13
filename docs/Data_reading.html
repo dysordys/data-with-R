@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to data analysis and visualization with R - 3&nbsp; Reading tabular data from disk</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./Basic_data_wrangling.html" rel="next">
+<link href="./R_programming_basics.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Reading tabular data from disk</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to data analysis and visualization with R</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Intro_R_RStudio.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to R and RStudio</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R_programming_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R programming basics</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Data_reading.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Reading tabular data from disk</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Basic_data_wrangling.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Basic data manipulation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and data normalization</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Creating_figures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Creating publication-grade figures</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Further_plotting_options.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Some further plotting options</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Joining_data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Joining data</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-tidyverse-package-suite" id="toc-the-tidyverse-package-suite" class="nav-link active" data-scroll-target="#the-tidyverse-package-suite"> <span class="header-section-number">3.1</span> The <code>tidyverse</code> package suite</a></li>
+  <li><a href="#reading-tabular-data" id="toc-reading-tabular-data" class="nav-link" data-scroll-target="#reading-tabular-data"> <span class="header-section-number">3.2</span> Reading tabular data</a>
+  <ul class="collapse">
+  <li><a href="#the-csv-file-format" id="toc-the-csv-file-format" class="nav-link" data-scroll-target="#the-csv-file-format"> <span class="header-section-number">3.2.1</span> The CSV file format</a></li>
+  <li><a href="#the-tibble-data-structure" id="toc-the-tibble-data-structure" class="nav-link" data-scroll-target="#the-tibble-data-structure"> <span class="header-section-number">3.2.2</span> The <code>tibble</code> data structure</a></li>
+  <li><a href="#sec-tsv" id="toc-sec-tsv" class="nav-link" data-scroll-target="#sec-tsv"> <span class="header-section-number">3.2.3</span> The TSV file format</a></li>
+  <li><a href="#sec-rename" id="toc-sec-rename" class="nav-link" data-scroll-target="#sec-rename"> <span class="header-section-number">3.2.4</span> Renaming columns</a></li>
+  <li><a href="#excel-tables" id="toc-excel-tables" class="nav-link" data-scroll-target="#excel-tables"> <span class="header-section-number">3.2.5</span> Excel tables</a></li>
+  <li><a href="#writing-data-to-files" id="toc-writing-data-to-files" class="nav-link" data-scroll-target="#writing-data-to-files"> <span class="header-section-number">3.2.6</span> Writing data to files</a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"> <span class="header-section-number">3.3</span> Exercises</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-reading" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Reading tabular data from disk</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="the-tidyverse-package-suite" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="the-tidyverse-package-suite"><span class="header-section-number">3.1</span> The <code>tidyverse</code> package suite</h2>
+<p>A suite of R packages, sharing the same design philosophy, are collected under the name <code>tidyverse</code>. In case this is not yet installed on your computer, type</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>at the R console and press Enter. After making sure that the package is installed, you must load it. This is done via the function call</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+✓ tibble  3.1.6     ✓ dplyr   1.0.8
+✓ tidyr   1.2.0     ✓ stringr 1.4.0
+✓ readr   2.1.2     ✓ forcats 0.5.1</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()</code></pre>
+</div>
+</div>
+<p>As you see, eight packages are now loaded, called <code>ggplot2</code>, <code>tibble</code>, and so on. We will get to know these in more detail throughout the course.</p>
+<p>There are actually even more packages that are part of the tidyverse. Typing and executing <code>tidyverse_packages()</code> will show all such packages. Of all these options, only eight are loaded by default when invoking <code>library(tidyverse)</code>. The others must be loaded separately. For example, <code>readxl</code> is a tidyverse package for loading Excel files in R. To use it, execute <code>library(readxl)</code>.</p>
+<p>In general, it is a good idea to load all necessary packages at the top of your R script. There are two reasons for this. First, once you close RStudio, it forgets the packages, which do not get automatically reloaded after reopening RStudio. Second, often other users will run the scripts you write on their own computers, and they will not be able to do so unless the proper packages are loaded first. It is then helpful to others if the necessary packages are all listed right at the top, showing what is needed to run your program.</p>
+</section>
+<section id="reading-tabular-data" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="reading-tabular-data"><span class="header-section-number">3.2</span> Reading tabular data</h2>
+<p>One of the packages loaded by default with <code>tidyverse</code> is called <code>readr</code>. This package contains tools for loading data files, and writing them to disk. To see how it works, download the files <code>Goldberg2010_data.csv</code>, <code>Goldberg2010_data.xlsx</code>, and <code>Smith2003_data.txt</code> from Lisam. Then set the working directory in RStudio to the folder where you have saved them (as a reminder, you can do this by executing <code>setwd(/path/to/files)</code>, where you should substitute in your own path in place of <code>/path/to/files</code>).</p>
+<section id="the-csv-file-format" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="the-csv-file-format"><span class="header-section-number">3.2.1</span> The CSV file format</h3>
+<p>Goldberg et al.&nbsp;(2010)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> collected data on self-incompatibility in the family <em>Solanaceae</em> (nightshades). It contains a list of 356 species, along with a flag determining self-incompatibility status (0: self-incompatible; 1: self-compatible; 2-5: more complicated selfing scenarios). The data are in the file <code>Goldberg2010_data.csv</code>. This is a so-called <em>comma-separated value</em> (CSV) file, meaning that the different columns of the data are separated by commas. One can see this by viewing the file in any simple text editor. For example, this can be done in RStudio itself, by clicking on the file in the <strong>Files</strong> panel in the lower right part of the RStudio window, and then choosing the option “View file” (ignore the other option called “Import dataset…”). Having done this, a new tab opens in your editor panel (upper left region) where you should see something like the following:</p>
+<pre><code>Species,Status
+Acnistus_arborescens,1
+Anisodus_tanguticus,1
+Atropa_belladonna,1
+Brachistus_stramonifolius,1
+Brugmansia_aurea,0
+Brugmansia_sanguinea,0
+Capsicum_annuum,1
+Capsicum_baccatum,1
+Capsicum_cardenasii,2
+Capsicum_chacoense,1</code></pre>
+<p>And so on. As you can see, the first line (<code>Species,Status</code>) is actually an indicator of what the corresponding columns of data will contain: the first column has the species name, and the second one the numerical flag indicating self-compatibility status. The subsequent rows hold the actual data. Notice that the boundary between the columns is always indicated by a comma. This is what gave rise to the name “comma-separated value” (CSV) file.</p>
+<p>The above raw format is not yet amenable to processing within R. To make it so, we first need to import the data. For comma-separated value files, there is a convenient function, <code>read_csv</code>, that makes this especially simple:<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">"Goldberg2010_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 356 × 2
+   Species                   Status
+   &lt;chr&gt;                      &lt;dbl&gt;
+ 1 Acnistus_arborescens           1
+ 2 Anisodus_tanguticus            1
+ 3 Atropa_belladonna              1
+ 4 Brachistus_stramonifolius      1
+ 5 Brugmansia_aurea               0
+ 6 Brugmansia_sanguinea           0
+ 7 Capsicum_annuum                1
+ 8 Capsicum_baccatum              1
+ 9 Capsicum_cardenasii            2
+10 Capsicum_chacoense             1
+# … with 346 more rows</code></pre>
+</div>
+</div>
+<p>(We will interpret the output in the next subsection.) The above line loads the data, but does not save it into a variable. That is perfectly fine in case we immediately start performing operations on it via function composition (we will see many, many examples later on). However, in case we do want to assign the result to a variable, we can do so without problems. For instance, to put the table into the variable <code>dat</code>, we simply write:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Goldberg2010_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="the-tibble-data-structure" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="the-tibble-data-structure"><span class="header-section-number">3.2.2</span> The <code>tibble</code> data structure</h3>
+<p>Look at the output produced by <code>read_csv("Goldberg2010_data.csv")</code> above. You can mostly ignore the top part of that output—it simply provides information on how it interpreted the data it just read in. Instead, the interesting part starts with <code>A tibble: 356 x 2</code>. A <em>tibble</em> (or <em>data frame</em><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>) is the R-equivalent of an Excel-style spreadsheets. In this case, it has 356 rows and 2 columns (hence the <code>356 x 2</code>). The simplest way to conceive of a tibble is as a collection of vectors, glued together side-by-side to form a table of data. Importantly, although each vector must consist of entries of the same type, as usual (e.g., they can be vectors of numbers, vectors of strings, or vectors of logical values), the different columns need not share types. For example, in the above table, the first column consists of character strings, but the second one consists of numerical values. This can be seen right below the header information. Below <code>Species</code>, you can see <code>&lt;chr&gt;</code>, which stands for “character string”. Below <code>Status</code>, we have <code>&lt;dbl&gt;</code> which, confusing as it may look at first sight, refers simply to ordinary numbers.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> In turn, columns comprising of logical values would have the tag <code>&lt;lgl&gt;</code> underneath them (in this case though, we don’t have such a column). The point is that by looking at the type information below the header, you can see how R has interpreted each of the columns at a glance.</p>
+<p>The fact that the individual columns are simply vectors can be made explicit, by relying on the <code>$</code>-notation. To access a given column of the table as a vector, we write the name of the table, followed by the <code>$</code> symbol, followed by the name of the column in question. For example, we can access the <code>Status</code> column from the <code>dat</code> table as a vector of numbers like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>Status</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] 1 1 1 1 0 0 1 1 2 1 1 1 1 1 1 1 1 2 1 1 1 1 0 0 1 1 1 1 0 4 0 0 0 1 1 1 0
+ [38] 0 0 0 0 1 1 1 1 1 1 0 0 0 0 4 0 3 0 0 4 0 4 4 0 4 1 0 0 0 4 4 4 0 1 1 0 1
+ [75] 1 1 1 0 0 1 1 1 1 1 1 1 0 1 2 1 1 1 1 1 1 2 1 1 1 1 1 0 1 1 1 1 1 0 1 1 1
+[112] 1 1 1 1 1 1 1 1 0 1 1 1 1 1 0 0 0 1 2 0 0 2 0 0 0 1 0 0 1 1 0 0 1 1 0 0 0
+[149] 1 1 1 1 1 1 1 1 1 1 1 1 1 4 1 4 1 1 0 0 1 0 0 0 1 1 1 1 1 0 4 0 4 0 1 2 0
+[186] 1 0 1 0 1 1 0 1 1 0 0 1 0 1 0 4 4 1 1 1 4 0 0 0 0 1 1 0 1 1 0 0 1 2 1 1 0
+[223] 1 2 0 0 1 1 1 1 1 1 0 0 1 1 0 0 0 1 1 0 0 4 0 1 1 1 1 0 0 1 1 1 1 0 1 1 0
+[260] 1 0 1 1 2 1 1 1 1 0 0 0 1 2 1 0 0 1 1 4 1 0 2 0 4 1 1 0 0 0 1 2 4 1 1 1 1
+[297] 1 1 1 1 1 1 1 0 2 0 1 1 0 2 0 0 0 1 0 1 1 0 1 0 0 1 1 0 1 1 1 1 1 1 1 2 4
+[334] 0 4 0 1 1 1 1 1 0 1 1 5 4 4 1 4 1 0 0 0 0 0 2</code></pre>
+</div>
+</div>
+<p>Here <code>dat$Status</code> is really just a vector, and can be treated as such. For example, to get the 9th entry of this vector, we can use the usual bracket notation:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>Status[<span class="dv">9</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+</div>
+<p>The result is an ordinary numerical value.</p>
+<p>Finally, let us take one more look at the output again:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 356 × 2
+   Species                   Status
+   &lt;chr&gt;                      &lt;dbl&gt;
+ 1 Acnistus_arborescens           1
+ 2 Anisodus_tanguticus            1
+ 3 Atropa_belladonna              1
+ 4 Brachistus_stramonifolius      1
+ 5 Brugmansia_aurea               0
+ 6 Brugmansia_sanguinea           0
+ 7 Capsicum_annuum                1
+ 8 Capsicum_baccatum              1
+ 9 Capsicum_cardenasii            2
+10 Capsicum_chacoense             1
+# … with 346 more rows</code></pre>
+</div>
+</div>
+<p>When displaying large tibbles, R will not dump all the data at you. Instead, it will display the first 10 rows, with a message indicating how many more rows remain (in our case, we have <code>...with 346 more rows</code> written at the end of the printout). The system is still aware of the other rows; it just does not show them. To get a full view of a tibble in a more digestible, spreadsheet-like style, one can use the <code>view</code> function. Try running <code>view(dat)</code> and see what happens!</p>
+</section>
+<section id="sec-tsv" class="level3" data-number="3.2.3">
+<h3 data-number="3.2.3" class="anchored" data-anchor-id="sec-tsv"><span class="header-section-number">3.2.3</span> The TSV file format</h3>
+<p>Another type of file is one where the columns are separated by tabulators instead of commas. These are called <em>tab-separated value</em> (TSV) files. An example is provided by the file associated with data from Smith et al.&nbsp;(2003).<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> The authors compiled a database of the body mass of mammals of the late Quaternary period. The data file is <code>Smith2003_data.txt</code>. Its rows are the different mammal species; its columns are: the species’ native continent; whether the species is still alive or extinct; the order, family, genus, and species names; the base-10 log body mass; the actual body mass (in grams); and numbered references representing research papers which served as the source of the data.</p>
+<p>Viewing the TSV file <code>Smith2003_data.txt</code> in its raw form begins something like the following:</p>
+<pre><code>AF  extant  Artiodactyla    Bovidae Addax   nasomaculatus   4.85    70000.3 60
+AF  extant  Artiodactyla    Bovidae Aepyceros   melampus    4.72    52500.1 "63, 70"
+AF  extant  Artiodactyla    Bovidae Alcelaphus  buselaphus  5.23    171001.5    "63, 70"
+AF  extant  Artiodactyla    Bovidae Ammodorcas  clarkei 4.45    28049.8 60
+AF  extant  Artiodactyla    Bovidae Ammotragus  lervia  4.68    48000   75
+AF  extant  Artiodactyla    Bovidae Antidorcas  marsupialis 4.59    39049.9 60
+AF  extinct Artiodactyla    Bovidae Antidorcas  bondi   4.53    34000   1
+AF  extinct Artiodactyla    Bovidae Antidorcas  australis   4.6 40000   2
+AF  extant  Artiodactyla    Bovidae Bos taurus  5.95    900000  -999
+AF  extant  Artiodactyla    Bovidae Capra   walie   5   100000  -999</code></pre>
+<p>Since the file is tab- and not comma-separated, trying to load it using <code>read_csv</code> will not work correctly:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">"Smith2003_data.txt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: One or more parsing issues, see `problems()` for details</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 5730 Columns: 1
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (1): AF extant  Artiodactyla    Bovidae Addax   nasomaculatus   4.85    70000.3 60
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5,730 × 1
+   `AF\textant\tArtiodactyla\tBovidae\tAddax\tnasomaculatus\t4.85\t70000.3\t60` 
+   &lt;chr&gt;                                                                        
+ 1 "AF\textant\tArtiodactyla\tBovidae\tAepyceros\tmelampus\t4.72\t52500.1\t\"63…
+ 2 "AF\textant\tArtiodactyla\tBovidae\tAlcelaphus\tbuselaphus\t5.23\t171001.5\t…
+ 3 "AF\textant\tArtiodactyla\tBovidae\tAmmodorcas\tclarkei\t4.45\t28049.8\t60"  
+ 4 "AF\textant\tArtiodactyla\tBovidae\tAmmotragus\tlervia\t4.68\t48000\t75"     
+ 5 "AF\textant\tArtiodactyla\tBovidae\tAntidorcas\tmarsupialis\t4.59\t39049.9\t…
+ 6 "AF\textinct\tArtiodactyla\tBovidae\tAntidorcas\tbondi\t4.53\t34000\t1"      
+ 7 "AF\textinct\tArtiodactyla\tBovidae\tAntidorcas\taustralis\t4.6\t40000\t2"   
+ 8 "AF\textant\tArtiodactyla\tBovidae\tBos\ttaurus\t5.95\t900000\t-999"         
+ 9 "AF\textant\tArtiodactyla\tBovidae\tCapra\twalie\t5\t100000\t-999"           
+10 "AF\textant\tArtiodactyla\tBovidae\tCapra\tibex\t5\t100999.7\t65"            
+# … with 5,720 more rows</code></pre>
+</div>
+</div>
+<p>As you can see, there is even a warning at the top about “One or more parsing issues”, meaning that <code>read_csv</code> had a hard time reading in the file. Below the message, you can also see that the attempted read is a mess, with all data in the rows treated as being part of a single column.</p>
+<p>Instead, to correctly read TSV files, one should use <code>read_tsv</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="st">"Smith2003_data.txt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5,730 × 9
+   AF    extant  Artiodactyla Bovidae Addax nasomaculatus `4.85` `70000.3` `60` 
+   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;
+ 1 AF    extant  Artiodactyla Bovidae Aepy… melampus        4.72    52500. 63, …
+ 2 AF    extant  Artiodactyla Bovidae Alce… buselaphus      5.23   171002. 63, …
+ 3 AF    extant  Artiodactyla Bovidae Ammo… clarkei         4.45    28050. 60   
+ 4 AF    extant  Artiodactyla Bovidae Ammo… lervia          4.68    48000  75   
+ 5 AF    extant  Artiodactyla Bovidae Anti… marsupialis     4.59    39050. 60   
+ 6 AF    extinct Artiodactyla Bovidae Anti… bondi           4.53    34000  1    
+ 7 AF    extinct Artiodactyla Bovidae Anti… australis       4.6     40000  2    
+ 8 AF    extant  Artiodactyla Bovidae Bos   taurus          5.95   900000  -999 
+ 9 AF    extant  Artiodactyla Bovidae Capra walie           5      100000  -999 
+10 AF    extant  Artiodactyla Bovidae Capra ibex            5      101000. 65   
+# … with 5,720 more rows</code></pre>
+</div>
+</div>
+<p>This is now a neatly formatted table, with 9 columns as needed.</p>
+<p>There is a problem though. This file does not contain a header—a row, which is the first in a data file, specifying the names of the various columns. (Recall that the first row of <code>Goldberg2010_data.csv</code> contained not data, but the names of the columns.) Instead, the first row is itself part of the data. To override the default behavior of treating the first row as one of column names, one can use the <code>col_names = FALSE</code> option:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="st">"Smith2003_data.txt"</span>, <span class="at">col_names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5,731 × 9
+   X1    X2      X3           X4      X5         X6              X7     X8 X9   
+   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;        &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;
+ 1 AF    extant  Artiodactyla Bovidae Addax      nasomaculat…  4.85 7.00e4 60   
+ 2 AF    extant  Artiodactyla Bovidae Aepyceros  melampus      4.72 5.25e4 63, …
+ 3 AF    extant  Artiodactyla Bovidae Alcelaphus buselaphus    5.23 1.71e5 63, …
+ 4 AF    extant  Artiodactyla Bovidae Ammodorcas clarkei       4.45 2.80e4 60   
+ 5 AF    extant  Artiodactyla Bovidae Ammotragus lervia        4.68 4.8 e4 75   
+ 6 AF    extant  Artiodactyla Bovidae Antidorcas marsupialis   4.59 3.90e4 60   
+ 7 AF    extinct Artiodactyla Bovidae Antidorcas bondi         4.53 3.4 e4 1    
+ 8 AF    extinct Artiodactyla Bovidae Antidorcas australis     4.6  4   e4 2    
+ 9 AF    extant  Artiodactyla Bovidae Bos        taurus        5.95 9   e5 -999 
+10 AF    extant  Artiodactyla Bovidae Capra      walie         5    1   e5 -999 
+# … with 5,721 more rows</code></pre>
+</div>
+</div>
+<p>The <code>col_names</code> argument is set by default to <code>TRUE</code>; in case we wish to override this, we must explicitly change is, just like above.</p>
+</section>
+<section id="sec-rename" class="level3" data-number="3.2.4">
+<h3 data-number="3.2.4" class="anchored" data-anchor-id="sec-rename"><span class="header-section-number">3.2.4</span> Renaming columns</h3>
+<p>While the above works, the column names now default to the moderately informative labels <code>X1</code>, <code>X2</code>, and so on. Fortunately, columns can be renamed using the <code>rename</code> function from the <code>tidyverse</code>. This function takes a tibble as its first argument, and a renaming instruction as its second, of the form <code>new_name = old_name</code>. For example, to rename the first column (which, as you may remember, refers to the continent of the corresponding mammal):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>smithData <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"Smith2003_data.txt"</span>, <span class="at">col_names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rename</span>(smithData, <span class="at">Continent =</span> X1) <span class="co"># Rename column "X1" to "Continent"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5,731 × 9
+   Continent X2      X3           X4      X5         X6          X7     X8 X9   
+   &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;
+ 1 AF        extant  Artiodactyla Bovidae Addax      nasomac…  4.85 7.00e4 60   
+ 2 AF        extant  Artiodactyla Bovidae Aepyceros  melampus  4.72 5.25e4 63, …
+ 3 AF        extant  Artiodactyla Bovidae Alcelaphus buselap…  5.23 1.71e5 63, …
+ 4 AF        extant  Artiodactyla Bovidae Ammodorcas clarkei   4.45 2.80e4 60   
+ 5 AF        extant  Artiodactyla Bovidae Ammotragus lervia    4.68 4.8 e4 75   
+ 6 AF        extant  Artiodactyla Bovidae Antidorcas marsupi…  4.59 3.90e4 60   
+ 7 AF        extinct Artiodactyla Bovidae Antidorcas bondi     4.53 3.4 e4 1    
+ 8 AF        extinct Artiodactyla Bovidae Antidorcas austral…  4.6  4   e4 2    
+ 9 AF        extant  Artiodactyla Bovidae Bos        taurus    5.95 9   e5 -999 
+10 AF        extant  Artiodactyla Bovidae Capra      walie     5    1   e5 -999 
+# … with 5,721 more rows</code></pre>
+</div>
+</div>
+<p>As seen, the name of the first column now reads <code>Continent</code> instead of <code>X1</code>. One can similarly rename other columns as well.</p>
+</section>
+<section id="excel-tables" class="level3" data-number="3.2.5">
+<h3 data-number="3.2.5" class="anchored" data-anchor-id="excel-tables"><span class="header-section-number">3.2.5</span> Excel tables</h3>
+<p>Finally, although their use is discouraged in science, one should know how to read in data from an Excel spreadsheet. To do this, one needs to load the <code>readxl</code> package. This package is part of the <code>tidyverse</code>, but does not get automatically loaded when executing <code>library(tidyverse)</code>. Therefore, we first load the package:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can now load Excel files with the function <code>read_excel()</code>. At the start, we downloaded an Excel version of the data from Goldberg et al.&nbsp;(2010), called <code>Goldberg2010_data.xlsx</code>. It holds the exact same data as the original CSV file, just saved in Excel format for instructive purposes. Let us load this file:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_excel</span>(<span class="st">"Goldberg2010_data.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 356 × 2
+   Species                   Status
+   &lt;chr&gt;                      &lt;dbl&gt;
+ 1 Acnistus_arborescens           1
+ 2 Anisodus_tanguticus            1
+ 3 Atropa_belladonna              1
+ 4 Brachistus_stramonifolius      1
+ 5 Brugmansia_aurea               0
+ 6 Brugmansia_sanguinea           0
+ 7 Capsicum_annuum                1
+ 8 Capsicum_baccatum              1
+ 9 Capsicum_cardenasii            2
+10 Capsicum_chacoense             1
+# … with 346 more rows</code></pre>
+</div>
+</div>
+<p>The functions <code>read_csv</code>, <code>read_tsv</code>, and <code>read_excel</code> have several further options. For example, given an Excel table with multiple sheets, one can specify which one to import, using the <code>sheet</code> argument. Check the help pages of these functions, and experiment with their options.</p>
+</section>
+<section id="writing-data-to-files" class="level3" data-number="3.2.6">
+<h3 data-number="3.2.6" class="anchored" data-anchor-id="writing-data-to-files"><span class="header-section-number">3.2.6</span> Writing data to files</h3>
+<p>Finally, data can not only be read from a file, but also written out to one. Then, instead of <code>read_csv</code>, <code>read_tsv</code> and the like, one uses <code>write_csv</code>, <code>write_tsv</code>, and so on. For instance, to save <code>dat</code> in CSV form:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(dat, <span class="st">"/path/to/file.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>where <code>/path/to/file.csv</code> should be replaced by the path and file name with which the data should be saved.</p>
+</section>
+</section>
+<section id="exercises" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="exercises"><span class="header-section-number">3.3</span> Exercises</h2>
+<ol type="1">
+<li>Load the data from the file <code>Smith2003_data.txt</code>. Note that the file is tab-separated and lacks headers!</li>
+<li>The columns of this file are, in order: Continent (AF=Africa, etc.), Status (extinct, historical, introduction, or extant), Order, Family, Genus, Species, Base-10 Log Mass, Combined Mass (grams), and Reference (numbers, referring to a numerically ordered list of published works – no need to worry about the details). Rename each column appropriately, using the <code>rename()</code> function.</li>
+</ol>
+
+
+</section>
+<section class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1" role="doc-endnote"><p>Goldberg, E. E. et al.&nbsp;(2010). Species Selection Maintains Self-Incompatibility. <em>Science</em> 330, 493.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>Warning: there exists a similarly-named function called <code>read.csv</code> which is part of base R. It does much the same thing as <code>read_csv</code>; however, its use is far clunkier and less flexible. You can think of <code>read_csv</code> as a <code>tidyverse</code>-provided upgrade to the original <code>read.csv</code>. My recommendation is to stick with using just <code>read_csv</code>—it is simpler and at the same time more powerful than its predecessor.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>There is a nuance of a difference between a data frame (which is a feature of base R) and a tibble (a <code>tidyverse</code> construct). The two are mostly equivalent, but tibbles offer some features that are absent from data frames, and omit certain things which data frames do but are usually not needed. Like with <code>read_csv</code> and <code>read.csv</code>, tibbles can be thought of as a slightly upgraded and more user-friendly version of data frames. You do not need to be overly concerned with the precise differences between the two; in this course, we will mostly be using tibbles anyway.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4" role="doc-endnote"><p>The abbreviation <code>&lt;dbl&gt;</code> happens to stand for <a href="https://en.wikipedia.org/wiki/Double-precision_floating-point_format">double-precision numerical value</a>, a standard way of representing numbers on computers.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5" role="doc-endnote"><p>Smith, F. A. et al.&nbsp;(2003). Body mass of late Quaternary mammals. <em>Ecology</em> 84:3403-3403.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./R_programming_basics.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R programming basics</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./Basic_data_wrangling.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Basic data manipulation</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

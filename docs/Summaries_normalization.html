@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to data analysis and visualization with R - 5&nbsp; Summary statistics and data normalization</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./Creating_figures.html" rel="next">
+<link href="./Basic_data_wrangling.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and data normalization</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to data analysis and visualization with R</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Intro_R_RStudio.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to R and RStudio</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R_programming_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R programming basics</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Data_reading.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Reading tabular data from disk</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Basic_data_wrangling.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Basic data manipulation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and data normalization</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Creating_figures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Creating publication-grade figures</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Further_plotting_options.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Some further plotting options</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Joining_data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Joining data</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#creating-summary-data" id="toc-creating-summary-data" class="nav-link active" data-scroll-target="#creating-summary-data"> <span class="header-section-number">5.1</span> Creating summary data</a></li>
+  <li><a href="#data-normalization" id="toc-data-normalization" class="nav-link" data-scroll-target="#data-normalization"> <span class="header-section-number">5.2</span> Data normalization</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"> <span class="header-section-number">5.3</span> Exercises</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-normalization" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and data normalization</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>Last time we learned the basics of reading writing, and manipulating data. To review, download <code>pop_data.csv</code> from Lisam and set your working directory to the folder where you saved it. This is a comma-separated file (CSV), so you can load it using <code>read_csv</code>. As usual, we first load the <code>tidyverse</code> package:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And now we may use the <code>tidyverse</code> functionalities, such as <code>read_csv</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"pop_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The data we just loaded contain population densities of three species at two spatial patches (A and B) at various points in time, ranging from 1 to 50 in steps of 1:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pop</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 100 × 5
+    time patch species1 species2 species3
+   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1     1 A         8.43     6.62    10.1 
+ 2     1 B        10.1      3.28     6.27
+ 3     2 A         7.76     6.93    10.3 
+ 4     2 B        10.1      3.04     6.07
+ 5     3 A         7.09     7.24    10.5 
+ 6     3 B        10.1      2.8      5.82
+ 7     4 A         6.49     7.54    10.6 
+ 8     4 B        10.1      2.56     5.57
+ 9     5 A         5.99     7.83    10.7 
+10     5 B        10.1      2.33     5.32
+# … with 90 more rows</code></pre>
+</div>
+</div>
+<p>One can now perform various manipulations on these data, by using the functions <code>rename</code>, <code>select</code>, <code>filter</code>, <code>arrange</code>, and <code>mutate</code> we have learned about in <a href="Basic_data_wrangling.html"><span>Chapter&nbsp;4</span></a>. For instance, we could create a new column called <code>total</code> which contains the total community density (sum of the three species’ population densities) at each point in time and each location:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(pop, <span class="at">total =</span> species1 <span class="sc">+</span> species2 <span class="sc">+</span> species3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 100 × 6
+    time patch species1 species2 species3 total
+   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 A         8.43     6.62    10.1   25.1
+ 2     1 B        10.1      3.28     6.27  19.7
+ 3     2 A         7.76     6.93    10.3   25  
+ 4     2 B        10.1      3.04     6.07  19.2
+ 5     3 A         7.09     7.24    10.5   24.8
+ 6     3 B        10.1      2.8      5.82  18.7
+ 7     4 A         6.49     7.54    10.6   24.7
+ 8     4 B        10.1      2.56     5.57  18.2
+ 9     5 A         5.99     7.83    10.7   24.5
+10     5 B        10.1      2.33     5.32  17.8
+# … with 90 more rows</code></pre>
+</div>
+</div>
+<p>As a reminder, this can be written equivalently, using pipes:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">total =</span> species1 <span class="sc">+</span> species2 <span class="sc">+</span> species3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 100 × 6
+    time patch species1 species2 species3 total
+   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 A         8.43     6.62    10.1   25.1
+ 2     1 B        10.1      3.28     6.27  19.7
+ 3     2 A         7.76     6.93    10.3   25  
+ 4     2 B        10.1      3.04     6.07  19.2
+ 5     3 A         7.09     7.24    10.5   24.8
+ 6     3 B        10.1      2.8      5.82  18.7
+ 7     4 A         6.49     7.54    10.6   24.7
+ 8     4 B        10.1      2.56     5.57  18.2
+ 9     5 A         5.99     7.83    10.7   24.5
+10     5 B        10.1      2.33     5.32  17.8
+# … with 90 more rows</code></pre>
+</div>
+</div>
+<section id="creating-summary-data" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="creating-summary-data"><span class="header-section-number">5.1</span> Creating summary data</h2>
+<p>One can create summaries of data using the <code>summarise</code> function. This will simply apply some function to a column. For example, to calculate the average population density of species 1 in <code>pop</code>, across both time and patches, one can write</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  meanDensity1
+         &lt;dbl&gt;
+1         5.30</code></pre>
+</div>
+</div>
+<p>Here <code>meanDensity1</code> is the name of the new column to be created, and the <code>mean</code> function is our summary function, collapsing the data into a single number.</p>
+<p>So far, this is not particularly interesting; in fact, the exact same effect would have been achieved by typing the shorter <code>mean(pop$species1)</code> instead. The real power of <code>summarise</code> comes through when combined with <code>group_by</code>. This groups the data based on the given grouping variables. Let us see how this works in practice:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(patch)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 100 × 5
+# Groups:   patch [2]
+    time patch species1 species2 species3
+   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1     1 A         8.43     6.62    10.1 
+ 2     1 B        10.1      3.28     6.27
+ 3     2 A         7.76     6.93    10.3 
+ 4     2 B        10.1      3.04     6.07
+ 5     3 A         7.09     7.24    10.5 
+ 6     3 B        10.1      2.8      5.82
+ 7     4 A         6.49     7.54    10.6 
+ 8     4 B        10.1      2.56     5.57
+ 9     5 A         5.99     7.83    10.7 
+10     5 B        10.1      2.33     5.32
+# … with 90 more rows</code></pre>
+</div>
+</div>
+<p>Seemingly nothing has happened; the only difference is the extra line of comment above, before the printed table, saying <code>Groups: patch [2]</code>. What this means is that the rows of the data were internally split into two groups. The first have <code>"A"</code> as their patch, and the second have <code>"B"</code>. Whenever one groups data using <code>group_by</code>, rows which share the same unique combination of the grouping variables now belong together, and <em>subsequent</em> operations will act separately on each group instead of acting on the table as a whole (which is what we have been doing so far). That is, <code>group_by</code> does not actually alter the data; it only alters the behaviour of the functions applied to the grouped data.</p>
+<p>If we group not just by <code>patch</code> but also by <code>time</code>, the comment above the table will read <code>Groups: patch, time [100]</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(patch, time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 100 × 5
+# Groups:   patch, time [100]
+    time patch species1 species2 species3
+   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1     1 A         8.43     6.62    10.1 
+ 2     1 B        10.1      3.28     6.27
+ 3     2 A         7.76     6.93    10.3 
+ 4     2 B        10.1      3.04     6.07
+ 5     3 A         7.09     7.24    10.5 
+ 6     3 B        10.1      2.8      5.82
+ 7     4 A         6.49     7.54    10.6 
+ 8     4 B        10.1      2.56     5.57
+ 9     5 A         5.99     7.83    10.7 
+10     5 B        10.1      2.33     5.32
+# … with 90 more rows</code></pre>
+</div>
+</div>
+<p>This is because there are 100 unique combinations of patch and time: two different <code>patch</code> values (<code>"A"</code> and <code>"B"</code>), and fifty points in time (1, 2, …, 50). So we have “patch A, time 1” as group 1, “patch B, time 1” as group 2, “patch A, time 3” as group 3, and so on until “patch B, time 50” as our group 100.</p>
+<p>As mentioned, functions that are applied to grouped data will act on the groups separately. To return to the example of calculating the mean population density of species 1 in the two patches, we can write:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  patch meanDensity1
+  &lt;chr&gt;        &lt;dbl&gt;
+1 A             5.29
+2 B             5.32</code></pre>
+</div>
+</div>
+<p>One may obtain multiple summary statistics within the same <code>summarize</code> function. Below we compute both the mean and the standard deviation of the densities per patch:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch) <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1), <span class="at">sdDensity1 =</span> <span class="fu">sd</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  patch meanDensity1 sdDensity1
+  &lt;chr&gt;        &lt;dbl&gt;      &lt;dbl&gt;
+1 A             5.29      0.833
+2 B             5.32      3.81 </code></pre>
+</div>
+</div>
+<p>Let us see what happens if we calculate the mean density of species 1—but grouping by <code>time</code> instead of <code>patch</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(time) <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 50 × 2
+    time meanDensity1
+   &lt;dbl&gt;        &lt;dbl&gt;
+ 1     1         9.28
+ 2     2         8.94
+ 3     3         8.60
+ 4     4         8.3 
+ 5     5         8.04
+ 6     6         7.84
+ 7     7         7.68
+ 8     8         7.54
+ 9     9         7.44
+10    10         7.35
+# … with 40 more rows</code></pre>
+</div>
+</div>
+<p>The resulting table has 50 rows—half the number of rows in the original data, but many more than the two rows we get after grouping by <code>patch</code>. The reason is that there are 50 unique time points, and so the average is now computed over those rows which share <code>time</code>. But there are only two rows per moment of time: the rows corresponding to patch A and patch B. When we call <code>summarise</code> after having grouped by <code>time</code>, the averages are computed over the densities in these two rows only, per group. That is why here we end up with a table which has a single row per point in time.</p>
+<div class="callout-warning callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>An easy mistake to make when one first meets with grouping and summaries is to assume that if we call <code>group_by(patch)</code>, then the subsequent summaries will be taken over patches. <em>This is not the case</em>, and be sure to take a moment to understand why. When we apply <code>group_by(patch)</code>, we are telling R to treat different patch values as group indicators. Therefore, when creating a summary, only the patch identities are retained from the original data (apart from the new summary statistics we calculate, of course). This means that the subsequent summaries are taken over everything <em>except</em> the patches. This should be clear after comparing the outputs of</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(patch) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>and</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(time) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The first distinguishes the rows of the data only by <code>patch</code>, and therefore the average is taken over time. The second distinguishes the rows by <code>time</code>, so the average is taken over the patches. Run the two expressions again to see the difference between them!</p>
+</div>
+</div>
+<p>We can use functions such as <code>mutate</code> or <code>filter</code> on grouped data. For example, we might want to know the deviation of species 1’s density from its average <em>in each patch</em>. Doing the following does not quite do what we want:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">species1Dev =</span> species1 <span class="sc">-</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 100 × 6
+    time patch species1 species2 species3 species1Dev
+   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;
+ 1     1 A         8.43     6.62    10.1        3.13 
+ 2     1 B        10.1      3.28     6.27       4.83 
+ 3     2 A         7.76     6.93    10.3        2.46 
+ 4     2 B        10.1      3.04     6.07       4.82 
+ 5     3 A         7.09     7.24    10.5        1.79 
+ 6     3 B        10.1      2.8      5.82       4.82 
+ 7     4 A         6.49     7.54    10.6        1.19 
+ 8     4 B        10.1      2.56     5.57       4.81 
+ 9     5 A         5.99     7.83    10.7        0.685
+10     5 B        10.1      2.33     5.32       4.80 
+# … with 90 more rows</code></pre>
+</div>
+</div>
+<p>This will put the difference of species 1’s density from its mean density across both time and patches into the new column <code>species1Dev</code>. Which is not the same as calculating the difference from the mean in a given patch—patch A for rows corresponding to patch A, and patch B for the others. To achieve this, all one needs to do is to group the data by <code>patch</code> before invoking <code>mutate</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch) <span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">species1Dev =</span> species1 <span class="sc">-</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 100 × 6
+# Groups:   patch [2]
+    time patch species1 species2 species3 species1Dev
+   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;
+ 1     1 A         8.43     6.62    10.1        3.14 
+ 2     1 B        10.1      3.28     6.27       4.81 
+ 3     2 A         7.76     6.93    10.3        2.47 
+ 4     2 B        10.1      3.04     6.07       4.80 
+ 5     3 A         7.09     7.24    10.5        1.80 
+ 6     3 B        10.1      2.8      5.82       4.80 
+ 7     4 A         6.49     7.54    10.6        1.20 
+ 8     4 B        10.1      2.56     5.57       4.79 
+ 9     5 A         5.99     7.83    10.7        0.702
+10     5 B        10.1      2.33     5.32       4.78 
+# … with 90 more rows</code></pre>
+</div>
+</div>
+<p>Comparing this with the previous table, we see that the values in the <code>species1Dev</code> column are now different, because this time the differences are taken with respect to the average densities per each patch.</p>
+<p>Finally, since <code>group_by</code> changes subsequent behaviour, we might eventually want to get rid of the grouping in our data. To do so, one must use <code>ungroup</code>. For example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch) <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1), <span class="at">sdDensity1 =</span> <span class="fu">sd</span>(species1)) <span class="sc">%&gt;%</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 3
+  patch meanDensity1 sdDensity1
+  &lt;chr&gt;        &lt;dbl&gt;      &lt;dbl&gt;
+1 A             5.29      0.833
+2 B             5.32      3.81 </code></pre>
+</div>
+</div>
+<p>It is good practice to always <code>ungroup</code> the data after we have calculated what we wanted using the group structure.</p>
+</section>
+<section id="data-normalization" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="data-normalization"><span class="header-section-number">5.2</span> Data normalization</h2>
+<p>In science, we often strive to work with so-called <em>normalized data</em>. A dataset is normalized if:</p>
+<ol type="1">
+<li>Each variable is in its own column;</li>
+<li>Each observation is in its own row.</li>
+</ol>
+<p>Normalized data are suitable for performing operations, statistics, and plotting on. Furthermore, normalized data have a certain tidy feel to them, in the sense that their organization always follows the same general pattern regardless of the type of dataset one studies. (By contrast, every non-normalized dataset tends to be messy in its own unique way.) The <code>tidyverse</code> offers a simple and convenient way to normalize data.</p>
+<p>For example, the <code>pop</code> table from the previous section is not normalized. This is because although each variable is in its own column, it is not true that each observation is in its own row. In fact, each row contains three observations: the densities of species 1, 2, and 3 at a given time and place. To normalize these data, we create <em>key-value pairs</em>. We merge the columns for species densities into just two new ones. The first of these (the <em>key</em>) indicates whether it is species 1, or 2, or 3 which the given row refers to. The second column (the <em>value</em>) contains the population density of the given species. Such key-value pairs are created by the function <code>pivot_longer</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">names_to =</span> <span class="st">"species"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 300 × 4
+    time patch species  density
+   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;
+ 1     1 A     species1    8.43
+ 2     1 A     species2    6.62
+ 3     1 A     species3   10.1 
+ 4     1 B     species1   10.1 
+ 5     1 B     species2    3.28
+ 6     1 B     species3    6.27
+ 7     2 A     species1    7.76
+ 8     2 A     species2    6.93
+ 9     2 A     species3   10.3 
+10     2 B     species1   10.1 
+# … with 290 more rows</code></pre>
+</div>
+</div>
+<p>The function <code>pivot_longer</code> takes three arguments (apart, of course, from the first data argument that we may also pipe in, like above). First, <code>cols</code> is the list of columns to be converted into key-value pairs. One can refer to the columns by number: <code>3:5</code> is the same as <code>c(3, 4, 5)</code> and selects the third, fourth, and fifth columns—the ones corresponding to the population densities. We could also have written <code>c("species1", "species2", "species3")</code> instead, choosing columns by their names. This can give greater clarity, albeit at the cost of more typing. Second, the argument <code>names_to</code> is the name of the new key column. Finally, <code>values_to</code> is the name of the new value column.</p>
+<p>Notice that the above table is now normalized: each column records a single variable, and each row contains a single observation. Notice also that, unlike the original <code>pop</code> which had 100 rows and 5 columns, the normalized version has 300 rows and 4 columns. This is natural: since the number of rows was reduced, there must be some extra rows to prevent the loss of information.</p>
+<p>It is possible to “undo” the effect <code>pivot_longer</code>. To do so, use <code>pivot_wider</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">names_to =</span> <span class="st">"species"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">"species"</span>, <span class="at">values_from =</span> <span class="st">"density"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 100 × 5
+    time patch species1 species2 species3
+   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1     1 A         8.43     6.62    10.1 
+ 2     1 B        10.1      3.28     6.27
+ 3     2 A         7.76     6.93    10.3 
+ 4     2 B        10.1      3.04     6.07
+ 5     3 A         7.09     7.24    10.5 
+ 6     3 B        10.1      2.8      5.82
+ 7     4 A         6.49     7.54    10.6 
+ 8     4 B        10.1      2.56     5.57
+ 9     5 A         5.99     7.83    10.7 
+10     5 B        10.1      2.33     5.32
+# … with 90 more rows</code></pre>
+</div>
+</div>
+<p>The two named arguments of <code>pivot_wider</code> above are <code>names_from</code> (which specifies the column from which the names for the new columns will be taken), and <code>values_from</code> (the column whose values will be used to fill in the rows under those new columns).</p>
+<p>As a remark, one could make the data even “wider”, by not only making columns out of the population densities, but the densities at a given patch. Doing so is very simple: one just needs to specify both the <code>species</code> and <code>patch</code> columns from which the new column names will be compiled:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">names_to =</span> <span class="st">"species"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="fu">c</span>(<span class="st">"species"</span>, <span class="st">"patch"</span>), <span class="at">values_from =</span> <span class="st">"density"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 50 × 7
+    time species1_A species2_A species3_A species1_B species2_B species3_B
+   &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+ 1     1       8.43       6.62      10.1        10.1       3.28       6.27
+ 2     2       7.76       6.93      10.3        10.1       3.04       6.07
+ 3     3       7.09       7.24      10.5        10.1       2.8        5.82
+ 4     4       6.49       7.54      10.6        10.1       2.56       5.57
+ 5     5       5.99       7.83      10.7        10.1       2.33       5.32
+ 6     6       5.58       8.1       10.7        10.1       2.12       5.08
+ 7     7       5.27       8.34      10.6        10.1       1.92       4.86
+ 8     8       5.02       8.54      10.4        10.1       1.74       4.64
+ 9     9       4.82       8.7       10.0        10.0       1.58       4.43
+10    10       4.66       8.82       9.66       10.0       1.43       4.23
+# … with 40 more rows</code></pre>
+</div>
+</div>
+<p>If normalized data are what we strive for, what is the practical use of <code>pivot_wider</code>? There are two answers to this question. First, while non-normalized data are indeed less efficient from a computational and data analysis standpoint, they are often more human-readable. For example, the <code>pop</code> table is easy to read despite the lack of normalization, because each row corresponds to a given time and place. By normalizing the data, information referring to any given time and place will be spread out over multiple (in our case, three) rows—one for each species. While this is preferable from a data analysis point of view, it can be more difficult to digest visually. Second, wide data lend themselves very well to one particular class of statistical techniques called <em>multivariate analysis</em>. In case one wants to perform multivariate analysis, wide-format data are often better than normalized data.</p>
+<p>Finally, it is worth noting the power of normalized data in, e.g., generating summary statistics. To obtain the mean and the standard deviation of the population densities for each species in each patch, all one has to do is this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">names_to =</span> <span class="st">"species"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">%&gt;%</span> <span class="co"># Normalize data</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch, species) <span class="sc">%&gt;%</span> <span class="co"># Group data by both species and patch</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanDensity =</span> <span class="fu">mean</span>(density), <span class="at">sdDensity =</span> <span class="fu">sd</span>(density)) <span class="sc">%&gt;%</span> <span class="co"># Obtain statistics</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="co"># Don't forget to ungroup the data at the end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  patch species  meanDensity sdDensity
+  &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;
+1 A     species1        5.29     0.833
+2 A     species2        8.05     0.559
+3 A     species3        7.51     1.56 
+4 B     species1        5.32     3.81 
+5 B     species2        1.07     0.737
+6 B     species3        6.57     2.48 </code></pre>
+</div>
+</div>
+</section>
+<section id="exercises" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="exercises"><span class="header-section-number">5.3</span> Exercises</h2>
+<p>The exercises below use the <code>iris</code> dataset—the same that we used for last chapter’s data wrangling exercises. Convert the <code>iris</code> data to a tibble with the <code>as_tibble()</code> function, and assign it to a variable.</p>
+<ol type="1">
+<li><p>Create a new column in the <code>iris</code> dataset which contains the deviation of petal lengths from the average of the whole dataset.</p></li>
+<li><p>Create a new column in the <code>iris</code> dataset which contains the deviation of petal lengths from the average <em>of each species</em>. (Hint: <code>group_by</code> the species and then <code>mutate</code>!)</p></li>
+<li><p>Create a table where the rows are the three species, and the columns are: average petal length, variance of petal length, average sepal length, and variance of sepal length.</p></li>
+<li><p>Create key-value pairs in the <code>iris</code> dataset for the petal characteristics. In other words, have a column called <code>Petal.Trait</code> (whose values are either <code>Petal.Length</code> or <code>Petal.Width</code>), and another column called <code>Petal.Value</code> (with the length/width values).</p></li>
+<li><p>Repeat the same exercise, but now for sepal traits.</p></li>
+<li><p>Finally, do it for both petal and sepal traits simultaneously, to obtain a fully normalized form of the <code>iris</code> data. That is, the key column (call it <code>Flower.Trait</code>) will have the values <code>Petal.Length</code>, <code>Petal.Width</code>, <code>Sepal.Length</code>, and <code>Sepal.Width</code>. And the value column (which you can call <code>Trait.Value</code>) will have the corresponding measurements.</p></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./Basic_data_wrangling.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Basic data manipulation</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./Creating_figures.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Creating publication-grade figures</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

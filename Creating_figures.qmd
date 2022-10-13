@@ -1,0 +1,160 @@
+# Creating publication-grade figures {#sec-ggplot}
+
+In science, we want good, clear plots. Each figure should make it obvious what data you are plotting, what the axes, colors, shapes, and size differences represent, and the overall message the figure is conveying. When writing a scientific paper, or a report for an environmental consulting company, etc., remember that your future readers are busy people. They often do not have the time to delve into the subtleties of overly refined verbal arguments. Instead, they will most often glance at the figures to learn what your work is about. You will want to create figures which makes this possible for them to do.
+
+Here we will learn how to create accessible, publication-quality scientific graphs in a simple way. We do this using the R package `ggplot2` which is a standard part of the `tidyverse`. The `ggplot2` package follows a very special philosophy for creating figures. In 2006, Leland Wilkinson proposed a *grammar of graphics*.^[Wilkinson, L. (2006), *The Grammar of Graphics*. Springer Science & Business Media.] Just like sentences, graphs have fixed parts whose specification defines the plot. The grand idea is that the data ought not be changed in order to display it in different formats. For instance, the same data should be possible to represent either as a box plot, or as a histogram, without changing the data format.
+
+This last claim needs to be qualified somewhat. It is more accurate to say that one should not need to change the data format *as long as the data are normalized*. As a reminder, "normalized data" means that every variable is in its own column, and every observation in its own row. In case the data are not normalized, one should first wrangle them into such form, for example by using `pivot_wider()`. For certain kinds of graphs though, this step is not required. But when working with larger datasets, it can be very useful to normalize the data before analyzing and plotting them---we will see examples of this in the exercises.
+
+To see how `ggplot2` works, let us load `tidyverse`, and then use the built-in `iris` dataset to create some figures. As a reminder, here is what the data look like:
+
+```{r}
+#| message: false
+library(tidyverse)
+as_tibble(iris)
+```
+
+Let us, as a first step, create a plot where sepal length (x-axis) is plotted against petal length (y-axis), with the points referring to different species shown in different colors: 
+
+```{r}
+ggplot(iris) +
+  aes(x = Sepal.Length, y = Petal.Length, colour = Species) +
+  geom_point()
+```
+
+Here we defined the **data** (`iris`; feel free to use pipes, as in `iris %>% ggplot() + ...`), then the **aesthetic mappings** with `aes()`, and finally the **geometry** of how to display the data with `geom_point()`. The important thing to remember is that the aesthetic mappings are all those aspects of the figure that are governed by your data. For instance, if you wanted to set the color of all points to blue, this would not be an aesthetic mapping, because it applies regardless of what the data are (in case you want to do this, you would have to specify `geom_point(colour = "blue")` in the last line). The geometry of your plot, on the other hand, governs the overall visual arrangement of your data (points, lines, histograms, etc). There are many different `geom_`s; we will learn about some here, but when in doubt, Google and a [`ggplot2` cheat sheet](https://nyu-cdsc.github.io/learningr/assets/data-visualization-2.1.pdf) are your best friends.
+
+Notice that the different "grammatical" components of the plot (aesthetics, geometry) are *added* to the plot, using the `+` symbol for addition. This is due to somewhat of an unfortunate historical accident. As it happens, `ggplot2` is older than the rest of the `tidyverse`, and so when it was first designed, the pipe operator `%>%` did not yet exist. This means that within the creating of a ggplot graph, one must use `+` to compose the various graph elements; but outside that, the usual `%>%` is used for function composition.
+
+To look at a different kind of geometry, let us create a histogram of the petal lengths. This is done using `geom_histogram`:
+
+```{r}
+#| message: false
+iris %>%
+  ggplot() +
+  aes(x = Petal.Length) +
+  geom_histogram()
+```
+
+We see two clusters of data. Why is that? One might suspect that this is because of a species-level difference. To check if that is the case, let us color the histogram by species:
+
+```{r}
+#| message: false
+iris %>%
+  ggplot() +
+  aes(x = Petal.Length, colour = Species) +
+  geom_histogram()
+```
+
+(A color legend was created automatically on the right.) This changes the color of the outline of the histograms, but not the color of their fill. To do so, we need to change the `fill` color as well, which is a separate aesthetic property:
+
+```{r}
+#| message: false
+iris %>%
+  ggplot() +
+  aes(x = Petal.Length, colour = Species, fill = Species) +
+  geom_histogram()
+```
+
+This is fine, but now the histogram bars of different species are stacked on top of one another. This means that, for example at around a petal length of 5 cm where individuals of both *Iris versicolor* and *I. virginica* are found, the green bar on top of the blue one does not begin from the bottom of the y-axis at 0, but from wherever the blue bar ends and the green one begins (in our case, from around 10 upwards). So the number of *I. versicolor* individuals in the 5 cm bin is not 12, but only 2.
+
+It may be easier to interpret the histogram if all bars start at the bottom, even if this means that the bars will now overlap to an extent. To achieve this overlap, one simply has to add the argument `position = "identity"` to `geom_histogram`:
+
+```{r}
+#| message: false
+iris %>%
+  ggplot() +
+  aes(x = Petal.Length, colour = Species, fill = Species) +
+  geom_histogram(position = "identity")
+```
+
+(There are other options as well, such as `position = "dodge"` -- feel free to experiment. In general, you can learn what options each of the `geom_`s have by invoking the Help, or asking Google.) The figure above is almost perfect; the one remaining problem is that, due to the lack of transparency, the bars belonging to different species cover each other completely. So let us change the fill's *transparency*, which is called `alpha` in ggplot. The `alpha` property can take on any value between 0 (fully transparent object, to the point of invisibility) to 1 (fully solid object with no transparency, like above; this is the default). Setting it to 0.2 (say) will finally fully reveal the distribution of each species:
+
+```{r}
+#| message: false
+iris %>%
+  ggplot() +
+  aes(x = Petal.Length, colour = Species, fill = Species) +
+  geom_histogram(position = "identity", alpha = 0.2)
+```
+
+There are plenty of other `geom_`s as well, such as `geom_boxplot`, `geom_violin`, etc. Let us try `geom_boxplot` for instance. Let us create one box plot of the distribution of petal lengths for each species. Putting the species along the x-axis and petal length along the y-axis:
+
+```{r}
+iris %>%
+  ggplot() +
+  aes(x = Species, y = Petal.Length) +
+  geom_boxplot()
+```
+
+Although this is sufficient, one should feel free to make the plots prettier. For instance, one could use colors, like before. One can also use different themes. There are pre-defined themes such as `theme_classic()`, `theme_bw()`, and so on. For example, using `theme_bw()` gets rid of the default gray background and replaces it with a white one. The version of the graph below applies this theme, and also changes the color and fill to be based on species identity:
+
+```{r}
+iris %>%
+  ggplot() +
+  aes(x = Species, y = Petal.Length, colour = Species, fill = Species) +
+  geom_boxplot(alpha = 0.2) +
+  theme_bw()
+```
+
+
+## Summaries and confidence intervals
+
+Providing appropriate information on experimental errors is a hallmark of any credible scientific graph. Choose a type of error based on the conclusion that you want the reader to draw. While the standard deviation (SD) represents the dispersion of the data, the standard error of the mean (SEM) and confidence intervals (CI) report the certainty of the estimate of a value (e.g., certainty in estimating the mean). Let us see examples of each.
+
+Let us first obtain the mean and the standard deviation of the petal lengths for each species. We then would like to plot them. How to proceed? By creating a workflow which first uses `group_by` and `summarise` to obtain the required statistics (means and standard deviations), and then uses these data for plotting. One can include all these steps in a logical workflow:
+
+```{r}
+#| message: false
+iris %>%
+  group_by(Species) %>% # Perform summary calculations for each species separately
+  summarise(mP = mean(Petal.Length), sP = sd(Petal.Length)) %>% # Mean & sd petal length
+  ungroup() %>% # Ungroup data
+  ggplot() + # Start plotting
+  aes(x = Species, y = mP, ymin = mP - sP, ymax = mP + sP) + # Means plus/minus std devs
+  geom_col() + # This takes the y aesthetic, for plotting the mean mP
+  geom_errorbar(width = 0.2) # Takes the ymin and ymax aesthetics
+```
+
+Note that the y-axis label is not very descriptive. This is because it inherited the name of the corresponding data column, `mP`. There are multiple ways to change it; the simplest is to add `ylab("Petal length")` to the plot. Another way of doing so is duscussed in @sec-moreggplot.
+
+In case we want to calculate the 95% confidence intervals of the mean values, we first obtain some necessary summary statistics: the number of observations (sample size) in each group; the standard error of the mean (standard deviation divided by the square root of the sample size); and finally, the confidence interval itself (read off from the *t*-distribution, with one fewer degrees of freedom than the sample size). We can then include these confidence intervals on top of the mean values:
+
+```{r}
+#| message: false
+iris %>%
+  group_by(Species) %>%
+  summarise(mP = mean(Petal.Length), # Mean petal length per species
+            sP = sd(Petal.Length), # Standard deviation per species
+            N = n(), # Sample size (number of observations) per species
+            SEM = sP / sqrt(N), # Standard error of the mean
+            CI = SEM * qt(0.975, N - 1)) %>% # Confidence interval, read off
+                 # at 0.975 because plus/minus 2.5% adds up to 5%
+  ggplot() +
+  aes(x = Species, y = mP, ymin = mP - CI, ymax = mP + CI) +
+  geom_col(alpha = 0.4, colour = "steelblue", fill = "steelblue") +
+  geom_errorbar(width = 0.2, colour = "steelblue") +
+  ylab("Petal length") +
+  theme_bw()
+```
+
+
+## Exercises
+
+Fauchald et al. (2017)^[Fauchald, P. et al. (2017). Arctic greening from warming promotes declines in caribou populations. *Science Advances*, 3:e1601365.] tracked the population size of various herds of caribou in North America over time, and correlated population cycling with the amount of vegetation and sea-ice cover. The part of their data that we will use consists of two files (found on Lisam): `pop_size.tsv` (data on herd population sizes), and `sea_ice.tsv` (on sea levels of sea ice cover per year and month).
+
+1. The file `sea_ice.tsv` is in human-readable, wide format. Note however that the rule "each set of observations is stored in its own row" is violated. For computation, we would like to organize the data in a tidy tibble with four columns: `Herd`, `Year`, `Month`, and `Cover`. To this end, apply the function `pivot_longer` to columns 3-14 in the tibble, gathering the names of the months in the new column `Month` and the values in the new column `Cover`.
+
+2. Use `pop_size.tsv` to make a plot of herd sizes through time. Let the x-axis be Year, the y-axis be population size. Show different herds in different colors. For geometry, use points.
+
+3. The previous plot is actually not that easy to see and interpret. To make it better, add a `line` geometry as well, which will connect the points with lines.
+
+4. Make a histogram out of all population sizes in the data.
+
+5. Make the same histogram, but break it down by herd, using a different color and fill for each herd.
+
+6. Instead of a histogram, make a density plot with the same data and display (look up `geom_density` if needed).
+
+7. Make box plots of the population size of each herd. Along the x-axis, each herd should be separately displayed; the y-axis should be population size. The box plots should summarize population sizes across all years.
+
+8. Let us go back to `sea_ice.tsv`. Make the following plot. Along the x-axis, have Year. Along the y-axis, Month. Then, for each month-year pair, color the given part of the plot darker for lower ice cover and lighter for more. (Hint: look up `geom_tile` if needed.) Finally, make sure to do all this only for the herd with the i.d. `WAH` (filter the data before plotting).
