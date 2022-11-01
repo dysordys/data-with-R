@@ -175,7 +175,7 @@ iris %>%
 We used the built-in color names `"steelblue"`, `"goldenrod"`, and `"forestgreen"` above. A full R color cheat sheet can be found [here](https://www.nceas.ucsb.edu/sites/default/files/2020-04/colorPaletteCheatsheet.pdf), for more options and built-in colors.
 
 
-## Facets
+## Facets {#sec-faceting}
 
 Plots can be *faceted* (subplots created and arranged in a grid layout) based on some variable or variables. For instance, let us create histograms of petal lengths in the `iris` dataset, like we did last time:
 

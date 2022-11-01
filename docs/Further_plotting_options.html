@@ -196,6 +196,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <a href="./Joining_data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Joining data</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Intro_statistics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introducing statistical inference</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -207,7 +212,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul>
   <li><a href="#smoothing-and-regression-lines" id="toc-smoothing-and-regression-lines" class="nav-link active" data-scroll-target="#smoothing-and-regression-lines"> <span class="header-section-number">7.1</span> Smoothing and regression lines</a></li>
   <li><a href="#scales" id="toc-scales" class="nav-link" data-scroll-target="#scales"> <span class="header-section-number">7.2</span> Scales</a></li>
-  <li><a href="#facets" id="toc-facets" class="nav-link" data-scroll-target="#facets"> <span class="header-section-number">7.3</span> Facets</a></li>
+  <li><a href="#sec-faceting" id="toc-sec-faceting" class="nav-link" data-scroll-target="#sec-faceting"> <span class="header-section-number">7.3</span> Facets</a></li>
   <li><a href="#saving-plots" id="toc-saving-plots" class="nav-link" data-scroll-target="#saving-plots"> <span class="header-section-number">7.4</span> Saving plots</a></li>
   </ul>
 </nav>
@@ -415,8 +420,8 @@ Note
 </div>
 <p>We used the built-in color names <code>"steelblue"</code>, <code>"goldenrod"</code>, and <code>"forestgreen"</code> above. A full R color cheat sheet can be found <a href="https://www.nceas.ucsb.edu/sites/default/files/2020-04/colorPaletteCheatsheet.pdf">here</a>, for more options and built-in colors.</p>
 </section>
-<section id="facets" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="facets"><span class="header-section-number">7.3</span> Facets</h2>
+<section id="sec-faceting" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="sec-faceting"><span class="header-section-number">7.3</span> Facets</h2>
 <p>Plots can be <em>faceted</em> (subplots created and arranged in a grid layout) based on some variable or variables. For instance, let us create histograms of petal lengths in the <code>iris</code> dataset, like we did last time:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>

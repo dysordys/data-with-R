@@ -196,6 +196,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <a href="./Joining_data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Joining data</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Intro_statistics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introducing statistical inference</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -205,7 +210,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#summaries-and-confidence-intervals" id="toc-summaries-and-confidence-intervals" class="nav-link active" data-scroll-target="#summaries-and-confidence-intervals"> <span class="header-section-number">6.1</span> Summaries and confidence intervals</a></li>
+  <li><a href="#sec-CI" id="toc-sec-CI" class="nav-link active" data-scroll-target="#sec-CI"> <span class="header-section-number">6.1</span> Summaries and confidence intervals</a></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"> <span class="header-section-number">6.2</span> Exercises</a></li>
   </ul>
 </nav>
@@ -336,8 +341,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><img src="Creating_figures_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<section id="summaries-and-confidence-intervals" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="summaries-and-confidence-intervals"><span class="header-section-number">6.1</span> Summaries and confidence intervals</h2>
+<section id="sec-CI" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="sec-CI"><span class="header-section-number">6.1</span> Summaries and confidence intervals</h2>
 <p>Providing appropriate information on experimental errors is a hallmark of any credible scientific graph. Choose a type of error based on the conclusion that you want the reader to draw. While the standard deviation (SD) represents the dispersion of the data, the standard error of the mean (SEM) and confidence intervals (CI) report the certainty of the estimate of a value (e.g., certainty in estimating the mean). Let us see examples of each.</p>
 <p>Let us first obtain the mean and the standard deviation of the petal lengths for each species. We then would like to plot them. How to proceed? By creating a workflow which first uses <code>group_by</code> and <code>summarise</code> to obtain the required statistics (means and standard deviations), and then uses these data for plotting. One can include all these steps in a logical workflow:</p>
 <div class="cell">

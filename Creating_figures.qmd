@@ -98,7 +98,7 @@ iris %>%
 ```
 
 
-## Summaries and confidence intervals
+## Summaries and confidence intervals {#sec-CI}
 
 Providing appropriate information on experimental errors is a hallmark of any credible scientific graph. Choose a type of error based on the conclusion that you want the reader to draw. While the standard deviation (SD) represents the dispersion of the data, the standard error of the mean (SEM) and confidence intervals (CI) report the certainty of the estimate of a value (e.g., certainty in estimating the mean). Let us see examples of each.
 
