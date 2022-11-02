@@ -28,7 +28,7 @@ One of the packages loaded by default with `tidyverse` is called `readr`. This p
 
 ### The CSV file format
 
-Goldberg et al. (2010)^[Goldberg, E. E. et al. (2010). Species Selection Maintains Self-Incompatibility. *Science* 330, 493.] collected data on self-incompatibility in the family *Solanaceae* (nightshades). It contains a list of 356 species, along with a flag determining self-incompatibility status (0: self-incompatible; 1: self-compatible; 2-5: more complicated selfing scenarios). The data are in the file `Goldberg2010_data.csv`. This is a so-called *comma-separated value* (CSV) file, meaning that the different columns of the data are separated by commas. One can see this by viewing the file in any simple text editor. For example, this can be done in RStudio itself, by clicking on the file in the **Files** panel in the lower right part of the RStudio window, and then choosing the option "View file" (ignore the other option called "Import dataset..."). Having done this, a new tab opens in your editor panel (upper left region) where you should see something like the following:
+@Goldbergetal2010 collected data on self-incompatibility in the family *Solanaceae* (nightshades). It contains a list of 356 species, along with a flag determining self-incompatibility status (0: self-incompatible; 1: self-compatible; 2-5: more complicated selfing scenarios). The data are in the file `Goldberg2010_data.csv`. This is a so-called *comma-separated value* (CSV) file, meaning that the different columns of the data are separated by commas. One can see this by viewing the file in any simple text editor. For example, this can be done in RStudio itself, by clicking on the file in the **Files** panel in the lower right part of the RStudio window, and then choosing the option "View file" (ignore the other option called "Import dataset..."). Having done this, a new tab opens in your editor panel (upper left region) where you should see something like the following:
 
 ```
 Species,Status
@@ -89,7 +89,7 @@ When displaying large tibbles, R will not dump all the data at you. Instead, it 
 
 ### The TSV file format {#sec-tsv}
 
-Another type of file is one where the columns are separated by tabulators instead of commas. These are called *tab-separated value* (TSV) files. An example is provided by the file associated with data from Smith et al. (2003).^[Smith, F. A. et al. (2003). Body mass of late Quaternary mammals. *Ecology* 84:3403-3403.] The authors compiled a database of the body mass of mammals of the late Quaternary period. The data file is `Smith2003_data.txt`. Its rows are the different mammal species; its columns are: the species' native continent; whether the species is still alive or extinct; the order, family, genus, and species names; the base-10 log body mass; the actual body mass (in grams); and numbered references representing research papers which served as the source of the data.
+Another type of file is one where the columns are separated by tabulators instead of commas. These are called *tab-separated value* (TSV) files. An example is provided by the file associated with data from @Smithetal2003. The authors compiled a database of the body mass of mammals of the late Quaternary period. The data file is `Smith2003_data.txt`. Its rows are the different mammal species; its columns are: the species' native continent; whether the species is still alive or extinct; the order, family, genus, and species names; the base-10 log body mass; the actual body mass (in grams); and numbered references representing research papers which served as the source of the data.
 
 Viewing the TSV file `Smith2003_data.txt` in its raw form begins something like the following:
 
@@ -151,7 +151,7 @@ Finally, although their use is discouraged in science, one should know how to re
 library(readxl)
 ```
 
-We can now load Excel files with the function `read_excel()`. At the start, we downloaded an Excel version of the data from Goldberg et al. (2010), called `Goldberg2010_data.xlsx`. It holds the exact same data as the original CSV file, just saved in Excel format for instructive purposes. Let us load this file:
+We can now load Excel files with the function `read_excel()`. At the start, we downloaded an Excel version of the data from @Goldbergetal2010, called `Goldberg2010_data.xlsx`. It holds the exact same data as the original CSV file, just saved in Excel format for instructive purposes. Let us load this file:
 
 ```{r}
 read_excel("Goldberg2010_data.xlsx")

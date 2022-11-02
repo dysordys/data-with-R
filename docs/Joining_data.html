@@ -78,6 +78,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -199,6 +218,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Intro_statistics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introducing statistical inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">References</span></a>
   </div>
 </li>
     </ul>
@@ -563,7 +587,7 @@ Warning
 </section>
 <section id="exercises" class="level2" data-number="8.3">
 <h2 data-number="8.3" class="anchored" data-anchor-id="exercises"><span class="header-section-number">8.3</span> Exercises</h2>
-<p>We have used the data of Fauchald et al.&nbsp;(2017)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> before in other exercises. As a reminder, they tracked the population size of various herds of caribou in North America over time, and correlated population cycling with the amount of vegetation and sea-ice cover. Two files from their data are on Lisam: <code>pop_size.tsv</code> (herd population sizes), and <code>sea_ice.tsv</code> (sea ice cover per year and month).</p>
+<p>We have used the data of <span class="citation" data-cites="Fauchaldetal2017">Fauchald et al. (<a href="References.html#ref-Fauchaldetal2017" role="doc-biblioref">2017</a>)</span> before in other exercises. As a reminder, they tracked the population size of various herds of caribou in North America over time, and correlated population cycling with the amount of vegetation and sea-ice cover. Two files from their data are on Lisam: <code>pop_size.tsv</code> (herd population sizes), and <code>sea_ice.tsv</code> (sea ice cover per year and month).</p>
 <ol type="1">
 <li>Load these two datasets into two variables. They could be called <code>pop</code> and <code>ice</code>, for instance. Look at the data to familiarize yourself with them. How many rows and columns are in each?</li>
 <li>Before doing anything else: how many rows will there be in the table that is the left join of <code>pop</code> and <code>ice</code>, based on the two columns <code>Herd</code> and <code>Year</code>? Perform the left join to see if you were correct. Where do you see <code>NA</code>s in the table, and why?</li>
@@ -571,12 +595,11 @@ Warning
 </ol>
 
 
-</section>
-<section class="footnotes footnotes-end-of-document" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn1" role="doc-endnote"><p>Fauchald, P. et al.&nbsp;(2017). Arctic greening from warming promotes declines in caribou populations. <em>Science Advances</em>, 3:e1601365.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol>
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-Fauchaldetal2017" class="csl-entry" role="doc-biblioentry">
+Fauchald, Per, Taejin Park, Hans Tømmervik, Ranga Myneni, and Vera Helene Hausner. 2017. <span>“<span class="nocase">Arctic greening from warming promotes declines in caribou populations</span>.”</span> <em>Science Advances</em> 3 (4): e1601365. <a href="https://doi.org/10.1126/sciadv.1601365">https://doi.org/10.1126/sciadv.1601365</a>.
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->

@@ -78,6 +78,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -201,6 +220,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <a href="./Intro_statistics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introducing statistical inference</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">References</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -276,7 +300,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>One of the packages loaded by default with <code>tidyverse</code> is called <code>readr</code>. This package contains tools for loading data files, and writing them to disk. To see how it works, download the files <code>Goldberg2010_data.csv</code>, <code>Goldberg2010_data.xlsx</code>, and <code>Smith2003_data.txt</code> from Lisam. Then set the working directory in RStudio to the folder where you have saved them (as a reminder, you can do this by executing <code>setwd(/path/to/files)</code>, where you should substitute in your own path in place of <code>/path/to/files</code>).</p>
 <section id="the-csv-file-format" class="level3" data-number="3.2.1">
 <h3 data-number="3.2.1" class="anchored" data-anchor-id="the-csv-file-format"><span class="header-section-number">3.2.1</span> The CSV file format</h3>
-<p>Goldberg et al.&nbsp;(2010)<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> collected data on self-incompatibility in the family <em>Solanaceae</em> (nightshades). It contains a list of 356 species, along with a flag determining self-incompatibility status (0: self-incompatible; 1: self-compatible; 2-5: more complicated selfing scenarios). The data are in the file <code>Goldberg2010_data.csv</code>. This is a so-called <em>comma-separated value</em> (CSV) file, meaning that the different columns of the data are separated by commas. One can see this by viewing the file in any simple text editor. For example, this can be done in RStudio itself, by clicking on the file in the <strong>Files</strong> panel in the lower right part of the RStudio window, and then choosing the option “View file” (ignore the other option called “Import dataset…”). Having done this, a new tab opens in your editor panel (upper left region) where you should see something like the following:</p>
+<p><span class="citation" data-cites="Goldbergetal2010">Goldberg et al. (<a href="References.html#ref-Goldbergetal2010" role="doc-biblioref">2010</a>)</span> collected data on self-incompatibility in the family <em>Solanaceae</em> (nightshades). It contains a list of 356 species, along with a flag determining self-incompatibility status (0: self-incompatible; 1: self-compatible; 2-5: more complicated selfing scenarios). The data are in the file <code>Goldberg2010_data.csv</code>. This is a so-called <em>comma-separated value</em> (CSV) file, meaning that the different columns of the data are separated by commas. One can see this by viewing the file in any simple text editor. For example, this can be done in RStudio itself, by clicking on the file in the <strong>Files</strong> panel in the lower right part of the RStudio window, and then choosing the option “View file” (ignore the other option called “Import dataset…”). Having done this, a new tab opens in your editor panel (upper left region) where you should see something like the following:</p>
 <pre><code>Species,Status
 Acnistus_arborescens,1
 Anisodus_tanguticus,1
@@ -289,7 +313,7 @@ Capsicum_baccatum,1
 Capsicum_cardenasii,2
 Capsicum_chacoense,1</code></pre>
 <p>And so on. As you can see, the first line (<code>Species,Status</code>) is actually an indicator of what the corresponding columns of data will contain: the first column has the species name, and the second one the numerical flag indicating self-compatibility status. The subsequent rows hold the actual data. Notice that the boundary between the columns is always indicated by a comma. This is what gave rise to the name “comma-separated value” (CSV) file.</p>
-<p>The above raw format is not yet amenable to processing within R. To make it so, we first need to import the data. For comma-separated value files, there is a convenient function, <code>read_csv</code>, that makes this especially simple:<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>The above raw format is not yet amenable to processing within R. To make it so, we first need to import the data. For comma-separated value files, there is a convenient function, <code>read_csv</code>, that makes this especially simple:<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">"Goldberg2010_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -316,7 +340,7 @@ Capsicum_chacoense,1</code></pre>
 </section>
 <section id="the-tibble-data-structure" class="level3" data-number="3.2.2">
 <h3 data-number="3.2.2" class="anchored" data-anchor-id="the-tibble-data-structure"><span class="header-section-number">3.2.2</span> The <code>tibble</code> data structure</h3>
-<p>Look at the output produced by <code>read_csv("Goldberg2010_data.csv")</code> above. You can mostly ignore the top part of that output—it simply provides information on how it interpreted the data it just read in. Instead, the interesting part starts with <code>A tibble: 356 x 2</code>. A <em>tibble</em> (or <em>data frame</em><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>) is the R-equivalent of an Excel-style spreadsheets. In this case, it has 356 rows and 2 columns (hence the <code>356 x 2</code>). The simplest way to conceive of a tibble is as a collection of vectors, glued together side-by-side to form a table of data. Importantly, although each vector must consist of entries of the same type, as usual (e.g., they can be vectors of numbers, vectors of strings, or vectors of logical values), the different columns need not share types. For example, in the above table, the first column consists of character strings, but the second one consists of numerical values. This can be seen right below the header information. Below <code>Species</code>, you can see <code>&lt;chr&gt;</code>, which stands for “character string”. Below <code>Status</code>, we have <code>&lt;dbl&gt;</code> which, confusing as it may look at first sight, refers simply to ordinary numbers.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> In turn, columns comprising of logical values would have the tag <code>&lt;lgl&gt;</code> underneath them (in this case though, we don’t have such a column). The point is that by looking at the type information below the header, you can see how R has interpreted each of the columns at a glance.</p>
+<p>Look at the output produced by <code>read_csv("Goldberg2010_data.csv")</code> above. You can mostly ignore the top part of that output—it simply provides information on how it interpreted the data it just read in. Instead, the interesting part starts with <code>A tibble: 356 x 2</code>. A <em>tibble</em> (or <em>data frame</em><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>) is the R-equivalent of an Excel-style spreadsheets. In this case, it has 356 rows and 2 columns (hence the <code>356 x 2</code>). The simplest way to conceive of a tibble is as a collection of vectors, glued together side-by-side to form a table of data. Importantly, although each vector must consist of entries of the same type, as usual (e.g., they can be vectors of numbers, vectors of strings, or vectors of logical values), the different columns need not share types. For example, in the above table, the first column consists of character strings, but the second one consists of numerical values. This can be seen right below the header information. Below <code>Species</code>, you can see <code>&lt;chr&gt;</code>, which stands for “character string”. Below <code>Status</code>, we have <code>&lt;dbl&gt;</code> which, confusing as it may look at first sight, refers simply to ordinary numbers.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> In turn, columns comprising of logical values would have the tag <code>&lt;lgl&gt;</code> underneath them (in this case though, we don’t have such a column). The point is that by looking at the type information below the header, you can see how R has interpreted each of the columns at a glance.</p>
 <p>The fact that the individual columns are simply vectors can be made explicit, by relying on the <code>$</code>-notation. To access a given column of the table as a vector, we write the name of the table, followed by the <code>$</code> symbol, followed by the name of the column in question. For example, we can access the <code>Status</code> column from the <code>dat</code> table as a vector of numbers like this:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>Status</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -365,7 +389,7 @@ Capsicum_chacoense,1</code></pre>
 </section>
 <section id="sec-tsv" class="level3" data-number="3.2.3">
 <h3 data-number="3.2.3" class="anchored" data-anchor-id="sec-tsv"><span class="header-section-number">3.2.3</span> The TSV file format</h3>
-<p>Another type of file is one where the columns are separated by tabulators instead of commas. These are called <em>tab-separated value</em> (TSV) files. An example is provided by the file associated with data from Smith et al.&nbsp;(2003).<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> The authors compiled a database of the body mass of mammals of the late Quaternary period. The data file is <code>Smith2003_data.txt</code>. Its rows are the different mammal species; its columns are: the species’ native continent; whether the species is still alive or extinct; the order, family, genus, and species names; the base-10 log body mass; the actual body mass (in grams); and numbered references representing research papers which served as the source of the data.</p>
+<p>Another type of file is one where the columns are separated by tabulators instead of commas. These are called <em>tab-separated value</em> (TSV) files. An example is provided by the file associated with data from <span class="citation" data-cites="Smithetal2003">Smith et al. (<a href="References.html#ref-Smithetal2003" role="doc-biblioref">2003</a>)</span>. The authors compiled a database of the body mass of mammals of the late Quaternary period. The data file is <code>Smith2003_data.txt</code>. Its rows are the different mammal species; its columns are: the species’ native continent; whether the species is still alive or extinct; the order, family, genus, and species names; the base-10 log body mass; the actual body mass (in grams); and numbered references representing research papers which served as the source of the data.</p>
 <p>Viewing the TSV file <code>Smith2003_data.txt</code> in its raw form begins something like the following:</p>
 <pre><code>AF  extant  Artiodactyla    Bovidae Addax   nasomaculatus   4.85    70000.3 60
 AF  extant  Artiodactyla    Bovidae Aepyceros   melampus    4.72    52500.1 "63, 70"
@@ -484,7 +508,7 @@ chr (1): AF extant  Artiodactyla    Bovidae Addax   nasomaculatus   4.85    7000
 <div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We can now load Excel files with the function <code>read_excel()</code>. At the start, we downloaded an Excel version of the data from Goldberg et al.&nbsp;(2010), called <code>Goldberg2010_data.xlsx</code>. It holds the exact same data as the original CSV file, just saved in Excel format for instructive purposes. Let us load this file:</p>
+<p>We can now load Excel files with the function <code>read_excel()</code>. At the start, we downloaded an Excel version of the data from <span class="citation" data-cites="Goldbergetal2010">Goldberg et al. (<a href="References.html#ref-Goldbergetal2010" role="doc-biblioref">2010</a>)</span>, called <code>Goldberg2010_data.xlsx</code>. It holds the exact same data as the original CSV file, just saved in Excel format for instructive purposes. Let us load this file:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_excel</span>(<span class="st">"Goldberg2010_data.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -523,15 +547,21 @@ chr (1): AF extant  Artiodactyla    Bovidae Addax   nasomaculatus   4.85    7000
 </ol>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-Goldbergetal2010" class="csl-entry" role="doc-biblioentry">
+Goldberg, Emma E., Joshua R. Kohn, Russell Lande, Kelly A. Robertson, Stephen A. Smith, and Boris Igić. 2010. <span>“<span>Species Selection Maintains Self-Incompatibility</span>.”</span> <em>Science</em> 330 (6003): 493–95. <a href="https://doi.org/10.1126/science.1194513">https://doi.org/10.1126/science.1194513</a>.
+</div>
+<div id="ref-Smithetal2003" class="csl-entry" role="doc-biblioentry">
+Smith, Felisa A., S. Kathleen Lyons, S. K. Morgan Ernest, Kate E. Jones, Dawn M. Kaufman, Tamar Dayan, Pablo A. Marquet, James H. Brown, and John P. Haskell. 2003. <span>“<span class="nocase">Body Mass of Late Quaternary Mammals</span>.”</span> <em>Ecology</em> 84 (12): 3403. <a href="https://doi.org/10.1890/02-9003">https://doi.org/10.1890/02-9003</a>.
+</div>
+</div>
 </section>
 <section class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1" role="doc-endnote"><p>Goldberg, E. E. et al.&nbsp;(2010). Species Selection Maintains Self-Incompatibility. <em>Science</em> 330, 493.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>Warning: there exists a similarly-named function called <code>read.csv</code> which is part of base R. It does much the same thing as <code>read_csv</code>; however, its use is far clunkier and less flexible. You can think of <code>read_csv</code> as a <code>tidyverse</code>-provided upgrade to the original <code>read.csv</code>. My recommendation is to stick with using just <code>read_csv</code>—it is simpler and at the same time more powerful than its predecessor.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3" role="doc-endnote"><p>There is a nuance of a difference between a data frame (which is a feature of base R) and a tibble (a <code>tidyverse</code> construct). The two are mostly equivalent, but tibbles offer some features that are absent from data frames, and omit certain things which data frames do but are usually not needed. Like with <code>read_csv</code> and <code>read.csv</code>, tibbles can be thought of as a slightly upgraded and more user-friendly version of data frames. You do not need to be overly concerned with the precise differences between the two; in this course, we will mostly be using tibbles anyway.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4" role="doc-endnote"><p>The abbreviation <code>&lt;dbl&gt;</code> happens to stand for <a href="https://en.wikipedia.org/wiki/Double-precision_floating-point_format">double-precision numerical value</a>, a standard way of representing numbers on computers.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5" role="doc-endnote"><p>Smith, F. A. et al.&nbsp;(2003). Body mass of late Quaternary mammals. <em>Ecology</em> 84:3403-3403.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1" role="doc-endnote"><p>Warning: there exists a similarly-named function called <code>read.csv</code> which is part of base R. It does much the same thing as <code>read_csv</code>; however, its use is far clunkier and less flexible. You can think of <code>read_csv</code> as a <code>tidyverse</code>-provided upgrade to the original <code>read.csv</code>. My recommendation is to stick with using just <code>read_csv</code>—it is simpler and at the same time more powerful than its predecessor.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2" role="doc-endnote"><p>There is a nuance of a difference between a data frame (which is a feature of base R) and a tibble (a <code>tidyverse</code> construct). The two are mostly equivalent, but tibbles offer some features that are absent from data frames, and omit certain things which data frames do but are usually not needed. Like with <code>read_csv</code> and <code>read.csv</code>, tibbles can be thought of as a slightly upgraded and more user-friendly version of data frames. You do not need to be overly concerned with the precise differences between the two; in this course, we will mostly be using tibbles anyway.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3" role="doc-endnote"><p>The abbreviation <code>&lt;dbl&gt;</code> happens to stand for <a href="https://en.wikipedia.org/wiki/Double-precision_floating-point_format">double-precision numerical value</a>, a standard way of representing numbers on computers.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

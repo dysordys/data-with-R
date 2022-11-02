@@ -78,6 +78,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -200,6 +219,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Intro_statistics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introducing statistical inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">References</span></a>
   </div>
 </li>
     </ul>
@@ -738,9 +762,9 @@ argument n ----&gt; |            |
 <li>Combine these three strings into a single string, and print it on the screen. (Hint: look up the help for the <code>paste</code> function, in particular its <code>collapse</code> argument.)</li>
 <li>Reverse the entries of <code>s</code>, so they come in the order <code>"the mat"</code>, <code>"sat on"</code>, and <code>"the fat cat"</code>. (Hint: check out the <code>rev</code> function.) Then merge the three strings again into a single one, and print it on the screen.</li>
 </ul></li>
-<li><p>Assume you have a population of some organism in which one given allele of some gene is the only one available in the gene pool. If a new mutant organism with a different, selectively advantageous allele appears, it would be reasonable to conclude that the new allele will fix in the population and eliminate the original one over time. This, however, is not necessarily true, because a very rare allele might succumb to being eliminated by chance, regardless of how advantageous it is. According to Motoo Kimura’s famous formula,<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> the probability of such a new allele eventually fixing in the population is given as:</p>
+<li><p>Assume you have a population of some organism in which one given allele of some gene is the only one available in the gene pool. If a new mutant organism with a different, selectively advantageous allele appears, it would be reasonable to conclude that the new allele will fix in the population and eliminate the original one over time. This, however, is not necessarily true, because a very rare allele might succumb to being eliminated by chance, regardless of how advantageous it is. According to Motoo Kimura’s famous formula, the probability of such a new allele eventually fixing in the population is given as:</p>
 <p><span class="math display">\[ P = \frac{1 - \text{e}^{-s}}{1 - \text{e}^{-2Ns}} \]</span></p>
-<p>Here <em>P</em> is the probability of eventual fixation, <em>s</em> is the selection differential (the degree to which the new allele is advantageous over the original one), and <em>N</em> is the (effective) population size.</p>
+<p><span class="citation" data-cites="Gillespie2004">(<a href="References.html#ref-Gillespie2004" role="doc-biblioref">Gillespie 2004</a>)</span>. Here <em>P</em> is the probability of eventual fixation, <em>s</em> is the selection differential (the degree to which the new allele is advantageous over the original one), and <em>N</em> is the (effective) population size.</p>
 <ul>
 <li>Write a function that implements this formula. It should take the selection differential <em>s</em> and the population size <em>N</em> as parameters, and return the fixation probability as its result.</li>
 <li>A selection differential of 0.5 is very strong (though not unheard of). What is the likelihood that an allele with that level of advantage will fix in a population of 1000 individuals? Interpret the result.</li>
@@ -754,13 +778,17 @@ argument n ----&gt; |            |
 </ol>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-Gillespie2004" class="csl-entry" role="doc-biblioentry">
+Gillespie, John H. 2004. <em>Population Genetics: A Concise Guide</em>. Baltimore, MD, USA: Johns Hopkins University Press.
+</div>
+</div>
 </section>
 <section class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn1" role="doc-endnote"><p>Technically, there is a third option: a logical value could be equal to <code>NA</code>, indicating missing data.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2" role="doc-endnote"><p>As of R 4.1.0, the R language also supports a native, built-in pipe operator <code>|&gt;</code> as well. The package name <code>magrittr</code> is an allusion to Belgian surrealist artist René Magritte (1898-1967) because of his famous painting <a href="https://en.wikipedia.org/wiki/The_Treachery_of_Images">La trahison des images</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3" role="doc-endnote"><p>See, e.g., John H. Gillespie (2004) <em>Population Genetics: A Concise Guide</em>, Johns Hopkins University press, p.&nbsp;93.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
