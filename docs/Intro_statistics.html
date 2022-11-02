@@ -212,7 +212,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#sec-example_wilcox" id="toc-sec-example_wilcox" class="nav-link active" data-scroll-target="#sec-example_wilcox"> <span class="header-section-number">9.1</span> Introductory example and the Wilcoxon test</a></li>
   <li><a href="#some-general-conclusions" id="toc-some-general-conclusions" class="nav-link" data-scroll-target="#some-general-conclusions"> <span class="header-section-number">9.2</span> Some general conclusions</a></li>
   <li><a href="#parametric-versus-non-parametric-tests" id="toc-parametric-versus-non-parametric-tests" class="nav-link" data-scroll-target="#parametric-versus-non-parametric-tests"> <span class="header-section-number">9.3</span> Parametric versus non-parametric tests</a></li>
-  <li><a href="#including-statistical-tests-in-a-data-analysis-pipeline-the-dot-notation" id="toc-including-statistical-tests-in-a-data-analysis-pipeline-the-dot-notation" class="nav-link" data-scroll-target="#including-statistical-tests-in-a-data-analysis-pipeline-the-dot-notation"> <span class="header-section-number">9.4</span> Including statistical tests in a data analysis pipeline: the dot notation</a></li>
+  <li><a href="#statistical-tests-in-a-data-analysis-pipeline-the-dot-notation" id="toc-statistical-tests-in-a-data-analysis-pipeline-the-dot-notation" class="nav-link" data-scroll-target="#statistical-tests-in-a-data-analysis-pipeline-the-dot-notation"> <span class="header-section-number">9.4</span> Statistical tests in a data analysis pipeline: The dot notation</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"> <span class="header-section-number">9.5</span> Exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -242,7 +243,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>bird <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"t_test_example.csv"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>bird <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"fictive_bird_example.csv"</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(bird, <span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 40 × 2
@@ -386,10 +387,10 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In many subfields of science, it is standard practice to consider p-values falling below 0.05 as “significant” and those falling above as “non-significant”. Besides the fact that such a one-size-fits-all approach ought to be suspect even under the best of circumstances, a significance threshold of 0.05 is awfully permissive to errors. In fact, we should expect about one out of twenty of all papers ever published which have adopted this cutoff to be wrong! Digging deeper into this issue reveals that the figure is possibly much worse—see, e.g., the paper by David Colquhoun (2014).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> One way to ameliorate the problem is to use stricter significance thresholds—and, of course, to always use common sense as well as prescribed recipes when dealing with real-world problems and data.</p>
+<p>In many subfields of science, it is standard practice to consider p-values falling below 0.05 as “significant” and those falling above as “non-significant”. Besides the fact that such a one-size-fits-all approach ought to be suspect even under the best of circumstances, a significance threshold of 0.05 is awfully permissive to errors. In fact, we should expect about one out of twenty of all papers ever published which have adopted this cutoff to be wrong! Digging deeper into this issue reveals that the figure is possibly much worse—see, e.g., Colquhoun (2014).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> One way to ameliorate the problem is to adopt a less exclusive and parochial view of p-values. Instead of having rigid significance thresholds, p-values can simply be reported and interpreted for what they are: the probability that the outcome is at least as extreme as observed, assuming that the null model holds. Treating this information as just one piece of the data puzzle is a first step towards avoiding the overinterpretation of results.</p>
 </div>
 </div>
-<p>It is possible to calculate confidence intervals within the Wilcoxon test as well. All one needs to do is pass <code>conf.int = TRUE</code> as an argument:</p>
+<p>It is possible to add a calculation of confidence intervals to the Wilcoxon test. All one needs to do is pass <code>conf.int = TRUE</code> as an argument:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(weight <span class="sc">~</span> island, <span class="at">data =</span> bird, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -406,8 +407,8 @@ difference in location
               3.436204 </code></pre>
 </div>
 </div>
-<p>As additional output, we now receive the 95% confidence interval, as well as the explicit difference between the locations of the two samples. (A small word of caution: this difference is neither the difference of the means nor the difference of the medians, but the median of the difference between samples from the two groups of data.) The confidence interval, as seen, includes zero, which means that one cannot rule out the possibility of there being no true difference in the locations of the underlying populations.</p>
-<p>The confidence level defaults to 95%, but this can be changed via the <code>conf.level</code> argument. For example, to use a 99% confidence interval instead:</p>
+<p>As additional output, we now receive the 95% confidence interval, as well as the explicit difference between the locations of the two samples. (A small word of caution: this difference is neither the difference of the means nor the difference of the medians, but the median of the difference between samples from the two groups of data.) The confidence interval, as seen, includes zero, which can be interpreted as not being able to rule out the possibility of there being no true difference in the locations of the underlying populations at the specified confidence level.</p>
+<p>The default confidence level of 95% can be changed via the <code>conf.level</code> argument. For example, to use a 99% confidence interval instead:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(weight <span class="sc">~</span> island, <span class="at">data =</span> bird, <span class="at">conf.int =</span> <span class="cn">TRUE</span>, <span class="at">conf.level =</span> <span class="fl">0.99</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -424,18 +425,18 @@ difference in location
               3.436204 </code></pre>
 </div>
 </div>
-<p>In summary, the Wilcoxon test failed to reject the null hypothesis that our fictive birds have different sizes across the two islands. While failure to reject the null is not the same as confirming that the null is true (absence of evidence is not evidence of absence!), the notion that the two samples are different could not be supported. In this particular case, since we ourselves have created the original data using the null hypothesis, we have the privilege of knowing that this is the truth. When working with real data, such knowledge is generally not available.</p>
+<p>In summary, the Wilcoxon test failed to yield serious evidence in favor of rejecting the null hypothesis. Therefore, we cannot claim with any confidence that our fictive birds have different sizes across the two islands. While failure to reject the null is not the same as confirming that the null is true (absence of evidence is not evidence of absence!), the notion that the two samples are different could not be supported. In this particular case, since we ourselves have created the original data using the null hypothesis, we have the privilege of knowing that this is the truth. When working with real data, such knowledge is generally not available.</p>
 </section>
 <section id="some-general-conclusions" class="level2" data-number="9.2">
 <h2 data-number="9.2" class="anchored" data-anchor-id="some-general-conclusions"><span class="header-section-number">9.2</span> Some general conclusions</h2>
 <p>The example of <a href="#sec-example_wilcox"><span>Section&nbsp;9.1</span></a> illustrates two important general points.</p>
 <p>First, instead of jumping into statistical tests, we started the analysis with qualitative and descriptive data exploration: we plotted the data, computed its means and medians, etc. This is almost always the correct way to go. (The exception is when one analyzes data from a pre-registered experimental design. In that case, one must follow whatever statistical techniques were agreed upon before data collection even started.) To perform tests “blindly”, without visually exploring the data first, is rarely a good idea.</p>
-<p>Second, we only performed the statistical test after we have made an effort to understand the data, and after setting clear expectations about what we might find. We knew, going into the test, that finding a difference between the two island samples was questionable. And indeed, the test revealed that such a distinction cannot be made in good conscience. Following a similar strategy for all statistical inference can save a lot of undue frustration. To make the point more sharply: do not perform a statistical test without knowing what its result will be! A more nuanced way of saying the same thing is that if you think you see a relationship in your data, then you should also make sure that your observation is not just a mirage, by using a statistical test. But if a relationship is not evident, it rarely makes much sense to try to explore it statistically.</p>
+<p>Second, we only performed the statistical test after we have made an effort to understand the data, and after setting clear expectations about what we might find. We knew, going into the test, that finding a difference between the two island samples was questionable. And indeed, the test revealed that such a distinction cannot be made in good conscience. Following a similar strategy for all statistical inference can prevent a lot of frustration. To make the point more sharply: do not perform a statistical test without knowing what its result will be! A more nuanced way of saying the same thing is that if you think you see a relationship in your data, then you should also make sure that your observation is not just a mirage, by using a statistical test. But if a relationship is not visually evident, you should first ask the question whether it makes much sense to try to explore it statistically.</p>
 </section>
 <section id="parametric-versus-non-parametric-tests" class="level2" data-number="9.3">
 <h2 data-number="9.3" class="anchored" data-anchor-id="parametric-versus-non-parametric-tests"><span class="header-section-number">9.3</span> Parametric versus non-parametric tests</h2>
-<p>The Wilcoxon test we employed is <em>non-parametric</em>: it does not assume either the data or the residuals to come from any particular distribution. This is both the test’s advantage and disadvantage. It is an advantage because fewer assumptions must be satisfied for the test to be applicable. Additionally, non-parametric techniques tend to fare better when only limited data are available. Since in many areas of biology (e.g., in ecology) data are hard to come by, datasets are correspondingly small, making non-parametric techniques a natural candidate for interrogating the data with. On the downside, non-parametric tests tend to be less powerful than parametric ones: the additional assumptions of parametric tests (when they are actually met by real data) make inference easier.</p>
-<p>One of the most common parametric alternatives to the Wilcoxon test is Welch’s <em>t</em>-test. Like the Wilcoxon test, the <em>t</em>-test assumes the independence of the two samples. In addition, it also assumes that the samples are normally distributed. Let us see what the <em>t</em>-test says about the fictive bird data we analyzed earlier:</p>
+<p>The Wilcoxon test we employed is <em>non-parametric:</em> it does not assume either the data or the residuals to come from any particular distribution. This is both the test’s advantage and disadvantage. It is an advantage because fewer assumptions must be satisfied for the test to be applicable. Non-parametric techniques also tend to fare better when only limited data are available. Since in many areas of biology (such as ecology) data are hard to come by, datasets are correspondingly small, making non-parametric techniques a natural candidate for interrogating the data with. On the downside, non-parametric tests tend to be less powerful than parametric ones: the additional assumptions of parametric tests (when they are actually met by real data) may allow for sharper inference.</p>
+<p>One of the most common parametric alternatives to the Wilcoxon test is Welch’s <em>t</em>-test. Like the Wilcoxon test, the <em>t</em>-test assumes the independence of the two samples. In addition, it also assumes that the samples are normally distributed. Let us see what the <em>t</em>-test says about our fictive bird data:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(weight <span class="sc">~</span> island, <span class="at">data =</span> bird)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -518,8 +519,106 @@ difference in location
 </div>
 </div>
 </section>
-<section id="including-statistical-tests-in-a-data-analysis-pipeline-the-dot-notation" class="level2" data-number="9.4">
-<h2 data-number="9.4" class="anchored" data-anchor-id="including-statistical-tests-in-a-data-analysis-pipeline-the-dot-notation"><span class="header-section-number">9.4</span> Including statistical tests in a data analysis pipeline: the dot notation</h2>
+<section id="statistical-tests-in-a-data-analysis-pipeline-the-dot-notation" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="statistical-tests-in-a-data-analysis-pipeline-the-dot-notation"><span class="header-section-number">9.4</span> Statistical tests in a data analysis pipeline: The dot notation</h2>
+<p>One natural question is whether statistical tests can be included in a data analysis pipeline. The answer is yes, but not without having to consider some complications that are due to historical accidents. Attempting the following results in an error:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> island, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in wilcox.test.default(., weight ~ island, conf.int = TRUE): 'x' must be numeric</code></pre>
+</div>
+</div>
+<p>The reason for the error is in how the pipe operator <code>%&gt;%</code> works: it substitutes the expression on the left of the pipe into the <em>first</em> argument of the expression on the right. This works splendidly with functions of the <code>tidyverse</code>, since these are designed to always take the data as their first argument. However, a quick glance at the documentation of both <code>wilcox.test</code> and <code>t.test</code> (neither of which are <code>tidyverse</code> functions) reveals that they take the data as their <em>second</em> argument, with the formula coming first. A naive application of the pipe operator, like above, will therefore fail.</p>
+<p>Fortunately, there is a way to work around this. One may use the <em>dot</em> (<code>.</code>) in an expression to stand for whatever was being piped into it. The following will therefore work:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> island, <span class="at">data =</span> ., <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Wilcoxon rank sum exact test
+
+data:  weight by island
+W = 271, p-value = 0.05589
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.018386  6.820811
+sample estimates:
+difference in location 
+              3.436204 </code></pre>
+</div>
+</div>
+<p>The dot stands for the object being piped in—which, in our case, is simply the tibble <code>bird</code>. The <code>data = .</code> argument therefore evaluates to <code>data = bird</code>.</p>
+<p>This ought to conclude all there is to using the dot notation, except that there are a few subtleties involved. As we know, the pipe substitutes the object on the left as the first argument of the object on the right. In the above expression, this behavior was overridden: by using the dot, the data were substituted as the second argument instead. This will be the case as long as the dot appears alone, without being nested into some other function call. <em>However, if the dot is part of another function, then the expression to the left of the pipe will additionally be substituted, silently, as the first argument on the right.</em> For example, suppose that we want to remove rows with missing data from the table first, before doing a statistical test. We can do this with the <code>drop_na</code> function. (Since the <code>bird</code> table does not have any rows with <code>NA</code> values, this does not actually do anything in this context, but it is easy to imagine data where some rows do have missing entries, in which case removing them first could be useful.) But then, the following piece of code will fail:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> island, <span class="at">data =</span> <span class="fu">drop_na</span>(.), <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in wilcox.test.default(., weight ~ island, data = drop_na(.), conf.int = TRUE): 'x' must be numeric</code></pre>
+</div>
+</div>
+<p>Here the dot appears as part of the <code>drop_na</code> function. Thus, <code>bird</code> is not just substituted where the dot is, but also silently as the first function argument to <code>wilcox.test</code>. Which then makes the function think that <code>bird</code> is the formula, and <code>weight ~ island</code> is the data—consequently, we get an error.</p>
+<p>If necessary, it is possible to override this behavior, by putting curly braces around the expression(s) into which we are piping. The curly braces always prevent the silent substitution of the piped expression, which will therefore only be substituted wherever the dot explicitly appears. The above, faulty code can therefore be fixed by using curly braces:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  { <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> island, <span class="at">data =</span> <span class="fu">drop_na</span>(.), <span class="at">conf.int =</span> <span class="cn">TRUE</span>) }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Wilcoxon rank sum exact test
+
+data:  weight by island
+W = 271, p-value = 0.05589
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.018386  6.820811
+sample estimates:
+difference in location 
+              3.436204 </code></pre>
+</div>
+</div>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>While this behavior of the dot notation may appear arbitrary, there is method to the madness. In most situations, including the dot within another function indeed means that we would <em>like</em> the dot to also be passed as the first argument. For example, we could add row numbers to the bird tibble, by creating a new column whose entries range from one to the number of columns in the data. The number of columns can be obtained with the <code>nrow</code> function. Therefore, the following is possible:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rowID =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(.)) <span class="sc">%&gt;%</span> <span class="co"># Create new column, numbering the rows</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(rowID, island, weight) <span class="co"># Reorder the columns so rowID is first</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 40 × 3
+   rowID island  weight
+   &lt;int&gt; &lt;chr&gt;    &lt;dbl&gt;
+ 1     1 smaller  21.8 
+ 2     2 smaller  19.0 
+ 3     3 smaller  19.0 
+ 4     4 smaller  21.2 
+ 5     5 smaller  15.8 
+ 6     6 smaller  14.3 
+ 7     7 smaller  19.9 
+ 8     8 smaller   9.68
+ 9     9 smaller  17.0 
+10    10 smaller  12.7 
+# … with 30 more rows</code></pre>
+</div>
+</div>
+<p>In this case, the first argument to <code>mutate</code>, as always, is the piped-in tibble. Due to the convention that the dot gets silently substituted as the first argument as well (because the dot appeared within a function call), we did not need to write <code>mutate(., rowID = 1:nrow(.))</code> above in the second line. Thus, the seemingly arbitrary rules do lead to less awkward code, at least some of the time.</p>
+</div>
+</div>
+</section>
+<section id="exercises" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="exercises"><span class="header-section-number">9.5</span> Exercises</h2>
+<ol type="1">
+<li>Atmospheric ozone levels are important for urban gardens, because ozone concentrations above 80 parts per hundred million can damage lettuce plants. The file <code>ozone.csv</code> contains measured ozone concentrations in gardens distributed around a city. The gardens were either east or west of the city center. Is there a difference in average ozone concentration between eastern vs.&nbsp;western gardens? Create a plot of the concentrations first and try to guess the answer, before performing any statistical analyses. Then do the statistics, using both nonparametric and parametric methods. What result do you find? Do the outcomes of the different methods agree with one another?</li>
+<li>In the built-in <code>iris</code> dataset, the sepal and petal characteristics of the various species differ. Let us focus on just petal length here. Is there a detectable difference between the petal lengths of <em>Iris versicolor</em> and <em>I. virginica</em>? (Since we are not working with <em>I. setosa</em> in this exercise, make sure to remove them from the data first—e.g., by using <code>filter</code>.) Like before, start with a graph which you can base a hypothesis on. Then perform both nonparametric and parametric tests to see if your hypothesis can be supported.</li>
+<li>Repeat the above exercise for any and all of the possible trait-species pair combinations in the <code>iris</code> dataset. E.g., one can compare the sepal widths of <em>I. setosa</em> and <em>I. virginica</em>, or the petal widths of <em>I. versicolor</em> and <em>I. setosa</em>, and so on.</li>
+</ol>
 
 
 </section>
