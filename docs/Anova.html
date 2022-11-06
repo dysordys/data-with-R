@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to data analysis and visualization with R - 10&nbsp; Statistical comparison of multiple groups</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./References.html" rel="next">
+<link href="./Intro_statistics.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Statistical comparison of multiple groups</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to data analysis and visualization with R</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Welcome</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Intro_R_RStudio.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to R and RStudio</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./R_programming_basics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">R programming basics</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Data_reading.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Reading tabular data from disk</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Basic_data_wrangling.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Basic data manipulation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and data normalization</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Creating_figures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Creating publication-grade figures</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Further_plotting_options.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Some further plotting options</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Joining_data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Joining data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Intro_statistics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introducing statistical inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Anova.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Statistical comparison of multiple groups</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-kruskalwallis-and-dunn-tests" id="toc-the-kruskalwallis-and-dunn-tests" class="nav-link active" data-scroll-target="#the-kruskalwallis-and-dunn-tests"> <span class="header-section-number">10.1</span> The Kruskal–Wallis and Dunn tests</a></li>
+  <li><a href="#one-way-anova" id="toc-one-way-anova" class="nav-link" data-scroll-target="#one-way-anova"> <span class="header-section-number">10.2</span> One-way ANOVA</a></li>
+  <li><a href="#sec-diagnostics" id="toc-sec-diagnostics" class="nav-link" data-scroll-target="#sec-diagnostics"> <span class="header-section-number">10.3</span> Diagnostic plots</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-ANOVA" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Statistical comparison of multiple groups</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="the-kruskalwallis-and-dunn-tests" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="the-kruskalwallis-and-dunn-tests"><span class="header-section-number">10.1</span> The Kruskal–Wallis and Dunn tests</h2>
+<p>The tools of <a href="Intro_statistics.html"><span>Chapter&nbsp;9</span></a> allow us to compare two groups of data. But what do we do when we have more than two groups? For example, we might wish to know how different treatments influence plant growth, as measured by dry weight. If there are two treatments, then there will be three (instead of two) groups, because the treatments will be compared with a control group which does not receive treatment.</p>
+<p>Such a dataset is, in fact, built into R, and is called <code>PlantGrowth</code>. Here it is:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 2
+   weight group
+    &lt;dbl&gt; &lt;fct&gt;
+ 1   4.17 ctrl 
+ 2   5.58 ctrl 
+ 3   5.18 ctrl 
+ 4   6.11 ctrl 
+ 5   4.5  ctrl 
+ 6   4.61 ctrl 
+ 7   5.17 ctrl 
+ 8   4.53 ctrl 
+ 9   5.33 ctrl 
+10   5.14 ctrl 
+11   4.81 trt1 
+12   4.17 trt1 
+13   4.41 trt1 
+14   3.59 trt1 
+15   5.87 trt1 
+16   3.83 trt1 
+17   6.03 trt1 
+18   4.89 trt1 
+19   4.32 trt1 
+20   4.69 trt1 
+21   6.31 trt2 
+22   5.12 trt2 
+23   5.54 trt2 
+24   5.5  trt2 
+25   5.37 trt2 
+26   5.29 trt2 
+27   4.92 trt2 
+28   6.15 trt2 
+29   5.8  trt2 
+30   5.26 trt2 </code></pre>
+</div>
+</div>
+<p>(The <code>PlantGrowth</code> data are in the form of a data frame instead of a tibble; hence we convert it above by using <code>as_tibble</code>.) We see that each group consists of 10 observations, and we have three groups: the control (<code>ctrl</code>) treatment 1 (<code>trt1</code>), and treatment 2 (<code>trt2</code>). As usual, we visualize the data first, before doing any tests:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(PlantGrowth) <span class="sc">+</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> weight) <span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">fill =</span> <span class="st">"steelblue"</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">width =</span> <span class="fl">0.05</span>, <span class="at">colour =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Anova_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Based on the figure, it is reasonable to expect there to be a real difference between treatment 1 and treatment 2. But whether there is good reason to think that the control truly differs from any of the treatments is unclear.</p>
+<p>One way of finding out could be to perform pairwise Wilcoxon tests between each pair of groups. This, in fact, would be quite feasible here, because there are only three comparisons to be made (control vs.&nbsp;treatment 1; control vs.&nbsp;treatment 2, and treatment 1 vs.&nbsp;treatment 2). Here are the results of doing this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(PlantGrowth) <span class="sc">%&gt;%</span> <span class="co"># The PlantGrowth dataset, converted to a tibble</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"trt2"</span>) <span class="sc">%&gt;%</span> <span class="co"># Keep only the control and treatment 1</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> ., <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Wilcoxon rank sum test with continuity correction
+
+data:  weight by group
+W = 67.5, p-value = 0.1986
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.2899731  1.0100554
+sample estimates:
+difference in location 
+             0.4213948 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(PlantGrowth) <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"trt1"</span>) <span class="sc">%&gt;%</span> <span class="co"># Keep only the control and treatment 2</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> ., <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Wilcoxon rank sum exact test
+
+data:  weight by group
+W = 25, p-value = 0.06301
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -1.00  0.04
+sample estimates:
+difference in location 
+                 -0.49 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(PlantGrowth) <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"ctrl"</span>) <span class="sc">%&gt;%</span> <span class="co"># Keep only treatments 1 and 2</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> ., <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Wilcoxon rank sum exact test
+
+data:  weight by group
+W = 16, p-value = 0.008931
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -1.50 -0.31
+sample estimates:
+difference in location 
+                -0.945 </code></pre>
+</div>
+</div>
+<p>As expected, the difference between the control and the two treatments is not particularly credible (especially in the case of treatment 1), but there is good indication that the difference between the two treatments is not just due to chance.</p>
+<p>While this method of using repeated Wilcoxon tests worked fine above, there are some problems with this approach. One is that it can quickly get out of hand, because having <em>n</em> groups means there will be <em>n</em> (<em>n</em> - 1) / 2 pairs to consider. For instance, if the number of groups is 12 (not a particularly large number, as we will see in later examples), then there are 66 unique pairs already. It would not be pleasant to perform this many tests, even if any single test is quite simple to implement.</p>
+<p>The other problem has to do with <em>multiple testing</em> and its influence on the interpretation of p-values. Very simply put, the problem is that if sufficiently many groups are compared, then we might find at least one pair with a low p-value—not because the null hypothesis is false, but because across a large number of observations some p-values might turn out lower than others just by chance. Remember: p-values measure, in effect, the probability that the observed effect is too stark to be due to simple coincidence. But if we create sufficiently many opportunities for such a coincidence to arise, then of course one eventually will. One of the best explanation of this point is in the following cartoon by xkcd:</p>
+<p><img src="significant.png" class="img-fluid"></p>
+<p>Fortunately, there is no need to rely on repeated Wilcoxon tests when there are more than two groups, as other methods are available. One such method is the <em>Kruskal–Wallis test</em>, which can be used with any number of groups as long as those groups vary within a single factor. (Later we will see examples where multiple independent factors are varied, and each possible combination results in a separate group. For example, if the effects of three different diets are examined separately on women and men, then there will be 3 × 2 = 6 groups, defined by the two factors of diet and sex.) The Kruskal–Wallis test is non-parametric, and therefore does not rely on assumptions such as the normality of the residuals. Its application is precisely analogous to how the Wilcoxon test is implemented. Therefore, to perform the test on the <code>PlantGrowth</code> data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kruskal.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Kruskal-Wallis rank sum test
+
+data:  weight by group
+Kruskal-Wallis chi-squared = 7.9882, df = 2, p-value = 0.01842</code></pre>
+</div>
+</div>
+<p>The null hypothesis of the Kruskal–Wallis test is that the observations from all groups were sampled from the same underlying distribution—that is, that there are no differences between the groups other than those attributed to random noise. Consequently, when the p-value is low (like above), this means that it is unlikely that the data in all groups come from the same distribution, and thus that <em>at least</em> one group differs from the others.</p>
+<p>While that is something, we want more: an actual comparison of the groups (like we have done with our repeated Wilcoxon tests). The way forward is to perform a <em>post hoc</em> (Latin “after this”) test. In this case, the <em>Dunn test</em> is one such post hoc test. This test is implemented in R, but not in any of the basic packages. To use it, one must first install the <code>FSA</code> package:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"FSA"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Once it is installed, the package should be loaded:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And then, the Dunn test (<code>dunnTest</code>) follows the same syntax as <code>wilcox.test</code> or <code>kruskal.test</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dunnTest</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Dunn (1964) Kruskal-Wallis multiple comparison</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>  p-values adjusted with the Holm method.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Comparison         Z    P.unadj      P.adj
+1 ctrl - trt1  1.117725 0.26368427 0.26368427
+2 ctrl - trt2 -1.689290 0.09116394 0.18232789
+3 trt1 - trt2 -2.807015 0.00500029 0.01500087</code></pre>
+</div>
+</div>
+<p>The table above is the output of the test, and has four columns. The first column shows which two groups are being compared. The next column, called <code>Z</code>, is the value of the test statistic, which we need not concern ourselves with here. Next, we have the unadjusted p-values; and finally, the adjusted p-values (<code>P.adj</code>), which have been corrected to account for the multiple testing problem mentioned above. Therefore, the adjusted p-values will always be as large or larger than the unadjusted ones.</p>
+<p>What has the Dunn test revealed? Precisely what we have been suspecting: that the only difference worth noting is the one between the two treatments (last row of the table).</p>
+</section>
+<section id="one-way-anova" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="one-way-anova"><span class="header-section-number">10.2</span> One-way ANOVA</h2>
+<p>The Kruskal–Wallis test is the non-parametric analogue of the <em>one-way ANOVA</em> (ANalysis Of VAriance). The “one-way” in the name refers to the property that there is a single factor indexing the groups, as discussed earlier. ANOVA relies on assumptions such as normality of the residuals and having the same number of observations in each group (balanced design). Otherwise, it is much like the Kruskal–Wallis test. The function in R that performs an ANOVA is <code>lm</code> (short for “linear model”):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = weight ~ group, data = PlantGrowth)
+
+Coefficients:
+(Intercept)    grouptrt1    grouptrt2  
+      5.032       -0.371        0.494  </code></pre>
+</div>
+</div>
+<p>The output is not particularly informative: it simply lists the regression coefficients without the requisite information to see whether those coefficients actually mean anything. To get more, one can pass the result of the <code>lm</code> function to one of two other functions: either <code>anova</code> or <code>summary</code>. The former generates an ANOVA or sum-of-squares table (thus, despite its name, it does not actually perform the anova, just formats its output in a specific way). In this table, each factor indexing the groups, as well as their interactions (if present), get one row:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">%&gt;%</span> <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: weight
+          Df  Sum Sq Mean Sq F value  Pr(&gt;F)  
+group      2  3.7663  1.8832  4.8461 0.01591 *
+Residuals 27 10.4921  0.3886                  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>The p-value above (in the row belonging to the factor <code>group</code>, under the column <code>Pr(&gt;F)</code>) is the analogue of the p-value calculated by the Kruskal–Wallis test (which was 0.01842). We can see that the two tests agree qualitatively.</p>
+<p>The latter, <code>summary</code> function focuses on the regression coefficients instead, listing all of them in a table, alongside other information:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = weight ~ group, data = PlantGrowth)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.0710 -0.4180 -0.0060  0.2627  1.3690 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   5.0320     0.1971  25.527   &lt;2e-16 ***
+grouptrt1    -0.3710     0.2788  -1.331   0.1944    
+grouptrt2     0.4940     0.2788   1.772   0.0877 .  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.6234 on 27 degrees of freedom
+Multiple R-squared:  0.2641,    Adjusted R-squared:  0.2096 
+F-statistic: 4.846 on 2 and 27 DF,  p-value: 0.01591</code></pre>
+</div>
+</div>
+<p>The output first prints the function call to <code>lm</code> we used. Then it gives a quick overview of the residuals: the minimum and maximum values, the point of the first and third quantiles, and the median—in other words, it contains the same information one would use to create a box plot with. This ought to give a quick and rough idea of whether the residuals are violently skewed, or have at least a chance of being normally distributed, which is a key assumption behind ANOVA. (We will discuss a better method for assessing the normality of the residuals in <a href="#sec-diagnostics"><span>Section&nbsp;10.3</span></a>.) The next item in the output is the table of fitted regression coefficients. Here we can find the estimated values of the coefficients, their standard error, the associated t-statistic, and the p-values (the <code>Pr(&gt;|t|)</code> column). Here the p-values refer to the likelihood that the observed difference from zero is due to chance.</p>
+<p>To interpret the coefficients, note that R computes them relative to some reference group—which, unless specified otherwise, is the factor that comes first in the alphabet. From <code>ctrl</code>, <code>trt1</code>, and <code>trt2</code>, it is <code>ctrl</code> that comes first, and therefore the control serves as the baseline. The row called <code>(Intercept)</code> tells us the estimated value made by the regression, assuming that all non-baseline variables are set to zero. In this context, this means that both <code>trt1</code> and <code>trt2</code> are zeroed out, and therefore <code>(Intercept)</code> simply measures the average value within the group <code>ctrl</code>. The estimates in the rows <code>grouptrt1</code> and <code>grouptrt2</code> (these names were created by mushing together the name of the column in which the factor is found with the factors’ names themselves) are the <em>deviations</em> from the baseline provided by <code>(Intercept)</code>—that is, from the mean within the control. So we can surmise that the estimated mean of <code>trt1</code> is 5.032 - 0.371 = 4.661, and that of <code>trt2</code> is 5.032 + 0.494 = 5.526. Indeed, this is what we find relying on simple summaries computing the means in each group:</p>
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(group) <span class="sc">%&gt;%</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanWeight =</span> <span class="fu">mean</span>(weight)) <span class="sc">%&gt;%</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="co"># Not necessary here, strictly speaking, but does not hurt</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  group meanWeight
+  &lt;fct&gt;      &lt;dbl&gt;
+1 ctrl       5.032
+2 trt1       4.661
+3 trt2       5.526</code></pre>
+</div>
+</div>
+<div class="cell">
+
+</div>
+<p>After the table of regression coefficients, we get some information on the residual standard error, degrees of freedom, the coefficient of determination R<sup>2</sup> (a value between 0 and 1; the closer it is to 1, the more tightly the data fit the model), the adjusted R<sup>2</sup> (which is like the regular R<sup>2</sup> but with a penalty for using too many fitting parameters), the F-statistic, and the overall p-value—this is the same as the one in the ANOVA table earlier, created with the <code>anova</code> function.</p>
+</section>
+<section id="sec-diagnostics" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="sec-diagnostics"><span class="header-section-number">10.3</span> Diagnostic plots</h2>
+<p>Since ANOVA is a parametric method relying on equal variances in each group and the normality of the residuals, it is important to check whether these assumptions in fact hold. There is a convenient way to do so, via <em>diagnostic plots</em>. Such plots can be created via the <code>autoplot</code> function of the <code>ggfortify</code> package. We can therefore install this package first, in case we do not have it already:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggfortify"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And then load it:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggfortify)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And now, we can simply give the result of the <code>lm</code> function as input to the function <code>autoplot</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">%&gt;%</span> <span class="fu">autoplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Anova_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We see four plots above. The top left of these shows the residuals against the fitted values (notice that the three values along the x-axis correspond to the means of the three groups <code>ctrl</code>, <code>trt1</code>, and <code>trt2</code>). If the points have no trend of increase or decrease, and the spread of the points is roughly constant, then they adhere to ANOVA assumptions. The blue line is a moving regression line which helps decide whether there is a trend; in this case, it would be hard to argue that any trend is due to something else than chance.</p>
+<p>The bottom left plot is much the same as the top left one, except that it takes the absolute values of the residuals. This is done because, since residuals will by definition be more or less symmetrically distributed around zero, one can effectively double the precision of the diagnostic by focusing only on magnitudes. For statistical reasons that do not concern us here, the square roots of these absolute values tend to behave much better, which is why we see the square root being taken along the y-axis. The blue line is again a locally-weighted estimate, which ought to be as flat as possible. In this case, we see that it more or less is. (One can see a slight downward trend, but experience shows that these are not sufficient to render an ANOVA useless.)</p>
+<p>The top right graph offers a visualization of how well the residuals follow a normal distribution.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./Intro_statistics.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introducing statistical inference</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./References.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">References</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,158 @@
+# Statistical comparison of multiple groups {#sec-ANOVA}
+
+## The Kruskal--Wallis and Dunn tests
+
+The tools of @sec-wilcox allow us to compare two groups of data. But what do we do when we have more than two groups? For example, we might wish to know how different treatments influence plant growth, as measured by dry weight. If there are two treatments, then there will be three (instead of two) groups, because the treatments will be compared with a control group which does not receive treatment.
+
+Such a dataset is, in fact, built into R, and is called `PlantGrowth`. Here it is:
+
+```{r}
+#| message: false
+library(tidyverse)
+
+PlantGrowth %>% as_tibble() %>% print(n = Inf)
+```
+
+(The `PlantGrowth` data are in the form of a data frame instead of a tibble; hence we convert it above by using `as_tibble`.) We see that each group consists of 10 observations, and we have three groups: the control (`ctrl`) treatment 1 (`trt1`), and treatment 2 (`trt2`). As usual, we visualize the data first, before doing any tests:
+
+```{r}
+ggplot(PlantGrowth) +
+  aes(x = group, y = weight) +
+  geom_boxplot(colour = "steelblue", fill = "steelblue",
+               alpha = 0.2, outlier.shape = NA) +
+  geom_jitter(alpha = 0.4, width = 0.05, colour = "steelblue") +
+  theme_bw()
+```
+
+Based on the figure, it is reasonable to expect there to be a real difference between treatment 1 and treatment 2. But whether there is good reason to think that the control truly differs from any of the treatments is unclear.
+
+One way of finding out could be to perform pairwise Wilcoxon tests between each pair of groups. This, in fact, would be quite feasible here, because there are only three comparisons to be made (control vs. treatment 1; control vs. treatment 2, and treatment 1 vs. treatment 2). Here are the results of doing this:
+
+```{r}
+#| warning: false
+as_tibble(PlantGrowth) %>% # The PlantGrowth dataset, converted to a tibble
+  filter(group != "trt2") %>% # Keep only the control and treatment 1
+  wilcox.test(weight ~ group, data = ., conf.int = TRUE)
+
+as_tibble(PlantGrowth) %>%
+  filter(group != "trt1") %>% # Keep only the control and treatment 2
+  wilcox.test(weight ~ group, data = ., conf.int = TRUE)
+
+as_tibble(PlantGrowth) %>%
+  filter(group != "ctrl") %>% # Keep only treatments 1 and 2
+  wilcox.test(weight ~ group, data = ., conf.int = TRUE)
+```
+
+As expected, the difference between the control and the two treatments is not particularly credible (especially in the case of treatment 1), but there is good indication that the difference between the two treatments is not just due to chance.
+
+While this method of using repeated Wilcoxon tests worked fine above, there are some problems with this approach. One is that it can quickly get out of hand, because having *n* groups means there will be *n* (*n* - 1) / 2 pairs to consider. For instance, if the number of groups is 12 (not a particularly large number, as we will see in later examples), then there are 66 unique pairs already. It would not be pleasant to perform this many tests, even if any single test is quite simple to implement.
+
+The other problem has to do with *multiple testing* and its influence on the interpretation of p-values. Very simply put, the problem is that if sufficiently many groups are compared, then we might find at least one pair with a low p-value---not because the null hypothesis is false, but because across a large number of observations some p-values might turn out lower than others just by chance. Remember: p-values measure, in effect, the probability that the observed effect is too stark to be due to simple coincidence. But if we create sufficiently many opportunities for such a coincidence to arise, then of course one eventually will. One of the best explanation of this point is in the following cartoon by xkcd:
+
+![](significant.png)
+
+Fortunately, there is no need to rely on repeated Wilcoxon tests when there are more than two groups, as other methods are available. One such method is the *Kruskal--Wallis test*, which can be used with any number of groups as long as those groups vary within a single factor. (Later we will see examples where multiple independent factors are varied, and each possible combination results in a separate group. For example, if the effects of three different diets are examined separately on women and men, then there will be 3 &#215; 2 = 6 groups, defined by the two factors of diet and sex.) The Kruskal--Wallis test is non-parametric, and therefore does not rely on assumptions such as the normality of the residuals. Its application is precisely analogous to how the Wilcoxon test is implemented. Therefore, to perform the test on the `PlantGrowth` data:
+
+```{r}
+kruskal.test(weight ~ group, data = PlantGrowth)
+```
+
+The null hypothesis of the Kruskal--Wallis test is that the observations from all groups were sampled from the same underlying distribution---that is, that there are no differences between the groups other than those attributed to random noise. Consequently, when the p-value is low (like above), this means that it is unlikely that the data in all groups come from the same distribution, and thus that *at least* one group differs from the others.
+
+While that is something, we want more: an actual comparison of the groups (like we have done with our repeated Wilcoxon tests). The way forward is to perform a *post hoc* (Latin "after this") test. In this case, the *Dunn test* is one such post hoc test. This test is implemented in R, but not in any of the basic packages. To use it, one must first install the `FSA` package:
+
+```{r}
+#| eval: false
+install.packages("FSA")
+```
+
+Once it is installed, the package should be loaded:
+
+```{r}
+#| message: false
+library(FSA)
+```
+
+And then, the Dunn test (`dunnTest`) follows the same syntax as `wilcox.test` or `kruskal.test`:
+
+```{r}
+dunnTest(weight ~ group, data = PlantGrowth)
+```
+
+The table above is the output of the test, and has four columns. The first column shows which two groups are being compared. The next column, called `Z`, is the value of the test statistic, which we need not concern ourselves with here. Next, we have the unadjusted p-values; and finally, the adjusted p-values (`P.adj`), which have been corrected to account for the multiple testing problem mentioned above. Therefore, the adjusted p-values will always be as large or larger than the unadjusted ones.
+
+What has the Dunn test revealed? Precisely what we have been suspecting: that the only difference worth noting is the one between the two treatments (last row of the table).
+
+
+## One-way ANOVA
+
+The Kruskal--Wallis test is the non-parametric analogue of the *one-way ANOVA* (ANalysis Of VAriance). The "one-way" in the name refers to the property that there is a single factor indexing the groups, as discussed earlier. ANOVA relies on assumptions such as normality of the residuals and having the same number of observations in each group (balanced design). Otherwise, it is much like the Kruskal--Wallis test. The function in R that performs an ANOVA is `lm` (short for "linear model"):
+
+```{r}
+lm(weight ~ group, data = PlantGrowth)
+```
+
+The output is not particularly informative: it simply lists the regression coefficients without the requisite information to see whether those coefficients actually mean anything. To get more, one can pass the result of the `lm` function to one of two other functions: either `anova` or `summary`. The former generates an ANOVA or sum-of-squares table (thus, despite its name, it does not actually perform the anova, just formats its output in a specific way). In this table, each factor indexing the groups, as well as their interactions (if present), get one row:
+
+```{r}
+lm(weight ~ group, data = PlantGrowth) %>% anova()
+```
+
+The p-value above (in the row belonging to the factor `group`, under the column `Pr(>F)`) is the analogue of the p-value calculated by the Kruskal--Wallis test (which was 0.01842). We can see that the two tests agree qualitatively.
+
+The latter, `summary` function focuses on the regression coefficients instead, listing all of them in a table, alongside other information:
+
+```{r}
+lm(weight ~ group, data = PlantGrowth) %>% summary()
+```
+
+The output first prints the function call to `lm` we used. Then it gives a quick overview of the residuals: the minimum and maximum values, the point of the first and third quantiles, and the median---in other words, it contains the same information one would use to create a box plot with. This ought to give a quick and rough idea of whether the residuals are violently skewed, or have at least a chance of being normally distributed, which is a key assumption behind ANOVA. (We will discuss a better method for assessing the normality of the residuals in @sec-diagnostics.) The next item in the output is the table of fitted regression coefficients. Here we can find the estimated values of the coefficients, their standard error, the associated t-statistic, and the p-values (the `Pr(>|t|)` column). Here the p-values refer to the likelihood that the observed difference from zero is due to chance.
+
+To interpret the coefficients, note that R computes them relative to some reference group---which, unless specified otherwise, is the factor that comes first in the alphabet. From `ctrl`, `trt1`, and `trt2`, it is `ctrl` that comes first, and therefore the control serves as the baseline. The row called `(Intercept)` tells us the estimated value made by the regression, assuming that all non-baseline variables are set to zero. In this context, this means that both `trt1` and `trt2` are zeroed out, and therefore `(Intercept)` simply measures the average value within the group `ctrl`. The estimates in the rows `grouptrt1` and `grouptrt2` (these names were created by mushing together the name of the column in which the factor is found with the factors' names themselves) are the *deviations* from the baseline provided by `(Intercept)`---that is, from the mean within the control. So we can surmise that the estimated mean of `trt1` is 5.032 - 0.371 = 4.661, and that of `trt2` is 5.032 + 0.494 = 5.526. Indeed, this is what we find relying on simple summaries computing the means in each group:
+
+```{r}
+#| echo: false
+options(pillar.sigfig = 4)
+```
+
+```{r}
+PlantGrowth %>%
+  group_by(group) %>%
+  summarise(meanWeight = mean(weight)) %>%
+  ungroup() # Not necessary here, strictly speaking, but does not hurt
+```
+
+```{r}
+#| echo: false
+options(pillar.sigfig = 3)
+```
+
+After the table of regression coefficients, we get some information on the residual standard error, degrees of freedom, the coefficient of determination R^2^ (a value between 0 and 1; the closer it is to 1, the more tightly the data fit the model), the adjusted R^2^ (which is like the regular R^2^ but with a penalty for using too many fitting parameters), the F-statistic, and the overall p-value---this is the same as the one in the ANOVA table earlier, created with the `anova` function.
+
+
+## Diagnostic plots {#sec-diagnostics}
+
+Since ANOVA is a parametric method relying on equal variances in each group and the normality of the residuals, it is important to check whether these assumptions in fact hold. There is a convenient way to do so, via *diagnostic plots*. Such plots can be created via the `autoplot` function of the `ggfortify` package. We can therefore install this package first, in case we do not have it already:
+
+```{r}
+#| eval: false
+install.packages("ggfortify")
+```
+
+And then load it:
+
+```{r}
+library(ggfortify)
+```
+
+And now, we can simply give the result of the `lm` function as input to the function `autoplot`:
+
+```{r}
+lm(weight ~ group, data = PlantGrowth) %>% autoplot()
+```
+
+We see four plots above. The top left of these shows the residuals against the fitted values (notice that the three values along the x-axis correspond to the means of the three groups `ctrl`, `trt1`, and `trt2`). If the points have no trend of increase or decrease, and the spread of the points is roughly constant, then they adhere to ANOVA assumptions. The blue line is a moving regression line which helps decide whether there is a trend; in this case, it would be hard to argue that any trend is due to something else than chance.
+
+The bottom left plot is much the same as the top left one, except that it takes the absolute values of the residuals. This is done because, since residuals will by definition be more or less symmetrically distributed around zero, one can effectively double the precision of the diagnostic by focusing only on magnitudes. For statistical reasons that do not concern us here, the square roots of these absolute values tend to behave much better, which is why we see the square root being taken along the y-axis. The blue line is again a locally-weighted estimate, which ought to be as flat as possible. In this case, we see that it more or less is. (One can see a slight downward trend, but experience shows that these are not sufficient to render an ANOVA useless.)
+
+The top right graph offers a visualization of how well the residuals follow a normal distribution.

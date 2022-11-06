@@ -16,6 +16,7 @@ book:
     - Further_plotting_options.qmd
     - Joining_data.qmd
     - Intro_statistics.qmd
+    - Anova.qmd
     - References.qmd
 
 bibliography: biblio.bib
