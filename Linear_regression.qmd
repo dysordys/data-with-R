@@ -1,0 +1,195 @@
+# Simple linear regression {#sec-linreg}
+
+*Linear regression* was invented by Sir Francis Galton (half-cousin to Charles Darwin), in relation to a very specific problem. He was studying the relationship between the body heights of humans and their children. We can follow his lead and download a dataset which is similar to the one used by Sir Francis, but was in fact gathered by Karl Pearson in 1903 (the fact that the dataset strictly focuses on fathers and their sons, excluding mothers and daughters, contributes an extra air of historical authenticity to the analysis):
+
+```{r}
+#| message: false
+library(tidyverse)
+
+heights <- read_tsv("http://www.randomservices.org/random/data/Pearson.txt")
+print(heights)
+```
+
+The above illustrates a point we have not mentioned before: `read_tsv`, `read_csv`, and the other `tidyverse` file reading functions can also fetch data directly from the Internet. Displaying the above in a graph yields the following:
+
+```{r}
+#| message: false
+ggplot(heights, aes(x = Father, y = Son)) +
+  geom_point(colour = "steelblue", alpha = 0.4) +
+  coord_fixed() + # Keep a 1-to-1 aspect ratio between the axes
+  geom_smooth(method = lm) +
+  theme_bw()
+```
+
+A linear smoother has also been added, to illustrate two points. First, notice that although the data are heavily scattered, the confidence interval (gray shaded area) around the linear fit is very narrow. This is due to the fact that this interval is not a direct measure of the variability, but of how reliable the estimate is at any one point. Although the data have large variance, one can be highly certain of the mean trends; hence the narrow confidence region.
+
+The other, more relevant point to notice is that the slope of the line is less than one. We can show this by including a line in the graph whose slope is one and which crosses the center of the blurb of points:
+
+```{r}
+#| message: false
+meanFather <- mean(heights$Father) # Average height of fathers
+meanSon <- mean(heights$Son) # Average height of sons
+ic <- meanSon - meanFather # Calculate intercept, assuming slope of 1
+print(ic) # The intercept is, interestingly almost perfectly 1
+
+ggplot(heights, aes(x = Father, y = Son)) +
+  geom_point(colour = "steelblue", alpha = 0.4) +
+  coord_fixed() +
+  geom_smooth(method = lm) +
+  geom_abline(slope = 1, intercept = ic, alpha = 0.75, linetype = "dashed") +
+  theme_bw()
+```
+
+The implication is that sons of tall fathers, on average, tend to be shorter than their father, and conversely: sons of short fathers on average are taller than their father. This phenomenon gives rise to the name of linear *regression*: Galton described it in a study called "Regression towards mediocrity in hereditary stature" [@Galton1886]. As an aside, he also worked out the method of finding the "best" line that fits the data.
+
+This last part is what we are interested in. Galton's way of doing this was to pick the slope and intercept of the line such that the summed deviations of the points from the line are minimized. Or, rather, the sum of *squared* deviations, to prevent very large positive and very large negative deviations canceling each other in the sum, making it appear as if the total deviation was very small.
+
+One can imagine that there must be some reasonably straightforward mathematical procedure to obtain the intercept and slope from arbitrary data. This is indeed the case. But fortunately, there is no need to do it by hand, because the `lm` function automates this process.^[It has been doing this same minimization even for the one- and two-way ANOVA we have been working with in @sec-ANOVA and @sec-SRH. It's just that the results of doing so are not so easy to visualize when the predictors are categorical variables.] Let us perform the regression on the height data:
+
+```{r}
+lm(Son ~ Father, data = heights) %>% summary()
+```
+
+Recall that `summary` returns a table of regression coefficients (under "Coefficients:" above). The two fitted coefficients are the intercept and the slope. The intercept is conveniently called `(Intercept)`, but the slope is labeled by the predictor---consistently with the behavior of `lm` in one- and two-way ANOVA calculations. We see that the intercept is about 33.9 inches; this would be the average height of a son born to a father with zero height.^[This also illustrates the dangers of extrapolating the results of linear regression too far: generally, a linear relationship will only hold within a restricted range of values.] The slope is about 0.5; that is, a father who is one inch taller than another father will have, on average, sons who are half an inch taller (than the sons of the first, shorter father).
+
+
+## Interpreting the results of a linear regression
+
+The intercept and slope which minimize the sum of the squared deviations from the fit can be obtained for any data. But the question is: does such a linear fit actually mean anything? The situation is similar to what we discussed in @sec-example_wilcox: one can always compute the difference of the means between two groups of data, but whether the observed difference is meaningfully different from zero is another question. In the case of the two groups, we introduced techniques such as the Wilcoxon test and the *t*-test to answer that question.
+
+For linear regression, a similar thing is possible. As seen, the output of `lm` above contains p-values and other statistics. The p-values are both practically zero, indicating that one can be absolutely certain that the observed nonzero intercept and slope aren't simply due to chance. But for these conclusions to be meaningful, the usual assumptions must hold: the residuals should be independent from one another, should be normally distributed, and should be homoscedastic (have equal variance for all values of the predictor).
+
+One can check whether these assumptions hold with diagnostic plots. In this particular example, we have a nearly perfect match-up between theory and the data, so the statistical results fro the linear regression should be reliable:
+
+```{r}
+#| warning: false
+library(ggfortify)
+
+lm(Son ~ Father, data = heights) %>%
+  autoplot(which = 1:3, smooth.colour = NA)
+```
+
+To further illustrate possible difficulties of interpretation, let us take a look at a famous dataset that was designed for precisely this purpose [@Anscombe1973]. The data are built into R (with the name `anscombe`), but are not in the most convenient format:
+
+```{r}
+print(anscombe)
+```
+
+These are actually four datasets merged into one: `x1` and `y1` are x and y coordinates of the points from the first set, `x1` and `y2` from the second set, and so on. We can use `pivot_longer` to normalize these data:
+
+```{r}
+ans_long <- anscombe %>%
+  pivot_longer(cols = everything(), names_to = c(".value", "set"),
+               names_pattern = "(.)(.)")
+print(ans_long)
+```
+
+We can now visualize each set, along with linear fits:
+
+```{r}
+#| message: false
+ans_long %>%
+  ggplot() +
+  aes(x = x, y = y, colour = set) +
+  geom_point() +
+  geom_smooth(method = lm, se = FALSE) +
+  facet_wrap(~ set, nrow = 2, labeller = label_both) +
+  theme_bw()
+```
+
+The data have been carefully crafted so that the least-squares regression line has an intercept of 3 and a slope of 0.5 for each of the four sets. But this visual representation reveals what would have been much harder to intuit otherwise: that only the first set has a real chance of conforming to the assumptions of linear regression. Performing the regression on just this set and creating diagnostic plots:
+
+```{r}
+#| warning: false
+lm(y ~ x, data = filter(ans_long, set == "1")) %>% summary()
+lm(y ~ x, data = filter(ans_long, set == "1")) %>%
+  autoplot(which = 1:3, smooth.colour = NA)
+```
+
+There is nothing to suggest on the diagnostic plots that there should be anything wrong with the regression---and, in fact, there isn't anything wrong with it. The computed p-values for the intercept and slope are therefore reliable.
+
+The situation changes for the other three sets. Let us look at set 2:
+
+```{r}
+#| warning: false
+lm(y ~ x, data = filter(ans_long, set == "2")) %>% summary()
+lm(y ~ x, data = filter(ans_long, set == "2")) %>%
+  autoplot(which = 1:3, smooth.colour = NA)
+```
+
+Blindly reading off the p-values without considering the diagnostic plots might lead one to conclude that the observed intercept and slope are not due to chance. This conclusion cannot be drawn however, as it only holds if the assumptions of linear regression are fulfilled---which they certainly aren't, based on the diagnostic plots. Especially the top left one shows that the residuals are not independent, and certainly not identically and normally distributed.
+
+In set 3, the trends are driven too much by a single outlier:
+
+```{r}
+#| warning: false
+lm(y ~ x, data = filter(ans_long, set == "3")) %>% summary()
+lm(y ~ x, data = filter(ans_long, set == "3")) %>%
+  autoplot(which = 1:3, smooth.colour = NA)
+```
+
+As before, the diagnostic plots show that the independence of the residuals is violated. Finally, in set 4, the whole regression is based on a single point whose predictor is different from the rest:
+
+```{r}
+#| warning: false
+lm(y ~ x, data = filter(ans_long, set == "4")) %>% summary()
+lm(y ~ x, data = filter(ans_long, set == "4")) %>%
+  autoplot(which = 1:3, smooth.colour = NA)
+```
+
+Clearly, homoscedasticity (equality of residual variances across all values of the predictor) is heavily violated.
+
+These examples are there to urge caution when interpreting regression statistics. This problem becomes much more acute when relying on *multiple regression*, where there are more than one predictor variables. Since high-dimensional data cannot be visualized as easily as the datasets above, often the diagnostic plots are the only way to tell whether the assumptions of regression hold or not.
+
+
+## A non-parametric method: Theil--Sen regression
+
+A nonparametric alternative to least-squares regression is the *Theil--Sen regression*. It is generally much more robust against outliers than the least-squares method. It also does not require that the residuals are normally distributed, or that they are homoscedastic. There are also two disadvantages, the main one being that it can only be used for simple regression (one single predictor). It can also be slower to compute, but with modern computers, this is rarely an issue.
+
+The way Theil--Sen regression works is simple:
+
+* A line is fit between all possible pairs of points, and their slopes are recorded.
+* The overall regression slope *m* is the median of all these pairwise slopes.
+* The intercept *b* is the median of all *y*~*i*~ -- *m* *x*~*i*~ values, where *x*~*i*~ is the *i*th predictor and *y*~*i*~ the *i*th measurement at that predictor.
+
+To use the Theil--Sen regression, one has to install the package `mblm` ("median-based linear models"):
+
+```{r}
+#| echo: false
+library(mblm)
+```
+
+```{r}
+#| eval: false
+install.packages("mblm")
+
+library(mblm)
+```
+
+The function performing the regression is itself called `mblm`. A note of caution: its data argument, for some reason, is not called `data` but `dataframe`. Let us apply it to set 3 in the Anscombe dataset (the one with the single strong outlier):
+
+```{r}
+#| warning: false
+mblm(y ~ x, dataframe = filter(ans_long, set == "3")) %>% summary()
+```
+
+As seen, the predicted intercept and slope are no longer 3 and 0.5, but 4 and 0.35 instead. Visualizing this, side by side with the ordinary least-squares regression:
+
+```{r}
+leastSquaresFit <-lm(y ~ x, data = filter(ans_long, set == "3"))
+TheilSenFit <-mblm(y ~ x, dataframe = filter(ans_long, set == "3"))
+
+ans_long %>%
+  filter(set == "3") %>%
+  mutate(`least squares` = predict(leastSquaresFit),
+         `Theil-Sen` = predict(TheilSenFit)) %>%
+  pivot_longer(cols = c("least squares", "Theil-Sen"),
+               names_to = "type", values_to = "prediction") %>%
+  ggplot() +
+  geom_point(aes(x = x, y = y), colour = "steelblue") +
+  geom_line(aes(x = x, y = prediction), colour = "goldenrod") +
+  facet_grid(. ~ type) +
+  theme_bw()
+```
+
+The Theil--Sen regression correctly recognizes the outlier for what it is, and remains unaffected by it.

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.36">
+<meta name="generator" content="quarto-1.1.189">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,10 +11,15 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -53,7 +58,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -66,7 +71,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -207,7 +212,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Further_plotting_options.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Some further plotting options</span></a>
+  <a href="./Further_plotting_options.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Some further plotting options; introducing factors</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -222,12 +227,22 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Anova.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Statistical comparison of multiple groups</span></a>
+  <a href="./Anova.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">References</span></a>
+  <a href="./Anova_two_way.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Linear_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Simple linear regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">References</span></a>
   </div>
 </li>
     </ul>
@@ -235,15 +250,15 @@ div.csl-indent {
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-example_wilcox" id="toc-sec-example_wilcox" class="nav-link active" data-scroll-target="#sec-example_wilcox"> <span class="header-section-number">9.1</span> Introductory example and the Wilcoxon test</a></li>
-  <li><a href="#some-general-conclusions" id="toc-some-general-conclusions" class="nav-link" data-scroll-target="#some-general-conclusions"> <span class="header-section-number">9.2</span> Some general conclusions</a></li>
-  <li><a href="#parametric-versus-non-parametric-tests" id="toc-parametric-versus-non-parametric-tests" class="nav-link" data-scroll-target="#parametric-versus-non-parametric-tests"> <span class="header-section-number">9.3</span> Parametric versus non-parametric tests</a></li>
-  <li><a href="#statistical-tests-in-a-data-analysis-pipeline-the-dot-notation" id="toc-statistical-tests-in-a-data-analysis-pipeline-the-dot-notation" class="nav-link" data-scroll-target="#statistical-tests-in-a-data-analysis-pipeline-the-dot-notation"> <span class="header-section-number">9.4</span> Statistical tests in a data analysis pipeline: The dot notation</a></li>
-  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"> <span class="header-section-number">9.5</span> Exercises</a></li>
+  <li><a href="#sec-example_wilcox" id="toc-sec-example_wilcox" class="nav-link active" data-scroll-target="#sec-example_wilcox"><span class="toc-section-number">9.1</span>  Introductory example and the Wilcoxon test</a></li>
+  <li><a href="#some-general-conclusions" id="toc-some-general-conclusions" class="nav-link" data-scroll-target="#some-general-conclusions"><span class="toc-section-number">9.2</span>  Some general conclusions</a></li>
+  <li><a href="#parametric-versus-non-parametric-tests" id="toc-parametric-versus-non-parametric-tests" class="nav-link" data-scroll-target="#parametric-versus-non-parametric-tests"><span class="toc-section-number">9.3</span>  Parametric versus non-parametric tests</a></li>
+  <li><a href="#statistical-tests-in-a-data-analysis-pipeline-the-dot-notation" id="toc-statistical-tests-in-a-data-analysis-pipeline-the-dot-notation" class="nav-link" data-scroll-target="#statistical-tests-in-a-data-analysis-pipeline-the-dot-notation"><span class="toc-section-number">9.4</span>  Statistical tests in a data analysis pipeline: The dot notation</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="toc-section-number">9.5</span>  Exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -402,7 +417,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>We have used the tilde (<code>~</code>) before, when faceting plots with <code>facet_grid</code>; see <a href="Further_plotting_options.html#sec-faceting"><span>Section&nbsp;7.3</span></a>. However, the tilde used in <code>facet_grid</code> has nothing to do with the one we use in formulas: the two symbols happen to be identical, but that is just an accident.</p>
+<p>We have used the tilde (<code>~</code>) before, when faceting plots with <code>facet_grid</code>; see <a href="Further_plotting_options.html#sec-faceting"><span>Section&nbsp;7.4</span></a>. However, the tilde used in <code>facet_grid</code> has nothing to do with the one we use in formulas: the two symbols happen to be identical, but that is just an accident.</p>
 </div>
 </div>
 <p>Let us now look at the output produced by <code>wilcox.test</code> above. Most of it is not particularly relevant for us: we are first informed that a Wilcoxon rank sum exact test is being performed; then we see that we are explaining weight differences by island; then we see the test statistic W itself (we need not concern ourselves with its precise meaning); then the p-value; and finally, a reminder of what the alternative hypothesis is (the null hypothesis is that the shift in location is in fact zero).</p>
@@ -729,7 +744,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
@@ -765,7 +781,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
   <div class="nav-page nav-page-next">
       <a href="./Anova.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Statistical comparison of multiple groups</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

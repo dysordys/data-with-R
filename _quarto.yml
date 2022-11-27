@@ -17,6 +17,8 @@ book:
     - Joining_data.qmd
     - Intro_statistics.qmd
     - Anova.qmd
+    - Anova_two_way.qmd
+    - Linear_regression.qmd
     - References.qmd
 
 bibliography: biblio.bib

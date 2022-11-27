@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.36">
+<meta name="generator" content="quarto-1.1.189">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -11,10 +11,15 @@
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -53,7 +58,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -66,7 +71,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -208,7 +213,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Further_plotting_options.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Some further plotting options</span></a>
+  <a href="./Further_plotting_options.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Some further plotting options; introducing factors</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -223,12 +228,22 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Anova.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Statistical differences between several groups</span></a>
+  <a href="./Anova.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">References</span></a>
+  <a href="./Anova_two_way.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./Linear_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Simple linear regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">References</span></a>
   </div>
 </li>
     </ul>
@@ -236,26 +251,26 @@ div.csl-indent {
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#using-r-as-a-calculator" id="toc-using-r-as-a-calculator" class="nav-link active" data-scroll-target="#using-r-as-a-calculator"> <span class="header-section-number">2.1</span> Using R as a calculator</a></li>
-  <li><a href="#variables-and-types" id="toc-variables-and-types" class="nav-link" data-scroll-target="#variables-and-types"> <span class="header-section-number">2.2</span> Variables and types</a>
+  <li><a href="#using-r-as-a-calculator" id="toc-using-r-as-a-calculator" class="nav-link active" data-scroll-target="#using-r-as-a-calculator"><span class="toc-section-number">2.1</span>  Using R as a calculator</a></li>
+  <li><a href="#variables-and-types" id="toc-variables-and-types" class="nav-link" data-scroll-target="#variables-and-types"><span class="toc-section-number">2.2</span>  Variables and types</a>
   <ul class="collapse">
-  <li><a href="#numerical-variables-and-variable-names" id="toc-numerical-variables-and-variable-names" class="nav-link" data-scroll-target="#numerical-variables-and-variable-names"> <span class="header-section-number">2.2.1</span> Numerical variables and variable names</a></li>
-  <li><a href="#strings" id="toc-strings" class="nav-link" data-scroll-target="#strings"> <span class="header-section-number">2.2.2</span> Strings</a></li>
-  <li><a href="#logical-values" id="toc-logical-values" class="nav-link" data-scroll-target="#logical-values"> <span class="header-section-number">2.2.3</span> Logical values</a></li>
+  <li><a href="#numerical-variables-and-variable-names" id="toc-numerical-variables-and-variable-names" class="nav-link" data-scroll-target="#numerical-variables-and-variable-names"><span class="toc-section-number">2.2.1</span>  Numerical variables and variable names</a></li>
+  <li><a href="#strings" id="toc-strings" class="nav-link" data-scroll-target="#strings"><span class="toc-section-number">2.2.2</span>  Strings</a></li>
+  <li><a href="#logical-values" id="toc-logical-values" class="nav-link" data-scroll-target="#logical-values"><span class="toc-section-number">2.2.3</span>  Logical values</a></li>
   </ul></li>
-  <li><a href="#vectors" id="toc-vectors" class="nav-link" data-scroll-target="#vectors"> <span class="header-section-number">2.3</span> Vectors</a></li>
-  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions"> <span class="header-section-number">2.4</span> Functions</a>
+  <li><a href="#vectors" id="toc-vectors" class="nav-link" data-scroll-target="#vectors"><span class="toc-section-number">2.3</span>  Vectors</a></li>
+  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions"><span class="toc-section-number">2.4</span>  Functions</a>
   <ul class="collapse">
-  <li><a href="#user-defined-functions" id="toc-user-defined-functions" class="nav-link" data-scroll-target="#user-defined-functions"> <span class="header-section-number">2.4.1</span> User-defined functions</a></li>
-  <li><a href="#naming-rules-for-functions-and-the-concept-of-syntactic-sugar" id="toc-naming-rules-for-functions-and-the-concept-of-syntactic-sugar" class="nav-link" data-scroll-target="#naming-rules-for-functions-and-the-concept-of-syntactic-sugar"> <span class="header-section-number">2.4.2</span> Naming rules for functions and the concept of syntactic sugar</a></li>
-  <li><a href="#sec-funccomp" id="toc-sec-funccomp" class="nav-link" data-scroll-target="#sec-funccomp"> <span class="header-section-number">2.4.3</span> Function composition</a></li>
-  <li><a href="#function-piping" id="toc-function-piping" class="nav-link" data-scroll-target="#function-piping"> <span class="header-section-number">2.4.4</span> Function piping</a></li>
+  <li><a href="#user-defined-functions" id="toc-user-defined-functions" class="nav-link" data-scroll-target="#user-defined-functions"><span class="toc-section-number">2.4.1</span>  User-defined functions</a></li>
+  <li><a href="#naming-rules-for-functions-and-the-concept-of-syntactic-sugar" id="toc-naming-rules-for-functions-and-the-concept-of-syntactic-sugar" class="nav-link" data-scroll-target="#naming-rules-for-functions-and-the-concept-of-syntactic-sugar"><span class="toc-section-number">2.4.2</span>  Naming rules for functions and the concept of syntactic sugar</a></li>
+  <li><a href="#sec-funccomp" id="toc-sec-funccomp" class="nav-link" data-scroll-target="#sec-funccomp"><span class="toc-section-number">2.4.3</span>  Function composition</a></li>
+  <li><a href="#function-piping" id="toc-function-piping" class="nav-link" data-scroll-target="#function-piping"><span class="toc-section-number">2.4.4</span>  Function piping</a></li>
   </ul></li>
-  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"> <span class="header-section-number">2.5</span> Exercises</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="toc-section-number">2.5</span>  Exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -740,7 +755,7 @@ argument n ----&gt; |            |
 <section id="exercises" class="level2" data-number="2.5">
 <h2 data-number="2.5" class="anchored" data-anchor-id="exercises"><span class="header-section-number">2.5</span> Exercises</h2>
 <ol type="1">
-<li><p>Which of the variable names below are valid, and why?</p>
+<li>Which of the variable names below are valid, and why?
 <ul>
 <li><code>first.result.of_computation</code></li>
 <li><code>2nd.result.of_computation</code></li>
@@ -752,7 +767,7 @@ argument n ----&gt; |            |
 <li><code>`is this valid?...`</code></li>
 <li><code>is_this_valid?...</code></li>
 </ul></li>
-<li><p>Create a vector called <code>z</code>, with entries 1.2, 5, 3, 13.7, 6.66, and 4.2 (in that order). Then, by applying functions to this vector, obtain:</p>
+<li>Create a vector called <code>z</code>, with entries 1.2, 5, 3, 13.7, 6.66, and 4.2 (in that order). Then, by applying functions to this vector, obtain:
 <ul>
 <li>Its smallest entry.</li>
 <li>Its largest entry.</li>
@@ -762,19 +777,17 @@ argument n ----&gt; |            |
 <li>The vector’s entries sorted in decreasing order.</li>
 <li>The product of the fourth entry with the difference of the third and sixth entries. Then take the absolute value of the result.</li>
 </ul></li>
-<li><p>Define a vector of strings, called <code>s</code>, with the three entries <code>"the fat cat"</code>, <code>"sat on"</code>, and <code>"the mat"</code>.</p>
+<li>Define a vector of strings, called <code>s</code>, with the three entries <code>"the fat cat"</code>, <code>"sat on"</code>, and <code>"the mat"</code>.
 <ul>
 <li>Combine these three strings into a single string, and print it on the screen. (Hint: look up the help for the <code>paste</code> function, in particular its <code>collapse</code> argument.)</li>
 <li>Reverse the entries of <code>s</code>, so they come in the order <code>"the mat"</code>, <code>"sat on"</code>, and <code>"the fat cat"</code>. (Hint: check out the <code>rev</code> function.) Then merge the three strings again into a single one, and print it on the screen.</li>
 </ul></li>
-<li><p>Assume you have a population of some organism in which one given allele of some gene is the only one available in the gene pool. If a new mutant organism with a different, selectively advantageous allele appears, it would be reasonable to conclude that the new allele will fix in the population and eliminate the original one over time. This, however, is not necessarily true, because a very rare allele might succumb to being eliminated by chance, regardless of how advantageous it is. According to Motoo Kimura’s famous formula, the probability of such a new allele eventually fixing in the population is given as:</p>
-<p><span class="math display">\[ P = \frac{1 - \text{e}^{-s}}{1 - \text{e}^{-2Ns}} \]</span></p>
-<p><span class="citation" data-cites="Gillespie2004">(<a href="References.html#ref-Gillespie2004" role="doc-biblioref">Gillespie 2004</a>)</span>. Here <em>P</em> is the probability of eventual fixation, <em>s</em> is the selection differential (the degree to which the new allele is advantageous over the original one), and <em>N</em> is the (effective) population size.</p>
+<li>Assume you have a population of some organism in which one given allele of some gene is the only one available in the gene pool. If a new mutant organism with a different, selectively advantageous allele appears, it would be reasonable to conclude that the new allele will fix in the population and eliminate the original one over time. This, however, is not necessarily true, because a very rare allele might succumb to being eliminated by chance, regardless of how advantageous it is. According to Motoo Kimura’s famous formula, the probability of such a new allele eventually fixing in the population is given as: <span class="math display">\[ P = \frac{1 - \text{e}^{-s}}{1 - \text{e}^{-2Ns}} \]</span> <span class="citation" data-cites="Gillespie2004">(<a href="References.html#ref-Gillespie2004" role="doc-biblioref">Gillespie 2004</a>)</span>. Here <em>P</em> is the probability of eventual fixation, <em>s</em> is the selection differential (the degree to which the new allele is advantageous over the original one), and <em>N</em> is the (effective) population size.
 <ul>
 <li>Write a function that implements this formula. It should take the selection differential <em>s</em> and the population size <em>N</em> as parameters, and return the fixation probability as its result.</li>
 <li>A selection differential of 0.5 is very strong (though not unheard of). What is the likelihood that an allele with that level of advantage will fix in a population of 1000 individuals? Interpret the result.</li>
 </ul></li>
-<li><p>A text is <em>palindromic</em> if it reads backwards the same as it reads forwards. For example, “racecar”, “deified”, and “rotator” are all palindromic words. Assume that you are given a word in all lowercase, broken up by characters. For instance, you could be given the vector <code>c("r", "a", "c", "e", "c", "a", "r")</code> (a palindrome) or <code>c("h", "e", "l", "l", "o")</code> (not a palindrome).</p>
+<li>A text is <em>palindromic</em> if it reads backwards the same as it reads forwards. For example, “racecar”, “deified”, and “rotator” are all palindromic words. Assume that you are given a word in all lowercase, broken up by characters. For instance, you could be given the vector <code>c("r", "a", "c", "e", "c", "a", "r")</code> (a palindrome) or <code>c("h", "e", "l", "l", "o")</code> (not a palindrome).
 <ul>
 <li>Write a function which checks whether the vector encodes a palindromic text. The function should return <code>TRUE</code> if the text is a palindrome, and <code>FALSE</code> otherwise. (Hint: reverse the text, collapse both the original and the reversed vectors into single strings, and then compare them using logical equality.)</li>
 <li>Modify the function to allow for both upper- and lowercase text, treating case as irrelevant (i.e., <code>"A"</code> is treated to be equal to <code>"a"</code> when evaluating whether the text is palindromic). One simple way to do this is to convert each character of the text into uppercase (or lowercase; it doesn’t matter which), and use this standardized text for reversing and comparing with. Look up the functions <code>toupper</code> and <code>tolower</code>, and implement this improvement in your palindrome checker function.</li>
@@ -789,11 +802,11 @@ Gillespie, John H. 2004. <em>Population Genetics: A Concise Guide</em>. Baltimor
 </div>
 </div>
 </section>
-<section class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1" role="doc-endnote"><p>Technically, there is a third option: a logical value could be equal to <code>NA</code>, indicating missing data.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2" role="doc-endnote"><p>As of R 4.1.0, the R language also supports a native, built-in pipe operator <code>|&gt;</code> as well. The package name <code>magrittr</code> is an allusion to Belgian surrealist artist René Magritte (1898-1967) because of his famous painting <a href="https://en.wikipedia.org/wiki/The_Treachery_of_Images">La trahison des images</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Technically, there is a third option: a logical value could be equal to <code>NA</code>, indicating missing data.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>As of R 4.1.0, the R language also supports a native, built-in pipe operator <code>|&gt;</code> as well. The package name <code>magrittr</code> is an allusion to Belgian surrealist artist René Magritte (1898-1967) because of his famous painting <a href="https://en.wikipedia.org/wiki/The_Treachery_of_Images">La trahison des images</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -867,7 +880,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);

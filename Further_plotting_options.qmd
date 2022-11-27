@@ -1,4 +1,4 @@
-# Some further plotting options {#sec-moreggplot}
+# Some further plotting options; introducing factors {#sec-moreggplot}
 
 ## Smoothing and regression lines
 
@@ -175,7 +175,54 @@ iris %>%
 We used the built-in color names `"steelblue"`, `"goldenrod"`, and `"forestgreen"` above. A full R color cheat sheet can be found [here](https://www.nceas.ucsb.edu/sites/default/files/2020-04/colorPaletteCheatsheet.pdf), for more options and built-in colors.
 
 
+## Reordering labels using factors {#sec-factors}
+
+In the previous examples, the order of text labels was always automatically determined. In fact, the basic rule in R is that the ordering follows the alphabet: the default is for `setosa` to precede `versicolor`, which will be followed by `virginica`. This default ordering can be inconvenient, however. Consider the following table of data, with hypothetical temperature measurements for each month of the year:
+
+```{r}
+tibble(month = month.abb, temperature = -cos(seq(0, 2 * pi, l = 12)))
+```
+
+(`month.abb` is a built-in vector of character strings in R, with the abbreviations of the months' names from January to December.) So far so good. However, if we plot this with months along the x-axis and temperature along the y-axis, we run into trouble because R displays items by alphabetical instead of chronological order:
+
+```{r}
+tibble(month = month.abb, temperature = -cos(seq(0, 2 * pi, l = 12))) %>%
+  ggplot() +
+  aes(x = month, y = temperature) +
+  geom_point(colour = "steelblue") +
+  theme_bw()
+```
+
+To fix this, one must convert the type of `month` from a simple vector of character strings to a vector of *factors*. Factors are categorical variables (i.e., take on well-defined distinct values instead of varying on a continuous scale like double-precision numbers), but with an extra attribute which determines the order of those values. This ordering is often referred to as the *levels* of the factor, the value which is set to be the first has level 1, the next one level 2, and so on.
+
+One very convenient way of assigning factor levels is through the `tidyverse` function `as_factor`.^[As with `read_csv`, there exists a function called `as.factor`, in addition to `as_factor`. It is the base R version of the same functionality. As usual, the `tidyverse` offers improvements over the original, so it is recommended not to use `as.factor` at all, relying on just `as_factor` instead.] This function takes a vector of values and, if the values are numeric, assigns them levels based on those numerical values. However, if the values are character strings, then the levels are assigned in order of appearance within the vector. This is perfect for us, because the months are in proper order already within the tibble:
+
+```{r}
+tibble(month = month.abb, temperature = -cos(seq(0, 2 * pi, l = 12))) %>%
+  mutate(month = as_factor(month)) %>%
+  ggplot() +
+  aes(x = month, y = temperature) +
+  geom_point(colour = "steelblue") +
+  theme_bw()
+```
+
+It is also possible to take a factor and reassign its factor levels manually. This can be done with the `fct_relevel` function:
+
+```{r}
+tibble(month = month.abb, temperature = -cos(seq(0, 2 * pi, l = 12))) %>%
+  mutate(month = fct_relevel(month, "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")) %>%
+  ggplot() +
+  aes(x = month, y = temperature) +
+  geom_point(colour = "steelblue") +
+  theme_bw()
+```
+
+Also, the use of `fct_relevel` need not be this laborious. If all we want to do is place a few factor levels to be first ones without changing any of the others, it is possible to enter just their names. Often, for example, a factor column holds various experimental treatments, one of which is called `"control"`. In that case, all we might want is to make the control be the first factor level, without altering any of the others. This could be done with something like `fct_relevel(treatment, "control")`, assuming `treatment` is the name of the vector or column in a data frame that holds the different experimental treatment names.
+
+
 ## Facets {#sec-faceting}
+
 
 Plots can be *faceted* (subplots created and arranged in a grid layout) based on some variable or variables. For instance, let us create histograms of petal lengths in the `iris` dataset, like we did last time:
 
