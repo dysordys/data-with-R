@@ -176,6 +176,8 @@ Similar to "greater than" and "less than", there are other logical operations as
     `==`       equal to                 `5 == 6`             `FALSE`
     `!=`       not equal to             `5 != 6`             `TRUE`
     `!`        not                      `!FALSE`             `TRUE`
+    `&`        and                      `(1 > 2) & (1 < 2)`  `FALSE`
+    `|`        or                       `(1 > 2) | (1 < 2)`  `TRUE`
     `%in%`     is element of set        `2 %in% c(1, 2, 3)`  `TRUE`
 
 The `==` and `!=` operators can also be used with strings: `"Hello World" == "Hello World!"` returns `FALSE`, because the two strings are not exactly identical, differing in the final exclamation mark. Similarly, `"Hello World" != "Hello World!"` returns `TRUE`, because it is indeed true that the two strings are unequal.
