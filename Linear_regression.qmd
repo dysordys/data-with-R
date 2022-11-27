@@ -193,3 +193,9 @@ ans_long %>%
 ```
 
 The Theil--Sen regression correctly recognizes the outlier for what it is, and remains unaffected by it.
+
+
+## Exercises
+
+1. The file `plant.growth.rate.csv` contains individual plant growth data (mm/week), as a function of soil moisture content. Do plants grow better in more moist soils? Visualize the relationship, then perform and interpret a linear regression using both parametric and non-parametric methods. Use diagnostic plots to check whether the assumptions of the parametric test are satisfied.
+2. It is difficult to measure the height of a tree. By contrast, the diameter at breast height (DBH) is easy to measure. Can one infer the height of a tree by measuring its DBH? The built-in dataset `trees` contains DBH data (somewhat misleadingly labeled `Girth`), as well as measured height and timber volume of 31 felled black cherry trees. You can ignore timber volume, and focus instead on how well DBH predicts tree height. Plot the relationship, perform both parametric and non-parametric regression, create diagnostic plots---you know the routine by now. Interpret the results, and summarize how reliable it is to use DBH to infer tree height.

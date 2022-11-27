@@ -112,7 +112,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./References.html" rel="next">
+<link href="./Nonlinear_regression.html" rel="next">
 <link href="./Anova_two_way.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -242,7 +242,12 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">References</span></a>
+  <a href="./Nonlinear_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">More general linear models and nonlinear regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">References</span></a>
   </div>
 </li>
     </ul>
@@ -256,6 +261,7 @@ div.csl-indent {
   <ul>
   <li><a href="#interpreting-the-results-of-a-linear-regression" id="toc-interpreting-the-results-of-a-linear-regression" class="nav-link active" data-scroll-target="#interpreting-the-results-of-a-linear-regression"><span class="toc-section-number">12.1</span>  Interpreting the results of a linear regression</a></li>
   <li><a href="#a-non-parametric-method-theilsen-regression" id="toc-a-non-parametric-method-theilsen-regression" class="nav-link" data-scroll-target="#a-non-parametric-method-theilsen-regression"><span class="toc-section-number">12.2</span>  A non-parametric method: Theil–Sen regression</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="toc-section-number">12.3</span>  Exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -609,6 +615,13 @@ Residual standard error: 1.415 on 9 degrees of freedom</code></pre>
 </div>
 </div>
 <p>The Theil–Sen regression correctly recognizes the outlier for what it is, and remains unaffected by it.</p>
+</section>
+<section id="exercises" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="exercises"><span class="header-section-number">12.3</span> Exercises</h2>
+<ol type="1">
+<li>The file <code>plant.growth.rate.csv</code> contains individual plant growth data (mm/week), as a function of soil moisture content. Do plants grow better in more moist soils? Visualize the relationship, then perform and interpret a linear regression using both parametric and non-parametric methods. Use diagnostic plots to check whether the assumptions of the parametric test are satisfied.</li>
+<li>It is difficult to measure the height of a tree. By contrast, the diameter at breast height (DBH) is easy to measure. Can one infer the height of a tree by measuring its DBH? The built-in dataset <code>trees</code> contains DBH data (somewhat misleadingly labeled <code>Girth</code>), as well as measured height and timber volume of 31 felled black cherry trees. You can ignore timber volume, and focus instead on how well DBH predicts tree height. Plot the relationship, perform both parametric and non-parametric regression, create diagnostic plots—you know the routine by now. Interpret the results, and summarize how reliable it is to use DBH to infer tree height.</li>
+</ol>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
@@ -734,8 +747,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./References.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">References</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./Nonlinear_regression.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">More general linear models and nonlinear regression</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

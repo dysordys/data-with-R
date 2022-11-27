@@ -1,0 +1,117 @@
+# More general linear models and nonlinear regression
+
+## Combining categorical and continuous variables in linear models
+
+So far we have used at most two predictors when dealing with linear models (`lm`). This was in @sec-SRH, where we looked the effects of two categorical variables, as well as their interaction. @sec-linreg introduced the idea of using a continuous, instead of a categorical, predictor. But we have not been combining these.
+
+In fact, one can build arbitrarily complicated linear models from an arbitrary combination of continuous and categorical variables, and their interactions. Let us consider the built-in `CO2` dataset as an example, which was already used before in an exercise (@sec-exercises-anova-two-way). Briefly, the data contain measurements from an experiment on the cold tolerance of the grass species [Echinochloa crus-galli](https://en.wikipedia.org/wiki/Echinochloa_crus-galli). The dataset has five columns: `Plant` (a unique identifier for each plant individual), `Type` (either `Quebec` or `Mississippi` depending on the origin of the plant), `Treatment` (whether the plant individual was `chilled` or `nonchilled` for the experiment), `conc` (ambient carbon dioxide concentration), and `uptake` (carbon dioxide uptake rate by the plant).
+
+```{r}
+#| message: false
+library(tidyverse)
+as_tibble(CO2)
+```
+
+We can plot the observed distributions of CO~2~ uptake rates for each type and treatment:
+
+```{r}
+as_tibble(CO2) %>%
+  ggplot(aes(x = 0, y = uptake)) +
+  geom_boxplot(colour = "steelblue", fill = "steelblue",
+               alpha = 0.2, outlier.shape = NA) +
+  geom_jitter(colour = "steelblue", alpha = 0.5, width = 0.05) +
+  facet_grid(Type ~ Treatment) +
+  ylab("uptake rate") +
+  theme_bw() +
+  theme(axis.title.x = element_blank(), # The x-axis is meaningless here,
+        axis.ticks.x = element_blank(), # so remove title, tick marks,
+        axis.text.x = element_blank())  # and labels from it
+```
+
+This, however, is only part of the story, as becomes obvious if we also plot the ambient CO~2~ concentrations (`conc`) along the x-axis:
+
+```{r}
+as_tibble(CO2) %>%
+  ggplot(aes(x = conc, y = uptake)) +
+  geom_point(colour = "steelblue", alpha = 0.8) +
+  facet_grid(Type ~ Treatment) +
+  labs(x = "concentration", y = "uptake rate") +
+  theme_bw()
+```
+
+We see that there is also a clear, saturating relationship between CO~2~ concentration and uptake rates. It is definitely not a linear relationship, but a saturating one. This does not mean that a linear model is useless for analyzing these data: the trend of whether the data increase or decrease can still be captured (although it is not recommended to use the model for numerical prediction purposes). One model that may come to mind is as follows:
+
+```{r}
+lm(uptake ~ conc + Type * Treatment, data = CO2) %>% anova()
+```
+
+In other words, the uptake rates are modeled via a combination of the effect of concentration (a continuous variable) plus the interaction of type and treatment (two categorical variables). Recall that `Type * Treatment` is shorthand for `Type + Treatment + Type:Treatment`, the sum of the main effects and the interaction between them. The rationale for choosing this model is that the boxplot above reveals a potential interaction between the two factors `Type` and `Treatment` (the effect of changing `Treatment` from chilled to nonchilled depends on whether the `Type` was Quebec or Mississippi), and on top of this, we also want to capture the positive dependence on CO~2~ concentration. The ANOVA table above concurs: each of these categories come out with low p-values, indicating that what we see is unlikely to be due to just chance. To make sure that the assumptions on which this interpretation rests are held, we look at the diagnostic plots:
+
+```{r}
+#| warning: false
+library(ggfortify)
+
+lm(uptake ~ conc + Type * Treatment, data = CO2) %>%
+  autoplot(which = 1:3, smooth.colour = NA)
+```
+
+While the Q--Q plot could be better, there is not much reason not to trust the model---other than the fact, or course, that the data in fact depend on concentrations in a manifestly nonlinear way. We will come back to this point in @sec-nonlin-regression.
+
+It is also informative to apply the function `summary` on the model fit instead of just `anova`, to obtain the regression slopes and intercept:
+
+```{r}
+lm(uptake ~ conc + Type * Treatment, data = CO2) %>% summary()
+```
+
+As good as this model looks, one could argue based on the plot of the data that there could also be an interaction between `conc` and the other two factors. After all, the saturation levels of the uptake rate are always higher in Quebec than in Mississippi, and the effect of chilling also depends on `Type`. A model which accounts for all these effects and their interactions is `uptake ~ conc * Type * Treatment`:
+
+```{r}
+lm(uptake ~ conc * Type * Treatment, data = CO2) %>% anova()
+lm(uptake ~ conc * Type * Treatment, data = CO2) %>% summary()
+lm(uptake ~ conc * Type * Treatment, data = CO2) %>%
+  autoplot(which = 1:3, smooth.colour = NA)
+
+```
+
+This confirms what we saw on the plot of the data: that the basic shape of the relationship between concentration and uptake is unaffected by either `Type` or `Treatment` (i.e., the term `conc:Type:Treatment` in the ANOVA table has a high associated p-value). It also illustrates the general point that there are very often multiple candidate models, and choosing between them is a question of judgment, trial-and-error, and successively improving the model structure based on results from earlier modeling attempts.
+
+
+## Nonlinear regression {#sec-nonlin-regression}
+
+## Exercises
+
+#### Exponential growth
+
+Let $N(t)$ be the population abundance of some organism at time $t$. An exponentially growing population increases according to
+$$ N(t) = N_0 \mathrm{e}^{rt} $$
+where $N_0$ is the initial population size at time $t=0$, and $r$ is the exponential rate of increase.
+
+1. Download the data file `pop_growth_1.csv` from Lisam and load it in R.
+2. Use `nls()` to fit the above exponential growth model to this dataset. Do not treat $N_0$ as a free parameter, but instead use the actual population size at time $t=0$. This leaves $r$ as the only parameter to be fitted. Do so, using an appropriate starting value.
+4. Assume that the data describes a population of water lilies, and that a single 'individual' weighs 1 gram. If the population would continue to grow unrestricted, what would be its biomass after nine months (about 280 days)? What object would have a comparable weight to this population, and what does that tell us about unrestricted population growth in general?
+
+
+#### Nitrogen uptake
+
+@CedergreenMadsen2002 reported data from an experiment on nitrogen uptake by the duckweed *Lemna minor*, where the predictor variable is the initial substrate concentration and the response variable is the uptake rate. In this type of experiment, it is anticipated that the uptake will increase as the concentration increases, approaching a horizontal asymptote. The data are available in `uptake.csv`.
+
+1. Create a plot of the data, with the nitrogen concentrations along the x-axis and the corresponding uptake rates along the y-axis.
+2. Fit a Michaelis-Menten model (describing saturating dynamics) to the data. This model is given by
+$$ \rho = \frac{V c}{K + c} $$
+where $V$ and $K$ are two constants, $c$ is the concentration, and $\rho$ the uptake rate. Make initial guesses for the two parameters $V$ and $K$ based on the graph, and perform the nonlinear regression.
+2. Given your nonlinear regression results, what is the maximum possible nitrogen uptake rate of *L. minor*? 
+
+
+#### Logistic growth
+
+The simplest model illustrating population regulation and regulated growth is the *logistic model*, defined by the differential equation
+$$ \frac{\mathrm{d} N(t)}{\mathrm{d} t} = rN(t) \left( 1 - \frac{N(t)}{K} \right) $$
+Here $N(t)$ is the population abundance at time $t$, $r$ is the exponential growth rate of the population when rare, and $K$ is the maximum abundance it can sustainably achieve (the "carrying capacity"). It should be obvious that when $N(t) = K$, the derivative vanishes, signalling that the population size no longer changes.
+
+The above differential equation is one of the few which can be solved explicitly. Its solution reads
+$$ N(t) = N_0 \frac{\mathrm{e}^{rt}}{1-(1-\mathrm{e}^{rt})(N_0/K)} $$
+where $N_0$ is the initial population size at time $t=0$. Let us fit this model to some population growth data.
+
+1. Download the data file `pop_growth_2.csv`, load it in R, and plot the population abundances against time.
+2. Fit the above model to the data using the `nls()` function, with appropriate guesses for the starting values of $r$ and $K$.
+3. Plot the data and the model prediction together. What are the estimated values of $r$ and $K$?
