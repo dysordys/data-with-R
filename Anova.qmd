@@ -168,7 +168,7 @@ lm(weight ~ group, data = PlantGrowth) %>%
 ```
 
 
-## Tukey's honest significant differences
+## Tukey's honest significant differences {#sec-tukey}
 
 Just as the Dunn test is a post-hoc test for the Kruskal--Wallis test, the Tukey test (or Tukey's honest significant test) is a post-hoc test for an ANOVA. The corresponding function in R is called `TukeyHSD`, and it should be applied to the result of the `lm` function---with one caveat. The Tukey test requires the output of the ANOVA to be in a particular format. Therefore, before passing the result of `lm` to `TukeyHSD`, we first have to pass it to a helper function called `aov` ("analysis of variance"). Like this:
 

@@ -223,12 +223,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Nonlinear_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">More general linear models and nonlinear regression</span></a>
+  <a href="./Nonlinear_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">More general linear models; nonlinear regression</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">References</span></a>
+  <a href="./Intro_map.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Higher-order functions and mapping</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">References</span></a>
   </div>
 </li>
     </ul>
@@ -243,7 +248,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#the-kruskalwallis-and-dunn-tests" id="toc-the-kruskalwallis-and-dunn-tests" class="nav-link active" data-scroll-target="#the-kruskalwallis-and-dunn-tests"><span class="toc-section-number">10.1</span>  The Kruskal–Wallis and Dunn tests</a></li>
   <li><a href="#one-way-anova" id="toc-one-way-anova" class="nav-link" data-scroll-target="#one-way-anova"><span class="toc-section-number">10.2</span>  One-way ANOVA</a></li>
   <li><a href="#sec-diagnostics" id="toc-sec-diagnostics" class="nav-link" data-scroll-target="#sec-diagnostics"><span class="toc-section-number">10.3</span>  Diagnostic plots</a></li>
-  <li><a href="#tukeys-honest-significant-differences" id="toc-tukeys-honest-significant-differences" class="nav-link" data-scroll-target="#tukeys-honest-significant-differences"><span class="toc-section-number">10.4</span>  Tukey’s honest significant differences</a></li>
+  <li><a href="#sec-tukey" id="toc-sec-tukey" class="nav-link" data-scroll-target="#sec-tukey"><span class="toc-section-number">10.4</span>  Tukey’s honest significant differences</a></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="toc-section-number">10.5</span>  Exercises</a></li>
   </ul>
 </nav>
@@ -527,8 +532,8 @@ F-statistic: 4.846 on 2 and 27 DF,  p-value: 0.01591</code></pre>
 </div>
 </div>
 </section>
-<section id="tukeys-honest-significant-differences" class="level2" data-number="10.4">
-<h2 data-number="10.4" class="anchored" data-anchor-id="tukeys-honest-significant-differences"><span class="header-section-number">10.4</span> Tukey’s honest significant differences</h2>
+<section id="sec-tukey" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="sec-tukey"><span class="header-section-number">10.4</span> Tukey’s honest significant differences</h2>
 <p>Just as the Dunn test is a post-hoc test for the Kruskal–Wallis test, the Tukey test (or Tukey’s honest significant test) is a post-hoc test for an ANOVA. The corresponding function in R is called <code>TukeyHSD</code>, and it should be applied to the result of the <code>lm</code> function—with one caveat. The Tukey test requires the output of the ANOVA to be in a particular format. Therefore, before passing the result of <code>lm</code> to <code>TukeyHSD</code>, we first have to pass it to a helper function called <code>aov</code> (“analysis of variance”). Like this:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">%&gt;%</span> <span class="fu">aov</span>() <span class="sc">%&gt;%</span> <span class="fu">TukeyHSD</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

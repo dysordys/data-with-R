@@ -20,6 +20,7 @@ book:
     - Anova_two_way.qmd
     - Linear_regression.qmd
     - Nonlinear_regression.qmd
+    - Intro_map.qmd
     - References.qmd
 
 bibliography: biblio.bib

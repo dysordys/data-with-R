@@ -1,4 +1,4 @@
-# More general linear models and nonlinear regression
+# More general linear models; nonlinear regression {#sec-nls}
 
 ## Combining categorical and continuous variables in linear models
 
@@ -77,6 +77,140 @@ This confirms what we saw on the plot of the data: that the basic shape of the r
 
 
 ## Nonlinear regression {#sec-nonlin-regression}
+
+The relationship between CO~2~ concentration and uptake rates are definitely not linear, regardless of treatment or type. So the question arises: can one fit a *nonlinear* function to these data? As an example, let us focus on just Quebec and the nonchilled treatment, to better illustrate the ideas behind nonlinear regression. Here are the data:
+
+```{r}
+as_tibble(CO2) %>%
+  filter(Type == "Quebec", Treatment == "nonchilled") %>%
+  ggplot(aes(x = conc, y = uptake)) +
+  geom_point(colour = "steelblue", alpha = 0.8) +
+  labs(x = "concentration", y = "uptake rate") +
+  theme_bw()
+```
+
+If the function we wish to fit is not linear, we have to specify its shape. One commonly used shape for describing the above saturating pattern is the *Michaelis--Menten curve*. This is given by the following equation:
+$$ \rho = \frac{V c}{K + c} $$
+Here $\rho$ is the uptake rate, $c$ is the concentration, and $V$ and $K$ are two parameters which can modify the shape of the function. The figure below illustrates what curves one can get by varying these parameters:
+
+```{r}
+#| message: false
+expand_grid(V = c(10, 20, 30), # This function creates a tibble with all
+            K = c(1, 5, 10),   # possible combinations of the inputs
+            concentration = seq(0, 60, l = 201)) %>%
+  group_by(V, K) %>%
+  mutate(uptake = V * concentration / (K + concentration)) %>%
+  ungroup() %>%
+  ggplot() +
+  aes(x = concentration, y = uptake) +
+  geom_line(colour = "steelblue") +
+  facet_grid(V ~ K, labeller = label_both) +
+  theme_bw()
+```
+
+The task is to find the values of $V$ and $K$ that provide the best fit to the data. Like in the case of linear regression, this can be done via the least-squares criterion: the best fit is provided by the curve which minimizes the sum of the squared deviations of the observed points from it. Unlike with linear regression however, this curve can be very difficult to find. In fact, there is no known general procedure that would be able to minimize the sum of squares under all circumstances. What algorithms *can* do is to find the best fit, given some initial guesses for the parameters that are at least not violently off of the true values. Just how close the guess needs to be is context-dependent, and highlights an important problem: nonlinear regression can be as much an art as it is a science. For the types of curves we will be fitting though, the more subtle problems will never come up, and a "good enough" initial guess can vary within a relatively wide range.
+
+So, how can one guess the values of $V$ and $K$? To do this, one has to have an understanding of how the parameters influence the curves. For $V$, this interpretation is not difficult to infer. Notice that if concentrations are very, very large, then in the denominator of the formula $\rho = V c / (K + c)$, we might as well say that $K + c$ is approximately equal to $c$ (if $c$ is a million and $K$ is one, then one is justified in treating the sum as being about one million still). This means that for large $c$, the formula reduces to $\rho \approx V c / c = V$. In other words $V$ is the *saturation uptake rate:* the maximum value of the uptake. This, incidentally, is clearly visible in the plots above: when $V$ is 10 (top row), the curves always tend towards 10 for large concentrations; when $V$ is 20, they tend towards 20 (middle row), and when $V$ is 30, they tend towards 30.
+
+The interpretation of $K$ is slightly less straightforward, but still simple. To see what it means, let us ask what the uptake rate would be, were the concentration's value equal to $K$. In that case, we get $\rho = V K / (K + K)$ (we simply substituted $c = K$ into the formula), or $\rho = VK / (2K) = V/2$. That is, $K$ is the concentration at which the uptake rate reaches half its maximum.
+
+Looking at the data again, both these parameters can be roughly estimated:
+
+```{r}
+as_tibble(CO2) %>%
+  filter(Type == "Quebec", Treatment == "nonchilled") %>%
+  ggplot(aes(x = conc, y = uptake)) +
+  geom_point(colour = "steelblue", alpha = 0.8) +
+  geom_hline(yintercept = 43, linetype = "dashed", colour = "steelblue") +
+  annotate(geom = "segment", x = 0, y = 43/2, xend = 125, yend = 43/2,
+           linetype = "dashed", colour = "steelblue") +
+  annotate(geom = "segment", x = 125, y = 43/2, xend = 125, yend = 0,
+           linetype = "dashed", colour = "steelblue") +
+  scale_x_continuous(name = "concentration", limits = c(0, NA), expand = c(0, 0)) +
+  scale_y_continuous(name = "uptake rate", limits = c(0, NA), expand = c(0, 0)) +
+  theme_bw()
+```
+
+So guessing that $V$ is about 43 and $K$ about 125 seems to be close to the mark.
+
+To actually perform the nonlinear regression, one can use the `nls` function ("Nonlinear Least Squares"). It begins much like `lm`, taking a formula and a data frame. However, the formula is no longer a shorthand notation for a linear model, and therefore has to be entered literally. Additionally, there is another argument to `nls` called `start`; this is where the starting values have to be specified. The `start` argument has to be in the form of a *list*. These we have not discussed so far, but as a starter, lists are like vectors except they can hold arbitrary data in their entries. So unlike vectors which are composed of either all numbers or all character strings or all logical values, lists may have a combination of these. Furthermore, list entries are not restricted to elementary types: vectors, or even data frames may also be list entries. To define a list, all one needs to do is type `list`, and then give a sequence of named entries. For example, the following creates a list with three entries: `a` will be equal to 3, `b` to the string `"Hello!"`, and `myTable` to a small tibble.
+
+```{r}
+list(a = 3, b = "Hello!", myTable = tibble(x = c(1, 2), y = c(3, 4)))
+```
+
+One can refer to the entries of the list either with the `$` notation, or using double brackets:
+
+```{r}
+myList <- list(
+  a = 3,
+  b = "Hello!",
+  myTable = tibble(x = c(1, 2), y = c(3, 4))
+)
+
+myList$myTable # The entry called myTable in the list
+myList[[3]]    # The third entry in the list, which is also myTable
+```
+
+With this brief introduction, we can now look at the `nls` function and use it to produce a fit of the Michaelis--Menten curve to our data:
+
+```{r}
+nonlinearFit <- as_tibble(CO2) %>%
+  filter(Type == "Quebec", Treatment == "nonchilled") %>%
+  nls(uptake ~ V*conc/(K + conc), data = ., start = list(V = 43, K = 125))
+
+print(nonlinearFit)
+```
+
+Observe that in the formula, we use the column name `conc` when we want to use the data inside that column, but use made-up names (in this case, `V` and `K`) for the unknown parameters we are trying to obtain. Their starting values were filled in from our earlier visual estimation. From these starting values, the best fitting solution is found. We see that their values are 51.36 for $V$ and 136.32 for $K$.
+
+The result of `nls` can be used inside `summary` to get more information on the fitted parameters (note: the `anova` function is not applicable to nonlinear regression). Doing so results in the following regression table:
+
+```{r}
+summary(nonlinearFit)
+```
+
+As in the case of linear regression, the statistical analysis will only be reliable if the assumptions of the independence, normality, and homoscedasticity of the residuals are maintained.
+
+To conclude this section, it can be useful to plot the data together with the fitted nonlinear curve, to make sure visually that the fit is reasonable. There are several possible ways of doing this; here we discuss two of them. First, one can rely on the `predict` function (which works also for `lm`) that will tell us, for each value of the predictor, what the model-predicted values are. So
+
+```{r}
+predict(nonlinearFit)
+```
+
+returns a vector for each `conc` in the original data, documenting what the model thinks the corresponding uptake rate ought to be. They can then be compared with the data:
+
+```{r}
+as_tibble(CO2) %>%
+  filter(Type == "Quebec", Treatment == "nonchilled") %>%
+  mutate(pred = predict(nonlinearFit)) %>%
+  ggplot() +
+  geom_point(aes(x = conc, y = uptake), colour = "steelblue", alpha = 0.8) +
+  geom_line(aes(x = conc, y = pred), linetype = "dashed", alpha = 0.5) +
+  labs(x = "concentration", y = "uptake rate") +
+  theme_bw()
+```
+
+In the above plot, the data points and the predictions each had their own set of aeshetics. For this reason, the aesthetic mappings were not defined separately, but locally inside each `geom_`. This is perfectly legal, and can help whenever different geometries take different aesthetics from the data. Second, notice that the prediction was drawn with a dashed, semi-transparent line. This is intentional, to make it distinct from data. It signals that the curve does not correspond to data we are plotting, but to a model's predictions.
+
+The second method can be useful if the data are sufficiently scarce that the fitted line looks "rugged", a bit too piecewise (this can be seen in the above example as well if one looks carefully). In that case, it is possible to draw the curve of any function using `geom_function`. We can use the fitted parameters in drawing it, and it will not suffer from being too piecewise:
+
+```{r}
+V_fitted <- coef(nonlinearFit)["V"] # Get fitted values of V and K
+K_fitted <- coef(nonlinearFit)["K"] # from the vector of coefficients
+
+as_tibble(CO2) %>%
+  filter(Type == "Quebec", Treatment == "nonchilled") %>%
+  ggplot() +
+  geom_point(aes(x = conc, y = uptake), colour = "steelblue", alpha = 0.8) +
+  geom_function(fun = function(x) V_fitted * x / (K_fitted + x),
+                linetype = "dashed", alpha = 0.5) +
+  labs(x = "concentration", y = "uptake rate") +
+  theme_bw()
+```
+
+The result is much the same as before, although carefully looking at the dashed line shows that the second curve is smoother than the first. In this case, this does not matter much, but it could be aesthetically more relevant in others.
+
 
 ## Exercises
 
