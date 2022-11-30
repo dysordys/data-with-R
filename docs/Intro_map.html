@@ -93,7 +93,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./References.html" rel="next">
+<link href="./Multiple_analysis.html" rel="next">
 <link href="./Nonlinear_regression.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -234,7 +234,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">References</span></a>
+  <a href="./Multiple_analysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Nested data and multiple analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">References</span></a>
   </div>
 </li>
     </ul>
@@ -248,7 +253,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">14.1</span>  Introduction</a></li>
   <li><a href="#higher-order-functions" id="toc-higher-order-functions" class="nav-link" data-scroll-target="#higher-order-functions"><span class="toc-section-number">14.2</span>  Higher-order functions</a></li>
-  <li><a href="#the-map-family-of-functions" id="toc-the-map-family-of-functions" class="nav-link" data-scroll-target="#the-map-family-of-functions"><span class="toc-section-number">14.3</span>  The <code>map</code> family of functions</a></li>
+  <li><a href="#sec-mapfamily" id="toc-sec-mapfamily" class="nav-link" data-scroll-target="#sec-mapfamily"><span class="toc-section-number">14.3</span>  The <code>map</code> family of functions</a></li>
   <li><a href="#making-use-of-map-when-vectorization-fails" id="toc-making-use-of-map-when-vectorization-fails" class="nav-link" data-scroll-target="#making-use-of-map-when-vectorization-fails"><span class="toc-section-number">14.4</span>  Making use of <code>map</code> when vectorization fails</a></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="toc-section-number">14.5</span>  Exercises</a></li>
   </ul>
@@ -471,8 +476,8 @@ Kruskal-Wallis chi-squared = 7.9882, df = 2, p-value = 0.01842</code></pre>
 </div>
 <p>Functions without names are often called <em>anonymous</em> functions. They are commonly used within other, higher-order functions. Their use is not mandatory: it is always possible to first define the function with a name, and then use that name instead (e.g., using <code>sqr</code> instead of <code>function(x) x^2</code>, after defining <code>sqr &lt;- function(x) x^2</code>). However, they can be convenient, and it is also important to recognize them in R code written by others.</p>
 </section>
-<section id="the-map-family-of-functions" class="level2" data-number="14.3">
-<h2 data-number="14.3" class="anchored" data-anchor-id="the-map-family-of-functions"><span class="header-section-number">14.3</span> The <code>map</code> family of functions</h2>
+<section id="sec-mapfamily" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="sec-mapfamily"><span class="header-section-number">14.3</span> The <code>map</code> family of functions</h2>
 <p>The <code>purrr</code> package is a standard, automatically loaded part of the <code>tidyverse</code>. It contains a large family of functions starting with <code>map</code>. These allow one to perform repetitive tasks by applying the same function to all elements of a vector, list, or column in a data frame.</p>
 <p>To illustrate their use, how would we obtain the squares of all integers from 1 to 10? Using our earlier <code>sqr</code> function, we could painstakingly type out <code>sqr(1)</code>, then <code>sqr(2)</code>, and so on, up until <code>sqr(10)</code> (we ought to be grateful that the task was to obtain the squares of the first ten integers, instead of the first ten billion). But there is no need to do this, as this is exactly what <code>map</code> can do. <code>map</code> takes two arguments: some data (e.g., a vector of values), and a function. It then applies that function to all data entries. So a much quicker way of obtaining the squares of all integers from 1 to 10 is this:</p>
 <div class="cell">
@@ -739,10 +744,10 @@ difference in location
 <section id="exercises" class="level2" data-number="14.5">
 <h2 data-number="14.5" class="anchored" data-anchor-id="exercises"><span class="header-section-number">14.5</span> Exercises</h2>
 <ol type="1">
-<li>Start from the following sequence of values: <code>t &lt;- seq(-5*pi, 5*pi, by = 0.01)</code> (a vector with values going from -5π to 5π, in steps of 0.01). Now do the following steps:
+<li>Start from the following sequence of values: <code>values &lt;- seq(-5*pi, 5*pi, by = 0.01)</code> (a vector with values going from -5π to 5π, in steps of 0.01). Now do the following steps:
 <ul>
-<li>Define a new vector, <code>x</code>, which contains the cosine (<code>cos</code>) of each value in <code>t</code>. Use <code>map_dbl</code>.</li>
-<li>Now define another vector, <code>y</code>, and again using <code>map_dbl</code>, compute the function <code>sin(t) + cos(14 * t / 5) / 5</code> for every value of <code>t</code>. You can either define this function separately to use inside <code>map_dbl</code>, or create it anonymously.</li>
+<li>Define a new vector, <code>x</code>, which contains the cosine (<code>cos</code>) of each value in <code>values</code>. Use <code>map_dbl</code>.</li>
+<li>Now define another vector, <code>y</code>, and again using <code>map_dbl</code>, compute the function <code>sin(t) + cos(14 * t / 5) / 5</code> for every value <em>t</em> in <code>values</code>. You can either define this function separately to use inside <code>map_dbl</code>, or create it anonymously.</li>
 <li>Finally, create a tibble whose two columns are <code>x</code> and <code>y</code>, and plot them against each other using <code>geom_path</code>. See what you get!</li>
 </ul></li>
 <li>How does the integral of cos(x) change if the lower limit of integration is fixed at 0, but the upper limit gradually increases from 0 to 2π? Define a sequence of upper limits <code>upper &lt;- seq(0, 2*pi, by = 0.1)</code>. Then, using <code>map_dbl</code>, create a vector <code>integrals</code> whose entries are the integral of cos(x) from 0 to each upper limit. Finally, plot <code>integrals</code> against <code>upper</code>, using <code>geom_point</code> or <code>geom_line</code>. What is the function you see? (Note: the <code>integrate</code> function returns a complicated list object instead of just a single number. To access just the value of the integral, you can use <code>integrate(...)$value</code>, where <code>...</code> means all the arguments to the function you are supposed to write when solving the problem.)</li>
@@ -863,8 +868,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./References.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">References</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./Multiple_analysis.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Nested data and multiple analysis</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

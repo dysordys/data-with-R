@@ -116,7 +116,7 @@ integrate(function(x) x^2, 0, 1)
 Functions without names are often called *anonymous* functions. They are commonly used within other, higher-order functions. Their use is not mandatory: it is always possible to first define the function with a name, and then use that name instead (e.g., using `sqr` instead of `function(x) x^2`, after defining `sqr <- function(x) x^2`). However, they can be convenient, and it is also important to recognize them in R code written by others.
 
 
-## The `map` family of functions
+## The `map` family of functions {#sec-mapfamily}
 
 The `purrr` package is a standard, automatically loaded part of the `tidyverse`. It contains a large family of functions starting with `map`. These allow one to perform repetitive tasks by applying the same function to all elements of a vector, list, or column in a data frame.
 
@@ -195,8 +195,8 @@ c(0.8, 0.9, 0.95, 0.99) %>% map(wilcoxConf)
 
 ## Exercises
 
-1. Start from the following sequence of values: `t <- seq(-5*pi, 5*pi, by = 0.01)` (a vector with values going from -5&#960; to 5&#960;, in steps of 0.01). Now do the following steps:
-    * Define a new vector, `x`, which contains the cosine (`cos`) of each value in `t`. Use `map_dbl`.
-    * Now define another vector, `y`, and again using `map_dbl`, compute the function `sin(t) + cos(14 * t / 5) / 5` for every value of `t`. You can either define this function separately to use inside `map_dbl`, or create it anonymously.
+1. Start from the following sequence of values: `values <- seq(-5*pi, 5*pi, by = 0.01)` (a vector with values going from -5&#960; to 5&#960;, in steps of 0.01). Now do the following steps:
+    * Define a new vector, `x`, which contains the cosine (`cos`) of each value in `values`. Use `map_dbl`.
+    * Now define another vector, `y`, and again using `map_dbl`, compute the function `sin(t) + cos(14 * t / 5) / 5` for every value  *t* in `values`. You can either define this function separately to use inside `map_dbl`, or create it anonymously.
     * Finally, create a tibble whose two columns are `x` and `y`, and plot them against each other using `geom_path`. See what you get!
 2. How does the integral of cos(x) change if the lower limit of integration is fixed at 0, but the upper limit gradually increases from 0 to 2&#960;? Define a sequence of upper limits `upper <- seq(0, 2*pi, by = 0.1)`. Then, using `map_dbl`, create a vector `integrals` whose entries are the integral of cos(x) from 0 to each upper limit. Finally, plot `integrals` against `upper`, using `geom_point` or `geom_line`. What is the function you see? (Note: the `integrate` function returns a complicated list object instead of just a single number. To access just the value of the integral, you can use `integrate(...)$value`, where `...` means all the arguments to the function you are supposed to write when solving the problem.)

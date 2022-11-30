@@ -21,6 +21,7 @@ book:
     - Linear_regression.qmd
     - Nonlinear_regression.qmd
     - Intro_map.qmd
+    - Multiple_analysis.qmd
     - References.qmd
 
 bibliography: biblio.bib
