@@ -68,17 +68,14 @@ Before going deeper into R programming, we need to discuss a few things to enabl
 
 The upper-right part of RStudio is a simple text editor where you can write R code. But, instead of having to enter it one line at a time as we did in the console above, you can string long sequences of R instructions together that build on one another. You can save such a text file (Ctrl-S on Windows; Cmd-S on a Mac), giving it an appropriate name. It is then known as an R *script*, a text file containing R code that can be run from within R.
 
-As an example, enter the following code. Do not worry about how or why it works just yet. It is a simple simulation and visualization of exponential population growth:
+As an example, enter the following code. Do not worry about how or why it works just yet. It is a simple simulation and visualization of regulated (logistic) population growth:
 
 ```{r}
 #| eval: false
 time <- 1:15
-growthRate <- 1.2
-popSize <- rep(100, times = length(time))
-for (i in 1:(length(time) - 1)) {
-  popSize[i + 1] <- popSize[i] * growthRate
-}
-plot(time, popSize, ylab = "population size", type = "b")
+growthFun <- function(x, y, lambda = 1.8) lambda * x * (1 - x)
+pop <- Reduce(growthFun, rep(0.01, times = length(time)), accumulate = TRUE)
+plot(time, pop, xlab = "time", ylab = "population density", type = "b")
 ```
 
 After having typed this, highlight all lines (either with a mouse, or by pressing Ctrl-A on Windows / Cmd-A on a Mac, or by using the arrow keys while holding the Shift key down). Then, to send these instructions to R for processing, press Ctrl-Enter (Windows) or Cmd-Return (Mac). If all went well, the lower right screen section should have jumped to the **Plots** panel, showing the following graph:
@@ -86,12 +83,9 @@ After having typed this, highlight all lines (either with a mouse, or by pressin
 ```{r}
 #| echo: false
 time <- 1:15
-growthRate <- 1.2
-popSize <- rep(100, times = length(time))
-for (i in 1:(length(time) - 1)) {
-  popSize[i + 1] <- popSize[i] * growthRate
-}
-plot(time, popSize, ylab = "population size", type = "b")
+growthFun <- function(x, y, lambda = 1.8) lambda * x * (1 - x)
+pop <- Reduce(growthFun, rep(0.01, times = length(time)), accumulate = TRUE)
+plot(time, pop, xlab = "time", ylab = "population density", type = "b")
 ```
 
 ### Setting the Working Directory

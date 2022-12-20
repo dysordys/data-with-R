@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.1.189">
+<meta name="generator" content="quarto-1.2.269">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -271,6 +271,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="quarto-title-meta">
 
     
+  
     
   </div>
   
@@ -386,8 +387,8 @@ difference in location
 </div>
 </div>
 <p>As expected, the difference between the control and the two treatments is not particularly credible (especially in the case of treatment 1), but there is good indication that the difference between the two treatments is not just due to chance.</p>
-<p>While this method of using repeated Wilcoxon tests worked fine above, there are some problems with this approach. One is that it can quickly get out of hand, because having <em>n</em> groups means there will be <em>n</em> (<em>n</em> - 1) / 2 pairs to consider. For instance, if the number of groups is 12 (not a particularly large number in fact), then there are 66 unique pairs already. It would not be pleasant to perform this many tests, even if any single test is quite simple to implement.</p>
-<p>The other problem has to do with <em>multiple testing</em> and its influence on the interpretation of p-values. Very simply put, the problem is that if sufficiently many groups are compared, then we might find at least one pair with a low p-value—not because the null hypothesis is false, but because across a large number of observations some p-values might turn out lower than others just by chance. Remember: p-values measure, in effect, the probability that the observed effect is too stark to be due to simple coincidence. But if we create sufficiently many opportunities for such a coincidence to arise, then of course one eventually will. One of the best explanation of this point is in the following cartoon by xkcd:</p>
+<p>While this method of using repeated Wilcoxon tests worked fine above, there are some problems with this approach. One is that it can quickly get out of hand, because having <em>n</em> groups means there will be <em>n</em> · (<em>n</em> - 1) / 2 pairs to consider. For instance, if the number of groups is 12 (not a particularly large number), then there are 66 unique pairs already. It would not be pleasant to perform this many tests, even if any single test is quite simple to run.</p>
+<p>The other problem has to do with <em>multiple testing</em> and its influence on the interpretation of p-values. Very simply put, the problem is that if sufficiently many groups are compared, then we might find at least one pair with a low p-value—not because the null hypothesis is false, but because across a large number of observations some p-values might turn out lower than others just by chance. Remember: p-values measure, in effect, the probability that the observed effect is too stark to be due to simple coincidence. But if we create sufficiently many opportunities for such a coincidence to arise, then of course one eventually will. One of the best explanations of this point is in the following cartoon by <a href="https://xkcd.com/">xkcd</a>:</p>
 <p><img src="significant.png" class="img-fluid"></p>
 <p>Fortunately, there is no need to rely on repeated Wilcoxon tests when there are more than two groups, as other methods are available. One such method is the <em>Kruskal–Wallis test</em>, which can be used with any number of groups as long as those groups vary within a single factor. (In <a href="Anova_two_way.html"><span>Chapter&nbsp;11</span></a> we will see examples where multiple independent factors are varied, and each possible combination results in a separate group. For example, if the effects of three different dosages of vitamin C are examined on the tooth growth of Guinea pigs, and the vitamin is also supplied in two distinct forms of either orange juice or raw ascorbic acid, then there will be 3 × 2 = 6 groups, defined by the two factors of dosage and form of supplement.) The Kruskal–Wallis test is non-parametric, and therefore does not rely on assumptions such as the normality of the residuals. Its application is precisely analogous to how the Wilcoxon test is implemented. Therefore, to perform the test on the <code>PlantGrowth</code> data:</p>
 <div class="cell">
@@ -643,7 +644,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -679,24 +697,42 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>

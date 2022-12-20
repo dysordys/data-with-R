@@ -182,7 +182,7 @@ Similar to "greater than" and "less than", there are other logical operations as
 
 The `==` and `!=` operators can also be used with strings: `"Hello World" == "Hello World!"` returns `FALSE`, because the two strings are not exactly identical, differing in the final exclamation mark. Similarly, `"Hello World" != "Hello World!"` returns `TRUE`, because it is indeed true that the two strings are unequal.
 
-*Logical values* can either be `TRUE` or `FALSE`, with no other options.^[Technically, there is a third option: a logical value could be equal to `NA`, indicating missing data.] This is in contrast with numbers and character strings, which can take on a myriad different values. Note that `TRUE` and `FALSE` must be capitalized: `true`, `False`, or anything other than the fully capitalized forms will result in an error. Just like in the case of strings and numbers, logical values can be assigned to variables:
+*Logical values* can either be `TRUE` or `FALSE`, with no other options.^[Technically, there is a third option: a logical value could be equal to `NA`, indicating missing data. Numerical and string variables can also be `NA` to show that their values are missing.] This is in contrast with numbers and character strings, which can take on a myriad different values. Note that `TRUE` and `FALSE` must be capitalized: `true`, `False`, or anything other than the fully capitalized forms will result in an error. Just like in the case of strings and numbers, logical values can be assigned to variables:
 
 ```{r}
 lgl <- 3 > 4 # Since 3 > 4 is FALSE, lgl will be assigned FALSE
