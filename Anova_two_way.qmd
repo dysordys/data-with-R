@@ -67,12 +67,14 @@ As in the case of one-way ANOVA, diagnostic plots and post-hoc testing (Tukey te
 
 ```{r}
 #| warning: false
+#| fig-height: 3
 library(ggfortify)
 
 ToothGrowth %>%
   mutate(dose = as_factor(dose)) %>%
   lm(len ~ dose * supp, data = .) %>%
-  autoplot(which = 1:3, smooth.colour = NA)
+  autoplot(which=3:2, smooth.colour=NA, colour="steelblue", alpha=0.7) +
+  theme_bw()
 ```
 
 The Tukey test can be used to compare each factor in isolation, as well as their combinations:
@@ -126,7 +128,7 @@ ToothGrowth %>%
 
 ## The Scheirer--Ray--Hare test
 
-Like in the case of one-way ANOVA, there is a non-parametric version of the two-way ANOVA as well. This is the Scheirer--Ray--Hare test, which is therefore the two-way analogue of the Kruskal--Wallis test. To use this test, one must install and load the package `rcompanion`:
+For the sake of completeness, we mention that much like in the case of one-way ANOVA, there is a non-parametric version of the two-way ANOVA as well. This is the Scheirer--Ray--Hare test, which is therefore the two-way analogue of the Kruskal--Wallis test. To use this test, one must install and load the package `rcompanion`:
 
 ```{r}
 #| echo: false
@@ -155,8 +157,7 @@ Note that this test is skeptical about the role of the supplement type, and defi
 
 1. The file `cow_growth.csv` has data on the growth of individual cows which have received different grains (wheat, oats, or barley) and, independently, one of four different dietary supplements (one of which is no supplement, for control). Each of these diet combinations (twelve diets: three grains, times four supplements) had four cows observed. Is there any effect of these treatments on cow growth? Is there any interaction between the grain and the supplement given to the cows---some secret super-combination which makes the cows grow especially well (or poorly)?
     * As usual, before doing any tests, visualize and explore the data, and make sure you have a solid expectation for the results of any statistical analysis.
-    * Answer the question by first applying a non-parametric test.
-    * Next, apply a parametric test. Run post-hoc tests as well if needed. Do not forget to create *diagnostic plots*, to see if the assumptions behind the parametric test are satisfied to an acceptable degree.
+    * Answer the question by applying a parametric test. Run post-hoc tests as well if needed. Do not forget to create *diagnostic plots*, to see if the assumptions behind the parametric test are satisfied to an acceptable degree.
 2. The built-in `CO2` data frame contains measurements from an experiment on the cold tolerance of the grass species [Echinochloa crus-galli](https://en.wikipedia.org/wiki/Echinochloa_crus-galli). The dataset has five columns:
 
     * `Plant`: unique identifier for each plant individual.
@@ -165,4 +166,4 @@ Note that this test is skeptical about the role of the supplement type, and defi
     * `conc`: carbon dioxide concentration in the surrounding environment.
     * `uptake`: carbon dioxide uptake rate.
 
-    How do uptake rates depend on `Type`, `Treatment`, and their interaction? (For this exercise, you can ignore `Plant` and `conc`.) Start by forming a hypothesis based on visualizing the data. Then perform both parametric and non-parametric tests (and a post-hoc test for the latter). When relying on parametric tests, make sure to use diagnostic plots to gauge the quality of its assumptions.
+    How do uptake rates depend on `Type`, `Treatment`, and their interaction? (For this exercise, you can ignore `Plant` and `conc`.) Start by forming a hypothesis based on visualizing the data. Then perform a parametric test and a corresponding post-hoc test. Make sure to use diagnostic plots to gauge the quality of its assumptions.

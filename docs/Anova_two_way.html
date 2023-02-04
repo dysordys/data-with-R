@@ -384,7 +384,8 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>ToothGrowth <span class="sc">%&gt;%</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">%&gt;%</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(len <span class="sc">~</span> dose <span class="sc">*</span> supp, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="at">which =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">smooth.colour =</span> <span class="cn">NA</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="at">which=</span><span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">smooth.colour=</span><span class="cn">NA</span>, <span class="at">colour=</span><span class="st">"steelblue"</span>, <span class="at">alpha=</span><span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Anova_two_way_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -495,7 +496,7 @@ F-statistic: 41.56 on 5 and 54 DF,  p-value: &lt; 2.2e-16</code></pre>
 </section>
 <section id="the-scheirerrayhare-test" class="level2" data-number="11.2">
 <h2 data-number="11.2" class="anchored" data-anchor-id="the-scheirerrayhare-test"><span class="header-section-number">11.2</span> The Scheirer–Ray–Hare test</h2>
-<p>Like in the case of one-way ANOVA, there is a non-parametric version of the two-way ANOVA as well. This is the Scheirer–Ray–Hare test, which is therefore the two-way analogue of the Kruskal–Wallis test. To use this test, one must install and load the package <code>rcompanion</code>:</p>
+<p>For the sake of completeness, we mention that much like in the case of one-way ANOVA, there is a non-parametric version of the two-way ANOVA as well. This is the Scheirer–Ray–Hare test, which is therefore the two-way analogue of the Kruskal–Wallis test. To use this test, one must install and load the package <code>rcompanion</code>:</p>
 <div class="cell">
 
 </div>
@@ -532,8 +533,7 @@ Residuals 54  4021.1               </code></pre>
 <li><p>The file <code>cow_growth.csv</code> has data on the growth of individual cows which have received different grains (wheat, oats, or barley) and, independently, one of four different dietary supplements (one of which is no supplement, for control). Each of these diet combinations (twelve diets: three grains, times four supplements) had four cows observed. Is there any effect of these treatments on cow growth? Is there any interaction between the grain and the supplement given to the cows—some secret super-combination which makes the cows grow especially well (or poorly)?</p>
 <ul>
 <li>As usual, before doing any tests, visualize and explore the data, and make sure you have a solid expectation for the results of any statistical analysis.</li>
-<li>Answer the question by first applying a non-parametric test.</li>
-<li>Next, apply a parametric test. Run post-hoc tests as well if needed. Do not forget to create <em>diagnostic plots</em>, to see if the assumptions behind the parametric test are satisfied to an acceptable degree.</li>
+<li>Answer the question by applying a parametric test. Run post-hoc tests as well if needed. Do not forget to create <em>diagnostic plots</em>, to see if the assumptions behind the parametric test are satisfied to an acceptable degree.</li>
 </ul></li>
 <li><p>The built-in <code>CO2</code> data frame contains measurements from an experiment on the cold tolerance of the grass species <a href="https://en.wikipedia.org/wiki/Echinochloa_crus-galli">Echinochloa crus-galli</a>. The dataset has five columns:</p>
 <ul>
@@ -543,7 +543,7 @@ Residuals 54  4021.1               </code></pre>
 <li><code>conc</code>: carbon dioxide concentration in the surrounding environment.</li>
 <li><code>uptake</code>: carbon dioxide uptake rate.</li>
 </ul>
-<p>How do uptake rates depend on <code>Type</code>, <code>Treatment</code>, and their interaction? (For this exercise, you can ignore <code>Plant</code> and <code>conc</code>.) Start by forming a hypothesis based on visualizing the data. Then perform both parametric and non-parametric tests (and a post-hoc test for the latter). When relying on parametric tests, make sure to use diagnostic plots to gauge the quality of its assumptions.</p></li>
+<p>How do uptake rates depend on <code>Type</code>, <code>Treatment</code>, and their interaction? (For this exercise, you can ignore <code>Plant</code> and <code>conc</code>.) Start by forming a hypothesis based on visualizing the data. Then perform a parametric test and a corresponding post-hoc test. Make sure to use diagnostic plots to gauge the quality of its assumptions.</p></li>
 </ol>
 
 

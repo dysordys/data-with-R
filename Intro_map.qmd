@@ -2,12 +2,14 @@
 
 ## Introduction
 
-In @sec-basics we learned how to create user-defined functions. An example was provided in @sec-tukey, where we made our life easier by eliminating the need to always call `aov` before performing a Tukey test with `TukeyHSD`. Without the function, we must write:
-
 ```{r}
 #| message: false
 library(tidyverse) # Loading the tidyverse, before doing anything else
+```
 
+In @sec-basics we learned how to create user-defined functions. An example was provided in @sec-tukey, where we made our life easier by eliminating the need to always call `aov` before performing a Tukey test with `TukeyHSD`. Without the function, we must write:
+
+```{r}
 lm(weight ~ group, data = PlantGrowth) %>% aov() %>% TukeyHSD()
 ```
 
@@ -24,14 +26,14 @@ lm(weight ~ group, data = PlantGrowth) %>% tukeyTest()
 ```
 
 :::{.callout-note}
-Two features of `tukeyTest` may look unfamiliar. First, the body of the function was not enclosed between a pair of curly braces `{...}`. The rule in R is as follows: an arbitrary block of code between curly braces, potentially made up of several expressions, is treated as one single expression. Its value is by definition the final evaluated expression within the braces. This also means that the curly braces are superfluous whenever they contain only a single expression.
+Two features in the definition of `tukeyTest` above may look unfamiliar. First, the body of the function was not enclosed between a pair of curly braces `{...}`. The rule in R is as follows: an arbitrary block of code between curly braces, potentially made up of several expressions, is treated as one single expression. Its value is by definition the final evaluated expression within the braces. This also means that the curly braces are superfluous whenever they contain only a single expression.
 
 Second, in this function the `return` keyword was not used. Like curly braces, `return` is optional. If omitted, the final expression evaluated within the body of the function automatically becomes the return value.
 
 Whether to use braces and `return` even in cases when they are not needed is largely a question of personal coding style. From now on, they will often be omitted whenever their absence does not hamper program readability.
 :::
 
-Another useful function we can write helps use statistical procedures within a pipeline. As we have seen, most statistical functions take a formula as their first argument and the data as their second (and then they may take further, method-specific arguments as well, like `conf.int` for `wilcox.test`). Since the pipe operator `%>%` is often used in conjunction with functions like `select`, `mutate`, `pivot_longer`, `summarise`, etc. which all return a data frame, it would be convenient to reverse the order of arguments in all statistical functions, with the data coming first and the formula coming second. In fact, such a function is easy to write. We could call it `stats`:
+Another useful function we can write helps use statistical procedures within a pipeline. As we have seen, most statistical functions take a formula as their first argument and the data as their second (and then they may take further, method-specific arguments as well, like `conf.int` in the function `wilcox.test`). Since the pipe operator `%>%` is often used in conjunction with functions like `select`, `mutate`, `pivot_longer`, `summarise`, etc. which all return a data frame, it would be convenient to reverse the order of arguments in all statistical functions, with the data coming first and the formula coming second. In fact, such a function is easy to write. We could call it `stats`:
 
 ```{r}
 stats <- function(data, formula, method) method(formula, data)
@@ -61,7 +63,7 @@ stats <- function(data, formula, method, ...) {
 }
 ```
 
-And now, we can do even more than before; for instance:
+And now, we can pass extra arguments that we would not have been able to do before. For instance, we can request confidence intervals from `wilcox.test`:
 
 ```{r}
 PlantGrowth %>%
@@ -69,9 +71,10 @@ PlantGrowth %>%
   stats(weight ~ group, wilcox.test, conf.int = TRUE, conf.level = 0.99)
 ```
 
-This would not have worked with the previous definition of `stats`. As we have it, one can use it for performing various statistical procedures:
+From now on, we can use  `stats` for performing various statistical procedures:
 
 ```{r}
+#| message: false
 library(FSA) # For the Dunn test
 PlantGrowth %>% stats(weight ~ group, lm) %>% anova()
 PlantGrowth %>% stats(weight ~ group, lm) %>% tukeyTest()
@@ -84,11 +87,11 @@ PlantGrowth %>% stats(weight ~ group, dunnTest)
 
 If we think about the `stats` function above, something strange has happened. We are used to the idea of functions taking numbers, character strings, logical values, or even data frames as their arguments. What we have not paid much attention to before is what happens if the input to a function is itself another function. Yet this is precisely what `stats` does: its `method` argument is a function object.
 
-In R, this is perfectly legal, and its use and interpretation is every bit as natural as it was in `stats`. Functions which take other functions as arguments are often called *higher-order functions*.^[Functions that return a function as their output are also called higher-order functions. For an example which both takes functions as arguments and produces a function as its output, check out the `compose` function from the `purrr` package (part of the `tidyverse`).] To emphasize again: there is really nothing special about such functions, and they can be used in much the same way as "ordinary" functions.
+In R, this is perfectly legal, and its use and interpretation is every bit as natural as it was in `stats`. Functions which take other functions as arguments are often called *higher-order functions*.^[Functions that return a function as their output are also called higher-order functions. For an example which both takes functions as arguments and produces a function as its output, check out the `compose` function from the `purrr` package (part of the `tidyverse`).] To emphasize again: there really is nothing special about such functions, and they can be used in much the same way as "ordinary" functions.
 
 One very natural example for a higher-order function is integration. An integral (at least in simple cases) takes three inputs: a function to integrate, a lower limit of integration, and an upper limit of integration. The output is the (sign-weighted) area under the function's curve in between the lower and upper limits. This is stressed even in the usual mathematical notation for integrals: when we write
 $$ \int_0^1 x^2 \,\text{d} x = \frac{1}{3}$$
-(a true statement), we show the lower and upper limits of 0 and 1 at the bottom and top of the integral sign, and the function to be integrated (in this case, $f(x) = x^2$) in between the integral sign and the integration variable $\text{d} x$.
+(a true statement), we show the lower and upper limits of 0 and 1 at the bottom and top of the integral sign, and the function to be integrated (in this case, $f(x) = x^2$) in between the integral sign and $\text{d} x$.
 
 If you do not know how integrals do their magic, there is no need to worry, because R has a built in function called `integrate` to do the calculations for you. `integrate` takes the three arguments described above: the function to integrate, and the lower and upper limits of integration. To perform the above integral, we can write:
 
@@ -99,13 +102,13 @@ sqr <- function(x) x^2
 integrate(sqr, 0, 1)
 ```
 
-The answer is indeed 1/3 (the error is included in the output because R's integration routine is purely numeric, so it algorithmically approximates the integral, and such procedures always have finite precision). But there was no obligation to use the square function above. We could have used any other one. For instance, to compute the integral of the cosine function between 0 and 2&#960;, we can type:
+The answer is indeed one-third.^[The error is included in the output because R's integration routine is purely numeric, so it algorithmically approximates the integral, and such procedures always have finite precision.] But there was no obligation to use the square function above. We could have used any other one. For instance, to compute the integral of the cosine function between 0 and 2&#960;, we can type:
 
 ```{r}
 integrate(cos, 0, 2*pi)
 ```
 
-We get the expected result of 0, within numerical error.
+We get the expected result of zero, within numerical error.
 
 One thing to know about function objects like `sqr` is that they do not need a name to be used. In the definition `sqr <- function(x) x^2`, we assigned the function object `function(x) x^2` to the symbol `sqr`, so we wouldn't have to write it out all the time. But since `sqr` is just a name that stands for `function(x) x^2`, calling `(function(x) x^2)(4)` is the same as calling `sqr(4)`, both returning 16. If a function is used only once within another (higher-order) function, then we might not wish to bother with naming the function separately. Thus, the following is exactly equivalent to integrating the `sqr` function:
 
@@ -118,21 +121,21 @@ Functions without names are often called *anonymous* functions. They are commonl
 
 ## The `map` family of functions {#sec-mapfamily}
 
-The `purrr` package is a standard, automatically loaded part of the `tidyverse`. It contains a large family of functions starting with `map`. These allow one to perform repetitive tasks by applying the same function to all elements of a vector, list, or column in a data frame.
+The `purrr` package is a standard, automatically-loaded part of the `tidyverse`. It contains a large family of *mapping functions*. These allow one to perform repetitive tasks by applying the same function to all elements of a vector, list, or column in a data frame.
 
-To illustrate their use, how would we obtain the squares of all integers from 1 to 10? Using our earlier `sqr` function, we could painstakingly type out `sqr(1)`, then `sqr(2)`, and so on, up until `sqr(10)` (we ought to be grateful that the task was to obtain the squares of the first ten integers, instead of the first ten billion). But there is no need to do this, as this is exactly what `map` can do. `map` takes two arguments: some data (e.g., a vector of values), and a function. It then applies that function to all data entries. So a much quicker way of obtaining the squares of all integers from 1 to 10 is this:
+To illustrate their use, how would we obtain the squares of all integers from 1 to 10? Using our earlier `sqr` function, we could painstakingly type out `sqr(1)`, then `sqr(2)`, and so on, up until `sqr(10)` (we ought to be grateful that the task was to obtain the squares of the first ten integers, instead of the first ten thousand). But there is no need to do this, as this is exactly what `map` can do. `map` takes two arguments: some data (e.g., a vector of values), and a function. It then applies that function to all data entries. So a much quicker way of obtaining the squares of all integers from 1 to 10 is this:
 
 ```{r}
 map(1:10, sqr)
 ```
 
-Or, in case we prefer anonymous functions and/or we do not want to bother with defining our own `sqr` routine:
+Or, in case we prefer anonymous functions and do not want to bother with defining our own `sqr` routine:
 
 ```{r}
 map(1:10, function(x) x^2)
 ```
 
-The results are all there, although it might look strange that they are prefaced by double-bracketed indices `[[1]]`, `[[2]]`, and so on. You may recall from @sec-nonlin-regression that this is the notation used to reference the entries of lists. That is correct: `map` returns a list of values, not a vector. We will see momentarily that this can be very useful behavior, but here it can feel overkill. Fortunately, it is easy to get back a vector instead of a list. Since the entries of vectors must have a well-defined, uniform type (numeric, character string, logical, ...), we have to tell R what kind of result we want. In our case, we want numeric results. The function to do this is called `map_dbl` ("map into double-precision numerical values"). It can be used just like `map`; only its output type changes from list to numeric vector:
+The results are all there, although they are prefaced by double-bracketed indices `[[1]]`, `[[2]]`, and so on. You may recall from @sec-lists that this is the notation used to reference the entries of lists. That is correct: `map` returns a list of values, not a vector. We will see momentarily that this can be very useful behavior, but here it can feel overkill. Fortunately, it is easy to get back a vector instead of a list. Since the entries of vectors must have a well-defined, uniform type (numeric, character string, logical, etc.), we have to tell R what kind of result we want. In our case, we want numeric results. The function to do this is called `map_dbl` ("map into double-precision numerical values"). It can be used just like `map`; the only difference between the two is that the output type changes from list to numeric vector:
 
 ```{r}
 map_dbl(1:10, function(x) x^2)
@@ -165,7 +168,7 @@ plantTrt <- filter(PlantGrowth, group != "ctrl")
 print(plantTrt)
 ```
 
-We might want to perform a Xilcoxon test on these data, but with various different confidence levels. A naive approach would be to supply the required confidence levels as a vector:
+We might want to perform a Wilcoxon test on these data, but with a number of different confidence levels. A naive approach would be to supply the required confidence levels as a vector:
 
 ```{r}
 #| error: true
@@ -173,7 +176,7 @@ wilcox.test(weight ~ group, data = plantTrt,
             conf.int = TRUE, conf.level = c(0.8, 0.9, 0.95, 0.99))
 ```
 
-This generates an error: because of the way `wilcox.test` is internally implemented in R, it does not allow or recognize a vector input in place of `conf.level` (it must be a single number instead). This, however, can be overcome if we just use `map`:
+This generates an error: because of the way `wilcox.test` is internally implemented in R, it does not allow or recognize a vector input in place of `conf.level`. It must be a single number instead. This, however, can be overcome if we just use `map`:
 
 ```{r}
 c(0.8, 0.9, 0.95, 0.99) %>% # The vector of confidence levels

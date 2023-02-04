@@ -339,8 +339,8 @@ div.csl-indent {
 </section>
 <section id="nested-data-frames" class="level2" data-number="15.2">
 <h2 data-number="15.2" class="anchored" data-anchor-id="nested-data-frames"><span class="header-section-number">15.2</span> Nested data frames</h2>
-<p>We are by now used to the idea that the columns of tibbles can hold numbers, character strings, logical values, or even factors. But here is an interesting question: can a column of a tibble hold… other tibbles?</p>
-<p>The short answer is yes. The somewhat longer answer is that this is possible, but not directly so. Instead, one has to make the column into a <em>list</em>, the data type we learned about in <a href="Nonlinear_regression.html#sec-nonlin-regression"><span>Section&nbsp;13.2</span></a>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> While this could of course be done by hand using the <code>list</code> function, there are other options in the <code>tidyverse</code> which facilitate creating tibbles which have other tibbles in their columns. One of these is called <code>nest</code>. This function receives a name first, which will become the name of the newly-created column holding the sub-tibbles. Then, after an equality sign, one lists the columns, in a vector, which one would like to package into those sub-tibbles. For example, to keep <code>Species</code> as a separate column and wrap everything else into sub-tibbles, we can do:</p>
+<p>We are by now used to the idea that the columns of tibbles can hold numbers, character strings, logical values, or even factors. But here is an interesting question: can a column of a tibble hold other tibbles?</p>
+<p>The short answer is yes. The somewhat longer answer is that this is possible, but not directly so. Instead, one has to make the column into a list (<a href="Nonlinear_regression.html#sec-lists"><span>Section&nbsp;13.2.1</span></a>).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> While this could of course be done by hand using the <code>list</code> function, there are other options in the <code>tidyverse</code> which facilitate creating tibbles which have other tibbles in their columns. One of these is called <code>nest</code>. This function receives a name first, which will become the name of the newly-created column holding the sub-tibbles. Then, after an equality sign, one lists the columns, in a vector, which one would like to package into those sub-tibbles. For example, to keep <code>Species</code> as a separate column and wrap everything else into sub-tibbles, we can do:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span> <span class="fu">nest</span>(<span class="at">data =</span> <span class="fu">c</span>(ID, Date, Sex, WingSize, L2Length))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -404,9 +404,9 @@ div.csl-indent {
 # … with 45 more rows</code></pre>
 </div>
 </div>
-<p>That is: apply the nesting to all columns that are <em>not</em> called <code>Species</code>. This can be applied in more complicated cases as well. For example, if we wish to nest data pertaining to particular species-sex combinations, we can do the following:</p>
+<p>That is: apply the nesting to all columns that are <em>not</em> called <code>Species</code>. This can be used in more complicated cases as well. For example, if we wish to nest data pertaining to particular species-sex combinations, we can do the following:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span> <span class="fu">nest</span>(<span class="at">data =</span> <span class="fu">c</span>(ID, Date, WingSize, L2Length))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span> <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">!</span>Species <span class="sc">&amp;</span> <span class="sc">!</span>Sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 110 × 3
    Species      Sex   data              
@@ -424,29 +424,10 @@ div.csl-indent {
 # … with 100 more rows</code></pre>
 </div>
 </div>
-<p>Or, equivalently, we can say “nest all columns that are not <code>Species</code> and not <code>Sex</code>”:</p>
+<p>where <code>nest(data = !Species &amp; !Sex)</code> (nest all columns that are not <code>Species</code> and not <code>Sex</code>) is equivalent to the longer <code>nest(data = c(ID, Date, WingSize, L2Length))</code>.</p>
+<p>Finally, columns holding nested data can be unnested, meaning that their contents are expanded back into the original data frame. The function to do this with is called <code>unnest</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span> <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">!</span>Species <span class="sc">&amp;</span> <span class="sc">!</span>Sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 110 × 3
-   Species      Sex   data              
-   &lt;chr&gt;        &lt;chr&gt; &lt;list&gt;            
- 1 D_acutila    F     &lt;tibble [104 × 4]&gt;
- 2 D_acutila    M     &lt;tibble [101 × 4]&gt;
- 3 D_algonqu    F     &lt;tibble [144 × 4]&gt;
- 4 D_algonqu    M     &lt;tibble [93 × 4]&gt; 
- 5 D_texana     F     &lt;tibble [108 × 4]&gt;
- 6 D_texana     M     &lt;tibble [107 × 4]&gt;
- 7 Z_Sg.Anaprio F     &lt;tibble [95 × 4]&gt; 
- 8 Z_Sg.Anaprio M     &lt;tibble [105 × 4]&gt;
- 9 D_athabasca  F     &lt;tibble [20 × 4]&gt; 
-10 D_athabasca  M     &lt;tibble [59 × 4]&gt; 
-# … with 100 more rows</code></pre>
-</div>
-</div>
-<p>Finally, columns holding nested data can be unnested: its contents expanded back into the original data frame. The function to do this with is called <code>unnest</code>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span> <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">!</span>Species <span class="sc">&amp;</span> <span class="sc">!</span>Sex) <span class="sc">%&gt;%</span> <span class="fu">unnest</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span> <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">!</span>Species <span class="sc">&amp;</span> <span class="sc">!</span>Sex) <span class="sc">%&gt;%</span> <span class="fu">unnest</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10,327 × 6
    Species   Sex   ID          Date      WingSize L2Length
@@ -469,9 +450,9 @@ div.csl-indent {
 <h2 data-number="15.3" class="anchored" data-anchor-id="performing-statistical-tests-using-nested-data"><span class="header-section-number">15.3</span> Performing statistical tests using nested data</h2>
 <p>How can we test for all 55 fly species in this dataset whether there is a significant difference between average male and female wing lengths? The answer is to first nest the data using <code>fly %&gt;% nest(data = !Species)</code>, so that we end up with a table which has one row per each species. We then need to run a Wilcoxon test on each of them. But this we know how to do from <a href="Intro_map.html"><span>Chapter&nbsp;14</span></a>: we can rely on the <code>map</code> function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">!</span>Species) <span class="sc">%&gt;%</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">test =</span> <span class="fu">map</span>(data, <span class="cf">function</span>(dat) <span class="fu">wilcox.test</span>(L2Length<span class="sc">~</span>Sex, <span class="at">data=</span>dat)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">!</span>Species) <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">test =</span> <span class="fu">map</span>(data, <span class="cf">function</span>(x) <span class="fu">wilcox.test</span>(L2Length <span class="sc">~</span> Sex, <span class="at">data =</span> x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 55 × 3
    Species      data               test   
@@ -490,25 +471,24 @@ div.csl-indent {
 </div>
 </div>
 <p>And <em>voilà:</em> we now have the Wilcoxon test results in the column <code>test</code>, for each species! All we need to do is retrieve this information.</p>
-<p>Doing so is not completely straightforward, because <code>wilcox.test</code> does not return a data frame or tibble. Instead, it returns a complicated model fit object which cannot be unnested into the “master” table. If we try, we get an error:</p>
+<p>Doing so is not completely straightforward, because <code>wilcox.test</code> does not return a data frame or tibble. Instead, it returns a complicated model fit object which cannot be unnested into the outer table. If we try, we get an error:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">!</span>Species) <span class="sc">%&gt;%</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">test =</span> <span class="fu">map</span>(data,</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">function</span>(dat) <span class="fu">wilcox.test</span>(L2Length<span class="sc">~</span>Sex, <span class="at">data=</span>dat))) <span class="sc">%&gt;%</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">!</span>Species) <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">test =</span> <span class="fu">map</span>(data, <span class="cf">function</span>(x) <span class="fu">wilcox.test</span>(L2Length<span class="sc">~</span>Sex, <span class="at">data=</span>x))) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in `list_sizes()`:
 ! `x[[1]]` must be a vector, not a &lt;htest&gt; object.</code></pre>
 </div>
 </div>
-<p>Fortunately, there is an easy way to convert the output of the Wilcoxon test into a tibble. The <code>broom</code> package is designed to do exactly this. It is part of the <code>tidyverse</code>, though it does not get automatically loaded with it. Loading this package first:</p>
+<p>Fortunately, there is an easy way to convert the output of the Wilcoxon test into a tibble. The <code>broom</code> package is designed to do exactly this. It is part of the <code>tidyverse</code>, though it does not get automatically loaded with it. We load this package first:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The function in this package that creates a tibble out of the results of statistical models (almost any model in fact, not just the Wilcoxon test) is called <code>tidy</code>. Let us see how it works. If we do a Wilcoxon test between females and males for the whole data (without distinguishing between species), we get:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(WingSize <span class="sc">~</span> Sex, <span class="at">data =</span> fly, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(WingSize <span class="sc">~</span> Sex, <span class="at">data =</span> fly, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Wilcoxon rank sum test with continuity correction
@@ -525,7 +505,7 @@ difference in location
 </div>
 <p>By applying the <code>tidy</code> function to this result, it gets converted into a tibble:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(WingSize <span class="sc">~</span> Sex, <span class="at">data =</span> fly, <span class="at">conf.int =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(WingSize <span class="sc">~</span> Sex, <span class="at">data =</span> fly, <span class="at">conf.int =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 7
   estimate statistic   p.value conf.low conf.high method                 alter…¹
@@ -536,12 +516,11 @@ difference in location
 </div>
 <p>So we can insert a step into our analysis pipeline which converts the <code>test</code> column into a list of data frames:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">!</span>Species) <span class="sc">%&gt;%</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">test =</span> <span class="fu">map</span>(data,</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">function</span>(dat) <span class="fu">wilcox.test</span>(L2Length<span class="sc">~</span>Sex, <span class="at">data=</span>dat))) <span class="sc">%&gt;%</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">test =</span> <span class="fu">map</span>(test, tidy)) <span class="sc">%&gt;%</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">!</span>Species) <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">test =</span> <span class="fu">map</span>(data, <span class="cf">function</span>(x) <span class="fu">wilcox.test</span>(L2Length<span class="sc">~</span>Sex, <span class="at">data=</span>x))) <span class="sc">%&gt;%</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">test =</span> <span class="fu">map</span>(test, tidy)) <span class="sc">%&gt;%</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 55 × 6
    Species      data               statistic  p.value method             alter…¹
@@ -561,55 +540,53 @@ difference in location
 </div>
 <p>And now we have the results. As an example, we can check the distribution of p-values: how often is there a statistically significant sex difference? Let us visualize this, by ordering the species based on p-values:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">!</span>Species) <span class="sc">%&gt;%</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">test =</span> <span class="fu">map</span>(data,</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">function</span>(dat) <span class="fu">wilcox.test</span>(L2Length<span class="sc">~</span>Sex, <span class="at">data=</span>dat))) <span class="sc">%&gt;%</span></span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">test =</span> <span class="fu">map</span>(test, tidy)) <span class="sc">%&gt;%</span></span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(test) <span class="sc">%&gt;%</span></span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(p.value) <span class="sc">%&gt;%</span></span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Species =</span> <span class="fu">as_factor</span>(Species)) <span class="sc">%&gt;%</span></span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> p.value, <span class="at">y =</span> Species)) <span class="sc">+</span></span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name =</span> <span class="st">"p-value"</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">!</span>Species) <span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">test =</span> <span class="fu">map</span>(data, <span class="cf">function</span>(x) <span class="fu">wilcox.test</span>(L2Length<span class="sc">~</span>Sex, <span class="at">data=</span>x))) <span class="sc">%&gt;%</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">test =</span> <span class="fu">map</span>(test, tidy)) <span class="sc">%&gt;%</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(test) <span class="sc">%&gt;%</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(p.value) <span class="sc">%&gt;%</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Species =</span> <span class="fu">as_factor</span>(Species)) <span class="sc">%&gt;%</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> p.value, <span class="at">y =</span> Species)) <span class="sc">+</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name =</span> <span class="st">"p-value"</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Multiple_analysis_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
+<p><img src="Multiple_analysis_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>This graph shows that most species have very small p-values, but that there are four clear outliers. We can extract the names of these “outlier” species:</p>
+<p>This graph shows that most species have very small p-values, but that there are four clear outliers. We can extract the names of these outlier species:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>outlierSpecies <span class="ot">&lt;-</span> fly <span class="sc">%&gt;%</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">!</span>Species) <span class="sc">%&gt;%</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">test =</span> <span class="fu">map</span>(data,</span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">function</span>(dat) <span class="fu">wilcox.test</span>(L2Length <span class="sc">~</span> Sex, <span class="at">data =</span> dat))) <span class="sc">%&gt;%</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">test =</span> <span class="fu">map</span>(test, tidy)) <span class="sc">%&gt;%</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(test) <span class="sc">%&gt;%</span></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(p.value)) <span class="sc">%&gt;%</span></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>) <span class="sc">%&gt;%</span> <span class="co"># Choose first 4 rows from the sorted table</span></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Species) <span class="co"># Get the 4 species names</span></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(outlierSpecies)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>outlierSpecies <span class="ot">&lt;-</span> fly <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">!</span>Species) <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">test =</span> <span class="fu">map</span>(data, <span class="cf">function</span>(x) <span class="fu">wilcox.test</span>(L2Length<span class="sc">~</span>Sex, <span class="at">data=</span>x))) <span class="sc">%&gt;%</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">test =</span> <span class="fu">map</span>(test, tidy)) <span class="sc">%&gt;%</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(test) <span class="sc">%&gt;%</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(p.value)) <span class="sc">%&gt;%</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>) <span class="sc">%&gt;%</span> <span class="co"># Choose first 4 rows from the sorted table</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Species) <span class="co"># Get the 4 species names</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(outlierSpecies)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Det_nigro" "N_sordida" "I_crucige" "D_busckii"</code></pre>
 </div>
 </div>
 <p>And then we can plot the wing length data for just these ones:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Species <span class="sc">%in%</span> outlierSpecies) <span class="sc">%&gt;%</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Sex, <span class="at">y =</span> WingSize) <span class="sc">+</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">fill =</span> <span class="st">"steelblue"</span>,</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> Species) <span class="sc">+</span></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Species <span class="sc">%in%</span> outlierSpecies) <span class="sc">%&gt;%</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Sex, <span class="at">y =</span> WingSize) <span class="sc">+</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">fill =</span> <span class="st">"steelblue"</span>,</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> Species) <span class="sc">+</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Multiple_analysis_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<p><img src="Multiple_analysis_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>All species except <code>Det_nigro</code> have plenty of sampled individuals. For the other three, it is difficult not to conclude that the low p-values indicate the lack of a meaningful sex difference in wing length. For <code>Det_nigro</code>, one would most likely need more data to say.</p>
+<p>For <code>D_busckii</code>, <code>I_crucige</code>, and <code>N_sordida</code>, it is difficult not to conclude that the low p-values indicate the lack of a meaningful sex difference in wing length. For <code>Det_nigro</code> on the other hand, there are very few sampled individuals. Therefore one would most likely need more data to say.</p>
 <p>In summary, a very powerful way of analyzing data is to perform many analyses at once. To do so, one first has to nest the data. Then the analysis can be performed for every row with the help of the <code>map</code> function. Finally, one unnests the data and interprets the results. Often, an overview of the data will lead to insights that would have been difficult to gain otherwise. In our case, we saw that all but a handful of species exhibit a significant sex difference in wing length. For the few outliers, we saw that one of them lacks sufficient data, and therefore conclusions about this species should be postponed until more data are acquired.</p>
 </section>
 <section id="exercises" class="level2" data-number="15.4">
@@ -656,7 +633,7 @@ Bolstad, Geir H., Jason A. Cassara, Eladio Márquez, Thomas F. Hansen, Kim van d
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>In case you are interested in the technical details, the reason for this is that columns of tibbles must always hold elementary pieces of data. The way lists work is that they do not actually hold the information corresponding to their entries. Instead, they only contain references, or <em>pointers</em>, to where the information can be found in memory. Since lists only store these pointers (which can be represented by simple numbers) instead of the tibbles or other data structures inside them, they can be used without problems within tibbles.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>The reason is that columns of tibbles must always hold elementary pieces of data. The way lists work is that they do not actually hold the information corresponding to their entries. Instead, they only contain references, or <em>pointers</em>, to where the information can be found in memory. Since lists only store these pointers (which can be represented by simple numbers) instead of the tibbles or other data structures inside them, they can be used without problems within tibbles.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

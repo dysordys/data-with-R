@@ -32,9 +32,9 @@ Looking at this figure, it does appear as if females often had larger wings than
 
 ## Nested data frames
 
-We are by now used to the idea that the columns of tibbles can hold numbers, character strings, logical values, or even factors. But here is an interesting question: can a column of a tibble hold... other tibbles?
+We are by now used to the idea that the columns of tibbles can hold numbers, character strings, logical values, or even factors. But here is an interesting question: can a column of a tibble hold other tibbles?
 
-The short answer is yes. The somewhat longer answer is that this is possible, but not directly so. Instead, one has to make the column into a *list*, the data type we learned about in @sec-nonlin-regression.^[In case you are interested in the technical details, the reason for this is that columns of tibbles must always hold elementary pieces of data. The way lists work is that they do not actually hold the information corresponding to their entries. Instead, they only contain references, or *pointers*, to where the information can be found in memory. Since lists only store these pointers (which can be represented by simple numbers) instead of the tibbles or other data structures inside them, they can be used without problems within tibbles.] While this could of course be done by hand using the `list` function, there are other options in the `tidyverse` which facilitate creating tibbles which have other tibbles in their columns. One of these is called `nest`. This function receives a name first, which will become the name of the newly-created column holding the sub-tibbles. Then, after an equality sign, one lists the columns, in a vector, which one would like to package into those sub-tibbles. For example, to keep `Species` as a separate column and wrap everything else into sub-tibbles, we can do:
+The short answer is yes. The somewhat longer answer is that this is possible, but not directly so. Instead, one has to make the column into a list (@sec-lists).^[The reason is that columns of tibbles must always hold elementary pieces of data. The way lists work is that they do not actually hold the information corresponding to their entries. Instead, they only contain references, or *pointers*, to where the information can be found in memory. Since lists only store these pointers (which can be represented by simple numbers) instead of the tibbles or other data structures inside them, they can be used without problems within tibbles.] While this could of course be done by hand using the `list` function, there are other options in the `tidyverse` which facilitate creating tibbles which have other tibbles in their columns. One of these is called `nest`. This function receives a name first, which will become the name of the newly-created column holding the sub-tibbles. Then, after an equality sign, one lists the columns, in a vector, which one would like to package into those sub-tibbles. For example, to keep `Species` as a separate column and wrap everything else into sub-tibbles, we can do:
 
 ```{r}
 fly %>% nest(data = c(ID, Date, Sex, WingSize, L2Length))
@@ -57,19 +57,15 @@ When choosing which columns to wrap into sub-tibbles with `nest`, all the conven
 fly %>% nest(data = !Species)
 ```
 
-That is: apply the nesting to all columns that are *not* called `Species`. This can be applied in more complicated cases as well. For example, if we wish to nest data pertaining to particular species-sex combinations, we can do the following:
-
-```{r}
-fly %>% nest(data = c(ID, Date, WingSize, L2Length))
-```
-
-Or, equivalently, we can say "nest all columns that are not `Species` and not `Sex`":
+That is: apply the nesting to all columns that are *not* called `Species`. This can be used in more complicated cases as well. For example, if we wish to nest data pertaining to particular species-sex combinations, we can do the following:
 
 ```{r}
 fly %>% nest(data = !Species & !Sex)
 ```
 
-Finally, columns holding nested data can be unnested: its contents expanded back into the original data frame. The function to do this with is called `unnest`:
+where `nest(data = !Species & !Sex)` (nest all columns that are not `Species` and not `Sex`) is equivalent to the longer `nest(data = c(ID, Date, WingSize, L2Length))`.
+
+Finally, columns holding nested data can be unnested, meaning that their contents are expanded back into the original data frame. The function to do this with is called `unnest`:
 
 ```{r}
 fly %>% nest(data = !Species & !Sex) %>% unnest(data)
@@ -83,23 +79,22 @@ How can we test for all 55 fly species in this dataset whether there is a signif
 ```{r}
 fly %>%
   nest(data = !Species) %>%
-  mutate(test = map(data, function(dat) wilcox.test(L2Length~Sex, data=dat)))
+  mutate(test = map(data, function(x) wilcox.test(L2Length ~ Sex, data = x)))
 ```
 
 And *voilà:* we now have the Wilcoxon test results in the column `test`, for each species! All we need to do is retrieve this information.
 
-Doing so is not completely straightforward, because `wilcox.test` does not return a data frame or tibble. Instead, it returns a complicated model fit object which cannot be unnested into the "master" table. If we try, we get an error:
+Doing so is not completely straightforward, because `wilcox.test` does not return a data frame or tibble. Instead, it returns a complicated model fit object which cannot be unnested into the outer table. If we try, we get an error:
 
 ```{r}
 #| error: true
 fly %>%
   nest(data = !Species) %>%
-  mutate(test = map(data,
-                    function(dat) wilcox.test(L2Length~Sex, data=dat))) %>%
+  mutate(test = map(data, function(x) wilcox.test(L2Length~Sex, data=x))) %>%
   unnest(test)
 ```
 
-Fortunately, there is an easy way to convert the output of the Wilcoxon test into a tibble. The `broom` package is designed to do exactly this. It is part of the `tidyverse`, though it does not get automatically loaded with it. Loading this package first:
+Fortunately, there is an easy way to convert the output of the Wilcoxon test into a tibble. The `broom` package is designed to do exactly this. It is part of the `tidyverse`, though it does not get automatically loaded with it. We load this package first:
 
 ```{r}
 library(broom)
@@ -122,8 +117,7 @@ So we can insert a step into our analysis pipeline which converts the `test` col
 ```{r}
 fly %>%
   nest(data = !Species) %>%
-  mutate(test = map(data,
-                    function(dat) wilcox.test(L2Length~Sex, data=dat))) %>%
+  mutate(test = map(data, function(x) wilcox.test(L2Length~Sex, data=x))) %>%
   mutate(test = map(test, tidy)) %>%
   unnest(test)
 ```
@@ -134,8 +128,7 @@ And now we have the results. As an example, we can check the distribution of p-v
 #| fig-height: 9
 fly %>%
   nest(data = !Species) %>%
-  mutate(test = map(data,
-                    function(dat) wilcox.test(L2Length~Sex, data=dat))) %>%
+  mutate(test = map(data, function(x) wilcox.test(L2Length~Sex, data=x))) %>%
   mutate(test = map(test, tidy)) %>%
   unnest(test) %>%
   arrange(p.value) %>%
@@ -146,13 +139,12 @@ fly %>%
   theme_bw()
 ```
 
-This graph shows that most species have very small p-values, but that there are four clear outliers. We can extract the names of these "outlier" species:
+This graph shows that most species have very small p-values, but that there are four clear outliers. We can extract the names of these outlier species:
 
 ```{r}
 outlierSpecies <- fly %>%
   nest(data = !Species) %>%
-  mutate(test = map(data,
-                    function(dat) wilcox.test(L2Length ~ Sex, data = dat))) %>%
+  mutate(test = map(data, function(x) wilcox.test(L2Length~Sex, data=x))) %>%
   mutate(test = map(test, tidy)) %>%
   unnest(test) %>%
   arrange(desc(p.value)) %>%
@@ -176,7 +168,7 @@ fly %>%
   theme_bw()
 ```
 
-All species except `Det_nigro` have plenty of sampled individuals. For the other three, it is difficult not to conclude that the low p-values indicate the lack of a meaningful sex difference in wing length. For `Det_nigro`, one would most likely need more data to say.
+For `D_busckii`, `I_crucige`, and `N_sordida`, it is difficult not to conclude that the low p-values indicate the lack of a meaningful sex difference in wing length. For `Det_nigro` on the other hand, there are very few sampled individuals. Therefore one would most likely need more data to say.
 
 In summary, a very powerful way of analyzing data is to perform many analyses at once. To do so, one first has to nest the data. Then the analysis can be performed for every row with the help of the `map` function. Finally, one unnests the data and interprets the results. Often, an overview of the data will lead to insights that would have been difficult to gain otherwise. In our case, we saw that all but a handful of species exhibit a significant sex difference in wing length. For the few outliers, we saw that one of them lacks sufficient data, and therefore conclusions about this species should be postponed until more data are acquired.
 
