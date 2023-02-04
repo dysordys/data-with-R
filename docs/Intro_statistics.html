@@ -272,7 +272,7 @@ div.csl-indent {
   <li><a href="#sec-example_wilcox" id="toc-sec-example_wilcox" class="nav-link active" data-scroll-target="#sec-example_wilcox"><span class="toc-section-number">9.1</span>  Introductory example and the Wilcoxon test</a></li>
   <li><a href="#some-general-conclusions" id="toc-some-general-conclusions" class="nav-link" data-scroll-target="#some-general-conclusions"><span class="toc-section-number">9.2</span>  Some general conclusions</a></li>
   <li><a href="#parametric-versus-non-parametric-tests" id="toc-parametric-versus-non-parametric-tests" class="nav-link" data-scroll-target="#parametric-versus-non-parametric-tests"><span class="toc-section-number">9.3</span>  Parametric versus non-parametric tests</a></li>
-  <li><a href="#statistical-tests-in-a-data-analysis-pipeline-the-dot-notation" id="toc-statistical-tests-in-a-data-analysis-pipeline-the-dot-notation" class="nav-link" data-scroll-target="#statistical-tests-in-a-data-analysis-pipeline-the-dot-notation"><span class="toc-section-number">9.4</span>  Statistical tests in a data analysis pipeline: The dot notation</a></li>
+  <li><a href="#sec-dot" id="toc-sec-dot" class="nav-link" data-scroll-target="#sec-dot"><span class="toc-section-number">9.4</span>  Statistical tests in a data analysis pipeline: The dot notation</a></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="toc-section-number">9.5</span>  Exercises</a></li>
   </ul>
 </nav>
@@ -581,8 +581,8 @@ difference in location
 </div>
 <p>The p-value of 0.01 means that there is a one-in-a-hundred probability that the observed difference is due only to chance.</p>
 </section>
-<section id="statistical-tests-in-a-data-analysis-pipeline-the-dot-notation" class="level2" data-number="9.4">
-<h2 data-number="9.4" class="anchored" data-anchor-id="statistical-tests-in-a-data-analysis-pipeline-the-dot-notation"><span class="header-section-number">9.4</span> Statistical tests in a data analysis pipeline: The dot notation</h2>
+<section id="sec-dot" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="sec-dot"><span class="header-section-number">9.4</span> Statistical tests in a data analysis pipeline: The dot notation</h2>
 <p>One natural question is whether statistical tests can be included in a data analysis pipeline. The answer is yes, but not without having to consider some complications that are due to historical accidents. Attempting the following results in an error:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">%&gt;%</span></span>

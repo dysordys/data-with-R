@@ -149,7 +149,7 @@ wilcox.test(measurement ~ group, data = example, conf.int = TRUE)
 The p-value of 0.01 means that there is a one-in-a-hundred probability that the observed difference is due only to chance.
 
 
-## Statistical tests in a data analysis pipeline: The dot notation
+## Statistical tests in a data analysis pipeline: The dot notation {#sec-dot}
 
 One natural question is whether statistical tests can be included in a data analysis pipeline. The answer is yes, but not without having to consider some complications that are due to historical accidents. Attempting the following results in an error:
 
