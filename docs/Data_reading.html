@@ -309,7 +309,7 @@ div.csl-indent {
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>at the R console and press Enter. After making sure that the package is installed, you must load it. This is done via the function call</p>
+<p>at the R console and press Enter. After the package is installed, we can load it via the function call</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -327,16 +327,28 @@ div.csl-indent {
 ✖ dplyr::lag()    masks stats::lag()</code></pre>
 </div>
 </div>
-<p>As you see, eight packages are now loaded, called <code>ggplot2</code>, <code>tibble</code>, and so on. We will get to know these in more detail throughout the course.</p>
-<p>There are actually even more packages that are part of the tidyverse. Typing and executing <code>tidyverse_packages()</code> will show all such packages. Of all these options, only eight are loaded by default when invoking <code>library(tidyverse)</code>. The others must be loaded separately. For example, <code>readxl</code> is a tidyverse package for loading Excel files in R. To use it, execute <code>library(readxl)</code>.</p>
-<p>In general, it is a good idea to load all necessary packages at the top of your R script. There are two reasons for this. First, once you close RStudio, it forgets the packages, which do not get automatically reloaded after reopening RStudio. Second, often other users will run the scripts you write on their own computers, and they will not be able to do so unless the proper packages are loaded first. It is then helpful to others if the necessary packages are all listed right at the top, showing what is needed to run your program.</p>
+<p>As we see, eight packages are now loaded, called <code>ggplot2</code>, <code>tibble</code>, and so on. We will get to know these in more detail throughout the course.</p>
+<p>There are even more packages that are part of the tidyverse. Typing and executing <code>tidyverse_packages()</code> will show all such packages. Of all these, only eight are loaded by default when invoking <code>library(tidyverse)</code>. The others must be loaded separately. For example, <code>readxl</code> is a tidyverse package for loading Excel files in R. To use it, run <code>library(readxl)</code>.</p>
+<div class="callout-tip callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In general, it is a good idea to load all necessary packages at the top of your R script, instead of loading them wherever the need to use them first arises. There are two reasons for this. First, if you close and then later reopen RStudio, the packages do not get automatically reloaded—one must execute the calls to <code>library</code> all over again. Second, often other users will run the scripts you write on their own computers, and they will not be able to do so unless the proper packages are loaded first. It is then helpful to others if the necessary packages are all listed right at the top, showing what is needed to run your program.</p>
+</div>
+</div>
 </section>
 <section id="reading-tabular-data" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="reading-tabular-data"><span class="header-section-number">3.2</span> Reading tabular data</h2>
 <p>One of the packages loaded by default with <code>tidyverse</code> is called <code>readr</code>. This package contains tools for loading data files, and writing them to disk. To see how it works, download the files <code>Goldberg2010_data.csv</code>, <code>Goldberg2010_data.xlsx</code>, and <code>Smith2003_data.txt</code> from Lisam. Then set the working directory in RStudio to the folder where you have saved them (as a reminder, you can do this by executing <code>setwd(/path/to/files)</code>, where you should substitute in your own path in place of <code>/path/to/files</code>).</p>
 <section id="the-csv-file-format" class="level3" data-number="3.2.1">
 <h3 data-number="3.2.1" class="anchored" data-anchor-id="the-csv-file-format"><span class="header-section-number">3.2.1</span> The CSV file format</h3>
-<p><span class="citation" data-cites="Goldbergetal2010">Goldberg et al. (<a href="References.html#ref-Goldbergetal2010" role="doc-biblioref">2010</a>)</span> collected data on self-incompatibility in the family <em>Solanaceae</em> (nightshades). It contains a list of 356 species, along with a flag determining self-incompatibility status (0: self-incompatible; 1: self-compatible; 2-5: more complicated selfing scenarios). The data are in the file <code>Goldberg2010_data.csv</code>. This is a so-called <em>comma-separated value</em> (CSV) file, meaning that the different columns of the data are separated by commas. One can see this by viewing the file in any simple text editor. For example, this can be done in RStudio itself, by clicking on the file in the <strong>Files</strong> panel in the lower right part of the RStudio window, and then choosing the option “View file” (ignore the other option called “Import dataset…”). Having done this, a new tab opens in your editor panel (upper left region) where you should see something like the following:</p>
+<p><span class="citation" data-cites="Goldbergetal2010">Goldberg et al. (<a href="References.html#ref-Goldbergetal2010" role="doc-biblioref">2010</a>)</span> collected data on self-incompatibility in the family Solanaceae (nightshades). It contains a list of 356 species, along with a flag determining self-incompatibility status (0: self-incompatible; 1: self-compatible; 2-5: more complicated selfing scenarios). The data are in the file <code>Goldberg2010_data.csv</code>. This is a so-called <em>comma-separated value</em> (CSV) file, meaning that the different columns of the data are separated by commas. One can see this by viewing the file in any simple text editor. For example, this can be done in RStudio itself, by clicking on the file in the <strong>Files</strong> panel in the lower right part of the RStudio window, and then choosing the option “View file” (ignore the other option called “Import dataset…”). Having done this, a new tab opens in your editor panel (upper left region) where you should see something like the following:</p>
 <pre><code>Species,Status
 Acnistus_arborescens,1
 Anisodus_tanguticus,1
@@ -369,17 +381,17 @@ Capsicum_chacoense,1</code></pre>
 # … with 346 more rows</code></pre>
 </div>
 </div>
-<p>(We will interpret the output in the next subsection.) The above line loads the data, but does not save it into a variable. That is perfectly fine in case we immediately start performing operations on it via function composition (we will see many, many examples later on). However, in case we do want to assign the result to a variable, we can do so without problems. For instance, to put the table into the variable <code>dat</code>, we simply write:</p>
+<p>(We will interpret the output in the next subsection.) The above line loads the data, but does not save it into a variable. That is perfectly fine in case we immediately start performing operations on it via function composition—we will see many, many examples later on. However, in case we do want to assign the result to a variable, we can do so without problems. For instance, to put the table into the variable <code>goldbergDat</code>, we simply write:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Goldberg2010_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>goldbergDat<span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"Goldberg2010_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="the-tibble-data-structure" class="level3" data-number="3.2.2">
 <h3 data-number="3.2.2" class="anchored" data-anchor-id="the-tibble-data-structure"><span class="header-section-number">3.2.2</span> The <code>tibble</code> data structure</h3>
-<p>Look at the output produced by <code>read_csv("Goldberg2010_data.csv")</code> above. You can mostly ignore the top part of that output—it simply provides information on how it interpreted the data it just read in. Instead, the interesting part starts with <code>A tibble: 356 x 2</code>. A <em>tibble</em> (or <em>data frame</em><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>) is the R-equivalent of an Excel-style spreadsheets. In this case, it has 356 rows and 2 columns (hence the <code>356 x 2</code>). The simplest way to conceive of a tibble is as a collection of vectors, glued together side-by-side to form a table of data. Importantly, although each vector must consist of entries of the same type, as usual (e.g., they can be vectors of numbers, vectors of strings, or vectors of logical values), the different columns need not share types. For example, in the above table, the first column consists of character strings, but the second one consists of numerical values. This can be seen right below the header information. Below <code>Species</code>, you can see <code>&lt;chr&gt;</code>, which stands for “character string”. Below <code>Status</code>, we have <code>&lt;dbl&gt;</code> which, confusing as it may look at first sight, refers simply to ordinary numbers.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> In turn, columns comprising of logical values would have the tag <code>&lt;lgl&gt;</code> underneath them (in this case though, we don’t have such a column). The point is that by looking at the type information below the header, you can see how R has interpreted each of the columns at a glance.</p>
-<p>The fact that the individual columns are simply vectors can be made explicit, by relying on the <code>$</code>-notation. To access a given column of the table as a vector, we write the name of the table, followed by the <code>$</code> symbol, followed by the name of the column in question. For example, we can access the <code>Status</code> column from the <code>dat</code> table as a vector of numbers like this:</p>
+<p>Look at the output produced by <code>read_csv("Goldberg2010_data.csv")</code> above, starting with <code># A tibble: 356 x 2</code>. A <em>tibble</em> (or <em>data frame</em><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>) is the R-equivalent of an Excel-style spreadsheet. In this case, it has 356 rows and 2 columns (hence the <code>356 x 2</code>). The way to conceive of a tibble is as a collection of vectors, glued together side-by-side to form a table of data. Importantly, although each vector must consist of entries of the same type as usual (e.g., they can be vectors of numbers, vectors of strings, or vectors of logical values), the different columns need not share types. For example, in the above table, the first column consists of character strings, but the second one consists of numerical values. This can be seen right below the header information. Below <code>Species</code>, you can see <code>&lt;chr&gt;</code>, which stands for “character string”. Below <code>Status</code>, we have <code>&lt;dbl&gt;</code> which, confusing as it may look at first, refers simply to ordinary numbers.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> In turn, columns comprising of logical values would have the tag <code>&lt;lgl&gt;</code> underneath them (in this case though, we don’t have such a column). The point is that by looking at the type information below the header, you can see how R has interpreted each of the columns at a glance.</p>
+<p>The fact that the individual columns are simply vectors can be made explicit, by relying on the <code>$</code>-notation. To access a given column of the table as a vector, we write the name of the table, followed by the <code>$</code> symbol, followed by the name of the column in question. For example, we can access the <code>Status</code> column from the <code>goldbergDat</code> table as a vector of numbers like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>Status</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>goldbergDat<span class="sc">$</span>Status</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  [1] 1 1 1 1 0 0 1 1 2 1 1 1 1 1 1 1 1 2 1 1 1 1 0 0 1 1 1 1 0 4 0 0 0 1 1 1 0
  [38] 0 0 0 0 1 1 1 1 1 1 0 0 0 0 4 0 3 0 0 4 0 4 4 0 4 1 0 0 0 4 4 4 0 1 1 0 1
@@ -393,9 +405,9 @@ Capsicum_chacoense,1</code></pre>
 [334] 0 4 0 1 1 1 1 1 0 1 1 5 4 4 1 4 1 0 0 0 0 0 2</code></pre>
 </div>
 </div>
-<p>Here <code>dat$Status</code> is really just a vector, and can be treated as such. For example, to get the 9th entry of this vector, we can use the usual bracket notation:</p>
+<p>Here <code>goldbergDat$Status</code> is really just a vector, and can be treated as such. For example, to get the 9th entry of this vector, we can use the usual bracket notation:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>Status[<span class="dv">9</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>goldbergDat<span class="sc">$</span>Status[<span class="dv">9</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2</code></pre>
 </div>
@@ -403,7 +415,7 @@ Capsicum_chacoense,1</code></pre>
 <p>The result is an ordinary numerical value.</p>
 <p>Finally, let us take one more look at the output again:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(goldbergDat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 356 × 2
    Species                   Status
@@ -515,11 +527,11 @@ chr (1): AF extant  Artiodactyla    Bovidae Addax   nasomaculatus   4.85    7000
 # … with 5,721 more rows</code></pre>
 </div>
 </div>
-<p>The <code>col_names</code> argument is set by default to <code>TRUE</code>; in case we wish to override this, we must explicitly change is, just like above.</p>
+<p>The <code>col_names</code> argument is set by default to <code>TRUE</code>; in case we wish to override this, we must explicitly change it, just like above.</p>
 </section>
 <section id="sec-rename" class="level3" data-number="3.2.4">
 <h3 data-number="3.2.4" class="anchored" data-anchor-id="sec-rename"><span class="header-section-number">3.2.4</span> Renaming columns</h3>
-<p>While the above works, the column names now default to the moderately informative labels <code>X1</code>, <code>X2</code>, and so on. Fortunately, columns can be renamed using the <code>rename</code> function from the <code>tidyverse</code>. This function takes a tibble as its first argument, and a renaming instruction as its second, of the form <code>new_name = old_name</code>. For example, to rename the first column (which, as you may remember, refers to the continent of the corresponding mammal):</p>
+<p>While the above works, the column names now default to the moderately informative labels <code>X1</code>, <code>X2</code>, … Fortunately, columns can be renamed using the <code>rename</code> function from the <code>tidyverse</code>. This function takes a tibble as its first argument, and a renaming instruction as its second, of the form <code>new_name = old_name</code>. For example, to rename the first column (which, as you may remember, refers to the continent of the corresponding mammal):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>smithData <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"Smith2003_data.txt"</span>, <span class="at">col_names =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rename</span>(smithData, <span class="at">Continent =</span> X1) <span class="co"># Rename column "X1" to "Continent"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -540,17 +552,37 @@ chr (1): AF extant  Artiodactyla    Bovidae Addax   nasomaculatus   4.85    7000
 # … with 5,721 more rows</code></pre>
 </div>
 </div>
-<p>As seen, the name of the first column now reads <code>Continent</code> instead of <code>X1</code>. One can similarly rename other columns as well.</p>
+<p>As seen, the name of the first column now reads <code>Continent</code> instead of <code>X1</code>. One can similarly rename other columns as well. To rename the first two columns:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rename</span>(smithData, <span class="at">Continent =</span> X1, <span class="at">Status =</span> X2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5,731 × 9
+   Continent Status  X3           X4      X5         X6          X7     X8 X9   
+   &lt;chr&gt;     &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;
+ 1 AF        extant  Artiodactyla Bovidae Addax      nasomac…  4.85 7.00e4 60   
+ 2 AF        extant  Artiodactyla Bovidae Aepyceros  melampus  4.72 5.25e4 63, …
+ 3 AF        extant  Artiodactyla Bovidae Alcelaphus buselap…  5.23 1.71e5 63, …
+ 4 AF        extant  Artiodactyla Bovidae Ammodorcas clarkei   4.45 2.80e4 60   
+ 5 AF        extant  Artiodactyla Bovidae Ammotragus lervia    4.68 4.8 e4 75   
+ 6 AF        extant  Artiodactyla Bovidae Antidorcas marsupi…  4.59 3.90e4 60   
+ 7 AF        extinct Artiodactyla Bovidae Antidorcas bondi     4.53 3.4 e4 1    
+ 8 AF        extinct Artiodactyla Bovidae Antidorcas austral…  4.6  4   e4 2    
+ 9 AF        extant  Artiodactyla Bovidae Bos        taurus    5.95 9   e5 -999 
+10 AF        extant  Artiodactyla Bovidae Capra      walie     5    1   e5 -999 
+# … with 5,721 more rows</code></pre>
+</div>
+</div>
+<p>And so on.</p>
 </section>
 <section id="excel-tables" class="level3" data-number="3.2.5">
 <h3 data-number="3.2.5" class="anchored" data-anchor-id="excel-tables"><span class="header-section-number">3.2.5</span> Excel tables</h3>
-<p>Finally, although their use is discouraged in science, one should know how to read in data from an Excel spreadsheet. To do this, one needs to load the <code>readxl</code> package. This package is part of the <code>tidyverse</code>, but does not get automatically loaded when executing <code>library(tidyverse)</code>. Therefore, we first load the package:</p>
+<p>Although their use is discouraged in science, one should know how to read in data from an Excel spreadsheet. To do this, one needs to load the <code>readxl</code> package. This package is part of the <code>tidyverse</code>, but does not get automatically loaded when running <code>library(tidyverse)</code>. Therefore, we first load the package:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can now load Excel files with the function <code>read_excel()</code>. At the start, we downloaded an Excel version of the data from <span class="citation" data-cites="Goldbergetal2010">Goldberg et al. (<a href="References.html#ref-Goldbergetal2010" role="doc-biblioref">2010</a>)</span>, called <code>Goldberg2010_data.xlsx</code>. It holds the exact same data as the original CSV file, just saved in Excel format for instructive purposes. Let us load this file:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_excel</span>(<span class="st">"Goldberg2010_data.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_excel</span>(<span class="st">"Goldberg2010_data.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 356 × 2
    Species                   Status
@@ -574,7 +606,7 @@ chr (1): AF extant  Artiodactyla    Bovidae Addax   nasomaculatus   4.85    7000
 <h3 data-number="3.2.6" class="anchored" data-anchor-id="writing-data-to-files"><span class="header-section-number">3.2.6</span> Writing data to files</h3>
 <p>Finally, data can not only be read from a file, but also written out to one. Then, instead of <code>read_csv</code>, <code>read_tsv</code> and the like, one uses <code>write_csv</code>, <code>write_tsv</code>, and so on. For instance, to save <code>dat</code> in CSV form:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(dat, <span class="st">"/path/to/file.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(dat, <span class="st">"/path/to/file.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>where <code>/path/to/file.csv</code> should be replaced by the path and file name with which the data should be saved.</p>
 </section>
@@ -599,8 +631,8 @@ Smith, Felisa A., S. Kathleen Lyons, S. K. Morgan Ernest, Kate E. Jones, Dawn M.
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>Warning: there exists a similarly-named function called <code>read.csv</code> which is part of base R. It does much the same thing as <code>read_csv</code>; however, its use is far clunkier and less flexible. You can think of <code>read_csv</code> as a <code>tidyverse</code>-provided upgrade to the original <code>read.csv</code>. My recommendation is to stick with using just <code>read_csv</code>—it is simpler and at the same time more powerful than its predecessor.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>There is a nuance of a difference between a data frame (which is a feature of base R) and a tibble (a <code>tidyverse</code> construct). The two are mostly equivalent, but tibbles offer some features that are absent from data frames, and omit certain things which data frames do but are usually not needed. Like with <code>read_csv</code> and <code>read.csv</code>, tibbles can be thought of as a slightly upgraded and more user-friendly version of data frames. You do not need to be overly concerned with the precise differences between the two; in this course, we will mostly be using tibbles anyway.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Warning: there exists a similarly-named function called <code>read.csv</code> which is part of base R. It does much the same thing as <code>read_csv</code>; however, its use is clunkier and less flexible. You can think of <code>read_csv</code> as a <code>tidyverse</code>-provided upgrade to the original <code>read.csv</code>. My recommendation is to stick with using just <code>read_csv</code>—it is simpler and at the same time more powerful than its predecessor.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Data frames (a feature of base R) and tibbles (a <code>tidyverse</code> construct) are equivalent for most practical purposes. Tibbles offer some features that are absent from data frames, and omit certain quirks of data frames which tend to be in the way. Like with <code>read_csv</code> and <code>read.csv</code>, tibbles can be thought of as a slightly upgraded and more user-friendly version of data frames. You do not need to be overly concerned with the precise differences between the two. In this course, we will be using tibbles almost exclusively.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>The abbreviation <code>&lt;dbl&gt;</code> happens to stand for <a href="https://en.wikipedia.org/wiki/Double-precision_floating-point_format">double-precision numerical value</a>, a standard way of representing numbers on computers.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
