@@ -299,8 +299,8 @@ div.csl-indent {
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>heights <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"Pearson.tsv"</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(heights)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>heightDat <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"Pearson.tsv"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(heightDat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1,078 × 2
    Father   Son
@@ -320,7 +320,7 @@ div.csl-indent {
 </div>
 <p>Displaying the above in a graph yields the following:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heights, <span class="fu">aes</span>(<span class="at">x =</span> Father, <span class="at">y =</span> Son)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heightDat, <span class="fu">aes</span>(<span class="at">x =</span> Father, <span class="at">y =</span> Son)) <span class="sc">+</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>() <span class="sc">+</span> <span class="co"># Keep a 1-to-1 aspect ratio between the axes</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm) <span class="sc">+</span></span>
@@ -332,14 +332,14 @@ div.csl-indent {
 <p>A linear smoother has also been added, to illustrate two points. First, notice that although the data are heavily scattered, the confidence interval (gray shaded area) around the linear fit is very narrow. This is due to the fact that this interval is not a direct measure of the variability, but of how reliable the estimate is at any one point. Although the data have large variance, one can be highly certain of the mean trends; hence the narrow confidence region.</p>
 <p>The other, more relevant point to notice is that the slope of the line is less than one. We can show this by including a line in the graph whose slope is one and which crosses the center of the blurb of points:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>meanFather <span class="ot">&lt;-</span> <span class="fu">mean</span>(heights<span class="sc">$</span>Father) <span class="co"># Average height of fathers</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>meanSon <span class="ot">&lt;-</span> <span class="fu">mean</span>(heights<span class="sc">$</span>Son) <span class="co"># Average height of sons</span></span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>meanFather <span class="ot">&lt;-</span> <span class="fu">mean</span>(heightDat<span class="sc">$</span>Father) <span class="co"># Average height of fathers</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>meanSon <span class="ot">&lt;-</span> <span class="fu">mean</span>(heightDat<span class="sc">$</span>Son) <span class="co"># Average height of sons</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ic <span class="ot">&lt;-</span> meanSon <span class="sc">-</span> meanFather <span class="co"># Calculate intercept, assuming slope of 1</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ic) <span class="co"># The intercept is, interestingly almost perfectly 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.9974026</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heights, <span class="fu">aes</span>(<span class="at">x =</span> Father, <span class="at">y =</span> Son)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heightDat, <span class="fu">aes</span>(<span class="at">x =</span> Father, <span class="at">y =</span> Son)) <span class="sc">+</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>() <span class="sc">+</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> lm) <span class="sc">+</span></span>
@@ -349,15 +349,15 @@ div.csl-indent {
 <p><img src="Linear_regression_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>The implication is that sons of tall fathers, on average, tend to be shorter than their father, and conversely: sons of short fathers on average are taller than their father. This phenomenon gives rise to the name of linear <em>regression</em>: Galton described it in a study called “Regression towards mediocrity in hereditary stature” <span class="citation" data-cites="Galton1886">(<a href="References.html#ref-Galton1886" role="doc-biblioref">Galton 1886</a>)</span>. As an aside, he also worked out the method of finding the “best” line that fits the data.</p>
+<p>The implication is that sons of tall fathers, on average, tend to be shorter than their father, and conversely: sons of short fathers on average are taller than their father. This phenomenon gives rise to the name of linear <em>regression:</em> Galton described it in a study called “Regression towards mediocrity in hereditary stature” <span class="citation" data-cites="Galton1886">(<a href="References.html#ref-Galton1886" role="doc-biblioref">Galton 1886</a>)</span>. As an aside, he also worked out the method of finding the “best” line that fits the data.</p>
 <p>This last part is what we are interested in. Galton’s way of doing this was to pick the slope and intercept of the line such that the summed deviations of the points from the line are minimized. Or, rather, the sum of <em>squared</em> deviations, to prevent very large positive and very large negative deviations canceling each other in the sum, making it appear as if the total deviation was very small.</p>
 <p>One can imagine that there must be some reasonably straightforward mathematical procedure to obtain the intercept and slope from arbitrary data. This is indeed the case. But fortunately, there is no need to do it by hand, because the <code>lm</code> function automates this process.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Let us perform the regression on the height data:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(Son <span class="sc">~</span> Father, <span class="at">data =</span> heights) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(Son <span class="sc">~</span> Father, <span class="at">data =</span> heightDat) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
-lm(formula = Son ~ Father, data = heights)
+lm(formula = Son ~ Father, data = heightDat)
 
 Residuals:
     Min      1Q  Median      3Q     Max 
@@ -378,13 +378,13 @@ F-statistic: 360.9 on 1 and 1076 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Recall that <code>summary</code> returns a table of regression coefficients (under “Coefficients:” above). The two fitted coefficients are the intercept and the slope. The intercept is conveniently called <code>(Intercept)</code>, but the slope is labeled by the predictor—consistently with the behavior of <code>lm</code> in one- and two-way ANOVA calculations. We see that the intercept is about 33.9 inches; this would be the average height of a son born to a father with zero height.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> The slope is about 0.5; that is, a father who is one inch taller than another father will have, on average, sons who are half an inch taller (than the sons of the first, shorter father).</p>
 <section id="interpreting-the-results-of-a-linear-regression" class="level2" data-number="12.1">
 <h2 data-number="12.1" class="anchored" data-anchor-id="interpreting-the-results-of-a-linear-regression"><span class="header-section-number">12.1</span> Interpreting the results of a linear regression</h2>
-<p>The intercept and slope which minimize the sum of the squared deviations from the fit can be obtained for any data. But the question is: does such a linear fit actually mean anything? The situation is similar to what we discussed in <a href="Intro_statistics.html#sec-example_wilcox"><span>Section&nbsp;9.1</span></a>: one can always compute the difference of the means between two groups of data, but whether the observed difference is meaningfully different from zero is another question. In the case of the two groups, we introduced techniques such as the Wilcoxon test and the <em>t</em>-test to answer that question.</p>
+<p>The intercept and slope which minimize the sum of the squared deviations from the fit can be obtained for any data. But the question is: does such a linear fit actually mean anything? The situation is similar to what we discussed in <a href="Intro_statistics.html#sec-example-wilcox"><span>Section&nbsp;9.1</span></a>: one can always compute the difference of the means between two groups of data, but whether the observed difference is meaningfully different from zero is another question. In the case of the two groups, we introduced techniques such as the Wilcoxon test and the <em>t</em>-test to answer that question.</p>
 <p>For linear regression, a similar thing is possible. As seen, the output of <code>lm</code> above contains p-values and other statistics. The p-values are both practically zero, indicating that one can be absolutely certain that the observed nonzero intercept and slope aren’t simply due to chance. But for these conclusions to be meaningful, the usual assumptions must hold: the residuals should be independent from one another, should be normally distributed, and should be homoscedastic (have equal variance for all values of the predictor).</p>
 <p>One can check whether these assumptions hold with diagnostic plots. In this particular example, we have a nearly perfect match-up between theory and the data, so the statistical results fro the linear regression should be reliable:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggfortify)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(Son <span class="sc">~</span> Father, <span class="at">data =</span> heights) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(Son <span class="sc">~</span> Father, <span class="at">data =</span> heightDat) <span class="sc">%&gt;%</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="at">which=</span><span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">smooth.colour=</span><span class="cn">NA</span>, <span class="at">colour=</span><span class="st">"steelblue"</span>, <span class="at">alpha=</span><span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -635,7 +635,7 @@ Residual standard error: 1.415 on 9 degrees of freedom</code></pre>
 <section id="exercises" class="level2" data-number="12.3">
 <h2 data-number="12.3" class="anchored" data-anchor-id="exercises"><span class="header-section-number">12.3</span> Exercises</h2>
 <ol type="1">
-<li>The file <code>plant.growth.rate.csv</code> contains individual plant growth data (mm/week), as a function of soil moisture content. Do plants grow better in more moist soils? Visualize the relationship, then perform and interpret a linear regression using both parametric and non-parametric methods. Use diagnostic plots to check whether the assumptions of the parametric test are satisfied.</li>
+<li>The file <code>plant.growth.rate.csv</code>, downloadable from <a href="https://github.com/dysordys/data-with-R/tree/main/data">here</a>, contains individual plant growth data (mm/week), as a function of soil moisture content. Do plants grow better in more moist soils? Visualize the relationship, then perform and interpret a linear regression using both parametric and non-parametric methods. Use diagnostic plots to check whether the assumptions of the parametric test are satisfied.</li>
 <li>It is difficult to measure the height of a tree. By contrast, the diameter at breast height (DBH) is easy to measure. Can one infer the height of a tree by measuring its DBH? The built-in dataset <code>trees</code> contains DBH data (somewhat misleadingly labeled <code>Girth</code>), as well as measured height and timber volume of 31 felled black cherry trees. You can ignore timber volume, and focus instead on how well DBH predicts tree height. Plot the relationship, perform both parametric and non-parametric regression, and create diagnostic plots. Interpret the results, and summarize how reliable it is to use DBH to infer tree height.</li>
 </ol>
 
@@ -652,7 +652,7 @@ Galton, Francis. 1886. <span>“<span class="nocase">Regression Towards Mediocri
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>It has been doing this same minimization even for the one- and two-way ANOVA we have been working with in <a href="Anova.html"><span>Chapter&nbsp;10</span></a> and <a href="Anova_two_way.html"><span>Chapter&nbsp;11</span></a>. It’s just that the results of doing so are not so easy to visualize when the predictors are categorical variables.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>It has been doing this same minimization even for the one- and two-way ANOVA we have been working with in <a href="Anova.html"><span>Chapter&nbsp;10</span></a> and <a href="Anova_two_way.html"><span>Chapter&nbsp;11</span></a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>This also illustrates the dangers of extrapolating the results of linear regression too far: generally, a linear relationship will only hold within a restricted range of values.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>

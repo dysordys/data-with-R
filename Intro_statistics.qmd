@@ -1,8 +1,8 @@
 # Introducing statistical inference {#sec-wilcox}
 
-## Introductory example and the Wilcoxon test {#sec-example_wilcox}
+## Introductory example and the Wilcoxon test {#sec-example-wilcox}
 
-In this chapter we will take a first look at statistical tests of the simplest kind: comparing two groups of data. To illustrate why statistical inference is needed in such comparisons, let us take a look at a fictive dataset which contains an equally fictive set of weight measurements of different bird individuals from the same species. The birds are assumed to come from two islands, a larger and a smaller one. The question is: do the data provide evidence of *insular dwarfism*---that is, the phenomenon that the body sizes of species tend to decline on small islands?
+In this chapter we will take a first look at statistical tests of a very simple kind: comparing two groups of data. To illustrate why statistical inference is needed in such comparisons, let us take a look at a fictive dataset which contains an equally fictive set of weight measurements of different bird individuals from the same species. The birds are assumed to come from two islands, a larger and a smaller one. The question is: do the data provide evidence of *insular dwarfism*---that is, the phenomenon that the body sizes of species tend to decline on small islands?
 
 We can load the data:
 
@@ -37,7 +37,7 @@ bird %>%
   summarise(mean = mean(weight), median = median(weight))
 ```
 
-Can we conclude that the two samples are indeed different, and birds on the smaller island tend to be smaller, supporting the insular dwarfism hypothesis? As mentioned above, the data are fictive---they are not based on actual measurements. **In fact, these "observations" were created by sampling each data point from the same distribution, regardless of island**: a normal distribution with mean 20 and standard deviation 5. This means that any supposedly observed difference between the samples must be accidental. Would various statistical methods detect a difference? One thing we can do is what we have already done in @sec-CI: compute the 95% confidence intervals of the means, and see whether and how much they overlap.
+Can we conclude that the two samples are indeed different, and birds on the smaller island tend to be smaller, supporting the insular dwarfism hypothesis? As mentioned above, the data are fictive---they are not based on actual measurements. **In fact, these "observations" were created by sampling each data point from the same distribution, regardless of island**: a normal distribution with mean 20 and standard deviation 5. This means that any supposedly observed difference between the samples must be accidental. Would various statistical methods detect a difference? One thing we can do is what we have learned in @sec-CI: compute the 95% confidence intervals of the means, and see whether and how much they overlap.
 
 ```{r}
 bird %>%
@@ -46,7 +46,7 @@ bird %>%
             sd = sd(weight), # Standard deviations
             N = n(), # Sample sizes
             SEM = sd / sqrt(N), # Standard errors of the means
-            CI = qt(0.975, N - 1)) %>% # Confidence intervals
+            CI = qt(1 - 0.025, N - 1)) %>% # Confidence intervals
   ungroup() %>% # Ungroup the data (not necessary here, but a good habit)
   ggplot(aes(x = island, y = mean, ymin = mean - CI, ymax = mean + CI)) +
   geom_point(colour = "steelblue") +
@@ -57,27 +57,27 @@ bird %>%
 
 As seen, there is overlap between the 95% confidence intervals. While that by itself is not conclusive, it is an indication that the difference between the two samples may not be as relevant as it might have initially looked.
 
-Let us wait no longer, and perform a statistical test. One widely used test to check if two samples differ from one another is the *Wilcoxon test* (also known as the *Mann-Whitney test*). Its implementation is very simple:
+Let us wait no longer, and perform a statistical test. One widely used test to check if two samples differ from one another is the *Wilcoxon test* (also known as the *Mann-Whitney test*). Its implementation is as follows:
 
 ```{r}
 wilcox.test(weight ~ island, data = bird)
 ```
 
-The function takes two arguments: a *formula*, and the *data* to be analyzed, in the form of a data frame or tibble. The formula in the first argument establishes a relationship between two (or more) columns of the data. We will discuss formulas and their syntax in more detail later. For now: the way to write them is to first type the variable we wish to predict or explain, then a tilde (`~`), and then the explanatory variable (predictor) by which the data are subdivided into the two groups. In our case, we are trying to explain the difference in weight between the islands, so `weight` comes before the tilde and the predictor `island` comes after.
+The function takes two arguments: a *formula*, and the *data* to be analyzed, in the form of a data frame or tibble. The formula in the first argument establishes a relationship between two (or more) columns of the data. We will discuss formulas and their syntax in more detail later. For now: the way to write them is to first type the variable we wish to predict, then a tilde (`~`), and then the explanatory variable (predictor) by which the data are subdivided into the two groups. In our case, we are trying to explain the difference in weight between the islands, so `weight` comes before the tilde and the predictor `island` comes after.
 
 :::{.callout-note}
-We have used the tilde (`~`) before, when faceting plots with `facet_grid`; see @sec-faceting. However, the tilde used in `facet_grid` has nothing to do with the one we use in formulas: the two symbols happen to be identical, but that is just an accident.
+We have used the tilde (`~`) before, when faceting plots with `facet_grid`; see @sec-faceting. However, the tilde used in `facet_grid` has nothing to do with the one we use in formulas: the two symbols happen to be identical by accident.
 :::
 
 Let us now look at the output produced by `wilcox.test` above. Most of it is not particularly relevant for us: we are first informed that a Wilcoxon rank sum exact test is being performed; then we see that we are explaining weight differences by island; then we see the test statistic W itself (we need not concern ourselves with its precise meaning); then the p-value; and finally, a reminder of what the alternative hypothesis is (the null hypothesis is that the shift in location is in fact zero).
 
 One piece of datum we are interested in is the p-value. This tells us the probability of observing a result *at least* as extreme as we see in our data, given that the null hypothesis is true. In our case, we are measuring how different the two samples are from one another, and the null hypothesis is that the only difference we might observe is due purely to chance. We find that the probability of this being the case, given our data, is 0.056. What this number means is that we have a roughly one-in-eighteen chance that the observed difference is nothing but a fluke. Since science leans towards erring on the side of caution (i.e., we would rather miss out on making a discovery than falsely claim having seen an effect), this value is in general a bit too high for comfort. And indeed: since in this case we know that the data were generated by sampling from the same distribution, any distinctiveness between them is incidental.
 
-:::{.callout-note}
-In many subfields of science, it is standard practice to consider p-values falling below 0.05 as "significant" and those falling above as "non-significant". Besides the fact that such a one-size-fits-all approach ought to be suspect even under the best of circumstances, a significance threshold of 0.05 is awfully permissive to errors. In fact, we should expect about one out of twenty of all papers ever published which have adopted this cutoff to be wrong! Digging deeper into this issue reveals that the figure is possibly much worse---see, e.g., @Colquhoun2014. One way to ameliorate the problem is to adopt a less exclusive and parochial view of p-values. Instead of having rigid significance thresholds, p-values can simply be reported and interpreted for what they are: the probability that the outcome is at least as extreme as observed, assuming that the null model holds. Treating this information as just one piece of the data puzzle is a first step towards avoiding the erroneous classification of random patterns as results.
+:::{.callout-warning}
+In many subfields of science, it is standard practice to consider p-values falling below 0.05 as "significant" and those falling above as "non-significant". Besides the fact that such a one-size-fits-all approach ought to be suspect even under the best of circumstances, a significance threshold of 0.05 is awfully permissive to errors. In fact, we should expect about one out of twenty of all papers ever published which have adopted this cutoff to be wrong! Digging deeper into this issue reveals that the figure is possibly much worse---see, e.g., @Colquhoun2014. One way to ameliorate the problem is to adopt a less exclusive and parochial view of p-values. Instead of having rigid significance thresholds, p-values can simply be reported and interpreted for what they are: the probability that the outcome is at least as extreme as observed, assuming that the null model holds. Treating this information as just another piece of the larger data puzzle is a first step towards avoiding the erroneous classification of random patterns as results.
 :::
 
-Apart from the p-value (is the observed effect likely to be due to chance alone?), another important piece of information is some measure of the *effect size:* how different are the two samples? We have already computed the means and medians; their differences across the islands provide one way of measuring this effect size. It is possible to add a calculation of the effect size, as well as the confidence intervals, to the Wilcoxon test. All one needs to do is pass `conf.int = TRUE` as an argument:
+Apart from the p-value which measures whether the observed effect is likely to have been due to chance alone, another important piece of information is some measure of the *effect size:* how different are the two samples? We have already computed the means and medians; their differences across the islands provide one way of measuring this effect size. It is possible to add a calculation of the effect size, as well as the confidence intervals, to the Wilcoxon test. All one needs to do is pass `conf.int = TRUE` as an argument:
 
 ```{r}
 wilcox.test(weight ~ island, data = bird, conf.int = TRUE)
@@ -96,16 +96,16 @@ In summary, the Wilcoxon test failed to yield serious evidence in favor of rejec
 
 ## Some general conclusions
 
-The example of @sec-example_wilcox illustrates two important general points.
+The example of @sec-example-wilcox illustrates two important general points.
 
-First, instead of jumping into statistical tests, we started the analysis with qualitative and descriptive data exploration: we plotted the data, computed its means and medians, etc. This is almost always the correct way to go. (The exception is when one analyzes data from a pre-registered experimental design. In that case, one must follow whatever statistical techniques were agreed upon before data collection even started.) To perform tests "blindly", without visually exploring the data first, is rarely a good idea.
+First, instead of jumping into statistical tests, we started the analysis with qualitative and descriptive data exploration: we plotted the data, computed its means and medians, etc. This is almost always the correct way to go.^[The exception is when one analyzes data from a pre-registered experimental design. In that case, one must follow whatever statistical techniques were agreed upon before data collection even started.] To perform tests blindly, without visually exploring the data first, is rarely a good idea.
 
 Second, we only performed the statistical test after we have made an effort to understand the data, and after setting clear expectations about what we might find. We knew, going into the test, that finding a difference between the two island samples was questionable. And indeed, the test revealed that such a distinction cannot be made in good conscience. Following a similar strategy for all statistical inference can prevent a lot of frustration. To make the point more sharply: do not perform a statistical test without knowing what its result will be! A more nuanced way of saying the same thing is that if you think you see a relationship in your data, then you should also make sure that your observation is not just a mirage, by using a statistical test. But if a relationship is not visually evident, you should first ask the question whether it makes much sense to try to explore it statistically.
 
 
 ## Parametric versus non-parametric tests
 
-The Wilcoxon test we employed is *non-parametric:* it does not assume either the data or the residuals to come from any particular distribution. This is both the test's advantage and disadvantage. It is an advantage because fewer assumptions must be satisfied for the test to be applicable. Non-parametric techniques also tend to fare better when only limited data are available. Since in many areas of biology (such as ecology) data are hard to come by, datasets are correspondingly small, making non-parametric techniques a natural candidate for interrogating the data with. On the downside, non-parametric tests tend to be less powerful than parametric ones: the additional assumptions of parametric tests (when they are actually met by real data) may allow for sharper inference.
+The Wilcoxon test we employed is *non-parametric:* it does not assume either the data or the residuals to come from any particular distribution. This is both the test's advantage and disadvantage. It is an advantage because fewer assumptions must be satisfied for the test to be applicable. Non-parametric techniques also tend to fare better when only limited data are available. Since in many areas of biology (such as ecology) data are hard to come by, datasets are correspondingly small, making non-parametric techniques a natural candidate for interrogating the data with. On the downside, non-parametric tests tend to be less powerful than parametric ones: the additional assumptions of parametric tests may allow for sharper inference---provided that those assumptions are actually met by the real data, of course.
 
 One of the most common parametric alternatives to the Wilcoxon test is Welch's *t*-test. Like the Wilcoxon test, the *t*-test assumes the independence of the two samples. In addition, it also assumes that the samples are normally distributed. Let us see what the *t*-test says about our fictive bird data:
 
@@ -140,7 +140,7 @@ Applying a *t*-test first:
 t.test(measurement ~ group, data = example)
 ```
 
-The parametric *t*-test cannot detect a difference between the samples---though, since its assumption of normality is violated, such a test should not have been attempted in the first place. By contrast, the non-parametric Wilcoxon test (correctly) suggests that there might be a difference:
+The parametric *t*-test cannot detect a difference between the samples. The fact is, since its assumption of normality is violated, such a test should not have been attempted in the first place. By contrast, the non-parametric Wilcoxon test correctly suggests that there might be a difference:
 
 ```{r}
 wilcox.test(measurement ~ group, data = example, conf.int = TRUE)
@@ -202,6 +202,6 @@ In this case, the first argument to `mutate`, as always, is the piped-in tibble.
 
 ## Exercises
 
-1. Atmospheric ozone levels are important for urban gardens, because ozone concentrations above 80 parts per hundred million can damage lettuce plants. The file `ozone.csv` contains measured ozone concentrations in gardens distributed around a city. The gardens were either east or west of the city center. Is there a difference in average ozone concentration between eastern vs. western gardens? Create a plot of the concentrations first and try to guess the answer, before performing any statistical analyses. Then do the statistics, using both nonparametric and parametric methods. What result do you find? Do the outcomes of the different methods agree with one another?
+1. Atmospheric ozone levels are important for urban gardens, because ozone concentrations above 80 parts per hundred million can damage lettuce plants. The file `ozone.csv`, downloadable [here](https://github.com/dysordys/data-with-R/tree/main/data), contains measured ozone concentrations in gardens distributed around a city. The gardens were either east or west of the city center. Is there a difference in average ozone concentration between eastern vs. western gardens? Create a plot of the concentrations first and try to guess the answer, before performing any statistical analyses. Then do the statistics, using both nonparametric and parametric methods. What result do you find? Do the outcomes of the different methods agree with one another?
 2. In the built-in `iris` dataset, the sepal and petal characteristics of the various species differ. Let us focus on just petal length here. Is there a detectable difference between the petal lengths of *Iris versicolor* and *I. virginica*? (Since we are not working with *I. setosa* in this exercise, make sure to remove them from the data first---e.g., by using `filter`.) Like before, start with a graph which you can base a hypothesis on. Then perform both nonparametric and parametric tests to see if your hypothesis can be supported.
 3. Repeat the above exercise for any and all of the possible trait-species pair combinations in the `iris` dataset. E.g., one can compare the sepal widths of *I. setosa* and *I. virginica*, or the petal widths of *I. versicolor* and *I. setosa*, and so on.

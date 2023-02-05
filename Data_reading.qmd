@@ -26,7 +26,7 @@ In general, it is a good idea to load all necessary packages at the top of your 
 
 ## Reading tabular data
 
-One of the packages loaded by default with `tidyverse` is called `readr`. This package contains tools for loading data files, and writing them to disk. To see how it works, download the files `Goldberg2010_data.csv`, `Goldberg2010_data.xlsx`, and `Smith2003_data.txt` from Lisam. Then set the working directory in RStudio to the folder where you have saved them (as a reminder, you can do this by executing `setwd(/path/to/files)`, where you should substitute in your own path in place of `/path/to/files`).
+One of the packages loaded by default with `tidyverse` is called `readr`. This package contains tools for loading data files, and writing them to disk. To see how it works, download the files `Goldberg2010_data.csv`, `Goldberg2010_data.xlsx`, and `Smith2003_data.txt` (here's a [link](https://github.com/dysordys/data-with-R/tree/main/data) to these and other data files used throughout the book). Then set the working directory in RStudio to the folder where you have saved them. As a reminder, you can do this by executing `setwd(/path/to/files)`, where you should substitute in your own path in place of `/path/to/files`.
 
 ### The CSV file format
 

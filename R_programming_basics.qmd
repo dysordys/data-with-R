@@ -359,7 +359,7 @@ A remarkable property of composition is that the composed function (in this case
 If we conceive of a program written in R as a large lego building, then one can think of functions as the lego blocks out of which the whole construction is made up. Lego pieces are designed to fit well together, one can always combine them in various ways. Furthermore, any combination of lego pieces itself behaves like a more elementary lego piece: it can be fitted together with other pieces in much the same way. The composition of functions is analogous to building larger lego blocks out of simpler ones. Remarkably, just as the size of a lego block does not hamper our ability to stick them together, the composability of functions is retained regardless of how many more elementary pieces each of them consist of. Thus, the composition of functions is an excellent way of keeping the complexity of larger programs in hand.
 
 
-### Function piping
+### Function piping {#sec-pipes}
 
 One problem with composing many functions together is that the order of application must be read backwards. An expression such as `sqrt(sin(cos(log(1))))` means: "take the square root of the sine of the cosine of the natural logarithm of 1". But it is more convenient for the human brain to think of it the other way round: we first take the log of 1, then the cosine of the result, then the sine of what we got, and finally the square root. The problem of interpreting composed functions gets more difficult when the functions have more than one argument. Even something as relatively simple as
 

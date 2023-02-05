@@ -6,15 +6,15 @@
 #| message: false
 library(tidyverse)
 
-heights <- read_tsv("Pearson.tsv")
-print(heights)
+heightDat <- read_tsv("Pearson.tsv")
+print(heightDat)
 ```
 
 Displaying the above in a graph yields the following:
 
 ```{r}
 #| message: false
-ggplot(heights, aes(x = Father, y = Son)) +
+ggplot(heightDat, aes(x = Father, y = Son)) +
   geom_point(colour = "steelblue", alpha = 0.4) +
   coord_fixed() + # Keep a 1-to-1 aspect ratio between the axes
   geom_smooth(method = lm) +
@@ -27,12 +27,12 @@ The other, more relevant point to notice is that the slope of the line is less t
 
 ```{r}
 #| message: false
-meanFather <- mean(heights$Father) # Average height of fathers
-meanSon <- mean(heights$Son) # Average height of sons
+meanFather <- mean(heightDat$Father) # Average height of fathers
+meanSon <- mean(heightDat$Son) # Average height of sons
 ic <- meanSon - meanFather # Calculate intercept, assuming slope of 1
 print(ic) # The intercept is, interestingly almost perfectly 1
 
-ggplot(heights, aes(x = Father, y = Son)) +
+ggplot(heightDat, aes(x = Father, y = Son)) +
   geom_point(colour = "steelblue", alpha = 0.4) +
   coord_fixed() +
   geom_smooth(method = lm) +
@@ -40,14 +40,14 @@ ggplot(heights, aes(x = Father, y = Son)) +
   theme_bw()
 ```
 
-The implication is that sons of tall fathers, on average, tend to be shorter than their father, and conversely: sons of short fathers on average are taller than their father. This phenomenon gives rise to the name of linear *regression*: Galton described it in a study called "Regression towards mediocrity in hereditary stature" [@Galton1886]. As an aside, he also worked out the method of finding the "best" line that fits the data.
+The implication is that sons of tall fathers, on average, tend to be shorter than their father, and conversely: sons of short fathers on average are taller than their father. This phenomenon gives rise to the name of linear *regression:* Galton described it in a study called "Regression towards mediocrity in hereditary stature" [@Galton1886]. As an aside, he also worked out the method of finding the "best" line that fits the data.
 
 This last part is what we are interested in. Galton's way of doing this was to pick the slope and intercept of the line such that the summed deviations of the points from the line are minimized. Or, rather, the sum of *squared* deviations, to prevent very large positive and very large negative deviations canceling each other in the sum, making it appear as if the total deviation was very small.
 
-One can imagine that there must be some reasonably straightforward mathematical procedure to obtain the intercept and slope from arbitrary data. This is indeed the case. But fortunately, there is no need to do it by hand, because the `lm` function automates this process.^[It has been doing this same minimization even for the one- and two-way ANOVA we have been working with in @sec-ANOVA and @sec-SRH. It's just that the results of doing so are not so easy to visualize when the predictors are categorical variables.] Let us perform the regression on the height data:
+One can imagine that there must be some reasonably straightforward mathematical procedure to obtain the intercept and slope from arbitrary data. This is indeed the case. But fortunately, there is no need to do it by hand, because the `lm` function automates this process.^[It has been doing this same minimization even for the one- and two-way ANOVA we have been working with in @sec-ANOVA and @sec-SRH.] Let us perform the regression on the height data:
 
 ```{r}
-lm(Son ~ Father, data = heights) %>% summary()
+lm(Son ~ Father, data = heightDat) %>% summary()
 ```
 
 Recall that `summary` returns a table of regression coefficients (under "Coefficients:" above). The two fitted coefficients are the intercept and the slope. The intercept is conveniently called `(Intercept)`, but the slope is labeled by the predictor---consistently with the behavior of `lm` in one- and two-way ANOVA calculations. We see that the intercept is about 33.9 inches; this would be the average height of a son born to a father with zero height.^[This also illustrates the dangers of extrapolating the results of linear regression too far: generally, a linear relationship will only hold within a restricted range of values.] The slope is about 0.5; that is, a father who is one inch taller than another father will have, on average, sons who are half an inch taller (than the sons of the first, shorter father).
@@ -55,7 +55,7 @@ Recall that `summary` returns a table of regression coefficients (under "Coeffic
 
 ## Interpreting the results of a linear regression
 
-The intercept and slope which minimize the sum of the squared deviations from the fit can be obtained for any data. But the question is: does such a linear fit actually mean anything? The situation is similar to what we discussed in @sec-example_wilcox: one can always compute the difference of the means between two groups of data, but whether the observed difference is meaningfully different from zero is another question. In the case of the two groups, we introduced techniques such as the Wilcoxon test and the *t*-test to answer that question.
+The intercept and slope which minimize the sum of the squared deviations from the fit can be obtained for any data. But the question is: does such a linear fit actually mean anything? The situation is similar to what we discussed in @sec-example-wilcox: one can always compute the difference of the means between two groups of data, but whether the observed difference is meaningfully different from zero is another question. In the case of the two groups, we introduced techniques such as the Wilcoxon test and the *t*-test to answer that question.
 
 For linear regression, a similar thing is possible. As seen, the output of `lm` above contains p-values and other statistics. The p-values are both practically zero, indicating that one can be absolutely certain that the observed nonzero intercept and slope aren't simply due to chance. But for these conclusions to be meaningful, the usual assumptions must hold: the residuals should be independent from one another, should be normally distributed, and should be homoscedastic (have equal variance for all values of the predictor).
 
@@ -66,7 +66,7 @@ One can check whether these assumptions hold with diagnostic plots. In this part
 #| fig-height: 3
 library(ggfortify)
 
-lm(Son ~ Father, data = heights) %>%
+lm(Son ~ Father, data = heightDat) %>%
   autoplot(which=3:2, smooth.colour=NA, colour="steelblue", alpha=0.4) +
   theme_bw()
 ```
@@ -207,5 +207,5 @@ The Theil--Sen regression correctly recognizes the outlier for what it is, and r
 
 ## Exercises
 
-1. The file `plant.growth.rate.csv` contains individual plant growth data (mm/week), as a function of soil moisture content. Do plants grow better in more moist soils? Visualize the relationship, then perform and interpret a linear regression using both parametric and non-parametric methods. Use diagnostic plots to check whether the assumptions of the parametric test are satisfied.
+1. The file `plant.growth.rate.csv`, downloadable from [here](https://github.com/dysordys/data-with-R/tree/main/data), contains individual plant growth data (mm/week), as a function of soil moisture content. Do plants grow better in more moist soils? Visualize the relationship, then perform and interpret a linear regression using both parametric and non-parametric methods. Use diagnostic plots to check whether the assumptions of the parametric test are satisfied.
 2. It is difficult to measure the height of a tree. By contrast, the diameter at breast height (DBH) is easy to measure. Can one infer the height of a tree by measuring its DBH? The built-in dataset `trees` contains DBH data (somewhat misleadingly labeled `Girth`), as well as measured height and timber volume of 31 felled black cherry trees. You can ignore timber volume, and focus instead on how well DBH predicts tree height. Plot the relationship, perform both parametric and non-parametric regression, and create diagnostic plots. Interpret the results, and summarize how reliable it is to use DBH to infer tree height.

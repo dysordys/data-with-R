@@ -47,11 +47,11 @@ As expected, the difference between the control and the two treatments is not pa
 
 While this method of using repeated Wilcoxon tests worked fine above, there are some problems with this approach. One is that it can quickly get out of hand, because having *n* groups means there will be *n* &#183; (*n* - 1) / 2 pairs to consider. For instance, if the number of groups is 12 (not a particularly large number), then there are 66 unique pairs already. It would not be pleasant to perform this many tests, even if any single test is quite simple to run.
 
-The other problem has to do with *multiple testing* and its influence on the interpretation of p-values. Very simply put, the problem is that if sufficiently many groups are compared, then we might find at least one pair with a low p-value---not because the null hypothesis is false, but because across a large number of observations some p-values might turn out lower than others just by chance. Remember: p-values measure, in effect, the probability that the observed effect is too stark to be due to simple coincidence. But if we create sufficiently many opportunities for such a coincidence to arise, then of course one eventually will. One of the best explanations of this point is in the following cartoon by [xkcd](https://xkcd.com/):
+The other problem has to do with *multiple testing* and its influence on the interpretation of p-values. Very simply put, the problem is that if sufficiently many groups are compared, then we might find at least one pair with a low p-value---not because the null hypothesis is false, but because across a large number of observations some p-values will turn out lower than others just by chance. Remember: p-values measure, in effect, the probability that the observed effect is too stark to be due to simple coincidence. But if we create sufficiently many opportunities for such a coincidence to arise, then of course one eventually will. One of the best explanations of this point is in the following cartoon by [xkcd](https://xkcd.com/):
 
 ![](significant.png)
 
-Fortunately, there is no need to rely on repeated Wilcoxon tests when there are more than two groups, as other methods are available. One such method is the *Kruskal--Wallis test*, which can be used with any number of groups as long as those groups vary within a single factor. (In @sec-SRH we will see examples where multiple independent factors are varied, and each possible combination results in a separate group. For example, if the effects of three different dosages of vitamin C are examined on the tooth growth of Guinea pigs, and the vitamin is also supplied in two distinct forms of either orange juice or raw ascorbic acid, then there will be 3 &#215; 2 = 6 groups, defined by the two factors of dosage and form of supplement.) The Kruskal--Wallis test is non-parametric, and therefore does not rely on assumptions such as the normality of the residuals. Its application is precisely analogous to how the Wilcoxon test is implemented. Therefore, to perform the test on the `PlantGrowth` data:
+Fortunately, there is no need to rely on repeated Wilcoxon tests when there are more than two groups, as other methods are available. One such method is the *Kruskal--Wallis test*, which can be used with any number of groups as long as those groups vary within a single factor.^[In @sec-SRH we will see examples where multiple independent factors are varied, and each possible combination results in a separate group. For example, if the effects of three different dosages of vitamin C are examined on the tooth growth of Guinea pigs, and the vitamin is also supplied in two distinct forms of either orange juice or raw ascorbic acid, then there will be 3 &#215; 2 = 6 groups, defined by the two factors of dosage and form of supplement.] The Kruskal--Wallis test is non-parametric, and therefore does not rely on assumptions such as the normality of the residuals. Its application is precisely analogous to how the Wilcoxon test is implemented. Therefore, to perform the test on the `PlantGrowth` data:
 
 ```{r}
 kruskal.test(weight ~ group, data = PlantGrowth)
@@ -81,7 +81,7 @@ dunnTest(weight ~ group, data = PlantGrowth)
 
 The table above is the output of the test, and has four columns. The first column shows which two groups are being compared. The next column, called `Z`, is the value of the test statistic, which we need not concern ourselves with here. Next, we have the unadjusted p-values; and finally, the adjusted p-values (`P.adj`), which have been corrected to account for the multiple testing problem mentioned above. Therefore, the adjusted p-values will always be as large or larger than the unadjusted ones.
 
-What has the Dunn test revealed? Precisely what we have been suspecting: that the only difference worth noting is the one between the two treatments (last row of the table).
+What has the Dunn test revealed? Precisely what we have been suspecting: that the only difference worth noting is the one between the two treatments (last row of the table, where the adjusted p-value is sufficiently small to have a chance of meaning something).
 
 
 ## One-way ANOVA
@@ -168,7 +168,7 @@ lm(weight ~ group, data = PlantGrowth) %>%
   autoplot(which = 3:2, smooth.colour = NA)
 ```
 
-One may can go even further---since `autoplot` returns a standard `ggplot` object, we can add various theme options:
+One may can go even further. Since `autoplot` returns a standard `ggplot` object, we can add various theme options:
 
 ```{r}
 #| warning: false
@@ -189,7 +189,7 @@ lm(weight ~ group, data = PlantGrowth) %>% aov() %>% TukeyHSD()
 
 The table is similar to the one produced by the Dunn test, with a few differences. The first column tells us which groups of data are compared. The second column is the raw difference between the group means, the third and fourth are the lower and upper limits of a 95% confidence interval for the difference, and the last one are the p-values (adjusted for multiple comparisons). In this case, the results from the Dunn test and the Tukey test are in agreement: only the difference between the two control groups stands a reasonable chance of being real. The fact that multiple methods lead to the same conclusion increases the trust we can place in their results being correct.
 
-In case using the `aov` function as an intermediary feels like a hassle, one can easily make life simpler, by writing a helper function which automatically calls it, together with the Tukey test:
+The `aov` function serves no purpose above, except to put the data in a format which `TukeyHSD` can work with. In case using this intermediary feels like a hassle, one can easily make life simpler, by writing a helper function which automatically calls it, together with the Tukey test:
 
 ```{r}
 tukey.test <- function(lmFit) {
@@ -206,9 +206,9 @@ lm(weight ~ group, data = PlantGrowth) %>% tukey.test()
 
 ## Exercises
 
-1. The file `daphnia_growth.csv` contains data on the growth rate of *Daphnia* populations that are infected with various parasites. There are four groups of observations: the control (no parasites), infection with *Metschnikowia bicuspidata*, infection with *Pansporella perplexa*, and finally, infection with *Pasteuria ramosa*. Each group has ten replicate observations. Are growth rates affected by parasite load?
+1. The file `daphnia_growth.csv`, downloadable [here](https://github.com/dysordys/data-with-R/tree/main/data), contains data on the growth rate of *Daphnia* populations that are infected with various parasites. There are four groups of observations: the control (no parasites), infection with *Metschnikowia bicuspidata*, infection with *Pansporella perplexa*, and finally, infection with *Pasteuria ramosa*. Each group has ten replicate observations. Are growth rates affected by parasite load?
     * Before doing any tests, visualize and explore the data, and make sure you have a solid expectation for the results of any statistical analysis.
     * Answer the question whether growth rates affected by parasite load by first applying a non-parametric test (and a subsequent non-parametric post-hoc test if needed).
     * Next, apply a parametric test in the same way: by applying the test and running post-hoc tests if needed.
     * Do not forget to create *diagnostic plots*, to see if the assumptions behind the parametric test are satisfied to an acceptable degree. Is that the case? And do the results from the parametric and non-parametric tests agree with one another?
-2. In `ponds.csv`, measured acidity data (pH) is reported from four different ponds. Do the ponds differ in acidity, and if so, which ones from which others? Answer using both non-parametric and parametric tests, with appropriate post-hoc analyses. Check whether these different methods of analysis agree, and make sure that the assumptions behind the parametric test are satisfied using diagnostic plots. (Note: in this dataset, some values are missing.)
+2. In `ponds.csv` (download [here](https://github.com/dysordys/data-with-R/tree/main/data)), measured acidity data (pH) is reported from four different ponds. Do the ponds differ in acidity, and if so, which ones from which others? Answer using both non-parametric and parametric tests, with appropriate post-hoc analyses. Check whether these different methods of analysis agree, and make sure that the assumptions behind the parametric test are satisfied using diagnostic plots. (Note: in this dataset, some values are missing.)

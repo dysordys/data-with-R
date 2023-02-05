@@ -269,7 +269,7 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-example_wilcox" id="toc-sec-example_wilcox" class="nav-link active" data-scroll-target="#sec-example_wilcox"><span class="toc-section-number">9.1</span>  Introductory example and the Wilcoxon test</a></li>
+  <li><a href="#sec-example-wilcox" id="toc-sec-example-wilcox" class="nav-link active" data-scroll-target="#sec-example-wilcox"><span class="toc-section-number">9.1</span>  Introductory example and the Wilcoxon test</a></li>
   <li><a href="#some-general-conclusions" id="toc-some-general-conclusions" class="nav-link" data-scroll-target="#some-general-conclusions"><span class="toc-section-number">9.2</span>  Some general conclusions</a></li>
   <li><a href="#parametric-versus-non-parametric-tests" id="toc-parametric-versus-non-parametric-tests" class="nav-link" data-scroll-target="#parametric-versus-non-parametric-tests"><span class="toc-section-number">9.3</span>  Parametric versus non-parametric tests</a></li>
   <li><a href="#sec-dot" id="toc-sec-dot" class="nav-link" data-scroll-target="#sec-dot"><span class="toc-section-number">9.4</span>  Statistical tests in a data analysis pipeline: The dot notation</a></li>
@@ -297,9 +297,9 @@ div.csl-indent {
 
 </header>
 
-<section id="sec-example_wilcox" class="level2" data-number="9.1">
-<h2 data-number="9.1" class="anchored" data-anchor-id="sec-example_wilcox"><span class="header-section-number">9.1</span> Introductory example and the Wilcoxon test</h2>
-<p>In this chapter we will take a first look at statistical tests of the simplest kind: comparing two groups of data. To illustrate why statistical inference is needed in such comparisons, let us take a look at a fictive dataset which contains an equally fictive set of weight measurements of different bird individuals from the same species. The birds are assumed to come from two islands, a larger and a smaller one. The question is: do the data provide evidence of <em>insular dwarfism</em>—that is, the phenomenon that the body sizes of species tend to decline on small islands?</p>
+<section id="sec-example-wilcox" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="sec-example-wilcox"><span class="header-section-number">9.1</span> Introductory example and the Wilcoxon test</h2>
+<p>In this chapter we will take a first look at statistical tests of a very simple kind: comparing two groups of data. To illustrate why statistical inference is needed in such comparisons, let us take a look at a fictive dataset which contains an equally fictive set of weight measurements of different bird individuals from the same species. The birds are assumed to come from two islands, a larger and a smaller one. The question is: do the data provide evidence of <em>insular dwarfism</em>—that is, the phenomenon that the body sizes of species tend to decline on small islands?</p>
 <p>We can load the data:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -390,7 +390,7 @@ Note
 2 smaller  19.2   19.0</code></pre>
 </div>
 </div>
-<p>Can we conclude that the two samples are indeed different, and birds on the smaller island tend to be smaller, supporting the insular dwarfism hypothesis? As mentioned above, the data are fictive—they are not based on actual measurements. <strong>In fact, these “observations” were created by sampling each data point from the same distribution, regardless of island</strong>: a normal distribution with mean 20 and standard deviation 5. This means that any supposedly observed difference between the samples must be accidental. Would various statistical methods detect a difference? One thing we can do is what we have already done in <a href="Creating_figures.html#sec-CI"><span>Section&nbsp;6.1</span></a>: compute the 95% confidence intervals of the means, and see whether and how much they overlap.</p>
+<p>Can we conclude that the two samples are indeed different, and birds on the smaller island tend to be smaller, supporting the insular dwarfism hypothesis? As mentioned above, the data are fictive—they are not based on actual measurements. <strong>In fact, these “observations” were created by sampling each data point from the same distribution, regardless of island</strong>: a normal distribution with mean 20 and standard deviation 5. This means that any supposedly observed difference between the samples must be accidental. Would various statistical methods detect a difference? One thing we can do is what we have learned in <a href="Creating_figures.html#sec-CI"><span>Section&nbsp;6.3</span></a>: compute the 95% confidence intervals of the means, and see whether and how much they overlap.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">%&gt;%</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(island) <span class="sc">%&gt;%</span></span>
@@ -398,7 +398,7 @@ Note
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd =</span> <span class="fu">sd</span>(weight), <span class="co"># Standard deviations</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">N =</span> <span class="fu">n</span>(), <span class="co"># Sample sizes</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">SEM =</span> sd <span class="sc">/</span> <span class="fu">sqrt</span>(N), <span class="co"># Standard errors of the means</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">CI =</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, N <span class="sc">-</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span> <span class="co"># Confidence intervals</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">CI =</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.025</span>, N <span class="sc">-</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span> <span class="co"># Confidence intervals</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="co"># Ungroup the data (not necessary here, but a good habit)</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> island, <span class="at">y =</span> mean, <span class="at">ymin =</span> mean <span class="sc">-</span> CI, <span class="at">ymax =</span> mean <span class="sc">+</span> CI)) <span class="sc">+</span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
@@ -410,7 +410,7 @@ Note
 </div>
 </div>
 <p>As seen, there is overlap between the 95% confidence intervals. While that by itself is not conclusive, it is an indication that the difference between the two samples may not be as relevant as it might have initially looked.</p>
-<p>Let us wait no longer, and perform a statistical test. One widely used test to check if two samples differ from one another is the <em>Wilcoxon test</em> (also known as the <em>Mann-Whitney test</em>). Its implementation is very simple:</p>
+<p>Let us wait no longer, and perform a statistical test. One widely used test to check if two samples differ from one another is the <em>Wilcoxon test</em> (also known as the <em>Mann-Whitney test</em>). Its implementation is as follows:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(weight <span class="sc">~</span> island, <span class="at">data =</span> bird)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -422,7 +422,7 @@ W = 271, p-value = 0.05589
 alternative hypothesis: true location shift is not equal to 0</code></pre>
 </div>
 </div>
-<p>The function takes two arguments: a <em>formula</em>, and the <em>data</em> to be analyzed, in the form of a data frame or tibble. The formula in the first argument establishes a relationship between two (or more) columns of the data. We will discuss formulas and their syntax in more detail later. For now: the way to write them is to first type the variable we wish to predict or explain, then a tilde (<code>~</code>), and then the explanatory variable (predictor) by which the data are subdivided into the two groups. In our case, we are trying to explain the difference in weight between the islands, so <code>weight</code> comes before the tilde and the predictor <code>island</code> comes after.</p>
+<p>The function takes two arguments: a <em>formula</em>, and the <em>data</em> to be analyzed, in the form of a data frame or tibble. The formula in the first argument establishes a relationship between two (or more) columns of the data. We will discuss formulas and their syntax in more detail later. For now: the way to write them is to first type the variable we wish to predict, then a tilde (<code>~</code>), and then the explanatory variable (predictor) by which the data are subdivided into the two groups. In our case, we are trying to explain the difference in weight between the islands, so <code>weight</code> comes before the tilde and the predictor <code>island</code> comes after.</p>
 <div class="callout-note callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -433,25 +433,25 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>We have used the tilde (<code>~</code>) before, when faceting plots with <code>facet_grid</code>; see <a href="Further_plotting_options.html#sec-faceting"><span>Section&nbsp;7.4</span></a>. However, the tilde used in <code>facet_grid</code> has nothing to do with the one we use in formulas: the two symbols happen to be identical, but that is just an accident.</p>
+<p>We have used the tilde (<code>~</code>) before, when faceting plots with <code>facet_grid</code>; see <a href="Further_plotting_options.html#sec-faceting"><span>Section&nbsp;7.4</span></a>. However, the tilde used in <code>facet_grid</code> has nothing to do with the one we use in formulas: the two symbols happen to be identical by accident.</p>
 </div>
 </div>
 <p>Let us now look at the output produced by <code>wilcox.test</code> above. Most of it is not particularly relevant for us: we are first informed that a Wilcoxon rank sum exact test is being performed; then we see that we are explaining weight differences by island; then we see the test statistic W itself (we need not concern ourselves with its precise meaning); then the p-value; and finally, a reminder of what the alternative hypothesis is (the null hypothesis is that the shift in location is in fact zero).</p>
 <p>One piece of datum we are interested in is the p-value. This tells us the probability of observing a result <em>at least</em> as extreme as we see in our data, given that the null hypothesis is true. In our case, we are measuring how different the two samples are from one another, and the null hypothesis is that the only difference we might observe is due purely to chance. We find that the probability of this being the case, given our data, is 0.056. What this number means is that we have a roughly one-in-eighteen chance that the observed difference is nothing but a fluke. Since science leans towards erring on the side of caution (i.e., we would rather miss out on making a discovery than falsely claim having seen an effect), this value is in general a bit too high for comfort. And indeed: since in this case we know that the data were generated by sampling from the same distribution, any distinctiveness between them is incidental.</p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-warning callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-caption-container flex-fill">
-Note
+Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In many subfields of science, it is standard practice to consider p-values falling below 0.05 as “significant” and those falling above as “non-significant”. Besides the fact that such a one-size-fits-all approach ought to be suspect even under the best of circumstances, a significance threshold of 0.05 is awfully permissive to errors. In fact, we should expect about one out of twenty of all papers ever published which have adopted this cutoff to be wrong! Digging deeper into this issue reveals that the figure is possibly much worse—see, e.g., <span class="citation" data-cites="Colquhoun2014">Colquhoun (<a href="References.html#ref-Colquhoun2014" role="doc-biblioref">2014</a>)</span>. One way to ameliorate the problem is to adopt a less exclusive and parochial view of p-values. Instead of having rigid significance thresholds, p-values can simply be reported and interpreted for what they are: the probability that the outcome is at least as extreme as observed, assuming that the null model holds. Treating this information as just one piece of the data puzzle is a first step towards avoiding the erroneous classification of random patterns as results.</p>
+<p>In many subfields of science, it is standard practice to consider p-values falling below 0.05 as “significant” and those falling above as “non-significant”. Besides the fact that such a one-size-fits-all approach ought to be suspect even under the best of circumstances, a significance threshold of 0.05 is awfully permissive to errors. In fact, we should expect about one out of twenty of all papers ever published which have adopted this cutoff to be wrong! Digging deeper into this issue reveals that the figure is possibly much worse—see, e.g., <span class="citation" data-cites="Colquhoun2014">Colquhoun (<a href="References.html#ref-Colquhoun2014" role="doc-biblioref">2014</a>)</span>. One way to ameliorate the problem is to adopt a less exclusive and parochial view of p-values. Instead of having rigid significance thresholds, p-values can simply be reported and interpreted for what they are: the probability that the outcome is at least as extreme as observed, assuming that the null model holds. Treating this information as just another piece of the larger data puzzle is a first step towards avoiding the erroneous classification of random patterns as results.</p>
 </div>
 </div>
-<p>Apart from the p-value (is the observed effect likely to be due to chance alone?), another important piece of information is some measure of the <em>effect size:</em> how different are the two samples? We have already computed the means and medians; their differences across the islands provide one way of measuring this effect size. It is possible to add a calculation of the effect size, as well as the confidence intervals, to the Wilcoxon test. All one needs to do is pass <code>conf.int = TRUE</code> as an argument:</p>
+<p>Apart from the p-value which measures whether the observed effect is likely to have been due to chance alone, another important piece of information is some measure of the <em>effect size:</em> how different are the two samples? We have already computed the means and medians; their differences across the islands provide one way of measuring this effect size. It is possible to add a calculation of the effect size, as well as the confidence intervals, to the Wilcoxon test. All one needs to do is pass <code>conf.int = TRUE</code> as an argument:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(weight <span class="sc">~</span> island, <span class="at">data =</span> bird, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -490,13 +490,13 @@ difference in location
 </section>
 <section id="some-general-conclusions" class="level2" data-number="9.2">
 <h2 data-number="9.2" class="anchored" data-anchor-id="some-general-conclusions"><span class="header-section-number">9.2</span> Some general conclusions</h2>
-<p>The example of <a href="#sec-example_wilcox"><span>Section&nbsp;9.1</span></a> illustrates two important general points.</p>
-<p>First, instead of jumping into statistical tests, we started the analysis with qualitative and descriptive data exploration: we plotted the data, computed its means and medians, etc. This is almost always the correct way to go. (The exception is when one analyzes data from a pre-registered experimental design. In that case, one must follow whatever statistical techniques were agreed upon before data collection even started.) To perform tests “blindly”, without visually exploring the data first, is rarely a good idea.</p>
+<p>The example of <a href="#sec-example-wilcox"><span>Section&nbsp;9.1</span></a> illustrates two important general points.</p>
+<p>First, instead of jumping into statistical tests, we started the analysis with qualitative and descriptive data exploration: we plotted the data, computed its means and medians, etc. This is almost always the correct way to go.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> To perform tests blindly, without visually exploring the data first, is rarely a good idea.</p>
 <p>Second, we only performed the statistical test after we have made an effort to understand the data, and after setting clear expectations about what we might find. We knew, going into the test, that finding a difference between the two island samples was questionable. And indeed, the test revealed that such a distinction cannot be made in good conscience. Following a similar strategy for all statistical inference can prevent a lot of frustration. To make the point more sharply: do not perform a statistical test without knowing what its result will be! A more nuanced way of saying the same thing is that if you think you see a relationship in your data, then you should also make sure that your observation is not just a mirage, by using a statistical test. But if a relationship is not visually evident, you should first ask the question whether it makes much sense to try to explore it statistically.</p>
 </section>
 <section id="parametric-versus-non-parametric-tests" class="level2" data-number="9.3">
 <h2 data-number="9.3" class="anchored" data-anchor-id="parametric-versus-non-parametric-tests"><span class="header-section-number">9.3</span> Parametric versus non-parametric tests</h2>
-<p>The Wilcoxon test we employed is <em>non-parametric:</em> it does not assume either the data or the residuals to come from any particular distribution. This is both the test’s advantage and disadvantage. It is an advantage because fewer assumptions must be satisfied for the test to be applicable. Non-parametric techniques also tend to fare better when only limited data are available. Since in many areas of biology (such as ecology) data are hard to come by, datasets are correspondingly small, making non-parametric techniques a natural candidate for interrogating the data with. On the downside, non-parametric tests tend to be less powerful than parametric ones: the additional assumptions of parametric tests (when they are actually met by real data) may allow for sharper inference.</p>
+<p>The Wilcoxon test we employed is <em>non-parametric:</em> it does not assume either the data or the residuals to come from any particular distribution. This is both the test’s advantage and disadvantage. It is an advantage because fewer assumptions must be satisfied for the test to be applicable. Non-parametric techniques also tend to fare better when only limited data are available. Since in many areas of biology (such as ecology) data are hard to come by, datasets are correspondingly small, making non-parametric techniques a natural candidate for interrogating the data with. On the downside, non-parametric tests tend to be less powerful than parametric ones: the additional assumptions of parametric tests may allow for sharper inference—provided that those assumptions are actually met by the real data, of course.</p>
 <p>One of the most common parametric alternatives to the Wilcoxon test is Welch’s <em>t</em>-test. Like the Wilcoxon test, the <em>t</em>-test assumes the independence of the two samples. In addition, it also assumes that the samples are normally distributed. Let us see what the <em>t</em>-test says about our fictive bird data:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(weight <span class="sc">~</span> island, <span class="at">data =</span> bird)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -562,7 +562,7 @@ mean in group x mean in group y
         2.33571        10.56830 </code></pre>
 </div>
 </div>
-<p>The parametric <em>t</em>-test cannot detect a difference between the samples—though, since its assumption of normality is violated, such a test should not have been attempted in the first place. By contrast, the non-parametric Wilcoxon test (correctly) suggests that there might be a difference:</p>
+<p>The parametric <em>t</em>-test cannot detect a difference between the samples. The fact is, since its assumption of normality is violated, such a test should not have been attempted in the first place. By contrast, the non-parametric Wilcoxon test correctly suggests that there might be a difference:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox.test</span>(measurement <span class="sc">~</span> group, <span class="at">data =</span> example, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -677,7 +677,7 @@ Note
 <section id="exercises" class="level2" data-number="9.5">
 <h2 data-number="9.5" class="anchored" data-anchor-id="exercises"><span class="header-section-number">9.5</span> Exercises</h2>
 <ol type="1">
-<li>Atmospheric ozone levels are important for urban gardens, because ozone concentrations above 80 parts per hundred million can damage lettuce plants. The file <code>ozone.csv</code> contains measured ozone concentrations in gardens distributed around a city. The gardens were either east or west of the city center. Is there a difference in average ozone concentration between eastern vs.&nbsp;western gardens? Create a plot of the concentrations first and try to guess the answer, before performing any statistical analyses. Then do the statistics, using both nonparametric and parametric methods. What result do you find? Do the outcomes of the different methods agree with one another?</li>
+<li>Atmospheric ozone levels are important for urban gardens, because ozone concentrations above 80 parts per hundred million can damage lettuce plants. The file <code>ozone.csv</code>, downloadable <a href="https://github.com/dysordys/data-with-R/tree/main/data">here</a>, contains measured ozone concentrations in gardens distributed around a city. The gardens were either east or west of the city center. Is there a difference in average ozone concentration between eastern vs.&nbsp;western gardens? Create a plot of the concentrations first and try to guess the answer, before performing any statistical analyses. Then do the statistics, using both nonparametric and parametric methods. What result do you find? Do the outcomes of the different methods agree with one another?</li>
 <li>In the built-in <code>iris</code> dataset, the sepal and petal characteristics of the various species differ. Let us focus on just petal length here. Is there a detectable difference between the petal lengths of <em>Iris versicolor</em> and <em>I. virginica</em>? (Since we are not working with <em>I. setosa</em> in this exercise, make sure to remove them from the data first—e.g., by using <code>filter</code>.) Like before, start with a graph which you can base a hypothesis on. Then perform both nonparametric and parametric tests to see if your hypothesis can be supported.</li>
 <li>Repeat the above exercise for any and all of the possible trait-species pair combinations in the <code>iris</code> dataset. E.g., one can compare the sepal widths of <em>I. setosa</em> and <em>I. virginica</em>, or the petal widths of <em>I. versicolor</em> and <em>I. setosa</em>, and so on.</li>
 </ol>
@@ -688,6 +688,12 @@ Note
 Colquhoun, David. 2014. <span>“<span class="nocase">An investigation of the false discovery rate and the misinterpretation of p-values</span>.”</span> <em>Royal Society Open Science</em> 1 (3): 140216. <a href="https://doi.org/10.1098/rsos.140216">https://doi.org/10.1098/rsos.140216</a>.
 </div>
 </div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>The exception is when one analyzes data from a pre-registered experimental design. In that case, one must follow whatever statistical techniques were agreed upon before data collection even started.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
 </section>
 
 </main> <!-- /main -->

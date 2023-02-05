@@ -1,6 +1,6 @@
 # Summary statistics and data normalization {#sec-normalization}
 
-Last time we learned the basics of reading writing, and manipulating data. To review, download `pop_data.csv` from Lisam and set your working directory to the folder where you saved it. This is a comma-separated file (CSV), so you can load it using `read_csv`. As usual, we first load the `tidyverse` package:
+Last time we learned the basics of reading writing, and manipulating data. To review, download `pop_data.csv` (from [this link](https://github.com/dysordys/data-with-R/tree/main/data)) and set your working directory to the folder where you saved it. This is a comma-separated file (CSV), so you can load it using `read_csv`. As usual, we first load the `tidyverse` package:
 
 ```{r}
 #| message: false
@@ -92,7 +92,7 @@ The resulting table has 50 rows---half the number of rows in the original data, 
 
 
 :::{.callout-warning}
-An easy mistake to make when one first meets with grouping and summaries is to assume that if we call `group_by(patch)`, then the subsequent summaries will be taken over patches. *This is not the case*, and be sure to take a moment to understand why. When we apply `group_by(patch)`, we are telling R to treat different patch values as group indicators. Therefore, when creating a summary, only the patch identities are retained from the original data (apart from the new summary statistics we calculate, of course). This means that the subsequent summaries are taken over everything *except* the patches. This should be clear after comparing the outputs of
+One common mistake when one first meets with grouping and summaries is to assume that if we call `group_by(patch)`, then the subsequent summaries will be taken over patches. *This is not the case*, and it is important to take a moment to understand why. When we apply `group_by(patch)`, we are telling R to treat different patch values as group indicators. Therefore, when creating a summary, only the patch identities are retained from the original data (apart from the new summary statistics we calculate, of course). This means that the subsequent summaries are taken over everything *except* the patches. This should be clear after comparing the outputs of
 
 ```{r}
 #| eval: false
@@ -116,7 +116,7 @@ We can use functions such as `mutate` or `filter` on grouped data. For example, 
 pop %>% mutate(species1Dev = species1 - mean(species1))
 ```
 
-This will put the difference of species 1's density from its mean density across both time and patches into the new column `species1Dev`. Which is not the same as calculating the difference from the mean in a given patch---patch A for rows corresponding to patch A, and patch B for the others. To achieve this, all one needs to do is to group the data by `patch` before invoking `mutate`:
+This will put the difference of species 1's density from its mean density across both time and patches into the new column `species1Dev`. That is not the same as calculating the difference from the mean in a given patch---patch A for rows corresponding to patch A, and patch B for the others. To achieve this, all one needs to do is to group the data by `patch` before invoking `mutate`:
 
 ```{r}
 pop %>%
@@ -126,7 +126,7 @@ pop %>%
 
 Comparing this with the previous table, we see that the values in the `species1Dev` column are now different, because this time the differences are taken with respect to the average densities per each patch.
 
-Finally, since `group_by` changes subsequent behaviour, we might eventually want to get rid of the grouping in our data. To do so, one must use `ungroup`. For example:
+Finally, since `group_by` changes subsequent behaviour, we might eventually want to get rid of the grouping in our data. This can be done with the function `ungroup`. For example:
 
 ```{r}
 #| message: false
@@ -136,7 +136,7 @@ pop %>%
   ungroup()
 ```
 
-It is good practice to always `ungroup` the data after we have calculated what we wanted using the group structure.
+It is good practice to always `ungroup` the data after we have calculated what we wanted using the group structure. Otherwise, subsequent calculations could be influenced by the grouping in unexpected ways.
 
 
 ## Data normalization
@@ -168,7 +168,7 @@ pop %>%
 
 The two named arguments of `pivot_wider` above are `names_from` (which specifies the column from which the names for the new columns will be taken), and `values_from` (the column whose values will be used to fill in the rows under those new columns).
 
-As a remark, one could make the data even "wider", by not only making columns out of the population densities, but the densities at a given patch. Doing so is very simple: one just needs to specify both the `species` and `patch` columns from which the new column names will be compiled:
+As a remark, one could make the data even "wider", by not only making columns out of the population densities, but the densities at a given patch. Doing so is simple: one just needs to specify both the `species` and `patch` columns from which the new column names will be compiled.
 
 ```{r}
 pop %>%
@@ -176,23 +176,27 @@ pop %>%
   pivot_wider(names_from = c("species", "patch"), values_from = "density")
 ```
 
-If normalized data are what we strive for, what is the practical use of `pivot_wider`? There are two answers to this question. First, while non-normalized data are indeed less efficient from a computational and data analysis standpoint, they are often more human-readable. For example, the `pop` table is easy to read despite the lack of normalization, because each row corresponds to a given time and place. By normalizing the data, information referring to any given time and place will be spread out over multiple (in our case, three) rows---one for each species. While this is preferable from a data analysis point of view, it can be more difficult to digest visually. Second, wide data lend themselves very well to one particular class of statistical techniques called *multivariate analysis*. In case one wants to perform multivariate analysis, wide-format data are often better than normalized data.
+If normalized data are what we strive for, what is the practical use of `pivot_wider`? There are two answers to this question. First, while non-normalized data are indeed less efficient from a computational and data analysis standpoint, they are often more human-readable. For example, the `pop` table is easy to read despite the lack of normalization, because each row corresponds to a given time and place. By normalizing the data, information referring to any given time and place will be spread out over multiple (in our case, three) rows---one for each species. While this is preferable from a data analysis point of view, it can be more difficult to digest visually. Second, wide data lend themselves very well to a class of statistical techniques called *multivariate analysis*. In case one wants to perform multivariate analysis, wide-format data are often better than normalized data. We will see an example application of this in @sec-ancova.
 
 Finally, it is worth noting the power of normalized data in, e.g., generating summary statistics. To obtain the mean and the standard deviation of the population densities for each species in each patch, all one has to do is this:
 
 ```{r}
 #| message: false
 pop %>%
-  pivot_longer(3:5, names_to = "species", values_to = "density") %>% # Normalize data
-  group_by(patch, species) %>% # Group data by both species and patch
-  summarise(meanDensity = mean(density), sdDensity = sd(density)) %>% # Obtain statistics
-  ungroup() # Don't forget to ungroup the data at the end
+  # Normalize data:
+  pivot_longer(3:5, names_to = "species", values_to = "density") %>%
+  # Group data by both species and patch:
+  group_by(patch, species) %>%
+  # Obtain statistics:
+  summarise(meanDensity = mean(density), sdDensity = sd(density)) %>%
+  # Don't forget to ungroup the data at the end:
+  ungroup()
 ```
 
 
 ## Exercises
 
-The exercises below use the `iris` dataset---the same that we used for last chapter's data wrangling exercises. Convert the `iris` data to a tibble with the `as_tibble()` function, and assign it to a variable.
+The exercises below use the `iris` dataset---the same that we used in the previous chapter's data wrangling exercises (@sec-wrangling-exercises). Convert the `iris` data to a tibble with the `as_tibble()` function, and assign it to a variable.
 
 1. Create a new column in the `iris` dataset which contains the deviation of petal lengths from the average of the whole dataset.
 

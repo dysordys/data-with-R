@@ -276,7 +276,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p>Last time we learned the basics of reading writing, and manipulating data. To review, download <code>pop_data.csv</code> from Lisam and set your working directory to the folder where you saved it. This is a comma-separated file (CSV), so you can load it using <code>read_csv</code>. As usual, we first load the <code>tidyverse</code> package:</p>
+<p>Last time we learned the basics of reading writing, and manipulating data. To review, download <code>pop_data.csv</code> (from <a href="https://github.com/dysordys/data-with-R/tree/main/data">this link</a>) and set your working directory to the folder where you saved it. This is a comma-separated file (CSV), so you can load it using <code>read_csv</code>. As usual, we first load the <code>tidyverse</code> package:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -460,7 +460,7 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>An easy mistake to make when one first meets with grouping and summaries is to assume that if we call <code>group_by(patch)</code>, then the subsequent summaries will be taken over patches. <em>This is not the case</em>, and be sure to take a moment to understand why. When we apply <code>group_by(patch)</code>, we are telling R to treat different patch values as group indicators. Therefore, when creating a summary, only the patch identities are retained from the original data (apart from the new summary statistics we calculate, of course). This means that the subsequent summaries are taken over everything <em>except</em> the patches. This should be clear after comparing the outputs of</p>
+<p>One common mistake when one first meets with grouping and summaries is to assume that if we call <code>group_by(patch)</code>, then the subsequent summaries will be taken over patches. <em>This is not the case</em>, and it is important to take a moment to understand why. When we apply <code>group_by(patch)</code>, we are telling R to treat different patch values as group indicators. Therefore, when creating a summary, only the patch identities are retained from the original data (apart from the new summary statistics we calculate, of course). This means that the subsequent summaries are taken over everything <em>except</em> the patches. This should be clear after comparing the outputs of</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(patch) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -491,7 +491,7 @@ Warning
 # … with 90 more rows</code></pre>
 </div>
 </div>
-<p>This will put the difference of species 1’s density from its mean density across both time and patches into the new column <code>species1Dev</code>. Which is not the same as calculating the difference from the mean in a given patch—patch A for rows corresponding to patch A, and patch B for the others. To achieve this, all one needs to do is to group the data by <code>patch</code> before invoking <code>mutate</code>:</p>
+<p>This will put the difference of species 1’s density from its mean density across both time and patches into the new column <code>species1Dev</code>. That is not the same as calculating the difference from the mean in a given patch—patch A for rows corresponding to patch A, and patch B for the others. To achieve this, all one needs to do is to group the data by <code>patch</code> before invoking <code>mutate</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch) <span class="sc">%&gt;%</span></span>
@@ -515,7 +515,7 @@ Warning
 </div>
 </div>
 <p>Comparing this with the previous table, we see that the values in the <code>species1Dev</code> column are now different, because this time the differences are taken with respect to the average densities per each patch.</p>
-<p>Finally, since <code>group_by</code> changes subsequent behaviour, we might eventually want to get rid of the grouping in our data. To do so, one must use <code>ungroup</code>. For example:</p>
+<p>Finally, since <code>group_by</code> changes subsequent behaviour, we might eventually want to get rid of the grouping in our data. This can be done with the function <code>ungroup</code>. For example:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch) <span class="sc">%&gt;%</span></span>
@@ -529,7 +529,7 @@ Warning
 2 B             5.32      3.81 </code></pre>
 </div>
 </div>
-<p>It is good practice to always <code>ungroup</code> the data after we have calculated what we wanted using the group structure.</p>
+<p>It is good practice to always <code>ungroup</code> the data after we have calculated what we wanted using the group structure. Otherwise, subsequent calculations could be influenced by the grouping in unexpected ways.</p>
 </section>
 <section id="data-normalization" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="data-normalization"><span class="header-section-number">5.2</span> Data normalization</h2>
@@ -584,7 +584,7 @@ Warning
 </div>
 </div>
 <p>The two named arguments of <code>pivot_wider</code> above are <code>names_from</code> (which specifies the column from which the names for the new columns will be taken), and <code>values_from</code> (the column whose values will be used to fill in the rows under those new columns).</p>
-<p>As a remark, one could make the data even “wider”, by not only making columns out of the population densities, but the densities at a given patch. Doing so is very simple: one just needs to specify both the <code>species</code> and <code>patch</code> columns from which the new column names will be compiled:</p>
+<p>As a remark, one could make the data even “wider”, by not only making columns out of the population densities, but the densities at a given patch. Doing so is simple: one just needs to specify both the <code>species</code> and <code>patch</code> columns from which the new column names will be compiled.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">names_to =</span> <span class="st">"species"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">%&gt;%</span></span>
@@ -606,14 +606,18 @@ Warning
 # … with 40 more rows</code></pre>
 </div>
 </div>
-<p>If normalized data are what we strive for, what is the practical use of <code>pivot_wider</code>? There are two answers to this question. First, while non-normalized data are indeed less efficient from a computational and data analysis standpoint, they are often more human-readable. For example, the <code>pop</code> table is easy to read despite the lack of normalization, because each row corresponds to a given time and place. By normalizing the data, information referring to any given time and place will be spread out over multiple (in our case, three) rows—one for each species. While this is preferable from a data analysis point of view, it can be more difficult to digest visually. Second, wide data lend themselves very well to one particular class of statistical techniques called <em>multivariate analysis</em>. In case one wants to perform multivariate analysis, wide-format data are often better than normalized data.</p>
+<p>If normalized data are what we strive for, what is the practical use of <code>pivot_wider</code>? There are two answers to this question. First, while non-normalized data are indeed less efficient from a computational and data analysis standpoint, they are often more human-readable. For example, the <code>pop</code> table is easy to read despite the lack of normalization, because each row corresponds to a given time and place. By normalizing the data, information referring to any given time and place will be spread out over multiple (in our case, three) rows—one for each species. While this is preferable from a data analysis point of view, it can be more difficult to digest visually. Second, wide data lend themselves very well to a class of statistical techniques called <em>multivariate analysis</em>. In case one wants to perform multivariate analysis, wide-format data are often better than normalized data. We will see an example application of this in <a href="Nonlinear_regression.html#sec-ancova"><span>Section&nbsp;13.1</span></a>.</p>
 <p>Finally, it is worth noting the power of normalized data in, e.g., generating summary statistics. To obtain the mean and the standard deviation of the population densities for each species in each patch, all one has to do is this:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">names_to =</span> <span class="st">"species"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">%&gt;%</span> <span class="co"># Normalize data</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch, species) <span class="sc">%&gt;%</span> <span class="co"># Group data by both species and patch</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanDensity =</span> <span class="fu">mean</span>(density), <span class="at">sdDensity =</span> <span class="fu">sd</span>(density)) <span class="sc">%&gt;%</span> <span class="co"># Obtain statistics</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="co"># Don't forget to ungroup the data at the end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Normalize data:</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">names_to =</span> <span class="st">"species"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Group data by both species and patch:</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch, species) <span class="sc">%&gt;%</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Obtain statistics:</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanDensity =</span> <span class="fu">mean</span>(density), <span class="at">sdDensity =</span> <span class="fu">sd</span>(density)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Don't forget to ungroup the data at the end:</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 4
   patch species  meanDensity sdDensity
@@ -629,7 +633,7 @@ Warning
 </section>
 <section id="exercises" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="exercises"><span class="header-section-number">5.3</span> Exercises</h2>
-<p>The exercises below use the <code>iris</code> dataset—the same that we used for last chapter’s data wrangling exercises. Convert the <code>iris</code> data to a tibble with the <code>as_tibble()</code> function, and assign it to a variable.</p>
+<p>The exercises below use the <code>iris</code> dataset—the same that we used in the previous chapter’s data wrangling exercises (<a href="Basic_data_wrangling.html#sec-wrangling-exercises"><span>Section&nbsp;4.3</span></a>). Convert the <code>iris</code> data to a tibble with the <code>as_tibble()</code> function, and assign it to a variable.</p>
 <ol type="1">
 <li><p>Create a new column in the <code>iris</code> dataset which contains the deviation of petal lengths from the average of the whole dataset.</p></li>
 <li><p>Create a new column in the <code>iris</code> dataset which contains the deviation of petal lengths from the average <em>of each species</em>. (Hint: <code>group_by</code> the species and then <code>mutate</code>!)</p></li>

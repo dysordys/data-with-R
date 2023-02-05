@@ -2,7 +2,7 @@
 
 ## Smoothing and regression lines
 
-Last time we learned about aesthetic mappings and various `geom_` options, such as `geom_point`, `geom_histogram`, and `geom_boxplot`. Let us explore another type of `geom_`, which approximates the trend of a set of data points with a line and an error bar that shows the confidence interval of the estimate at each point:
+In @sec-ggplot we learned about aesthetic mappings and various `geom_` options such as `geom_point`, `geom_histogram`, and `geom_boxplot`. Let us explore another type of `geom_`, which approximates the trend of a set of data points with a line and an error bar that shows the confidence interval of the estimate at each point:
 
 ```{r}
 #| message: false
@@ -14,14 +14,14 @@ ggplot(iris) +
   geom_smooth()
 ```
 
-While such fits are occasionally useful, we often want a linear least-suqares regression on our data. To get such a linear fit, add the argument `method = "lm"` to `geom_smooth()` (`"lm"` stands for "linear model"):
+While such fits are occasionally useful, we often want a linear least-squares regression on our data. To get such a linear fit, add the argument `method = lm` to `geom_smooth()` (`lm` stands for "linear model"):
 
 ```{r}
 #| message: false
 ggplot(iris) +
   aes(x = Sepal.Length, y = Petal.Length) +
   geom_point() +
-  geom_smooth(method = "lm")
+  geom_smooth(method = lm)
 ```
 
 Linear regression lines are usually shown without the confidence intervals (the gray band around the regression line). To drop this, set `se = FALSE`:
@@ -31,7 +31,7 @@ Linear regression lines are usually shown without the confidence intervals (the 
 ggplot(iris) +
   aes(x = Sepal.Length, y = Petal.Length) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE)
+  geom_smooth(method = lm, se = FALSE)
 ```
 
 What happens if we color the data points by species? Let us add `colour = Species` to the list of aesthetic mappings:
@@ -41,20 +41,20 @@ What happens if we color the data points by species? Let us add `colour = Specie
 ggplot(iris) +
   aes(x = Sepal.Length, y = Petal.Length, colour = Species) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE)
+  geom_smooth(method = lm, se = FALSE)
 ```
 
 Now the regression line is automatically fitted to the data within each of the groups separately---a highly useful behavior.
 
-Notice also that a color legend was automatically created and put to the right of the graph. This is the default in `ggplot2`. You can move them to another position by specifying the `legend.position` option within the `theme` function that can be added onto the plot:
+Notice also that a color legend was automatically created and appended to the right of the graph. This legend positioning is the default in `ggplot2`. You can move the legend to another position by specifying the `legend.position` option within the `theme` function that can be added onto the plot:
 
 ```{r}
 #| message: false
 ggplot(iris) +
   aes(x = Sepal.Length, y = Petal.Length, colour = Species) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  theme(legend.position = "left") # "top", "bottom", "left", "right", or "none"
+  geom_smooth(method = lm, se = FALSE) +
+  theme(legend.position = "left") # Or: "top", "bottom", "right", "none"
 ```
 
 Specifying `legend.position = "none"` omits the legend altogether.
@@ -66,9 +66,9 @@ A word of caution: in case the legend positioning is matched with a generic them
 ggplot(iris) +
   aes(x = Sepal.Length, y = Petal.Length, colour = Species) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = lm, se = FALSE) +
   theme(legend.position = "left") + # Position legend at the left
-  theme_bw() # This defines the general theme - and thus overrides the line above...
+  theme_bw() # Define general theme - and thus override the line above...
 ```
 
 But this one does:
@@ -78,9 +78,9 @@ But this one does:
 ggplot(iris) +
   aes(x = Sepal.Length, y = Petal.Length, colour = Species) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = lm, se = FALSE) +
   theme_bw() + # This defines the general theme
-  theme(legend.position = "left") # We now override the default legend positioning
+  theme(legend.position = "left") # Now override default legend positioning
 ```
 
 
@@ -95,7 +95,7 @@ iris %>%
   geom_boxplot()
 ```
 
-We can now change, for example, how the y-axis is displayed. The component to be added to the plot is `scale_y_continuous()`. Here `scale` means we are going to change the scaling of some aesthetic mapping, `y` refers to the y-axis (as expected, it can be replaced with `x`, `colour`, `fill`, etc.), and `continuous` means that the scaling of the axis is not via discrete values (e.g., either 1 *or* 2 *or* 3 but nothing in between), but continuous (every real number is permissible along the y-axis). The plot component `scale_y_continuous()` takes several arguments; take a look look at its `help` page to see all possible options. Here we mention a few of these. First, there is the `name` option, which is used to relabel the axis. The `limits` argument receives a vector of two values, containing the lower and upper limits of the plot. If any of them is set to `NA`, the corresponding limit will be determined automatically. Next, the `breaks` argument controls where the tick marks along the axis go. It is given as a vector, with its entries corresponding to the y-coordinates of the tick marks. Finally, `labels` determines what actually gets written on the axis at the tick mark points---it is therefore also a vector, its length matching that of `breaks`.
+We can now change, for example, how the y-axis is displayed. The component to be added to the plot is `scale_y_continuous()`. Here `scale` means we are going to change the scaling of some aesthetic mapping, `y` refers to the y-axis (as expected, it can be replaced with `x`, `colour`, `fill`, etc.), and `continuous` means that the scaling of the axis is not via discrete values (e.g., either 1 or 2 or 3 but nothing in between), but continuous (every real number is permissible along the y-axis). The plot component `scale_y_continuous()` takes several arguments; take a look look at its `help` page to see all possible options. Here we mention a few of these. First, there is the `name` option, which is used to relabel the axis. The `limits` argument receives a vector of two values, containing the lower and upper limits of the plot. If any of them is set to `NA`, the corresponding limit will be determined automatically. Next, the `breaks` argument controls where the tick marks along the axis go. It is given as a vector, with its entries corresponding to the y-coordinates of the tick marks. Finally, `labels` determines what actually gets written on the axis at the tick mark points---it is therefore also a vector, its length matching that of `breaks`.
 
 As an example, let us scale the y-axis of the previous graph in the following way. The axis label should read "Petal length [cm]", instead of the current "Petal.Length". It should go from 0 to 7, with a break at those two values and also halfway in between at 3.5. Here is how to do this:
 
@@ -122,7 +122,7 @@ iris %>%
                      labels = c("0", "7/2", "7"))
 ```
 
-The x-axis can be scaled similarly. One important difference though is that here, the x-axis has a *discrete* scale. Since we are displaying the species along it, any value must be either *setosa* or *versicolor* or *virginica*; it makes no sense to talk about what is "halfway in between *setosa* and *versicolor*". Therefore, one should use `scale_x_discrete()`. Its options are similar to those of `scale_x_continuous()`. For instance, let us override the axis label, spelling out that the three species belong to the genus *Iris*:
+The x-axis can be scaled similarly. One important difference though is that here the x-axis has a *discrete* scale. Since we are displaying the species along it, any value must be either *setosa* or *versicolor* or *virginica*; it makes no sense to talk about what is "halfway in between *setosa* and *versicolor*". Therefore, one should use `scale_x_discrete()`. Its options are similar to those of `scale_x_continuous()`. For instance, let us override the axis label, spelling out that the three species belong to the genus *Iris*:
 
 ```{r}
 iris %>%
@@ -147,7 +147,8 @@ iris %>%
                      limits = c(0, 7),
                      breaks = c(0, 3.5, 7),
                      labels = c("0", "7/2", "7")) +
-  scale_x_discrete(labels = c("Iris setosa", "Iris versicolor", "Iris virginica"))
+  scale_x_discrete(labels = c("Iris setosa", "Iris versicolor",
+                              "Iris virginica"))
 ```
 
 
@@ -167,38 +168,39 @@ iris %>%
                      limits = c(0, 7),
                      breaks = c(0, 3.5, 7),
                      labels = c("0", "7/2", "7")) +
-  scale_x_discrete(labels = c("Iris setosa", "Iris versicolor", "Iris virginica")) +
+  scale_x_discrete(labels = c("Iris setosa", "Iris versicolor",
+                              "Iris virginica")) +
   scale_colour_manual(values = c("steelblue", "goldenrod", "forestgreen")) +
   scale_fill_manual(values = c("steelblue", "goldenrod", "forestgreen"))
 ```
 
-We used the built-in color names `"steelblue"`, `"goldenrod"`, and `"forestgreen"` above. A full R color cheat sheet can be found [here](https://www.nceas.ucsb.edu/sites/default/files/2020-04/colorPaletteCheatsheet.pdf), for more options and built-in colors.
+We used the built-in color names `"steelblue"`, `"goldenrod"`, and `"forestgreen"` above. A useful R color cheat sheet can be found [here](https://www.nceas.ucsb.edu/sites/default/files/2020-04/colorPaletteCheatsheet.pdf), for more options and built-in color names.
 
 
 ## Reordering labels using factors {#sec-factors}
 
-In the previous examples, the order of text labels was always automatically determined. In fact, the basic rule in R is that the ordering follows the alphabet: the default is for `setosa` to precede `versicolor`, which will be followed by `virginica`. This default ordering can be inconvenient, however. Consider the following table of data, with hypothetical temperature measurements for each month of the year:
+In the previous examples, the order of text labels was always automatically determined. The basic rule in R is that the ordering follows the alphabet: the default is for `setosa` to precede `versicolor`, which will be followed by `virginica`. This default ordering can be inconvenient, however. Consider the following table of data, with hypothetical temperature measurements (in Celsius degrees) for each month of the year:
 
 ```{r}
-tibble(month = month.abb, temperature = -cos(seq(0, 2 * pi, l = 12)))
+tibble(month = month.abb, temperature = 10 - 15*cos(seq(0, 2*pi, l=12)))
 ```
 
 (`month.abb` is a built-in vector of character strings in R, with the abbreviations of the months' names from January to December.) So far so good. However, if we plot this with months along the x-axis and temperature along the y-axis, we run into trouble because R displays items by alphabetical instead of chronological order:
 
 ```{r}
-tibble(month = month.abb, temperature = -cos(seq(0, 2 * pi, l = 12))) %>%
+tibble(month = month.abb, temperature = 10 - 15*cos(seq(0, 2*pi, l=12))) %>%
   ggplot() +
   aes(x = month, y = temperature) +
   geom_point(colour = "steelblue") +
   theme_bw()
 ```
 
-To fix this, one must convert the type of `month` from a simple vector of character strings to a vector of *factors*. Factors are categorical variables (i.e., take on well-defined distinct values instead of varying on a continuous scale like double-precision numbers), but with an extra attribute which determines the order of those values. This ordering is often referred to as the *levels* of the factor, the value which is set to be the first has level 1, the next one level 2, and so on.
+To fix this, one must convert the type of `month` from a simple vector of character strings to a vector of *factors*. Factors are categorical variables (i.e., take on well-defined distinct values instead of varying on a continuous scale like double-precision numbers), but with an extra attribute which determines the order of those values. This ordering is often referred to as the *levels* of the factor. The first of the values has level 1, the next one level 2, and so on.
 
-One very convenient way of assigning factor levels is through the `tidyverse` function `as_factor`.^[As with `read_csv`, there exists a function called `as.factor`, in addition to `as_factor`. It is the base R version of the same functionality. As usual, the `tidyverse` offers improvements over the original, so it is recommended not to use `as.factor` at all, relying on just `as_factor` instead.] This function takes a vector of values and, if the values are numeric, assigns them levels based on those numerical values. However, if the values are character strings, then the levels are assigned in order of appearance within the vector. This is perfect for us, because the months are in proper order already within the tibble:
+One very convenient way of assigning factor levels is through the `tidyverse` function `as_factor`.^[There also exists a similarly-named function called `as.factor`, in addition to `as_factor`. It is the base R version of the same functionality. As usual, the `tidyverse` version offers improvements over the original, so it is recommended not to use `as.factor` at all, relying on just `as_factor` instead.] This function takes a vector of values and, if the values are numeric, assigns them levels based on those numerical values. However, if the values are character strings, then the levels are assigned in order of appearance within the vector. This is perfect for us, because the months are in proper order already within the tibble:
 
 ```{r}
-tibble(month = month.abb, temperature = -cos(seq(0, 2 * pi, l = 12))) %>%
+tibble(month = month.abb, temperature = 10 - 15*cos(seq(0, 2*pi, l=12))) %>%
   mutate(month = as_factor(month)) %>%
   ggplot() +
   aes(x = month, y = temperature) +
@@ -209,7 +211,7 @@ tibble(month = month.abb, temperature = -cos(seq(0, 2 * pi, l = 12))) %>%
 It is also possible to take a factor and reassign its factor levels manually. This can be done with the `fct_relevel` function:
 
 ```{r}
-tibble(month = month.abb, temperature = -cos(seq(0, 2 * pi, l = 12))) %>%
+tibble(month = month.abb, temperature = 10 - 15*cos(seq(0, 2*pi, l=12))) %>%
   mutate(month = fct_relevel(month, "Jan", "Feb", "Mar", "Apr", "May", "Jun",
                              "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")) %>%
   ggplot() +
@@ -218,7 +220,7 @@ tibble(month = month.abb, temperature = -cos(seq(0, 2 * pi, l = 12))) %>%
   theme_bw()
 ```
 
-Also, the use of `fct_relevel` need not be this laborious. If all we want to do is place a few factor levels to be first ones without changing any of the others, it is possible to enter just their names. Often, for example, a factor column holds various experimental treatments, one of which is called `"control"`. In that case, all we might want is to make the control be the first factor level, without altering any of the others. This could be done with something like `fct_relevel(treatment, "control")`, assuming `treatment` is the name of the vector or column in a data frame that holds the different experimental treatment names.
+Also, the use of `fct_relevel` need not be this laborious. If all we want to do is place a few factor levels to be first ones without changing any of the others, it is possible to enter just their names. Often, for example, a factor column holds various experimental treatments, one of which is called `"control"`. In that case, all we might want to do is to make the control be the first factor level, without altering any of the others. If `treatment` is the name of the vector (or column in a data frame) that holds the different experimental treatment names, then this can be done with `fct_relevel(treatment, "control")`.
 
 
 ## Facets {#sec-faceting}
@@ -262,7 +264,7 @@ To illustrate how to make a two-dimensional grid of facets, let us normalize the
 
 ```{r}
 as_tibble(iris) %>%
-  pivot_longer(cols = c(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width),
+  pivot_longer(cols = c(Sepal.Length,Sepal.Width,Petal.Length,Petal.Width),
                names_to = "Trait",
                values_to = "Measurement")
 ```
@@ -272,7 +274,7 @@ As seen, now the `Measurement` in every row is characterized by two other variab
 ```{r}
 #| message: false
 as_tibble(iris) %>%
-  pivot_longer(cols = c(Sepal.Length, Sepal.Width, Petal.Length, Petal.Width),
+  pivot_longer(cols = c(Sepal.Length,Sepal.Width,Petal.Length,Petal.Width),
                names_to = "Trait",
                values_to = "Measurement") %>%
   ggplot() +
@@ -298,7 +300,7 @@ Here `filename` is the name (with path and extension) of the file you want to sa
 ggsave(filename = "graph.png", width = 4, height = 3)
 ```
 
-Since PDF is a vectorized file format (i.e., the file contains the instructions for generating the plot elements instead of a pixel representation), it is arbitrarily scalable, and is therefore the preferred way of saving and handling scientific graphs.
+PDF is a vectorized file format: the file contains the instructions for generating the plot elements instead of a pixel representation of the image. Consequently, PDF figures are arbitrarily scalable, and are therefore the preferred way of saving and handling scientific graphs.
 
 The `width` and `height` parameters specify, in inches, the dimensions of the saved plot. Note that this also scales some other plot elements, such as the size of the axis labels and plot legends. This means you can play with the `width` and `height` parameters to save the figure at a size where the labels are clearly visible without being too large.
 

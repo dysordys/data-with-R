@@ -1,10 +1,15 @@
 # Creating publication-grade figures {#sec-ggplot}
 
-In science, we want good, clear plots. Each figure should make it obvious what data you are plotting, what the axes, colors, shapes, and size differences represent, and the overall message the figure is conveying. When writing a scientific paper, or a report for an environmental consulting company, etc., remember that your future readers are busy people. They often do not have the time to delve into the subtleties of overly refined verbal arguments. Instead, they will most often glance at the figures to learn what your work is about. You will want to create figures which makes this possible for them to do.
+## General philosophy
+
+In science, we want clear and informative plots. Each figure should make it obvious what data you are plotting, what the axes, colors, shapes, and size differences represent, and the overall message the figure is conveying. When writing a scientific paper or report, remember that your future readers are busy people. They often do not have the time to delve into the subtleties of overly refined verbal arguments. Instead, they will most often look for the figures to learn what your work is about. You will want to create figures which makes this possible for them to do.
 
 Here we will learn how to create accessible, publication-quality scientific graphs in a simple way. We do this using the R package `ggplot2` which is a standard part of the `tidyverse`. The `ggplot2` package follows a very special philosophy for creating figures that was originally proposed by Leland @Wilkinson2006. The essence of this view is that, just like the grammar of sentences, graphs have fixed "grammatical" components whose specification defines the plot. The grand idea is that the data ought not be changed in order to display it in different formats. For instance, the same data should be possible to represent either as a box plot, or as a histogram, without changing the data format.
 
-This last claim needs to be qualified somewhat. It is more accurate to say that one should not need to change the data format *as long as the data are normalized*. As a reminder, "normalized data" means that every variable is in its own column, and every observation in its own row. In case the data are not normalized, one should first wrangle them into such form, for example by using `pivot_wider()`. For certain kinds of graphs though, this step is not required. But when working with larger datasets, it can be very useful to normalize the data before analyzing and plotting them---we will see examples of this in the exercises.
+This last claim needs to be qualified somewhat. It is more accurate to say that one should not need to change the data format *as long as the data are normalized*. As a reminder, "normalized data" means that every variable is in its own column, and every observation in its own row. In case the data are not normalized, one should first wrangle them into such form, for example by using `pivot_longer`. While this step is not always required (especially for simpler graphs), it can be very useful to normalize the data before analyzing and plotting them when working with larger, more complex datasets.
+
+
+## Basic `ggplot2` usage
 
 To see how `ggplot2` works, let us load `tidyverse`, and then use the built-in `iris` dataset to create some figures. As a reminder, here is what the data look like:
 
@@ -22,9 +27,9 @@ ggplot(iris) +
   geom_point()
 ```
 
-Here we defined the **data** (`iris`; feel free to use pipes, as in `iris %>% ggplot() + ...`), then the **aesthetic mappings** with `aes()`, and finally the **geometry** of how to display the data with `geom_point()`. The important thing to remember is that the aesthetic mappings are all those aspects of the figure that are governed by your data. For instance, if you wanted to set the color of all points to blue, this would not be an aesthetic mapping, because it applies regardless of what the data are (in case you want to do this, you would have to specify `geom_point(colour = "blue")` in the last line). The geometry of your plot, on the other hand, governs the overall visual arrangement of your data (points, lines, histograms, etc). There are many different `geom_`s; we will learn about some here, but when in doubt, Google and a [`ggplot2` cheat sheet](https://nyu-cdsc.github.io/learningr/assets/data-visualization-2.1.pdf) are your best friends.
+Here we defined the **data** (`iris`; feel free to use pipes, as in `iris %>% ggplot() + ...`), then the **aesthetic mappings** with `aes()`, and finally the **geometry** of how to display the data with `geom_point()`. The important thing to remember is that the aesthetic mappings are all those aspects of the figure that are governed by the data. For instance, if you wanted to set the color of all points to blue, this would not be an aesthetic mapping, because it applies regardless of what the data are (in case you want to do this, you would have to specify `geom_point(colour = "blue")` in the last line). The **geometry** of your plot governs the overall visual arrangement of your data (points, lines, histograms, etc). There are many different `geom_`s; we will learn about some here, but when in doubt, Google and a [`ggplot2` cheat sheet](https://nyu-cdsc.github.io/learningr/assets/data-visualization-2.1.pdf) are your best friends.
 
-Notice that the different "grammatical" components of the plot (aesthetics, geometry) are *added* to the plot, using the `+` symbol for addition. This is due to somewhat of an unfortunate historical accident. As it happens, `ggplot2` is older than the rest of the `tidyverse`, and so when it was first designed, the pipe operator `%>%` did not yet exist. This means that within the creating of a ggplot graph, one must use `+` to compose the various graph elements; but outside that, the usual `%>%` is used for function composition.
+Notice that the different "grammatical" components of the plot (aesthetics, geometry) are *added* to the plot, using the `+` symbol for addition. This is due to a somewhat unfortunate historical accident. As it happens, `ggplot2` is older than the rest of the `tidyverse`, and so when it was first designed, the pipe operator `%>%` did not yet exist. This means that within the creating of a ggplot graph, one must use `+` to compose the various graph elements; but outside that, the usual `%>%` is used for function composition.
 
 To look at a different kind of geometry, let us create a histogram of the petal lengths. This is done using `geom_histogram`:
 
@@ -68,7 +73,7 @@ iris %>%
   geom_histogram(position = "identity")
 ```
 
-(There are other options as well, such as `position = "dodge"` -- feel free to experiment. In general, you can learn what options each of the `geom_`s have by invoking the Help, or asking Google.) The figure above is almost perfect; the one remaining problem is that, due to the lack of transparency, the bars belonging to different species cover each other completely. So let us change the fill's *transparency*, which is called `alpha` in ggplot. The `alpha` property can take on any value between 0 (fully transparent object, to the point of invisibility) to 1 (fully solid object with no transparency, like above; this is the default). Setting it to 0.2 (say) will finally fully reveal the distribution of each species:
+(There are other options as well, such as `position = "dodge"` -- feel free to experiment. In general, you can learn what options each of the `geom_`s have by invoking the Help, or asking Google.) The figure above is almost perfect; the one remaining problem is that the bars belonging to different species cover each other completely. So let us change the fill's *transparency*, which is called `alpha` in ggplot. The `alpha` property can take on any value between 0 (fully transparent object, to the point of invisibility) to 1 (fully solid object with no transparency, like above; this is the default). Setting it to 0.2 (say) will finally fully reveal the distribution of each species:
 
 ```{r}
 #| message: false
@@ -100,9 +105,9 @@ iris %>%
 
 ## Summaries and confidence intervals {#sec-CI}
 
-Providing appropriate information on experimental errors is a hallmark of any credible scientific graph. Choose a type of error based on the conclusion that you want the reader to draw. While the standard deviation (SD) represents the dispersion of the data, the standard error of the mean (SEM) and confidence intervals (CI) report the certainty of the estimate of a value (e.g., certainty in estimating the mean). Let us see examples of each.
+Providing appropriate information on experimental errors is a hallmark of any credible scientific graph. Choose a type of error based on the conclusion that you want the reader to draw. While the standard deviation represents the dispersion of the data, the standard error and confidence intervals report the certainty of the estimate of a value (e.g., certainty in estimating the mean). Let us see examples of each.
 
-Let us first obtain the mean and the standard deviation of the petal lengths for each species. We then would like to plot them. How to proceed? By creating a workflow which first uses `group_by` and `summarise` to obtain the required statistics (means and standard deviations), and then uses these data for plotting. One can include all these steps in a logical workflow:
+Let us first obtain the mean and the standard deviation of the petal lengths for each species. We then would like to plot them. To do this, we proceed by creating a workflow which first uses `group_by` and `summarise` to obtain the required statistics (means and standard deviations), and then uses these data for plotting. One can include all these steps in a logical workflow:
 
 ```{r}
 #| message: false
@@ -113,11 +118,11 @@ iris %>%
   ungroup() %>% # Ungroup data
   ggplot() + # Start plotting
   aes(x = Species, y = mP, ymin = mP - sP, ymax = mP + sP) + # Mean +/- sd
-  geom_col() + # This takes the y aesthetic, for plotting the mean
+  geom_point() + # This takes the y aesthetic, for plotting the mean
   geom_errorbar(width = 0.2) # Takes the ymin and ymax aesthetics
 ```
 
-Note that the y-axis label is not very descriptive. This is because it inherited the name of the corresponding data column, `mP`. There are multiple ways to change it; the simplest is to add `ylab("Petal length")` to the plot. Another way of doing so is duscussed in @sec-moreggplot.
+Note that the y-axis label is not very descriptive. This is because it inherited the name of the corresponding data column, `mP`. There are multiple ways to change it; the simplest is to add `ylab("Petal length")` to the plot. Another way of doing so is discussed in @sec-moreggplot.
 
 In case we want to calculate the 95% confidence intervals of the mean values, we first obtain some necessary summary statistics: the number of observations (sample size) in each group; the standard error of the mean (standard deviation divided by the square root of the sample size); and finally, the confidence interval itself (read off from the *t*-distribution, with one fewer degrees of freedom than the sample size). We can then include these confidence intervals on top of the mean values:
 
@@ -129,17 +134,38 @@ iris %>%
             sP = sd(Petal.Length), # Standard deviation per species
             N = n(), # Sample size (number of observations) per species
             SEM = sP / sqrt(N), # Standard error of the mean
-            CI = SEM * qt(0.975, N - 1)) %>% # Confidence interval, read off
-                 # at 0.975 because plus/minus 2.5% adds up to 5%
+            CI = SEM * qt(1 - 0.025, N - 1)) %>% # Confidence interval,
+                 # read off at 1 - 0.025 because +/- 2.5% adds up to 5%
   ggplot() +
   aes(x = Species, y = mP, ymin = mP - CI, ymax = mP + CI) +
+  geom_point(colour = "steelblue", fill = "steelblue") +
+  geom_errorbar(width = 0.2, colour = "steelblue") +
+  ylab("Petal length") +
+  theme_bw()
+```
+
+In the literature, it is common to encounter bar-and-whisker plots to represent the same information as above. These replace the points showing the means with bars that start from zero. One should be aware of how to read and make such graphs. This is almost trivially simple: all one needs to do is replace `geom_point` with `geom_col`.
+
+```{r}
+#| message: false
+iris %>%
+  group_by(Species) %>%
+  summarise(mP = mean(Petal.Length),
+            sP = sd(Petal.Length),
+            N = n(),
+            SEM = sP / sqrt(N),
+            CI = SEM * qt(1 - 0.025, N - 1)) %>%
+  ggplot() +
+  aes(x = Species, y = mP, ymin = mP - CI, ymax = mP + CI) +
+  # Below we change geom_point to geom_col (for "column"):
   geom_col(alpha = 0.4, colour = "steelblue", fill = "steelblue") +
   geom_errorbar(width = 0.2, colour = "steelblue") +
   ylab("Petal length") +
   theme_bw()
 ```
 
-One final note. The above type of bar-and-whisker plot is common in the literature, and therefore one should be aware of how to make and read them. That said, there are several reasons why displaying summary data like this is not a good idea. By starting the bars from zero, the plot implies that zero is a natural point of comparison for all the data. Unfortunately, this can also visually distort the information we wish to convey. Consider the following graph:
+:::{.callout-warning}
+While means and their confidence intervals are often displayed with bar-and-whisker plots, there is an important reasons why this is not a good idea. By starting the bars from zero, the plot implies that zero is a natural point of comparison for all the data. Unfortunately, this can visually distort the information we wish to convey. Consider the following graph:
 
 ```{r}
 tibble(Species = c("species 1", "species 2"),
@@ -167,34 +193,17 @@ tibble(Species = c("species 1", "species 2"),
   theme_bw()
 ```
 
-It is now quite obvious that the two observations are distinct. Remaking our earlier bar-and-whisker graph of the `iris` dataset in this spirit, we simply replace `geom_col` with `geom_point`:
-
-```{r}
-#| message: false
-iris %>%
-  group_by(Species) %>%
-  summarise(mP = mean(Petal.Length), # Mean petal length per species
-            sP = sd(Petal.Length), # Standard deviation per species
-            N = n(), # Sample size (number of observations) per species
-            SEM = sP / sqrt(N), # Standard error of the mean
-            CI = SEM * qt(0.975, N - 1)) %>% # Confidence interval, read off
-                 # at 0.975 because plus/minus 2.5% adds up to 5%
-  ggplot() +
-  aes(x = Species, y = mP, ymin = mP - CI, ymax = mP + CI) +
-  geom_point(colour = "steelblue") +
-  geom_errorbar(width = 0.2, colour = "steelblue") +
-  ylab("Petal length") +
-  theme_bw()
-```
+It is now obvious that the two observations are distinct. Due to this problem, my recommendation is to avoid bar-and-whisker plots and simply use point-and-whisker ones instead.
+:::
 
 
-## Exercises
+## Exercises {#sec-ggplot-exercises}
 
-@Fauchaldetal2017 tracked the population size of various herds of caribou in North America over time, and correlated population cycling with the amount of vegetation and sea-ice cover. The part of their data that we will use consists of two files (found on Lisam): `pop_size.tsv` (data on herd population sizes), and `sea_ice.tsv` (on sea levels of sea ice cover per year and month).
+@Fauchaldetal2017 tracked the population size of various herds of caribou in North America over time, and correlated population cycling with the amount of vegetation and sea-ice cover. The part of their data that we will use consists of two files: `pop_size.tsv` (data on herd population sizes), and `sea_ice.tsv` (on sea levels of sea ice cover per year and month). You can download them from [this link](https://github.com/dysordys/data-with-R/tree/main/data).
 
-1. The file `sea_ice.tsv` is in human-readable, wide format. Note however that the rule "each set of observations is stored in its own row" is violated. For computation, we would like to organize the data in a tidy tibble with four columns: `Herd`, `Year`, `Month`, and `Cover`. To this end, apply the function `pivot_longer` to columns 3-14 in the tibble, gathering the names of the months in the new column `Month` and the values in the new column `Cover`.
+1. The file `sea_ice.tsv` is in human-readable, wide format. Note however that the rule "each set of observations is stored in its own row" is violated. We would like to organize the data in a tidy tibble with four columns: `Herd`, `Year`, `Month`, and `Cover`. To this end, apply the function `pivot_longer` to columns 3-14 in the tibble, gathering the names of the months in the new column `Month` and the values in the new column `Cover`.
 
-2. Use `pop_size.tsv` to make a plot of herd sizes through time. Let the x-axis be Year, the y-axis be population size. Show different herds in different colors. For geometry, use points.
+2. Use `pop_size.tsv` to make a plot of herd sizes through time. Let the x-axis be Year, the y-axis be population size. Show different herds in different colors. For the geometry, use points.
 
 3. The previous plot is actually not that easy to see and interpret. To make it better, add a `line` geometry as well, which will connect the points with lines.
 
