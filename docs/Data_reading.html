@@ -202,7 +202,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and data normalization</span></a>
+  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and tidy data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -327,7 +327,7 @@ div.csl-indent {
 ✖ dplyr::lag()    masks stats::lag()</code></pre>
 </div>
 </div>
-<p>As we see, eight packages are now loaded, called <code>ggplot2</code>, <code>tibble</code>, and so on. We will get to know these in more detail throughout the course.</p>
+<p>As we see, eight packages are now loaded, called <code>ggplot2</code>, <code>tibble</code>, and so on. We will get to know these in more detail throughout the book.</p>
 <p>There are even more packages that are part of the tidyverse. Typing and executing <code>tidyverse_packages()</code> will show all such packages. Of all these, only eight are loaded by default when invoking <code>library(tidyverse)</code>. The others must be loaded separately. For example, <code>readxl</code> is a tidyverse package for loading Excel files in R. To use it, run <code>library(readxl)</code>.</p>
 <div class="callout-tip callout callout-style-default callout-captioned">
 <div class="callout-header d-flex align-content-center">
@@ -632,7 +632,7 @@ Smith, Felisa A., S. Kathleen Lyons, S. K. Morgan Ernest, Kate E. Jones, Dawn M.
 <hr>
 <ol>
 <li id="fn1"><p>Warning: there exists a similarly-named function called <code>read.csv</code> which is part of base R. It does much the same thing as <code>read_csv</code>; however, its use is clunkier and less flexible. You can think of <code>read_csv</code> as a <code>tidyverse</code>-provided upgrade to the original <code>read.csv</code>. My recommendation is to stick with using just <code>read_csv</code>—it is simpler and at the same time more powerful than its predecessor.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Data frames (a feature of base R) and tibbles (a <code>tidyverse</code> construct) are equivalent for most practical purposes. Tibbles offer some features that are absent from data frames, and omit certain quirks of data frames which tend to be in the way. Like with <code>read_csv</code> and <code>read.csv</code>, tibbles can be thought of as a slightly upgraded and more user-friendly version of data frames. You do not need to be overly concerned with the precise differences between the two. In this course, we will be using tibbles almost exclusively.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Data frames (a feature of base R) and tibbles (a <code>tidyverse</code> construct) are equivalent for most practical purposes. Tibbles offer some features that are absent from data frames, and omit certain quirks of data frames which tend to be in the way. Like with <code>read_csv</code> and <code>read.csv</code>, tibbles can be thought of as a slightly upgraded and more user-friendly version of data frames. You do not need to be overly concerned with the precise differences between the two. In this book we will be using tibbles almost exclusively.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>The abbreviation <code>&lt;dbl&gt;</code> happens to stand for <a href="https://en.wikipedia.org/wiki/Double-precision_floating-point_format">double-precision numerical value</a>, a standard way of representing numbers on computers.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>

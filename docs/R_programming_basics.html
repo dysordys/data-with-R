@@ -203,7 +203,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and data normalization</span></a>
+  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and tidy data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -471,7 +471,7 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The variable <code>my_money_in_USD</code> above was defined in terms of the two variables <code>my_money</code> and <code>`crowns to $`</code>. You might be wondering: if we change <code>my_money</code> to a different value by executing <code>my_money &lt;- 1000</code> (say), does <code>my_money_in_USD</code> also get automatically updated? <strong>The answer is no:</strong> the value of <code>my_money_in_USD</code> will remain unchanged. In other words, variables are not automatically recalculated the way Excel formula cells are. To recompute <code>my_money_in_USD</code>, you will need to execute <code>my_money_in_USD &lt;- my_money * `crowns to $`</code> again. This leads to a recurring theme in programming: while assigning variables is convenient, it also carries some dangers, in case we forget to appropriately update them. In this course, we will be emphasizing a style of programming which avoids relying on (re-)assigning variables as much as possible.</p>
+<p>The variable <code>my_money_in_USD</code> above was defined in terms of the two variables <code>my_money</code> and <code>`crowns to $`</code>. You might be wondering: if we change <code>my_money</code> to a different value by executing <code>my_money &lt;- 1000</code> (say), does <code>my_money_in_USD</code> also get automatically updated? <strong>The answer is no:</strong> the value of <code>my_money_in_USD</code> will remain unchanged. In other words, variables are not automatically recalculated the way Excel formula cells are. To recompute <code>my_money_in_USD</code>, you will need to execute <code>my_money_in_USD &lt;- my_money * `crowns to $`</code> again. This leads to a recurring theme in programming: while assigning variables is convenient, it also carries some dangers, in case we forget to appropriately update them. In this book we will be emphasizing a style of programming which avoids relying on (re-)assigning variables as much as possible.</p>
 </div>
 </div>
 </section>

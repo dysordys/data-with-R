@@ -202,7 +202,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and data normalization</span></a>
+  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and tidy data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -340,7 +340,7 @@ div.csl-indent {
 <section id="nested-data-frames" class="level2" data-number="15.2">
 <h2 data-number="15.2" class="anchored" data-anchor-id="nested-data-frames"><span class="header-section-number">15.2</span> Nested data frames</h2>
 <p>We are by now used to the idea that the columns of tibbles can hold numbers, character strings, logical values, or even factors. But here is an interesting question: can a column of a tibble hold other tibbles?</p>
-<p>The short answer is yes. The somewhat longer answer is that this is possible, but not directly so. Instead, one has to make the column into a list (<a href="Nonlinear_regression.html#sec-lists"><span>Section&nbsp;13.2.1</span></a>).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> While this could of course be done by hand using the <code>list</code> function, there are other options in the <code>tidyverse</code> which facilitate creating tibbles which have other tibbles in their columns. One of these is called <code>nest</code>. This function receives a name first, which will become the name of the newly-created column holding the sub-tibbles. Then, after an equality sign, one lists the columns, in a vector, which one would like to package into those sub-tibbles. For example, to keep <code>Species</code> as a separate column and wrap everything else into sub-tibbles, we can do:</p>
+<p>The short answer is yes. The somewhat longer answer is that this is possible, but not directly so. Instead, one has to make the column into a list (<a href="Nonlinear_regression.html#sec-lists"><span>Section&nbsp;13.2.1</span></a>).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> While this could be done by hand using the <code>list</code> function, there are other options in the <code>tidyverse</code> which facilitate creating tibbles which have other tibbles in their columns. One of these is called <code>nest</code>. This function receives a name first, which will become the name of the newly-created column holding the sub-tibbles. Then, after an equality sign, one lists the columns, in a vector, which one would like to package into those sub-tibbles. For example, to keep <code>Species</code> as a separate column and wrap everything else into sub-tibbles, we can do:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span> <span class="fu">nest</span>(<span class="at">data =</span> <span class="fu">c</span>(ID, Date, Sex, WingSize, L2Length))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">

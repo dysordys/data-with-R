@@ -183,7 +183,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and data normalization</span></a>
+  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and tidy data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -561,7 +561,7 @@ Note
 </div>
 </div>
 <p>In this particular case, the above graph is preferable to the previous one, because the three subplots now share the same x-axis. This makes it easier to compare the distribution of petal lengths across the species.</p>
-<p>To illustrate how to make a two-dimensional grid of facets, let us normalize the <code>iris</code> dataset using <code>pivot_longer()</code>:</p>
+<p>To illustrate how to make a two-dimensional grid of facets, let us put the <code>iris</code> dataset in tidy form using <code>pivot_longer()</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(iris) <span class="sc">%&gt;%</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(Sepal.Length,Sepal.Width,Petal.Length,Petal.Width),</span>

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This chapter introduces R and RStudio. R is a free and open-source programming language for statistics, graphing, and modeling, originally developed by statisticians. In recent years, R has become extremely popular among biologists, and you will almost certainly encounter it as part of real-world research projects. In this course, we will be learning some of the ways in which R can be used for efficient data analysis and visualization.
+This chapter introduces R and RStudio. R is a free and open-source programming language for statistics, graphing, and modeling, originally developed by statisticians. In recent years, R has become extremely popular among biologists, and you will almost certainly encounter it as part of real-world research projects. In this book we will be learning some of the ways in which R can be used for efficient data analysis and visualization.
 
 RStudio is an "integrated development environment" (IDE) for R, which means it is a software application that lets you write, run, and interact graphically with programs. RStudio integrates a text editor, the R console (where you run R commands), package management, plotting, help, and more.
 

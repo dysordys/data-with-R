@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Introduction to data analysis and visualization with R - 5&nbsp; Summary statistics and data normalization</title>
+<title>Introduction to data analysis and visualization with R - 5&nbsp; Summary statistics and tidy data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -133,7 +133,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and data normalization</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and tidy data</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -183,7 +183,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and data normalization</span></a>
+  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and tidy data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -251,7 +251,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
    
   <ul>
   <li><a href="#creating-summary-data" id="toc-creating-summary-data" class="nav-link active" data-scroll-target="#creating-summary-data"><span class="toc-section-number">5.1</span>  Creating summary data</a></li>
-  <li><a href="#data-normalization" id="toc-data-normalization" class="nav-link" data-scroll-target="#data-normalization"><span class="toc-section-number">5.2</span>  Data normalization</a></li>
+  <li><a href="#sec-tidy" id="toc-sec-tidy" class="nav-link" data-scroll-target="#sec-tidy"><span class="toc-section-number">5.2</span>  Tidy data</a></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="toc-section-number">5.3</span>  Exercises</a></li>
   </ul>
 </nav>
@@ -261,7 +261,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-normalization" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and data normalization</span></span></h1>
+<h1 class="title"><span id="sec-normalization" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and tidy data</span></span></h1>
 </div>
 
 
@@ -531,15 +531,15 @@ Warning
 </div>
 <p>It is good practice to always <code>ungroup</code> the data after we have calculated what we wanted using the group structure. Otherwise, subsequent calculations could be influenced by the grouping in unexpected ways.</p>
 </section>
-<section id="data-normalization" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="data-normalization"><span class="header-section-number">5.2</span> Data normalization</h2>
-<p>In science, we often strive to work with so-called <em>normalized data</em>. A dataset is normalized if:</p>
+<section id="sec-tidy" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="sec-tidy"><span class="header-section-number">5.2</span> Tidy data</h2>
+<p>In science, we often strive to work with <em>tidy data</em> (also known as <em>long-format data</em> or <em>normalized data</em>). A dataset is tidy if:</p>
 <ol type="1">
 <li>Each variable is in its own column;</li>
 <li>Each observation is in its own row.</li>
 </ol>
-<p>Normalized data are suitable for performing operations, statistics, and plotting on. Furthermore, normalized data have a certain tidy feel to them, in the sense that their organization always follows the same general pattern regardless of the type of dataset one studies. (By contrast, every non-normalized dataset tends to be messy in its own unique way.) The <code>tidyverse</code> offers a simple and convenient way to normalize data.</p>
-<p>For example, the <code>pop</code> table from the previous section is not normalized. This is because although each variable is in its own column, it is not true that each observation is in its own row. In fact, each row contains three observations: the densities of species 1, 2, and 3 at a given time and place. To normalize these data, we create <em>key-value pairs</em>. We merge the columns for species densities into just two new ones. The first of these (the <em>key</em>) indicates whether it is species 1, or 2, or 3 which the given row refers to. The second column (the <em>value</em>) contains the population density of the given species. Such key-value pairs are created by the function <code>pivot_longer</code>:</p>
+<p>Tidy data are suitable for performing operations, statistics, and plotting on. Furthermore, tidy data have a certain well-groomed feel to them, in the sense that their organization always follows the same general pattern regardless of the type of dataset one studies. (By contrast, every non-tidy dataset tends to be messy in its own unique way.) The <code>tidyverse</code> offers a simple and convenient way of putting data in tidy format.</p>
+<p>For example, the <code>pop</code> table from the previous section is not tidy. This is because although each variable is in its own column, it is not true that each observation is in its own row. In fact, each row contains three observations: the densities of species 1, 2, and 3 at a given time and place. To tidy up these data, we create <em>key-value pairs</em>. We merge the columns for species densities into just two new ones. The first of these (the <em>key</em>) indicates whether it is species 1, or 2, or 3 which the given row refers to. The second column (the <em>value</em>) contains the population density of the given species. Such key-value pairs are created by the function <code>pivot_longer</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">names_to =</span> <span class="st">"species"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -559,8 +559,8 @@ Warning
 # … with 290 more rows</code></pre>
 </div>
 </div>
-<p>The function <code>pivot_longer</code> takes three arguments (apart, of course, from the first data argument that we may also pipe in, like above). First, <code>cols</code> is the list of columns to be converted into key-value pairs. One can refer to the columns by number: <code>3:5</code> is the same as <code>c(3, 4, 5)</code> and selects the third, fourth, and fifth columns—the ones corresponding to the population densities. We could also have written <code>c("species1", "species2", "species3")</code> instead, choosing columns by their names. This can give greater clarity, albeit at the cost of more typing. Second, the argument <code>names_to</code> is the name of the new key column. Finally, <code>values_to</code> is the name of the new value column.</p>
-<p>Notice that the above table is now normalized: each column records a single variable, and each row contains a single observation. Notice also that, unlike the original <code>pop</code> which had 100 rows and 5 columns, the normalized version has 300 rows and 4 columns. This is natural: since the number of rows was reduced, there must be some extra rows to prevent the loss of information.</p>
+<p>The function <code>pivot_longer</code> takes three arguments in addition to the first (data) argument that we may pipe in, like above. First, <code>cols</code> is the list of columns to be converted into key-value pairs. One can refer to the columns by number: <code>3:5</code> is the same as <code>c(3, 4, 5)</code> and selects the third, fourth, and fifth columns—the ones corresponding to the population densities. We could also have written <code>c("species1", "species2", "species3")</code> instead, choosing columns by their names. This can give greater clarity, albeit at the cost of more typing. Second, the argument <code>names_to</code> is the name of the new key column. Finally, <code>values_to</code> is the name of the new value column.</p>
+<p>Notice that the above table is now in tidy form: each column records a single variable, and each row contains a single observation. Notice also that, unlike the original <code>pop</code> which had 100 rows and 5 columns, the tidy version has 300 rows and 4 columns. This is natural: since the number of rows was reduced, there must be some extra rows to prevent the loss of information.</p>
 <p>It is possible to “undo” the effect <code>pivot_longer</code>. To do so, use <code>pivot_wider</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
@@ -606,11 +606,11 @@ Warning
 # … with 40 more rows</code></pre>
 </div>
 </div>
-<p>If normalized data are what we strive for, what is the practical use of <code>pivot_wider</code>? There are two answers to this question. First, while non-normalized data are indeed less efficient from a computational and data analysis standpoint, they are often more human-readable. For example, the <code>pop</code> table is easy to read despite the lack of normalization, because each row corresponds to a given time and place. By normalizing the data, information referring to any given time and place will be spread out over multiple (in our case, three) rows—one for each species. While this is preferable from a data analysis point of view, it can be more difficult to digest visually. Second, wide data lend themselves very well to a class of statistical techniques called <em>multivariate analysis</em>. In case one wants to perform multivariate analysis, wide-format data are often better than normalized data. We will see an example application of this in <a href="Nonlinear_regression.html#sec-ancova"><span>Section&nbsp;13.1</span></a>.</p>
-<p>Finally, it is worth noting the power of normalized data in, e.g., generating summary statistics. To obtain the mean and the standard deviation of the population densities for each species in each patch, all one has to do is this:</p>
+<p>If tidy data are what we strive for, what is the practical use of <code>pivot_wider</code>? There are two answers to this question. First, while non-tidy data are indeed less efficient from a computational and data analysis standpoint, they are often more human-readable. For example, the <code>pop</code> table is easy to read despite the lack of tidiness, because each row corresponds to a given time and place. By tidying the data, information referring to any given time and place will be spread out over multiple (in our case, three) rows—one for each species. While this is preferable from a data analysis point of view, it can be more difficult to digest visually. Second, wide data lend themselves very well to a class of statistical techniques called <em>multivariate analysis</em>. In case one wants to perform multivariate analysis, wide-format data are often better than tidy data. We will see an example application of this in <a href="Nonlinear_regression.html#sec-ancova"><span>Section&nbsp;13.1</span></a>.</p>
+<p>Finally, it is worth noting the power of tidy data in, e.g., generating summary statistics. To obtain the mean and the standard deviation of the population densities for each species in each patch, all one has to do is this:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Normalize data:</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Tidy up the data:</span></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">names_to =</span> <span class="st">"species"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Group data by both species and patch:</span></span>
 <span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch, species) <span class="sc">%&gt;%</span></span>
@@ -640,7 +640,7 @@ Warning
 <li><p>Create a table where the rows are the three species, and the columns are: average petal length, variance of petal length, average sepal length, and variance of sepal length.</p></li>
 <li><p>Create key-value pairs in the <code>iris</code> dataset for the petal characteristics. In other words, have a column called <code>Petal.Trait</code> (whose values are either <code>Petal.Length</code> or <code>Petal.Width</code>), and another column called <code>Petal.Value</code> (with the length/width values).</p></li>
 <li><p>Repeat the same exercise, but now for sepal traits.</p></li>
-<li><p>Finally, do it for both petal and sepal traits simultaneously, to obtain a fully normalized form of the <code>iris</code> data. That is, the key column (call it <code>Flower.Trait</code>) will have the values <code>Petal.Length</code>, <code>Petal.Width</code>, <code>Sepal.Length</code>, and <code>Sepal.Width</code>. And the value column (which you can call <code>Trait.Value</code>) will have the corresponding measurements.</p></li>
+<li><p>Finally, do it for both petal and sepal traits simultaneously, to obtain a fully tidy form of the <code>iris</code> data. That is, the key column (call it <code>Flower.Trait</code>) will have the values <code>Petal.Length</code>, <code>Petal.Width</code>, <code>Sepal.Length</code>, and <code>Sepal.Width</code>. And the value column (which you can call <code>Trait.Value</code>) will have the corresponding measurements.</p></li>
 </ol>
 
 

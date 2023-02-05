@@ -260,7 +260,7 @@ iris %>%
 
 In this particular case, the above graph is preferable to the previous one, because the three subplots now share the same x-axis. This makes it easier to compare the distribution of petal lengths across the species.
 
-To illustrate how to make a two-dimensional grid of facets, let us normalize the `iris` dataset using `pivot_longer()`:
+To illustrate how to make a two-dimensional grid of facets, let us put the `iris` dataset in tidy form using `pivot_longer()`:
 
 ```{r}
 as_tibble(iris) %>%

@@ -77,7 +77,7 @@ To further illustrate possible difficulties of interpretation, let us take a loo
 print(anscombe)
 ```
 
-These are actually four datasets merged into one: `x1` and `y1` are x and y coordinates of the points from the first set, `x1` and `y2` from the second set, and so on. We can use `pivot_longer` to normalize these data:
+These are actually four datasets merged into one: `x1` and `y1` are x and y coordinates of the points from the first set, `x1` and `y2` from the second set, and so on. We can use `pivot_longer` to put these data in tidy format:
 
 ```{r}
 ans_long <- anscombe %>%

@@ -1,4 +1,4 @@
-# Summary statistics and data normalization {#sec-normalization}
+# Summary statistics and tidy data {#sec-normalization}
 
 Last time we learned the basics of reading writing, and manipulating data. To review, download `pop_data.csv` (from [this link](https://github.com/dysordys/data-with-R/tree/main/data)) and set your working directory to the folder where you saved it. This is a comma-separated file (CSV), so you can load it using `read_csv`. As usual, we first load the `tidyverse` package:
 
@@ -139,24 +139,24 @@ pop %>%
 It is good practice to always `ungroup` the data after we have calculated what we wanted using the group structure. Otherwise, subsequent calculations could be influenced by the grouping in unexpected ways.
 
 
-## Data normalization
+## Tidy data {#sec-tidy}
 
-In science, we often strive to work with so-called *normalized data*. A dataset is normalized if:
+In science, we often strive to work with *tidy data* (also known as *long-format data* or *normalized data*). A dataset is tidy if:
 
 1. Each variable is in its own column;
 2. Each observation is in its own row.
 
-Normalized data are suitable for performing operations, statistics, and plotting on. Furthermore, normalized data have a certain tidy feel to them, in the sense that their organization always follows the same general pattern regardless of the type of dataset one studies. (By contrast, every non-normalized dataset tends to be messy in its own unique way.) The `tidyverse` offers a simple and convenient way to normalize data.
+Tidy data are suitable for performing operations, statistics, and plotting on. Furthermore, tidy data have a certain well-groomed feel to them, in the sense that their organization always follows the same general pattern regardless of the type of dataset one studies. (By contrast, every non-tidy dataset tends to be messy in its own unique way.) The `tidyverse` offers a simple and convenient way of putting data in tidy format.
 
-For example, the `pop` table from the previous section is not normalized. This is because although each variable is in its own column, it is not true that each observation is in its own row. In fact, each row contains three observations: the densities of species 1, 2, and 3 at a given time and place. To normalize these data, we create *key-value pairs*. We merge the columns for species densities into just two new ones. The first of these (the *key*) indicates whether it is species 1, or 2, or 3 which the given row refers to. The second column (the *value*) contains the population density of the given species. Such key-value pairs are created by the function `pivot_longer`:
+For example, the `pop` table from the previous section is not tidy. This is because although each variable is in its own column, it is not true that each observation is in its own row. In fact, each row contains three observations: the densities of species 1, 2, and 3 at a given time and place. To tidy up these data, we create *key-value pairs*. We merge the columns for species densities into just two new ones. The first of these (the *key*) indicates whether it is species 1, or 2, or 3 which the given row refers to. The second column (the *value*) contains the population density of the given species. Such key-value pairs are created by the function `pivot_longer`:
 
 ```{r}
 pop %>% pivot_longer(cols = 3:5, names_to = "species", values_to = "density")
 ```
 
-The function `pivot_longer` takes three arguments (apart, of course, from the first data argument that we may also pipe in, like above). First, `cols` is the list of columns to be converted into key-value pairs. One can refer to the columns by number: `3:5` is the same as `c(3, 4, 5)` and selects the third, fourth, and fifth columns---the ones corresponding to the population densities. We could also have written `c("species1", "species2", "species3")` instead, choosing columns by their names. This can give greater clarity, albeit at the cost of more typing. Second, the argument `names_to` is the name of the new key column. Finally, `values_to` is the name of the new value column.
+The function `pivot_longer` takes three arguments in addition to the first (data) argument that we may pipe in, like above. First, `cols` is the list of columns to be converted into key-value pairs. One can refer to the columns by number: `3:5` is the same as `c(3, 4, 5)` and selects the third, fourth, and fifth columns---the ones corresponding to the population densities. We could also have written `c("species1", "species2", "species3")` instead, choosing columns by their names. This can give greater clarity, albeit at the cost of more typing. Second, the argument `names_to` is the name of the new key column. Finally, `values_to` is the name of the new value column.
 
-Notice that the above table is now normalized: each column records a single variable, and each row contains a single observation. Notice also that, unlike the original `pop` which had 100 rows and 5 columns, the normalized version has 300 rows and 4 columns. This is natural: since the number of rows was reduced, there must be some extra rows to prevent the loss of information.
+Notice that the above table is now in tidy form: each column records a single variable, and each row contains a single observation. Notice also that, unlike the original `pop` which had 100 rows and 5 columns, the tidy version has 300 rows and 4 columns. This is natural: since the number of rows was reduced, there must be some extra rows to prevent the loss of information.
 
 It is possible to "undo" the effect `pivot_longer`. To do so, use `pivot_wider`:
 
@@ -176,14 +176,14 @@ pop %>%
   pivot_wider(names_from = c("species", "patch"), values_from = "density")
 ```
 
-If normalized data are what we strive for, what is the practical use of `pivot_wider`? There are two answers to this question. First, while non-normalized data are indeed less efficient from a computational and data analysis standpoint, they are often more human-readable. For example, the `pop` table is easy to read despite the lack of normalization, because each row corresponds to a given time and place. By normalizing the data, information referring to any given time and place will be spread out over multiple (in our case, three) rows---one for each species. While this is preferable from a data analysis point of view, it can be more difficult to digest visually. Second, wide data lend themselves very well to a class of statistical techniques called *multivariate analysis*. In case one wants to perform multivariate analysis, wide-format data are often better than normalized data. We will see an example application of this in @sec-ancova.
+If tidy data are what we strive for, what is the practical use of `pivot_wider`? There are two answers to this question. First, while non-tidy data are indeed less efficient from a computational and data analysis standpoint, they are often more human-readable. For example, the `pop` table is easy to read despite the lack of tidiness, because each row corresponds to a given time and place. By tidying the data, information referring to any given time and place will be spread out over multiple (in our case, three) rows---one for each species. While this is preferable from a data analysis point of view, it can be more difficult to digest visually. Second, wide data lend themselves very well to a class of statistical techniques called *multivariate analysis*. In case one wants to perform multivariate analysis, wide-format data are often better than tidy data. We will see an example application of this in @sec-ancova.
 
-Finally, it is worth noting the power of normalized data in, e.g., generating summary statistics. To obtain the mean and the standard deviation of the population densities for each species in each patch, all one has to do is this:
+Finally, it is worth noting the power of tidy data in, e.g., generating summary statistics. To obtain the mean and the standard deviation of the population densities for each species in each patch, all one has to do is this:
 
 ```{r}
 #| message: false
 pop %>%
-  # Normalize data:
+  # Tidy up the data:
   pivot_longer(3:5, names_to = "species", values_to = "density") %>%
   # Group data by both species and patch:
   group_by(patch, species) %>%
@@ -208,4 +208,4 @@ The exercises below use the `iris` dataset---the same that we used in the previo
 
 5. Repeat the same exercise, but now for sepal traits.
 
-6. Finally, do it for both petal and sepal traits simultaneously, to obtain a fully normalized form of the `iris` data. That is, the key column (call it `Flower.Trait`) will have the values `Petal.Length`, `Petal.Width`, `Sepal.Length`, and `Sepal.Width`. And the value column (which you can call `Trait.Value`) will have the corresponding measurements.
+6. Finally, do it for both petal and sepal traits simultaneously, to obtain a fully tidy form of the `iris` data. That is, the key column (call it `Flower.Trait`) will have the values `Petal.Length`, `Petal.Width`, `Sepal.Length`, and `Sepal.Width`. And the value column (which you can call `Trait.Value`) will have the corresponding measurements.
