@@ -384,7 +384,7 @@ div.csl-indent {
 </div>
 </div>
 <p>So this sub-table contains the information that pertains to just <em>D. acutila</em> individuals.</p>
-<p>When choosing which columns to wrap into sub-tibbles with <code>nest</code>, all the conventions and functionalities apply that one can use with the <code>select</code> function. So the above nesting could be equivalently and more simply be performed with:</p>
+<p>When choosing which columns to wrap into sub-tibbles with <code>nest</code>, all the tidy selection conventions and functionalities apply that one can use with the <code>select</code> function (<a href="Basic_data_wrangling.html#sec-select"><span>Section&nbsp;4.1.1</span></a>). So the above nesting could be equivalently and more simply be performed with:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>fly <span class="sc">%&gt;%</span> <span class="fu">nest</span>(<span class="at">data =</span> <span class="sc">!</span>Species)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">

@@ -51,7 +51,7 @@ fly %>%
 
 So this sub-table contains the information that pertains to just *D. acutila* individuals.
 
-When choosing which columns to wrap into sub-tibbles with `nest`, all the conventions and functionalities apply that one can use with the `select` function. So the above nesting could be equivalently and more simply be performed with:
+When choosing which columns to wrap into sub-tibbles with `nest`, all the tidy selection conventions and functionalities apply that one can use with the `select` function (@sec-select). So the above nesting could be equivalently and more simply be performed with:
 
 ```{r}
 fly %>% nest(data = !Species)

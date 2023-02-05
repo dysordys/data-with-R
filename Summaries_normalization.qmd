@@ -154,7 +154,9 @@ For example, the `pop` table from the previous section is not tidy. This is beca
 pop %>% pivot_longer(cols = 3:5, names_to = "species", values_to = "density")
 ```
 
-The function `pivot_longer` takes three arguments in addition to the first (data) argument that we may pipe in, like above. First, `cols` is the list of columns to be converted into key-value pairs. One can refer to the columns by number: `3:5` is the same as `c(3, 4, 5)` and selects the third, fourth, and fifth columns---the ones corresponding to the population densities. We could also have written `c("species1", "species2", "species3")` instead, choosing columns by their names. This can give greater clarity, albeit at the cost of more typing. Second, the argument `names_to` is the name of the new key column. Finally, `values_to` is the name of the new value column.
+The function `pivot_longer` takes three arguments in addition to the first (data) argument that we may pipe in, like above. First, `cols` is the list of columns to be converted into key-value pairs. It uses the same tidy selection mechanisms as the function `select` (@sec-select). This means that one can refer to the columns by number: `cols = 3:5` is the same as `cols = c(3, 4, 5)` and selects the third, fourth, and fifth columns (the ones corresponding to the population densities). One can also write `cols = c(species1, species2, species3)` instead, choosing columns by their names. This can give greater clarity, albeit at the cost of more typing. Or---perhaps the best and cleanest in this case---one can use `cols = starts_with("species")` to select those columns which start with the string `"species"`.
+
+Second, the argument `names_to` in the function `pitov_longer` is the name of the new key column. And third, `values_to` is the name of the new value column.
 
 Notice that the above table is now in tidy form: each column records a single variable, and each row contains a single observation. Notice also that, unlike the original `pop` which had 100 rows and 5 columns, the tidy version has 300 rows and 4 columns. This is natural: since the number of rows was reduced, there must be some extra rows to prevent the loss of information.
 
@@ -162,7 +164,9 @@ It is possible to "undo" the effect `pivot_longer`. To do so, use `pivot_wider`:
 
 ```{r}
 pop %>%
-  pivot_longer(cols = 3:5, names_to = "species", values_to = "density") %>%
+  pivot_longer(cols = starts_with("species"),
+               names_to = "species",
+               values_to = "density") %>%
   pivot_wider(names_from = "species", values_from = "density")
 ```
 
@@ -172,7 +176,9 @@ As a remark, one could make the data even "wider", by not only making columns ou
 
 ```{r}
 pop %>%
-  pivot_longer(cols = 3:5, names_to = "species", values_to = "density") %>%
+  pivot_longer(cols = starts_with("species"),
+               names_to = "species",
+               values_to = "density") %>%
   pivot_wider(names_from = c("species", "patch"), values_from = "density")
 ```
 
@@ -184,7 +190,9 @@ Finally, it is worth noting the power of tidy data in, e.g., generating summary 
 #| message: false
 pop %>%
   # Tidy up the data:
-  pivot_longer(3:5, names_to = "species", values_to = "density") %>%
+  pivot_longer(cols = starts_with("species"),
+               names_to = "species",
+               values_to = "density") %>%
   # Group data by both species and patch:
   group_by(patch, species) %>%
   # Obtain statistics:
