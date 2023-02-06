@@ -34,7 +34,7 @@ select(goldbergDat, -Species)
 
 Since there were only two columns in the data to begin with, only the `Status` column remained in the data after removing `Species`.
 
-There are several other options within `select`, which mostly help with selecting several columns at a time fulfilling certain criteria. The collection of these options and methods is called *tidy selection*. A few examples follow. First, one can use logical operations to select columns. `select(goldbergDat, !Species)` means "select all columns that are not species". In this case, the only such column is `Status`:
+There are several other options within `select`, which mostly help with selecting several columns at a time fulfilling certain criteria. The collection of these options and methods is called *tidy selection*. A few examples follow. First, one can use logical operations to select columns. `select(goldbergDat, !Species)` means "select all columns that are not `Species`". In this case, the only such column is `Status`:
 
 ```{r}
 select(goldbergDat, !Species)
@@ -52,7 +52,7 @@ select(goldbergDat, ends_with("us"))
 Finally, the function `contains` can select columns which contain some string anywhere in their names:
 
 ```{r}
-select(goldbergDat, contains("at"))
+select(goldbergDat, contains("tatu"))
 ```
 
 ### `filter`
