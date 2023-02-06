@@ -1,6 +1,6 @@
 # Summary statistics and tidy data {#sec-normalization}
 
-Last time we learned the basics of reading writing, and manipulating data. To review, download `pop_data.csv` (from [this link](https://github.com/dysordys/data-with-R/tree/main/data)) and set your working directory to the folder where you saved it. This is a comma-separated file (CSV), so you can load it using `read_csv`. As usual, we first load the `tidyverse` package:
+Last time we learned the basics of reading writing, and manipulating data. To review, download [`pop_data.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/pop_data.csv) and set your working directory to the folder where you saved it. This is a comma-separated file (CSV), so you can load it using `read_csv`. As usual, we first load the `tidyverse` package:
 
 ```{r}
 #| message: false

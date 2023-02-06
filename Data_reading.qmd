@@ -26,7 +26,7 @@ In general, it is a good idea to load all necessary packages at the top of your 
 
 ## Reading tabular data
 
-One of the packages loaded by default with `tidyverse` is called `readr`. This package contains tools for loading data files, and writing them to disk. To see how it works, download the files `Goldberg2010_data.csv`, `Goldberg2010_data.xlsx`, and `Smith2003_data.txt` (here's a [link](https://github.com/dysordys/data-with-R/tree/main/data) to these and other data files used throughout the book). Then set the working directory in RStudio to the folder where you have saved them. As a reminder, you can do this by executing `setwd(/path/to/files)`, where you should substitute in your own path in place of `/path/to/files`.
+One of the packages loaded by default with `tidyverse` is called `readr`. This package contains tools for loading data files, and writing them to disk. To see how it works, download the files [`Goldberg2010_data.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/Goldberg2010_data.csv), [`Goldberg2010_data.xlsx`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/Goldberg2010_data.xlsx), and [`Smith2003_data.txt`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/Smith2003_data.txt) (click the file names to get a link to these and other data files used throughout the book). Then set the working directory in RStudio to the folder where you have saved them. As a reminder, you can do this by executing `setwd(/path/to/files)`, where you should substitute in your own path in place of `/path/to/files`.
 
 ### The CSV file format
 
@@ -183,5 +183,5 @@ where `/path/to/file.csv` should be replaced by the path and file name with whic
 
 ## Exercises
 
-1. Load the data from the file `Smith2003_data.txt`. Note that the file is tab-separated and lacks headers!
-2. The columns of this file are, in order: Continent (AF=Africa, etc.), Status (extinct, historical, introduction, or extant), Order, Family, Genus, Species, Base-10 Log Mass, Combined Mass (grams), and Reference (numbers, referring to a numerically ordered list of published works -- no need to worry about the details). Rename each column appropriately, using the `rename()` function.
+1. The columns of the file `Smith2003_data.txt` are, in order: Continent (AF=Africa, etc.), Status (extinct, historical, introduction, or extant), Order, Family, Genus, Species, Base-10 Log Mass, Combined Mass (grams), and Reference (numbers, referring to a numerically ordered list of published works -- no need to worry about the details). Rename each column appropriately, using the `rename()` function.
+1. The data file [`ladybugs.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/ladybugs.csv) contains information on whether ladybugs sampled from rural versus industrial areas tend to be red or black morphs. Black morphs are thought to be an adaptation to more polluted industrial environments where the dark coloration provides better camouflage. The file is comma-separated and lacks headers. The meanings of the columns are, in order: habitat type, site code where the sampling was done, morph color, and the number of individuals sampled. Load this file into a tibble in R, and give the following names to its columns: `habitat`, `site`, `morph`, and `number`.
