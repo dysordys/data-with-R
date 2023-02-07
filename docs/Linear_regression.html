@@ -295,7 +295,7 @@ div.csl-indent {
 
 </header>
 
-<p><em>Linear regression</em> was invented by Sir Francis Galton (half-cousin to Charles Darwin), in relation to a very specific problem. He was studying the relationship between the body heights of humans and their children. We can follow his lead and download a dataset which is similar to the one used by Sir Francis, but was in fact gathered by Karl Pearson in 1903 (the fact that the dataset strictly focuses on fathers and their sons, excluding mothers and daughters, contributes an extra air of historical authenticity to the analysis):</p>
+<p><em>Linear regression</em> was invented by Sir Francis Galton (half-cousin to Charles Darwin), in relation to a very specific problem. He was studying the relationship between the body heights of humans and their children. We can follow his lead and look at a dataset (<a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/Pearson.tsv"><code>Pearson.tsv</code></a>) which is similar to the one used by Sir Francis, but was in fact gathered by Karl Pearson in 1903. The fact that Pearson’s data strictly focuses on fathers and their sons, excluding mothers and daughters, contributes an extra air of historical authenticity to the analysis:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -318,7 +318,7 @@ div.csl-indent {
 # … with 1,068 more rows</code></pre>
 </div>
 </div>
-<p>Displaying the above in a graph yields the following:</p>
+<p>All height measurements are in inches. Displaying the above in a graph yields the following:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(heightDat, <span class="fu">aes</span>(<span class="at">x =</span> Father, <span class="at">y =</span> Son)) <span class="sc">+</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
@@ -335,7 +335,7 @@ div.csl-indent {
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>meanFather <span class="ot">&lt;-</span> <span class="fu">mean</span>(heightDat<span class="sc">$</span>Father) <span class="co"># Average height of fathers</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>meanSon <span class="ot">&lt;-</span> <span class="fu">mean</span>(heightDat<span class="sc">$</span>Son) <span class="co"># Average height of sons</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ic <span class="ot">&lt;-</span> meanSon <span class="sc">-</span> meanFather <span class="co"># Calculate intercept, assuming slope of 1</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ic) <span class="co"># The intercept is, interestingly almost perfectly 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ic) <span class="co"># Interestingly, the intercept is almost perfectly 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.9974026</code></pre>
 </div>

@@ -1,6 +1,6 @@
 # Simple linear regression {#sec-linreg}
 
-*Linear regression* was invented by Sir Francis Galton (half-cousin to Charles Darwin), in relation to a very specific problem. He was studying the relationship between the body heights of humans and their children. We can follow his lead and download a dataset which is similar to the one used by Sir Francis, but was in fact gathered by Karl Pearson in 1903 (the fact that the dataset strictly focuses on fathers and their sons, excluding mothers and daughters, contributes an extra air of historical authenticity to the analysis):
+*Linear regression* was invented by Sir Francis Galton (half-cousin to Charles Darwin), in relation to a very specific problem. He was studying the relationship between the body heights of humans and their children. We can follow his lead and look at a dataset ([`Pearson.tsv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/Pearson.tsv)) which is similar to the one used by Sir Francis, but was in fact gathered by Karl Pearson in 1903. The fact that Pearson's data strictly focuses on fathers and their sons, excluding mothers and daughters, contributes an extra air of historical authenticity to the analysis:
 
 ```{r}
 #| message: false
@@ -10,7 +10,7 @@ heightDat <- read_tsv("Pearson.tsv")
 print(heightDat)
 ```
 
-Displaying the above in a graph yields the following:
+All height measurements are in inches. Displaying the above in a graph yields the following:
 
 ```{r}
 #| message: false
@@ -30,7 +30,7 @@ The other, more relevant point to notice is that the slope of the line is less t
 meanFather <- mean(heightDat$Father) # Average height of fathers
 meanSon <- mean(heightDat$Son) # Average height of sons
 ic <- meanSon - meanFather # Calculate intercept, assuming slope of 1
-print(ic) # The intercept is, interestingly almost perfectly 1
+print(ic) # Interestingly, the intercept is almost perfectly 1
 
 ggplot(heightDat, aes(x = Father, y = Son)) +
   geom_point(colour = "steelblue", alpha = 0.4) +

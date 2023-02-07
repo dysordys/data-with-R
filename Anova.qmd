@@ -86,7 +86,7 @@ What has the Dunn test revealed? Precisely what we have been suspecting: that th
 
 ## One-way ANOVA
 
-The Kruskal--Wallis test is the non-parametric analogue of the *one-way ANOVA* (ANalysis Of VAriance). The "one-way" in the name refers to the property that there is a single factor indexing the groups, as discussed earlier. ANOVA relies on assumptions such as normality of the residuals and having the same number of observations in each group (balanced design). Otherwise, it is much like the Kruskal--Wallis test. The function in R that performs an ANOVA is `lm` (short for "linear model"):
+The Kruskal--Wallis test is the non-parametric analogue of the *one-way ANOVA* (ANalysis Of VAriance). The "one-way" in the name refers to the property that there is a single factor indexing the groups, as discussed earlier. ANOVA relies on assumptions such as normality of the residuals and having the same number of observations in each group (balanced design). Otherwise, it is much like the Kruskal--Wallis test.^[The Kruskal--Wallis test is sometimes referred to as "non-parametric ANOVA". While this is perfectly fine as a label, one should be aware that it is, strictly speaking, a misnomer: the Kruskal--Wallis test does not rely on computing variances at all.] The function in R that performs an ANOVA is `lm` (short for "linear model"):
 
 ```{r}
 lm(weight ~ group, data = PlantGrowth)

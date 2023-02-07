@@ -204,7 +204,7 @@ pop %>%
 
 ## Exercises
 
-The exercises below use the `iris` dataset---the same that we used in the previous chapter's data wrangling exercises (@sec-wrangling-exercises). Convert the `iris` data to a tibble with the `as_tibble()` function, and assign it to a variable.
+The exercises below use the `iris` dataset---the same that we used in the previous chapter's data wrangling exercises (@sec-wrangling-exercises). Convert the `iris` data to a tibble with the `as_tibble` function, and assign it to a variable.
 
 1. Create a new column in the `iris` dataset which contains the deviation of petal lengths from the average of the whole dataset.
 
