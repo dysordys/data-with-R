@@ -414,7 +414,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 2 B             5.32</code></pre>
 </div>
 </div>
-<p>One may obtain multiple summary statistics within the same <code>summarize</code> function. Below we compute both the mean and the standard deviation of the densities per patch:</p>
+<p>One may obtain multiple summary statistics within the same <code>summarise</code> function. Below we compute both the mean and the standard deviation of the densities per patch:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch) <span class="sc">%&gt;%</span></span>
@@ -460,7 +460,7 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>One common mistake when one first meets with grouping and summaries is to assume that if we call <code>group_by(patch)</code>, then the subsequent summaries will be taken over patches. <em>This is not the case</em>, and it is important to take a moment to understand why. When we apply <code>group_by(patch)</code>, we are telling R to treat different patch values as group indicators. Therefore, when creating a summary, only the patch identities are retained from the original data (apart from the new summary statistics we calculate, of course). This means that the subsequent summaries are taken over everything <em>except</em> the patches. This should be clear after comparing the outputs of</p>
+<p>One common mistake when first encountering grouping and summaries is to assume that if we call <code>group_by(patch)</code>, then the subsequent summaries will be taken over patches. <em>This is not the case</em>, and it is important to take a moment to understand why. When we apply <code>group_by(patch)</code>, we are telling R to treat different patch values as group indicators. Therefore, when creating a summary, only the patch identities are retained from the original data (apart from the new summary statistics we calculate, of course). This means that the subsequent summaries are taken over everything <em>except</em> the patches. This should be clear after comparing the outputs of</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(patch) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>

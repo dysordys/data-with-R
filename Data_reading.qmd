@@ -59,7 +59,7 @@ read_csv("Goldberg2010_data.csv")
 
 ```{r}
 #| message: false
-goldbergDat<- read_csv("Goldberg2010_data.csv")
+goldbergDat <- read_csv("Goldberg2010_data.csv")
 ```
 
 
