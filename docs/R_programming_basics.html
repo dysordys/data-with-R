@@ -142,6 +142,9 @@ div.csl-indent {
     "search-submit-button-title": "Submit"
   }
 }</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
@@ -314,19 +317,28 @@ div.csl-indent {
 </div>
 <section id="using-r-as-a-calculator" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="using-r-as-a-calculator"><span class="header-section-number">2.1</span> Using R as a calculator</h2>
-<p>As we have seen before, R can be used as a glorified pocket calculator. Elementary operations work as expected: <code>+</code> and <code>-</code> are symbols for addition and subtraction, while <code>*</code> and <code>/</code> are multiplication and division. Thus, we can enter things such as</p>
+<p>As we have seen in <a href="Intro_R_RStudio.html#sec-simpcalc"><span>Section&nbsp;1.3.1</span></a>, R can be used as a glorified pocket calculator. Elementary operations work as expected: <code>+</code> and <code>-</code> are symbols for addition and subtraction, while <code>*</code> and <code>/</code> are multiplication and division. Thus, we can enter things such as <code>3 * 4 - 6 / 2 + 1</code> n the console, and press Enter (Return, on a Mac) to get the result:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span> <span class="sc">*</span> <span class="dv">4</span> <span class="sc">-</span> <span class="dv">6</span> <span class="sc">/</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10</code></pre>
 </div>
-<p>in the console, and press Enter (Return, on a Mac) to get the result, 10. One even has exponentiation, denoted by the symbol <code>^</code>. To raise 2 to the 5th power), we enter</p>
+</div>
+<p>One even has exponentiation, denoted by the symbol <code>^</code>. To raise 2 to the 5th power), we enter</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">^</span><span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span><span class="sc">^</span><span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 32</code></pre>
 </div>
-<p>and obtain the expected 32. Furthermore, one is not restricted to integers. It is possible to calculate with fractional numbers:</p>
+</div>
+<p>Furthermore, one is not restricted to integers. It is possible to calculate with fractional numbers:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fl">1.62</span> <span class="sc">*</span> <span class="fl">34.56</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fl">1.62</span> <span class="sc">*</span> <span class="fl">34.56</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 55.9872</code></pre>
 </div>
-<p>whose result is 55.9872. <strong>Note:</strong> in line with Anglo-Saxon tradition, R uses decimal points instead of decimal commas. Entering <code>1,62 * 34,56</code> will throw an error.</p>
+</div>
+<p><strong>Note:</strong> in line with Anglo-Saxon tradition, R uses decimal points instead of decimal commas. Entering <code>1,62 * 34,56</code> will throw an error.</p>
 <p>R also has many basic mathematical functions built into it. For example, <code>sqrt()</code> is the square root function; <code>cos()</code> is the cosine function, <code>log()</code> is the (natural) logarithm, <code>exp()</code> is the exponential function, and so on. The following tables summarize the symbols for various arithmetic operations and basic mathematical functions built into R:</p>
 <table class="table">
 <thead>
@@ -334,39 +346,39 @@ div.csl-indent {
 <th style="text-align: center;">Symbol</th>
 <th style="text-align: center;">Meaning</th>
 <th style="text-align: center;">Example</th>
-<th style="text-align: center;">Form in R</th>
+<th style="text-align: left;">Form in R</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: center;"><code>+</code></td>
 <td style="text-align: center;">addition</td>
-<td style="text-align: center;">2 + 3</td>
-<td style="text-align: center;"><code>2 + 3</code></td>
+<td style="text-align: center;"><span class="math inline">\(1 + 3\)</span></td>
+<td style="text-align: left;"><code>1 + 3</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><code>-</code></td>
 <td style="text-align: center;">subtraction</td>
-<td style="text-align: center;">5 - 1</td>
-<td style="text-align: center;"><code>5 - 1</code></td>
+<td style="text-align: center;"><span class="math inline">\(5 - 1\)</span></td>
+<td style="text-align: left;"><code>5 - 1</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><code>*</code></td>
 <td style="text-align: center;">multiplication</td>
-<td style="text-align: center;">2 · 6</td>
-<td style="text-align: center;"><code>2 * 6</code></td>
+<td style="text-align: center;"><span class="math inline">\(2 \cdot 2\)</span></td>
+<td style="text-align: left;"><code>2 * 2</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><code>/</code></td>
 <td style="text-align: center;">division</td>
-<td style="text-align: center;">9 / 5</td>
-<td style="text-align: center;"><code>9 / 5</code></td>
+<td style="text-align: center;"><span class="math inline">\(8 / 2\)</span></td>
+<td style="text-align: left;"><code>8 / 2</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><code>^</code></td>
 <td style="text-align: center;">raise to power</td>
-<td style="text-align: center;">3<sup>2</sup></td>
-<td style="text-align: center;"><code>3 ^ 2</code></td>
+<td style="text-align: center;"><span class="math inline">\(2^2\)</span></td>
+<td style="text-align: left;"><code>2 ^ 2</code></td>
 </tr>
 </tbody>
 </table>
@@ -376,64 +388,70 @@ div.csl-indent {
 <th style="text-align: center;">Function</th>
 <th style="text-align: center;">Meaning</th>
 <th style="text-align: center;">Example</th>
-<th style="text-align: center;">Form in R</th>
+<th style="text-align: left;">Form in R</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: center;"><code>log()</code></td>
 <td style="text-align: center;">natural log</td>
-<td style="text-align: center;">log(4)</td>
-<td style="text-align: center;"><code>log(4)</code></td>
+<td style="text-align: center;"><span class="math inline">\(\log(4)\)</span></td>
+<td style="text-align: left;"><code>log(4)</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><code>exp()</code></td>
 <td style="text-align: center;">exponential</td>
-<td style="text-align: center;">e<sup>4</sup></td>
-<td style="text-align: center;"><code>exp(4)</code></td>
+<td style="text-align: center;"><span class="math inline">\(\text{e}^4\)</span></td>
+<td style="text-align: left;"><code>exp(4)</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><code>sqrt()</code></td>
 <td style="text-align: center;">square root</td>
-<td style="text-align: center;">√4</td>
-<td style="text-align: center;"><code>sqrt(4)</code></td>
+<td style="text-align: center;"><span class="math inline">\(\sqrt{4}\)</span></td>
+<td style="text-align: left;"><code>sqrt(4)</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><code>log2()</code></td>
 <td style="text-align: center;">base-2 log</td>
-<td style="text-align: center;">log<sub>2</sub>(4)</td>
-<td style="text-align: center;"><code>log2(4)</code></td>
+<td style="text-align: center;"><span class="math inline">\(\log_2(4)\)</span></td>
+<td style="text-align: left;"><code>log2(4)</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><code>log10()</code></td>
 <td style="text-align: center;">base-10 log</td>
-<td style="text-align: center;">log<sub>10</sub>(4)</td>
-<td style="text-align: center;"><code>log10(4)</code></td>
+<td style="text-align: center;"><span class="math inline">\(\log_{10}(4)\)</span></td>
+<td style="text-align: left;"><code>log10(4)</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: center;"><code>sin()</code></td>
 <td style="text-align: center;">sine (radians!)</td>
-<td style="text-align: center;">sin(4)</td>
-<td style="text-align: center;"><code>sin(4)</code></td>
+<td style="text-align: center;"><span class="math inline">\(\sin(4)\)</span></td>
+<td style="text-align: left;"><code>sin(4)</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: center;"><code>abs()</code></td>
 <td style="text-align: center;">absolute value</td>
-<td style="text-align: center;">|-4|</td>
-<td style="text-align: center;"><code>abs(-4)</code></td>
+<td style="text-align: center;"><span class="math inline">\(|-4|\)</span></td>
+<td style="text-align: left;"><code>abs(-4)</code></td>
 </tr>
 </tbody>
 </table>
-<p>Expressions built from these basic blocks can be freely combined. Try to calculate 3<sup>log(4)</sup> - sin(e<sup>2</sup>) for instance. To do so, we simply type</p>
+<p>Expressions built from these basic blocks can be freely combined. Try to calculate <span class="math inline">\(3^{\log(4)} - \sin(\text{e}^2)\)</span> for instance. To do so, we simply type the following and press Enter to get the result:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span><span class="sc">^</span><span class="fu">log</span>(<span class="dv">4</span>) <span class="sc">-</span> <span class="fu">sin</span>(<span class="fu">exp</span>(<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span><span class="sc">^</span><span class="fu">log</span>(<span class="dv">4</span>) <span class="sc">-</span> <span class="fu">sin</span>(<span class="fu">exp</span>(<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.692108</code></pre>
 </div>
-<p>and press Enter to get the result, 3.692108. Now obtain e<sup>1.3</sup>(4 - sin(π/3)). Notice the parentheses enclosing 4 - sin(π/3). This means, as usual, that this expression is evaluated first, before any of the other computations. It can be implemented in R the same way, by using parentheses:</p>
+</div>
+<p>Now obtain <span class="math inline">\(\text{e}^{1.3} (4 - \sin(\pi / 3))\)</span>. Notice the parentheses enclosing <span class="math inline">\(4 - \sin(\pi /3)\)</span>. This means, as usual, that this expression is evaluated first, before any of the other computations. It can be implemented in R the same way, by using parentheses:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fl">1.3</span>) <span class="sc">*</span> (<span class="dv">4</span> <span class="sc">-</span> <span class="fu">sin</span>(<span class="fl">3.14159</span> <span class="sc">/</span> <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fl">1.3</span>) <span class="sc">*</span> (<span class="dv">4</span> <span class="sc">-</span> <span class="fu">sin</span>(<span class="fl">3.14159</span> <span class="sc">/</span> <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 11.49948</code></pre>
+</div>
 </div>
 <p>Note also that you <em>do</em> need to indicate the symbol for multiplication between closing and opening parentheses: omitting this results in an error. Try it: entering <code>exp(1.3)(4 - sin(3.14159/3))</code> instead of <code>exp(1.3)*(4 - sin(3.14159/3))</code> throws an error message. Also, be mindful that <code>exp(1.3)*(4 - sin(3.14159/3))</code> is not the same as <code>exp(1.3)*4 - sin(3.14159/3)</code>. This is because multiplication takes precedence over addition and subtraction, meaning that multiplications and divisions are performed first, and additions/subtractions get executed only afterwards—unless, of course, we override this behaviour with parentheses. In general, whenever you are uncertain about the order of execution of operations, it can be useful to explicitly use parentheses, even if it turns out they aren’t really necessary. For instance, you might be uncertain whether <code>3 * 6 + 2</code> first multiplies 3 by 6 and then adds 2 to the result, or if it first adds 2 to 6 and then multiplies that by 3. In that case, if you want to be absolutely sure that you perform the multiplication first, just write <code>(3 * 6) + 2</code>, explicitly indicating with the parentheses that the multiplication should be performed first—even though doing so would not be strictly necessary in this case.</p>
-<p>Incidentally, you do not need to type out <code>3.14159</code> to approximate π in the mathematical expressions above. R has a built-in constant, <code>pi</code>, that you can use instead. Therefore, <code>exp(1.3)*(4 - sin(pi/3))</code> produces the same result as our earlier <code>exp(1.3)*(4 - sin(3.14159/3))</code>.</p>
+<p>Incidentally, you do not need to type out <code>3.14159</code> to approximate <span class="math inline">\(\pi\)</span> in the mathematical expressions above. R has a built-in constant, <code>pi</code>, that you can use instead. Therefore, <code>exp(1.3)*(4 - sin(pi/3))</code> produces the same result as our earlier <code>exp(1.3)*(4 - sin(3.14159/3))</code>.</p>
 <p>Another thing to note is that the number of spaces between various operations is irrelevant. <code>4*(9-6)</code> is the same as <code>4*(9 - 6)</code>, or <code>4 * (9 - 6)</code>, or, for that matter, <code>4   * (9-    6)</code>. To the machine, they are all the same—it is only us, the human users, who might get confused by that last form…</p>
 <p>It is possible to get help on any function from the system itself. Type either <code>help(asin)</code> or the shorter <code>?asin</code> in the console to get information on the function <code>asin</code>, for instance. Whenever you are not sure how to use a certain function, just ask the computer.</p>
 </section>
@@ -443,18 +461,18 @@ div.csl-indent {
 <h3 data-number="2.2.1" class="anchored" data-anchor-id="numerical-variables-and-variable-names"><span class="header-section-number">2.2.1</span> Numerical variables and variable names</h3>
 <p>You can assign a value to a named variable, and then whenever you call on that variable, the assigned value will be substituted. For instance, to obtain the square root of 9, you can simply type <code>sqrt(9)</code>; or you can assign the value 9 to a variable first:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">9</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">9</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This will calculate the square root of <code>x</code>, and since <code>x</code> was defined as 9, we get <code>sqrt(9)</code>, or 3.</p>
 <p>The name for a variable can be almost anything, but a few restrictions apply. First, the name must consist only of letters, numbers, the period (<code>.</code>), and the underscore (<code>_</code>) character. Second, the variable’s name cannot start with a number or an underscore. So <code>one_result</code> or <code>one.result</code> are fine variable names, but <code>1_result</code> or <code>_one_result</code> are not. Similarly, the name <code>crowns to $</code> is not valid because of the spaces and the dollar (<code>$</code>) symbol, neither of which are numbers, letters, period, or the underscore.</p>
 <p>Additionally, there are a few <em>reserved words</em> which have a special meaning in R, and therefore cannot be used as variable names. Examples are: <code>if</code>, <code>NA</code>, <code>TRUE</code>, <code>FALSE</code>, <code>NULL</code>, and <code>function</code>. You can see the complete list by typing <code>?Reserved</code>.</p>
 <p>However, one can override all these rules and give absolutely any name to a variable by enclosing it in backward tick marks (<code>` `</code>). So while <code>crowns to $</code> and <code>function</code> are not valid variable names, <code>`crowns to $`</code> and <code>`function`</code> are! For instance, you could type</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">crowns to $</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fl">0.09</span> <span class="co"># Approximate SEK-to-USD exchange rate</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>my_money <span class="ot">&lt;-</span> <span class="dv">123</span> <span class="co"># Assumed to be given in Swedish crowns</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>my_money_in_USD <span class="ot">&lt;-</span> my_money <span class="sc">*</span> <span class="st">`</span><span class="at">crowns to $</span><span class="st">`</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(my_money_in_USD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">crowns to $</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fl">0.09</span> <span class="co"># Approximate SEK-to-USD exchange rate</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>my_money <span class="ot">&lt;-</span> <span class="dv">123</span> <span class="co"># Assumed to be given in Swedish crowns</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>my_money_in_USD <span class="ot">&lt;-</span> my_money <span class="sc">*</span> <span class="st">`</span><span class="at">crowns to $</span><span class="st">`</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(my_money_in_USD)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 11.07</code></pre>
 </div>
@@ -479,23 +497,23 @@ Warning
 <h3 data-number="2.2.2" class="anchored" data-anchor-id="strings"><span class="header-section-number">2.2.2</span> Strings</h3>
 <p>So far we have worked with numerical data. R can also work with textual information. In computer science, these are called <em>character strings</em>, or just <em>strings</em> for short. To assign a string to a variable, one has to enclose the text in quotes. For instance,</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="st">"Hello World!"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="st">"Hello World!"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>assigns the literal text <code>Hello World!</code> to the variable <code>s</code>. You can print it to screen either by just typing <code>s</code> at the console and pressing Enter, or typing <code>print(s)</code> and pressing Enter.</p>
 <p>One useful function that works on strings is <code>paste()</code>, which makes a single string out of several ones (in computer lingo, this is known as <em>string concatenation</em>). For example, try</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>s1 <span class="ot">&lt;-</span> <span class="st">"Hello"</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>s2 <span class="ot">&lt;-</span> <span class="st">"World!"</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>message <span class="ot">&lt;-</span> <span class="fu">paste</span>(s1, s2)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(message)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>s1 <span class="ot">&lt;-</span> <span class="st">"Hello"</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>s2 <span class="ot">&lt;-</span> <span class="st">"World!"</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>message <span class="ot">&lt;-</span> <span class="fu">paste</span>(s1, s2)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(message)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Hello World!"</code></pre>
 </div>
 </div>
 <p>The component strings are separated by a space, but this can be changed with the optional <code>sep</code> argument to the <code>paste()</code> function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>message <span class="ot">&lt;-</span> <span class="fu">paste</span>(s1, s2, <span class="at">sep =</span> <span class="st">""</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(message)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>message <span class="ot">&lt;-</span> <span class="fu">paste</span>(s1, s2, <span class="at">sep =</span> <span class="st">""</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(message)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "HelloWorld!"</code></pre>
 </div>
@@ -503,8 +521,8 @@ Warning
 <p>This results in <code>message</code> becoming <code>HelloWorld!</code>, without the space in between. Between the quotes, you can put any character (including nothing, like above), which will be used as a separator when merging the strings <code>s1</code> and <code>s2</code>. So specifying <code>sep = "-"</code> would have set <code>message</code> equal to <code>Hello-World!</code> (try it out and see how it works).</p>
 <p>It is important to remember that quotes distinguish information to be treated as text from information to be treated as numbers. Consider the following two variable assignments:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fl">6.7</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="st">"6.7"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fl">6.7</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="st">"6.7"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Although they look superficially similar, <code>a</code> is the number 6.7 while <code>b</code> is the string “6.7”, and the two are not equal! For instance, executing <code>2 * a</code> results in 13.4, but <code>2 * b</code> throws an error, because it does not make sense to multiply a bunch of text by 2.</p>
 </section>
@@ -512,14 +530,14 @@ Warning
 <h3 data-number="2.2.3" class="anchored" data-anchor-id="logical-values"><span class="header-section-number">2.2.3</span> Logical values</h3>
 <p>Let us type the following into the console, and press Enter:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">&gt;</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">&gt;</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
 </div>
 <p>We are asking the computer whether 2 is larger than 1. And it returns the answer: <code>TRUE</code>. By contrast, if we ask whether two is less than one, we get <code>FALSE</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">&lt;</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] FALSE</code></pre>
 </div>
@@ -600,8 +618,8 @@ Warning
 <p>The <code>==</code> and <code>!=</code> operators can also be used with strings: <code>"Hello World" == "Hello World!"</code> returns <code>FALSE</code>, because the two strings are not exactly identical, differing in the final exclamation mark. Similarly, <code>"Hello World" != "Hello World!"</code> returns <code>TRUE</code>, because it is indeed true that the two strings are unequal.</p>
 <p><em>Logical values</em> can either be <code>TRUE</code> or <code>FALSE</code>, with no other options.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> This is in contrast with numbers and character strings, which can take on a myriad different values. Note that <code>TRUE</code> and <code>FALSE</code> must be capitalized: <code>true</code>, <code>False</code>, or anything other than the fully capitalized forms will result in an error. Just like in the case of strings and numbers, logical values can be assigned to variables:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>lgl <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">&gt;</span> <span class="dv">4</span> <span class="co"># Since 3 &gt; 4 is FALSE, lgl will be assigned FALSE</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="sc">!</span>lgl) <span class="co"># lgl is FALSE, so !lgl ("not lgl") will be TRUE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>lgl <span class="ot">&lt;-</span> <span class="dv">3</span> <span class="sc">&gt;</span> <span class="dv">4</span> <span class="co"># Since 3 &gt; 4 is FALSE, lgl will be assigned FALSE</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="sc">!</span>lgl) <span class="co"># lgl is FALSE, so !lgl ("not lgl") will be TRUE</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
@@ -611,9 +629,9 @@ Warning
 
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>toss <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>coin <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(toss <span class="sc">&lt;</span> <span class="fl">0.5</span>, <span class="st">"heads"</span>, <span class="st">"tails"</span>)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(coin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>toss <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>coin <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(toss <span class="sc">&lt;</span> <span class="fl">0.5</span>, <span class="st">"heads"</span>, <span class="st">"tails"</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(coin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "heads"</code></pre>
 </div>
@@ -625,25 +643,25 @@ Warning
 <h2 data-number="2.3" class="anchored" data-anchor-id="vectors"><span class="header-section-number">2.3</span> Vectors</h2>
 <p>A <em>vector</em> is simply a sequence of variables of the same type. That is, the sequence may consist of numbers <em>or</em> strings <em>or</em> logical values, but one cannot intermix them. The <code>c()</code> function will create a vector in the following way:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This is a vector of numbers. If, after entering this line, you type <code>x</code> or <code>print(x)</code> and press Enter, all the values in the vector will appear on screen:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 2 5 1 6 4 4 3 3 2 5</code></pre>
 </div>
 </div>
 <p>What can you do if you want to display only the third entry? The way to do this is by applying brackets:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>x[<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>x[<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 1</code></pre>
 </div>
 </div>
 <p>Never forget that vectors and its elements are simply variables! To show this, calculate the value of <code>x[1] * (x[2] + x[3])</code>, but before pressing Enter, guess what the result will be. Then check if you were correct. You can also try typing <code>x * 2</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">*</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>x <span class="sc">*</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1]  4 10  2 12  8  8  6  6  4 10</code></pre>
 </div>
@@ -652,7 +670,7 @@ Warning
 <p>Certain functions are specific to vectors. Try <code>mean(x)</code> and <code>var(x)</code> for instance (if you are not sure what these do, just ask by typing <code>?mean</code> or <code>?var</code>). Some others to try: <code>max</code>, <code>min</code>, <code>length</code>, and <code>sum</code>.</p>
 <p>One can quickly generate vectors of sequences of values, using one of two ways. First, the notation <code>1:10</code> generates a vector of integers ranging from 1 to 10, in steps of 1. (Similarly, <code>2:7</code> generates the same vector as <code>c(2, 3, 4, 5, 6, 7)</code>, and so on). Second, the function <code>seq()</code> generates sequences, starting with the first argument, ending with the last, in steps defined with the <code>by</code> argument. So calling</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="at">by =</span> <span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="at">by =</span> <span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  [1]  0.0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1.0  1.1  1.2  1.3  1.4
  [16]  1.5  1.6  1.7  1.8  1.9  2.0  2.1  2.2  2.3  2.4  2.5  2.6  2.7  2.8  2.9
@@ -666,11 +684,11 @@ Warning
 <p>creates a vector of numbers ranging from 0 to 10, in steps of 0.1.</p>
 <p>Just as one can create a vector of numerical values, it is also possible to create a vector of character strings of logical values. For example:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>stringVec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"I am the first string"</span>, <span class="st">"I am the second"</span>, <span class="st">"And I am the 3rd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>stringVec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"I am the first string"</span>, <span class="st">"I am the second"</span>, <span class="st">"And I am the 3rd"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now <code>stringVec[1]</code> is simply equal to the string <code>"I am the first string"</code>, <code>stringVec[2]</code> is equal to <code>"I am the second"</code>, and so on. Similarly, defining</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>logicVec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>logicVec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>, <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>gives a vector whose second entry, <code>logicVec[2]</code>, is equal to <code>FALSE</code>, and its other three entries are <code>TRUE</code>.</p>
 </section>
@@ -678,52 +696,64 @@ Warning
 <h2 data-number="2.4" class="anchored" data-anchor-id="functions"><span class="header-section-number">2.4</span> Functions</h2>
 <p>A <em>function</em> in R can be thought of as a black box which receives <em>inputs</em> and, depending on those inputs, produces some <em>output</em>. Vending machines provide a good working model of what a “function” is in computer science: depending on the inputs they receive (in the form of coins of various denomination, plus the buttons you press for a particular item) they give you some output (Mars bars, Coke, and the like). It’s just that computer scientists like to refer to the inputs as “function arguments” or simply “arguments” instead of coins, and to the output as the “return value” instead of Red Bull. Arguments are often also referred to as “parameters” to the function.</p>
 <p>We have already seen some functions at work in R: <code>sqrt</code> and <code>log</code> are functions, but so are <code>setwd</code> (which, as you may recall, will set your working directory) and <code>library</code> (which loads R packages). The general workings of a function are illustrated below:</p>
-<pre><code>                 --------------
-argument 1 ----&gt; |            |
-argument 2 ----&gt; |            |
-argument 3 ----&gt; |  FUNCTION  | ----&gt; return value
-...              |            |
-argument n ----&gt; |            |
-                 --------------</code></pre>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<p>
+</p><pre class="mermaid mermaid-js" data-tooltip-selector="#mermaid-tooltip-1">flowchart LR
+  A([argument 1]) --&gt; F{FUNCTION}
+  B([argument 2]) --&gt; F
+  C([argument 3]) --&gt; F
+  D([...]) --&gt; F
+  E([argument n]) --&gt; F
+  F --&gt; G([return value])
+</pre>
+<div id="mermaid-tooltip-1" class="mermaidTooltip">
+
+</div>
+<p></p>
+</div>
+</div>
+</div>
 <p>When we ask a function to do something, we are <em>calling</em> the function. The arguments of functions are always enclosed in parentheses. For example, executing <code>sqrt(9)</code>, calls the built-in square root function. Its argument (or input, or parameter) is 9, and its return value is the square root of 9, which is 3.</p>
 <section id="user-defined-functions" class="level3" data-number="2.4.1">
 <h3 data-number="2.4.1" class="anchored" data-anchor-id="user-defined-functions"><span class="header-section-number">2.4.1</span> User-defined functions</h3>
 <p>Thus far, we have been using many built-in functions in R, such as <code>exp</code>, <code>log</code>, <code>sqrt</code>, <code>seq</code>, <code>setwd</code>, and others. However, it is also possible to define our own functions, which can then be used just like any built-in function. The way to do this is to use the <code>function</code> keyword, followed by the function’s arguments in parentheses, and then the R code comprising the function’s body enclosed in curly braces <code>{}</code>. For example, here is a function which calculates the area of a circle with radius <code>r</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>circleArea <span class="ot">&lt;-</span> <span class="cf">function</span>(r) {</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  area <span class="ot">&lt;-</span> r<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> pi</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(area)</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>circleArea <span class="ot">&lt;-</span> <span class="cf">function</span>(r) {</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  area <span class="ot">&lt;-</span> r<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> pi</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(area)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The function implements the formula that the area of a circle is equal to π times its radius squared. The <code>return</code> keyword determines what result the function will output when it finishes executing. In this case, the function returns the value of <code>area</code> that is created within the function. After running the above lines, the computer now knows and remembers the function. Calling <code>circleArea(3)</code> will, for example, calculate the area of a circle with radius 3, which is approximately 28.27433.</p>
+<p>The function implements the formula that the area of a circle is equal to <span class="math inline">\(\pi\)</span> times its radius squared. The <code>return</code> keyword determines what result the function will output when it finishes executing. In this case, the function returns the value of <code>area</code> that is created within the function. After running the above lines, the computer now knows and remembers the function. Calling <code>circleArea(3)</code> will, for example, calculate the area of a circle with radius 3, which is approximately 28.27433.</p>
 <p>One can define functions with more than one argument. For instance, here is a function that calculates the volume of a cylinder with radius <code>r</code> and height <code>h</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>cylinderVol <span class="ot">&lt;-</span> <span class="cf">function</span>(r, h) {</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  baseArea <span class="ot">&lt;-</span> <span class="fu">circleArea</span>(r)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  volume <span class="ot">&lt;-</span> baseArea <span class="sc">*</span> h</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(volume)</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>cylinderVol <span class="ot">&lt;-</span> <span class="cf">function</span>(r, h) {</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  baseArea <span class="ot">&lt;-</span> <span class="fu">circleArea</span>(r)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  volume <span class="ot">&lt;-</span> baseArea <span class="sc">*</span> h</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(volume)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here we used the fact that the volume of a cylinder is the area of its base circle, times its height. Notice also that we made use of our earlier <code>circleArea</code> function within the body of <code>cylinderVol</code>. While this was not a necessity and we could have simply written <code>volume &lt;- r^2 * pi * h</code> above, this is generally speaking good practice: by constructing functions to solve smaller problems, one can write slightly more complicated functions which make use of those simpler ones. Then, one will be able to write even more complex functions using the slightly more complex ones in turn—and so on. We will discuss this principle in more detail below, in <a href="#sec-funccomp"><span>Section&nbsp;2.4.3</span></a>.</p>
 <p>One very important property of functions is that any variables defined within them (such as <code>volume</code> above) are <em>local</em> to that function. This means that they are not visible from outside: even after calling the function, the variable <code>volume</code> will not be accessible to the rest of the program, despite the fact that it was declared in the function. This helps us create programs with modular structure, where functions operate as black boxes: we can use them without looking inside.</p>
 <p>When calling a function, it is optional but possible to name the arguments explicitly. This means that calling <code>circleArea(3)</code> is the same as calling <code>circleArea(r = 3)</code>, and calling <code>cylinderVol(2, 3)</code> is the same as calling <code>cylinderVol(r = 2, h = 3)</code>. Even more is true: since naming the arguments removes any ambiguity about which argument is which, one may even call <code>cylinderVol(h = 3, r = 2)</code>, with the arguments in reverse order, and this will still be equivalent to <code>cylinderVol(2, 3)</code>. As mentioned, naming arguments this way is optional, but it can be useful to do so, because it can increase the clarity of our programs. To give an example from a built-in function in R, take <code>rep(5, 3)</code>. Does this function create a vector with 5 entries, each equal to 3, or does it make a vector with 3 entries, each equal to 5? While reading the documentation (or simply executing these two function calls and comparing the outputs) reveals that it is the latter, one can clarify this easily, because the second argument of <code>rep()</code> is called <code>times</code>, as seen from reading the help after typing <code>?rep</code>. We can then write <code>rep(5, times = 3)</code>, which is now easy to interpret: it is a vector with the number 5 repeated 3 times.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(<span class="dv">5</span>, <span class="at">times =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(<span class="dv">5</span>, <span class="at">times =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 5 5 5</code></pre>
 </div>
 </div>
 <p>One may even define default values for one or more of the arguments to any function. If defaults are given, the user does not have to specify the value for that argument. It will then automatically be set to the default value instead. For example, one could rewrite the <code>cylinderVol()</code> function to specify default values for <code>r</code> and <code>h</code>. Making these defaults be 1 means we can write:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>cylinderVol <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">r =</span> <span class="dv">1</span>, <span class="at">h =</span> <span class="dv">1</span>) {</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  baseArea <span class="ot">&lt;-</span> <span class="fu">circleArea</span>(r)</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  volume <span class="ot">&lt;-</span> baseArea <span class="sc">*</span> h</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(volume)</span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>cylinderVol <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">r =</span> <span class="dv">1</span>, <span class="at">h =</span> <span class="dv">1</span>) {</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  baseArea <span class="ot">&lt;-</span> <span class="fu">circleArea</span>(r)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  volume <span class="ot">&lt;-</span> baseArea <span class="sc">*</span> h</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(volume)</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>If we now call <code>cylinderVol()</code> without specifying arguments, the defaults will be substituted for <code>r</code> and <code>h</code>. Since both are equal to 1, the cylinder volume will simply be π (about 3.14159), which is the result we will get back. Alternatively, if we call <code>cylinderVol(r = 2)</code>, then the function returns 4π (approximately 12.56637), because the default value of 1 is substituted in place of the unspecified height argument <code>h</code>. Importantly, if we <em>don’t</em> define default values and yet omit to specify one or more of those parameters, we get back an error message. For example, our earlier <code>circleArea</code> function had no default value for its argument <code>r</code>, so leaving it unspecified throws an error:</p>
+<p>If we now call <code>cylinderVol()</code> without specifying arguments, the defaults will be substituted for <code>r</code> and <code>h</code>. Since both are equal to 1, the cylinder volume will simply be <span class="math inline">\(\pi\)</span> (about 3.14159), which is the result we will get back. Alternatively, if we call <code>cylinderVol(r = 2)</code>, then the function returns <span class="math inline">\(4\pi\)</span> (approximately 12.56637), because the default value of 1 is substituted in place of the unspecified height argument <code>h</code>. Importantly, if we <em>don’t</em> define default values and yet omit to specify one or more of those parameters, we get back an error message. For example, our earlier <code>circleArea</code> function had no default value for its argument <code>r</code>, so leaving it unspecified throws an error:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">circleArea</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">circleArea</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>Error in circleArea(): argument "r" is missing, with no default</code></pre>
 </div>
@@ -752,9 +782,9 @@ Note
 <h3 data-number="2.4.3" class="anchored" data-anchor-id="sec-funccomp"><span class="header-section-number">2.4.3</span> Function composition</h3>
 <p>A function is like a vending machine: we give it some input(s), and it produces some output. The output itself may then be fed as input to another function—which in turn produces an output, which can be fed to yet another function, and so on. Chaining functions together in this manner is called the <em>composition</em> of functions. For example, we might need to take the square root of a number, then calculate the logarithm of the output, and finally, obtain the cosine of the result. This is as simple as writing <code>cos(log(sqrt(9)))</code>, if the number we start with is 9. More generally, one might even define a new function (let us call it <code>cls()</code>, after the starting letters of <code>cos</code>, <code>log</code>, and <code>sqrt</code>) like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>cls <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">cos</span>(<span class="fu">log</span>(<span class="fu">sqrt</span>(x))))</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>cls <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">cos</span>(<span class="fu">log</span>(<span class="fu">sqrt</span>(x))))</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>A remarkable property of composition is that the composed function (in this case, <code>cls</code>) is in many ways just like its constituents: it is also a black box which takes a single number as input and produces another number as its output. Putting it differently, if one did not know that the function <code>cls()</code> was defined manually as the composition of three more “elementary” functions, and instead claimed it was just another elementary built-in function in R, there would be no way to tell the difference just based on the behaviour of the function itself. The composition of functions thus has the important property of <em>self-similarity</em>: if we manage to solve a problem through the composition of functions, then that solution itself will behave like an “elementary” function, and so can be used to solve even more complex problems via composition—and so on.</p>
 <p>If we conceive of a program written in R as a large lego building, then one can think of functions as the lego blocks out of which the whole construction is made up. Lego pieces are designed to fit well together, one can always combine them in various ways. Furthermore, any combination of lego pieces itself behaves like a more elementary lego piece: it can be fitted together with other pieces in much the same way. The composition of functions is analogous to building larger lego blocks out of simpler ones. Remarkably, just as the size of a lego block does not hamper our ability to stick them together, the composability of functions is retained regardless of how many more elementary pieces each of them consist of. Thus, the composition of functions is an excellent way of keeping the complexity of larger programs in hand.</p>
@@ -763,7 +793,7 @@ Note
 <h3 data-number="2.4.4" class="anchored" data-anchor-id="sec-pipes"><span class="header-section-number">2.4.4</span> Function piping</h3>
 <p>One problem with composing many functions together is that the order of application must be read backwards. An expression such as <code>sqrt(sin(cos(log(1))))</code> means: “take the square root of the sine of the cosine of the natural logarithm of 1”. But it is more convenient for the human brain to think of it the other way round: we first take the log of 1, then the cosine of the result, then the sine of what we got, and finally the square root. The problem of interpreting composed functions gets more difficult when the functions have more than one argument. Even something as relatively simple as</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">mean</span>(<span class="fu">log</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">11</span>, <span class="at">by =</span> <span class="dv">2</span>)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">mean</span>(<span class="fu">log</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">11</span>, <span class="at">by =</span> <span class="dv">2</span>)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 4.671655</code></pre>
 </div>
@@ -772,19 +802,19 @@ Note
 <p>The expression <code>exp(mean(log(seq(-3, 11, by = 2)), na.rm = TRUE))</code> generates the numeric sequence -3, -1, 1, …, 11 (jumping in steps of 2), and computes their geometric mean. To do so, it takes the logarithms of each value, takes their mean, and finally, exponentiates the result back. The problem is that the logarithm of a negative number does not exist,<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and therefore, <code>log(-3)</code> and <code>log(-1)</code> both produce undefined results. Thus, when taking the <code>mean</code> of the logarithms, we must remove any such undefined values. This can be accomplished via an extra argument to <code>mean</code>, called <code>na.rm</code> (“NA-remove”). By default, this is set to <code>FALSE</code>, but by changing it to <code>TRUE</code>, undefined values are simply ignored when computing the mean. For example <code>mean(c(1, 2, 3, NA))</code> returns <code>NA</code>, because of the undefined entry in the vector; but <code>mean(c(1, 2, 3, NA), na.rm = TRUE)</code> returns 2, the result one gets after discarding the <code>NA</code> entry.</p>
 <p>But all this is quite difficult to see when looking at the expression</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">mean</span>(<span class="fu">log</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">11</span>, <span class="at">by =</span> <span class="dv">2</span>)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(<span class="fu">mean</span>(<span class="fu">log</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">11</span>, <span class="at">by =</span> <span class="dv">2</span>)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Part of the reason is the awkward backwards order of function applications which makes it hard to see which function the argument <code>na.rm = TRUE</code> belongs to. Fortunately, there is a simple operator in R called a <em>pipe</em> (written <code>%&gt;%</code>), which allows one to write the same code in a more streamlined way. The pipe was originally provided by the <code>magrittr</code> package,<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> but invoking <code>tidyverse</code> will also load it automatically:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The pipe allows one to write function application in reverse order (first the argument and then the function), making the code more transparent. Formally, <code>x %&gt;% f()</code> is equivalent to <code>f(x)</code> for any function <code>f</code>. For example, <code>sqrt(9)</code> can also be written <code>9 %&gt;% sqrt()</code>. Thus, <code>sqrt(sin(cos(log(1))))</code> can be written as <code>1 %&gt;% log() %&gt;% cos %&gt;% sin() %&gt;% sqrt()</code>, which reads straightforwardly as “start with the number 1; <em>then</em> take its log; <em>then</em> take the cosine of the result; <em>then</em> take the sine of that result; and <em>then</em>, finally, take the square root to obtain the final output”. In general, it helps to pronounce <code>%&gt;%</code> as “then”.</p>
 <p>The pipe also works for functions with multiple arguments. In that case, <code>x %&gt;% f(y, ...)</code> is equivalent to <code>f(x, y, ...)</code>. That is, the pipe refers to the function’s first argument (though, as we will see in <a href="Intro_statistics.html#sec-dot"><span>Section&nbsp;9.4</span></a>, it is possible to override this). Instead of the awkward and hard-to-read <code>mean(log(seq(-3, 11, by = 2)), na.rm = TRUE)</code>, we can therefore write:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">11</span>, <span class="at">by =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">log</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exp</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">11</span>, <span class="at">by =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">log</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(<span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">exp</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 4.671655</code></pre>
 </div>

@@ -83,6 +83,25 @@ code span.st { color: #4070a0; } /* String */
 code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
 </style>
 
 
@@ -255,6 +274,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#sec-factors" id="toc-sec-factors" class="nav-link" data-scroll-target="#sec-factors"><span class="toc-section-number">7.3</span>  Reordering labels using factors</a></li>
   <li><a href="#sec-faceting" id="toc-sec-faceting" class="nav-link" data-scroll-target="#sec-faceting"><span class="toc-section-number">7.4</span>  Facets</a></li>
   <li><a href="#saving-plots" id="toc-saving-plots" class="nav-link" data-scroll-target="#saving-plots"><span class="toc-section-number">7.5</span>  Saving plots</a></li>
+  <li><a href="#sec-moreggplot-exercises" id="toc-sec-moreggplot-exercises" class="nav-link" data-scroll-target="#sec-moreggplot-exercises"><span class="toc-section-number">7.6</span>  Exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -621,8 +641,22 @@ Note
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">"graph.pdf"</span>, <span class="at">plot =</span> p, <span class="at">width =</span> <span class="dv">4</span>, <span class="at">height =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="sec-moreggplot-exercises" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="sec-moreggplot-exercises"><span class="header-section-number">7.6</span> Exercises</h2>
+<p>Let us revisit the data of <span class="citation" data-cites="Fauchaldetal2017">Fauchald et al. (<a href="References.html#ref-Fauchaldetal2017" role="doc-biblioref">2017</a>)</span> which we used in <a href="Creating_figures.html#sec-ggplot-exercises"><span>Section&nbsp;6.4</span></a>, tracking the population size of various herds of caribou in North America over time and correlating population cycling with the amount of vegetation and sea-ice cover. Using the file <a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/sea_ice.tsv"><code>sea_ice.tsv</code></a> (sea ice cover per year and month for each caribou herd), do the following:</p>
+<ol type="1">
+<li><p>One exercise from <a href="Creating_figures.html#sec-ggplot-exercises"><span>Section&nbsp;6.4</span></a> was to plot <code>Year</code> along the x-axis and <code>Month</code> along the y-axis, with color tile shading indicating the level of ice cover for the herd labeled <code>WAH</code> in each month-year pair (using <code>geom_tile</code>). The resulting graph had an obvious weakness: the months along the y-axis were not in proper chronological order. Fix this problem, by converting the <code>Month</code> column from character strings to factors whose levels go from January to December.</p></li>
+<li><p>Create a similar plot, but do not filter for one single herd. Instead, have each herd occupy a different facet (sub-plot). Do this with the different herds making up a single row of facets, and then a single column of them.</p></li>
+<li><p>Since there are 11 different herds altogether, neither the row-wise nor the column-wise arrangement of the facets above is very satisfying: there are too many of them next to one another. Try re-plotting the results, but instead of <code>facet_grid</code>, use <code>facet_wrap(~ Herd)</code> which allows one to lay out the facets in several rows. (As usual, look up the help pages of <code>facet_wrap</code> if needed.)</p></li>
+</ol>
 
 
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-Fauchaldetal2017" class="csl-entry" role="doc-biblioentry">
+Fauchald, Per, Taejin Park, Hans Tømmervik, Ranga Myneni, and Vera Helene Hausner. 2017. <span>“<span class="nocase">Arctic greening from warming promotes declines in caribou populations</span>.”</span> <em>Science Advances</em> 3 (4): e1601365. <a href="https://doi.org/10.1126/sciadv.1601365">https://doi.org/10.1126/sciadv.1601365</a>.
+</div>
+</div>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>

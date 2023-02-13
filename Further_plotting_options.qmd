@@ -319,3 +319,14 @@ and then
 #| eval: false
 ggsave(filename = "graph.pdf", plot = p, width = 4, height = 3)
 ```
+
+
+## Exercises {#sec-moreggplot-exercises}
+
+Let us revisit the data of @Fauchaldetal2017 which we used in @sec-ggplot-exercises, tracking the population size of various herds of caribou in North America over time and correlating population cycling with the amount of vegetation and sea-ice cover. Using the file [`sea_ice.tsv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/sea_ice.tsv) (sea ice cover per year and month for each caribou herd), do the following:
+
+1. One exercise from @sec-ggplot-exercises was to plot `Year` along the x-axis and `Month` along the y-axis, with color tile shading indicating the level of ice cover for the herd labeled `WAH` in each month-year pair (using `geom_tile`). The resulting graph had an obvious weakness: the months along the y-axis were not in proper chronological order. Fix this problem, by converting the `Month` column from character strings to factors whose levels go from January to December.
+
+2. Create a similar plot, but do not filter for one single herd. Instead, have each herd occupy a different facet (sub-plot). Do this with the different herds making up a single row of facets, and then a single column of them.
+
+3. Since there are 11 different herds altogether, neither the row-wise nor the column-wise arrangement of the facets above is very satisfying: there are too many of them next to one another. Try re-plotting the results, but instead of `facet_grid`, use `facet_wrap(~ Herd)` which allows one to lay out the facets in several rows. (As usual, look up the help pages of `facet_wrap` if needed.)

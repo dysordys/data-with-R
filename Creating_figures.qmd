@@ -215,4 +215,4 @@ It is now obvious that the two observations are distinct. Due to this problem, m
 
 7. Make box plots of the population size of each herd. Along the x-axis, each herd should be separately displayed; the y-axis should be population size. The box plots should summarize population sizes across all years.
 
-8. Let us go back to `sea_ice.tsv`. Make the following plot. Along the x-axis, have Year. Along the y-axis, Month. Then, for each month-year pair, color the given part of the plot darker for lower ice cover and lighter for more. (Hint: look up `geom_tile` if needed.) Finally, make sure to do all this only for the herd with the i.d. `WAH` (filter the data before plotting).
+8. Let us go back to `sea_ice.tsv`. Make the following plot. Along the x-axis, have `Year`. Along the y-axis, `Month`. Then, for each month-year pair, color the given part of the plot darker for lower ice cover and lighter for more. (Hint: look up `geom_tile` if needed.) Finally, make sure to do all this only for the herd with the label `WAH` (filter the data before plotting).

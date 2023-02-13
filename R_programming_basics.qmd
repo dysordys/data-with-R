@@ -7,67 +7,62 @@ library(magrittr)
 
 ## Using R as a calculator
 
-As we have seen before, R can be used as a glorified pocket calculator. Elementary operations work as expected: `+` and `-` are symbols for addition and subtraction, while `*` and `/` are multiplication and division. Thus, we can enter things such as
+As we have seen in @sec-simpcalc, R can be used as a glorified pocket calculator. Elementary operations work as expected: `+` and `-` are symbols for addition and subtraction, while `*` and `/` are multiplication and division. Thus, we can enter things such as `3 * 4 - 6 / 2 + 1` n the console, and press Enter (Return, on a Mac) to get the result:
 
 ```{r}
-#| eval: false
 3 * 4 - 6 / 2 + 1
 ```
 
-in the console, and press Enter (Return, on a Mac) to get the result, 10. One even has exponentiation, denoted by the symbol `^`. To raise 2 to the 5th power), we enter
+One even has exponentiation, denoted by the symbol `^`. To raise 2 to the 5th power), we enter
 
 ```{r}
-#| eval: false
 2^5
 ```
 
-and obtain the expected 32. Furthermore, one is not restricted to integers. It is possible to calculate with fractional numbers:
+Furthermore, one is not restricted to integers. It is possible to calculate with fractional numbers:
 
 ```{r}
-#| eval: false
 1.62 * 34.56
 ```
 
-whose result is 55.9872. **Note:** in line with Anglo-Saxon tradition, R uses decimal points instead of decimal commas. Entering `1,62 * 34,56` will throw an error.
+**Note:** in line with Anglo-Saxon tradition, R uses decimal points instead of decimal commas. Entering `1,62 * 34,56` will throw an error.
 
 
 R also has many basic mathematical functions built into it. For example, `sqrt()` is the square root function; `cos()` is the cosine function, `log()` is the (natural) logarithm, `exp()` is the exponential function, and so on. The following tables summarize the symbols for various arithmetic operations and basic mathematical functions built into R:
 
-    Symbol        Meaning       Example      Form in R
-  ---------- ----------------- ------------ -----------
-    `+`        addition         2 + 3        `2 + 3`
-    `-`        subtraction      5 - 1        `5 - 1`
-    `*`        multiplication   2 &#183; 6   `2 * 6`
-    `/`        division         9 / 5        `9 / 5`
-    `^`        raise to power   3^2^         `3 ^ 2`
+    Symbol        Meaning       Example       Form in R
+  ---------- ----------------- -------------- -----------
+    `+`        addition         $1 + 3$       `1 + 3`
+    `-`        subtraction      $5 - 1$       `5 - 1`
+    `*`        multiplication   $2 \cdot 2$   `2 * 2`
+    `/`        division         $8 / 2$       `8 / 2`
+    `^`        raise to power   $2^2$         `2 ^ 2`
                                            
-   Function      Meaning          Example    Form in R
-  ---------- ----------------- ------------ -----------
-   `log()`     natural log      log(4)       `log(4)`
-   `exp()`     exponential      e^4^         `exp(4)`
-   `sqrt()`    square root      &#8730;4     `sqrt(4)`
-   `log2()`    base-2 log       log~2~(4)    `log2(4)`
-   `log10()`   base-10 log      log~10~(4)   `log10(4)`
-   `sin()`     sine (radians!)  sin(4)       `sin(4)`
-   `abs()`     absolute value   |-4|         `abs(-4)`
+   Function      Meaning          Example       Form in R
+  ---------- ----------------- ---------------  -----------
+   `log()`     natural log      $\log(4)$       `log(4)`
+   `exp()`     exponential      $\text{e}^4$    `exp(4)`
+   `sqrt()`    square root      $\sqrt{4}$      `sqrt(4)`
+   `log2()`    base-2 log       $\log_2(4)$     `log2(4)`
+   `log10()`   base-10 log      $\log_{10}(4)$  `log10(4)`
+   `sin()`     sine (radians!)  $\sin(4)$       `sin(4)`
+   `abs()`     absolute value   $|-4|$          `abs(-4)`
 
-Expressions built from these basic blocks can be freely combined. Try to calculate 3^log(4)^ - sin(e^2^) for instance. To do so, we simply type
+Expressions built from these basic blocks can be freely combined. Try to calculate $3^{\log(4)} - \sin(\text{e}^2)$ for instance. To do so, we simply type the following and press Enter to get the result:
 
 ```{r}
-#| eval: false
 3^log(4) - sin(exp(2))
 ```
 
-and press Enter to get the result, 3.692108. Now obtain e^1.3^(4 - sin(&#960;/3)). Notice the parentheses enclosing 4 - sin(&#960;/3). This means, as usual, that this expression is evaluated first, before any of the other computations. It can be implemented in R the same way, by using parentheses:
+Now obtain $\text{e}^{1.3} (4 - \sin(\pi / 3))$. Notice the parentheses enclosing $4 - \sin(\pi /3)$. This means, as usual, that this expression is evaluated first, before any of the other computations. It can be implemented in R the same way, by using parentheses:
 
 ```{r}
-#| eval: false
 exp(1.3) * (4 - sin(3.14159 / 3))
 ```
 
 Note also that you *do* need to indicate the symbol for multiplication between closing and opening parentheses: omitting this results in an error. Try it: entering `exp(1.3)(4 - sin(3.14159/3))` instead of `exp(1.3)*(4 - sin(3.14159/3))` throws an error message. Also, be mindful that `exp(1.3)*(4 - sin(3.14159/3))` is not the same as `exp(1.3)*4 - sin(3.14159/3)`. This is because multiplication takes precedence over addition and subtraction, meaning that multiplications and divisions are performed first, and additions/subtractions get executed only afterwards---unless, of course, we override this behaviour with parentheses. In general, whenever you are uncertain about the order of execution of operations, it can be useful to explicitly use parentheses, even if it turns out they aren't really necessary. For instance, you might be uncertain whether `3 * 6 + 2` first multiplies 3 by 6 and then adds 2 to the result, or if it first adds 2 to 6 and then multiplies that by 3. In that case, if you want to be absolutely sure that you perform the multiplication first, just write `(3 * 6) + 2`, explicitly indicating with the parentheses that the multiplication should be performed first---even though doing so would not be strictly necessary in this case.
 
-Incidentally, you do not need to type out `3.14159` to approximate &#960; in the mathematical expressions above. R has a built-in constant, `pi`, that you can use instead. Therefore, `exp(1.3)*(4 - sin(pi/3))` produces the same result as our earlier `exp(1.3)*(4 - sin(3.14159/3))`.
+Incidentally, you do not need to type out `3.14159` to approximate $\pi$ in the mathematical expressions above. R has a built-in constant, `pi`, that you can use instead. Therefore, `exp(1.3)*(4 - sin(pi/3))` produces the same result as our earlier `exp(1.3)*(4 - sin(3.14159/3))`.
 
 Another thing to note is that the number of spaces between various operations is irrelevant. `4*(9-6)` is the same as `4*(9 - 6)`, or `4 * (9 - 6)`, or, for that matter, `4   * (9-    6)`. To the machine, they are all the same---it is only us, the human users, who might get confused by that last form...
 
@@ -266,14 +261,14 @@ A *function* in R can be thought of as a black box which receives *inputs* and, 
 
 We have already seen some functions at work in R: `sqrt` and `log` are functions, but so are `setwd` (which, as you may recall, will set your working directory) and `library` (which loads R packages). The general workings of a function are illustrated below:
 
-```
-                 --------------
-argument 1 ----> |            |
-argument 2 ----> |            |
-argument 3 ----> |  FUNCTION  | ----> return value
-...              |            |
-argument n ----> |            |
-                 --------------
+```{mermaid}
+flowchart LR
+  A([argument 1]) --> F{FUNCTION}
+  B([argument 2]) --> F
+  C([argument 3]) --> F
+  D([...]) --> F
+  E([argument n]) --> F
+  F --> G([return value])
 ```
 
 When we ask a function to do something, we are *calling* the function. The arguments of functions are always enclosed in parentheses. For example, executing `sqrt(9)`, calls the built-in square root function. Its argument (or input, or parameter) is 9, and its return value is the square root of 9, which is 3.
@@ -290,7 +285,7 @@ circleArea <- function(r) {
 }
 ```
 
-The function implements the formula that the area of a circle is equal to &#960; times its radius squared. The `return` keyword determines what result the function will output when it finishes executing. In this case, the function returns the value of `area` that is created within the function. After running the above lines, the computer now knows and remembers the function. Calling `circleArea(3)` will, for example, calculate the area of a circle with radius 3, which is approximately 28.27433.
+The function implements the formula that the area of a circle is equal to $\pi$ times its radius squared. The `return` keyword determines what result the function will output when it finishes executing. In this case, the function returns the value of `area` that is created within the function. After running the above lines, the computer now knows and remembers the function. Calling `circleArea(3)` will, for example, calculate the area of a circle with radius 3, which is approximately 28.27433.
 
 One can define functions with more than one argument. For instance, here is a function that calculates the volume of a cylinder with radius `r` and height `h`:
 
@@ -322,7 +317,7 @@ cylinderVol <- function(r = 1, h = 1) {
 }
 ```
 
-If we now call `cylinderVol()` without specifying arguments, the defaults will be substituted for `r` and `h`. Since both are equal to 1, the cylinder volume will simply be &#960; (about 3.14159), which is the result we will get back. Alternatively, if we call `cylinderVol(r = 2)`, then the function returns 4&#960; (approximately 12.56637), because the default value of 1 is substituted in place of the unspecified height argument `h`. Importantly, if we *don't* define default values and yet omit to specify one or more of those parameters, we get back an error message. For example, our earlier `circleArea` function had no default value for its argument `r`, so leaving it unspecified throws an error:
+If we now call `cylinderVol()` without specifying arguments, the defaults will be substituted for `r` and `h`. Since both are equal to 1, the cylinder volume will simply be $\pi$ (about 3.14159), which is the result we will get back. Alternatively, if we call `cylinderVol(r = 2)`, then the function returns $4\pi$ (approximately 12.56637), because the default value of 1 is substituted in place of the unspecified height argument `h`. Importantly, if we *don't* define default values and yet omit to specify one or more of those parameters, we get back an error message. For example, our earlier `circleArea` function had no default value for its argument `r`, so leaving it unspecified throws an error:
 
 ```{r}
 #| error: true

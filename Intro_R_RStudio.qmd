@@ -40,7 +40,7 @@ RStudio should be available in the usual places: the Applications folder (on a M
 
 ![RStudio starting screen](rstudio_startup.png){#rstudio-screenshot fig-align="center"}
 
-### A Simple Calculation
+### A Simple Calculation {#sec-simpcalc}
 
 Even if you don't know R, you can start by typing some simple calculations into the console. The `>` symbol indicates that R is waiting for you to type something. Click on the console, type `2 + 2`, hit Enter (or Return on a Mac), and you should see R produce the right answer:
 

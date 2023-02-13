@@ -451,7 +451,7 @@ Kruskal-Wallis chi-squared = 7.9882, df = 2, p-value = 0.01842</code></pre>
 <pre><code>0.3333333 with absolute error &lt; 3.7e-15</code></pre>
 </div>
 </div>
-<p>The answer is indeed one-third.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> But there was no obligation to use the square function above. We could have used any other one. For instance, to compute the integral of the cosine function between 0 and 2π, we can type:</p>
+<p>The answer is indeed one-third.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> But there was no obligation to use the square function above. We could have used any other one. For instance, to compute the integral of the cosine function <span class="math inline">\(\cos(x)\)</span> between <span class="math inline">\(0\)</span> and <span class="math inline">\(2\pi\)</span>, we can type:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">integrate</span>(cos, <span class="dv">0</span>, <span class="dv">2</span><span class="sc">*</span>pi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -736,13 +736,13 @@ difference in location
 <section id="exercises" class="level2" data-number="14.5">
 <h2 data-number="14.5" class="anchored" data-anchor-id="exercises"><span class="header-section-number">14.5</span> Exercises</h2>
 <ol type="1">
-<li>Start from the following sequence of values: <code>values &lt;- seq(-5*pi, 5*pi, by = 0.01)</code> (a vector with values going from -5π to 5π, in steps of 0.01). Now do the following steps:
+<li>Start from the following sequence of values: <code>values &lt;- seq(-5*pi, 5*pi, by = 0.01)</code> (a vector with values going from <span class="math inline">\(-5\pi\)</span> to <span class="math inline">\(5\pi\)</span>, in steps of 0.01). Now do the following:
 <ul>
 <li>Define a new vector, <code>x</code>, which contains the cosine (<code>cos</code>) of each value in <code>values</code>. Use <code>map_dbl</code>.</li>
 <li>Now define another vector, <code>y</code>, and again using <code>map_dbl</code>, compute the function <code>sin(t) + cos(14 * t / 5) / 5</code> for every value <em>t</em> in <code>values</code>. You can either define this function separately to use inside <code>map_dbl</code>, or create it anonymously.</li>
 <li>Finally, create a tibble whose two columns are <code>x</code> and <code>y</code>, and plot them against each other using <code>geom_path</code>. See what you get!</li>
 </ul></li>
-<li>How does the integral of cos(x) change if the lower limit of integration is fixed at 0, but the upper limit gradually increases from 0 to 2π? Define a sequence of upper limits <code>upper &lt;- seq(0, 2*pi, by = 0.1)</code>. Then, using <code>map_dbl</code>, create a vector <code>integrals</code> whose entries are the integral of cos(x) from 0 to each upper limit. Finally, plot <code>integrals</code> against <code>upper</code>, using <code>geom_point</code> or <code>geom_line</code>. What is the function you see? (Note: the <code>integrate</code> function returns a complicated list object instead of just a single number. To access just the value of the integral, you can use <code>integrate(...)$value</code>, where <code>...</code> means all the arguments to the function you are supposed to write when solving the problem.)</li>
+<li>How does the integral of <span class="math inline">\(\cos(x)\)</span> change if the lower limit of integration is fixed at zero, but the upper limit gradually increases from <span class="math inline">\(0\)</span> to <span class="math inline">\(2\pi\)</span>? Define a sequence of upper limits <code>upper &lt;- seq(0, 2*pi, by = 0.1)</code>. Then, using <code>map_dbl</code>, create a vector <code>integrals</code> whose entries are the integral of <span class="math inline">\(\cos(x)\)</span> from zero to each upper limit. Finally, plot <code>integrals</code> against <code>upper</code>, using <code>geom_point</code> or <code>geom_line</code>. What is the function you see? (Note: the <code>integrate</code> function returns a complicated list object instead of just a single number. To access just the value of the integral, you can use <code>integrate(...)$value</code>, where <code>...</code> means all the arguments to the function you are supposed to write when solving the problem.)</li>
 </ol>
 
 

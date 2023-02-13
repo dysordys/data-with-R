@@ -102,7 +102,7 @@ sqr <- function(x) x^2
 integrate(sqr, 0, 1)
 ```
 
-The answer is indeed one-third.^[The error is included in the output because R's integration routine is purely numeric, so it algorithmically approximates the integral, and such procedures always have finite precision.] But there was no obligation to use the square function above. We could have used any other one. For instance, to compute the integral of the cosine function between 0 and 2&#960;, we can type:
+The answer is indeed one-third.^[The error is included in the output because R's integration routine is purely numeric, so it algorithmically approximates the integral, and such procedures always have finite precision.] But there was no obligation to use the square function above. We could have used any other one. For instance, to compute the integral of the cosine function $\cos(x)$ between $0$ and $2\pi$, we can type:
 
 ```{r}
 integrate(cos, 0, 2*pi)
@@ -198,8 +198,8 @@ c(0.8, 0.9, 0.95, 0.99) %>% map(wilcoxConf)
 
 ## Exercises
 
-1. Start from the following sequence of values: `values <- seq(-5*pi, 5*pi, by = 0.01)` (a vector with values going from -5&#960; to 5&#960;, in steps of 0.01). Now do the following steps:
+1. Start from the following sequence of values: `values <- seq(-5*pi, 5*pi, by = 0.01)` (a vector with values going from $-5\pi$ to $5\pi$, in steps of 0.01). Now do the following:
     * Define a new vector, `x`, which contains the cosine (`cos`) of each value in `values`. Use `map_dbl`.
     * Now define another vector, `y`, and again using `map_dbl`, compute the function `sin(t) + cos(14 * t / 5) / 5` for every value  *t* in `values`. You can either define this function separately to use inside `map_dbl`, or create it anonymously.
     * Finally, create a tibble whose two columns are `x` and `y`, and plot them against each other using `geom_path`. See what you get!
-2. How does the integral of cos(x) change if the lower limit of integration is fixed at 0, but the upper limit gradually increases from 0 to 2&#960;? Define a sequence of upper limits `upper <- seq(0, 2*pi, by = 0.1)`. Then, using `map_dbl`, create a vector `integrals` whose entries are the integral of cos(x) from 0 to each upper limit. Finally, plot `integrals` against `upper`, using `geom_point` or `geom_line`. What is the function you see? (Note: the `integrate` function returns a complicated list object instead of just a single number. To access just the value of the integral, you can use `integrate(...)$value`, where `...` means all the arguments to the function you are supposed to write when solving the problem.)
+2. How does the integral of $\cos(x)$ change if the lower limit of integration is fixed at zero, but the upper limit gradually increases from $0$ to $2\pi$? Define a sequence of upper limits `upper <- seq(0, 2*pi, by = 0.1)`. Then, using `map_dbl`, create a vector `integrals` whose entries are the integral of $\cos(x)$ from zero to each upper limit. Finally, plot `integrals` against `upper`, using `geom_point` or `geom_line`. What is the function you see? (Note: the `integrate` function returns a complicated list object instead of just a single number. To access just the value of the integral, you can use `integrate(...)$value`, where `...` means all the arguments to the function you are supposed to write when solving the problem.)
