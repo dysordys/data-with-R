@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Introduction to data analysis and visualization with R - 13&nbsp; More general linear models; nonlinear regression</title>
+<title>Introduction to data analysis and visualization with R - 14&nbsp; More general linear models; nonlinear regression</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -153,7 +153,7 @@ div.csl-indent {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">More general linear models; nonlinear regression</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">More general linear models; nonlinear regression</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -193,72 +193,77 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Data_reading.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Reading tabular data from disk</span></a>
+  <a href="./Functions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Functions</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Basic_data_wrangling.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Basic data manipulation</span></a>
+  <a href="./Data_reading.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Reading tabular data from disk</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and tidy data</span></a>
+  <a href="./Basic_data_wrangling.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Basic data manipulation</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Creating_figures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Creating publication-grade figures</span></a>
+  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Summary statistics and tidy data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Further_plotting_options.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Some further plotting options; introducing factors</span></a>
+  <a href="./Creating_figures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Creating publication-grade figures</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Joining_data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Joining data</span></a>
+  <a href="./Further_plotting_options.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Some further plotting options; introducing factors</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Intro_statistics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introducing statistical inference</span></a>
+  <a href="./Joining_data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Joining data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Anova.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></a>
+  <a href="./Intro_statistics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Introducing statistical inference</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Anova_two_way.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></a>
+  <a href="./Anova.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Linear_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Simple linear regression</span></a>
+  <a href="./Anova_two_way.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Nonlinear_regression.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">More general linear models; nonlinear regression</span></a>
+  <a href="./Linear_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Simple linear regression</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Intro_map.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Higher-order functions and mapping</span></a>
+  <a href="./Nonlinear_regression.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">More general linear models; nonlinear regression</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Multiple_analysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Nested data and multiple analysis</span></a>
+  <a href="./Intro_map.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Higher-order functions and mapping</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">References</span></a>
+  <a href="./Multiple_analysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Nested data and multiple analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">References</span></a>
   </div>
 </li>
     </ul>
@@ -270,13 +275,13 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sec-ancova" id="toc-sec-ancova" class="nav-link active" data-scroll-target="#sec-ancova"><span class="toc-section-number">13.1</span>  Combining categorical and continuous variables in linear models</a></li>
-  <li><a href="#sec-nonlin-regression" id="toc-sec-nonlin-regression" class="nav-link" data-scroll-target="#sec-nonlin-regression"><span class="toc-section-number">13.2</span>  Nonlinear regression</a>
+  <li><a href="#sec-ancova" id="toc-sec-ancova" class="nav-link active" data-scroll-target="#sec-ancova"><span class="toc-section-number">14.1</span>  Combining categorical and continuous variables in linear models</a></li>
+  <li><a href="#sec-nonlin-regression" id="toc-sec-nonlin-regression" class="nav-link" data-scroll-target="#sec-nonlin-regression"><span class="toc-section-number">14.2</span>  Nonlinear regression</a>
   <ul class="collapse">
-  <li><a href="#sec-lists" id="toc-sec-lists" class="nav-link" data-scroll-target="#sec-lists"><span class="toc-section-number">13.2.1</span>  Interlude: lists</a></li>
-  <li><a href="#back-to-nonlinear-regression" id="toc-back-to-nonlinear-regression" class="nav-link" data-scroll-target="#back-to-nonlinear-regression"><span class="toc-section-number">13.2.2</span>  Back to nonlinear regression</a></li>
+  <li><a href="#sec-lists" id="toc-sec-lists" class="nav-link" data-scroll-target="#sec-lists"><span class="toc-section-number">14.2.1</span>  Interlude: lists</a></li>
+  <li><a href="#back-to-nonlinear-regression" id="toc-back-to-nonlinear-regression" class="nav-link" data-scroll-target="#back-to-nonlinear-regression"><span class="toc-section-number">14.2.2</span>  Back to nonlinear regression</a></li>
   </ul></li>
-  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="toc-section-number">13.3</span>  Exercises</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="toc-section-number">14.3</span>  Exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -285,7 +290,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-nls" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">More general linear models; nonlinear regression</span></span></h1>
+<h1 class="title"><span id="sec-nls" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">More general linear models; nonlinear regression</span></span></h1>
 </div>
 
 
@@ -300,10 +305,10 @@ div.csl-indent {
 
 </header>
 
-<section id="sec-ancova" class="level2" data-number="13.1">
-<h2 data-number="13.1" class="anchored" data-anchor-id="sec-ancova"><span class="header-section-number">13.1</span> Combining categorical and continuous variables in linear models</h2>
-<p>So far we have used at most two predictors when dealing with linear models (<code>lm</code>). This was in <a href="Anova_two_way.html"><span>Chapter&nbsp;11</span></a>, where we looked the effects of two categorical variables, as well as their interaction. <a href="Linear_regression.html"><span>Chapter&nbsp;12</span></a> introduced the idea of using a continuous, instead of a categorical, predictor. But we have not been combining these.</p>
-<p>In fact, one can build arbitrarily complicated linear models from an arbitrary combination of continuous and categorical variables, and their interactions. Let us consider the built-in <code>CO2</code> dataset as an example, which was already used before in an exercise (<a href="Anova_two_way.html#sec-exercises-anova-two-way"><span>Section&nbsp;11.3</span></a>). Briefly, the data contain measurements from an experiment on the cold tolerance of the grass species <a href="https://en.wikipedia.org/wiki/Echinochloa_crus-galli"><em>Echinochloa crus-galli</em></a>. The dataset has five columns: <code>Plant</code> (a unique identifier for each plant individual), <code>Type</code> (either <code>Quebec</code> or <code>Mississippi</code> depending on the origin of the plant), <code>Treatment</code> (whether the plant individual was <code>chilled</code> or <code>nonchilled</code> for the experiment), <code>conc</code> (ambient carbon dioxide concentration), and <code>uptake</code> (carbon dioxide uptake rate by the plant).</p>
+<section id="sec-ancova" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="sec-ancova"><span class="header-section-number">14.1</span> Combining categorical and continuous variables in linear models</h2>
+<p>So far we have used at most two predictors when dealing with linear models (<code>lm</code>). This was in <a href="Anova_two_way.html"><span>Chapter&nbsp;12</span></a>, where we looked the effects of two categorical variables, as well as their interaction. <a href="Linear_regression.html"><span>Chapter&nbsp;13</span></a> introduced the idea of using a continuous, instead of a categorical, predictor. But we have not been combining these.</p>
+<p>In fact, one can build arbitrarily complicated linear models from an arbitrary combination of continuous and categorical variables, and their interactions. Let us consider the built-in <code>CO2</code> dataset as an example, which was already used before in an exercise (<a href="Anova_two_way.html#sec-exercises-anova-two-way"><span>Section&nbsp;12.3</span></a>). Briefly, the data contain measurements from an experiment on the cold tolerance of the grass species <a href="https://en.wikipedia.org/wiki/Echinochloa_crus-galli"><em>Echinochloa crus-galli</em></a>. The dataset has five columns: <code>Plant</code> (a unique identifier for each plant individual), <code>Type</code> (either <code>Quebec</code> or <code>Mississippi</code> depending on the origin of the plant), <code>Treatment</code> (whether the plant individual was <code>chilled</code> or <code>nonchilled</code> for the experiment), <code>conc</code> (ambient carbon dioxide concentration), and <code>uptake</code> (carbon dioxide uptake rate by the plant).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(CO2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -381,7 +386,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p><img src="Nonlinear_regression_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>While the Q–Q plot could be better, there is not much reason not to trust the model—other than the fact, or course, that the data in fact depend on concentrations in a manifestly nonlinear way. We will come back to this point in <a href="#sec-nonlin-regression"><span>Section&nbsp;13.2</span></a>.</p>
+<p>While the Q–Q plot could be better, there is not much reason not to trust the model—other than the fact, or course, that the data in fact depend on concentrations in a manifestly nonlinear way. We will come back to this point in <a href="#sec-nonlin-regression"><span>Section&nbsp;14.2</span></a>.</p>
 <p>It is also informative to apply the function <code>summary</code> on the model fit in addition to <code>anova</code>, to obtain the regression slopes and intercept:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">+</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -464,8 +469,8 @@ F-statistic: 30.52 on 7 and 76 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <p>This confirms what we saw on the plot of the data: that the basic shape of the relationship between concentration and uptake is unaffected by either <code>Type</code> or <code>Treatment</code> (i.e., the term <code>conc:Type:Treatment</code> in the ANOVA table has a high associated p-value). It also illustrates the general point that there are very often multiple candidate models, and choosing between them is a question of judgment, trial-and-error, and successively improving the model structure based on results from earlier modeling attempts.</p>
 </section>
-<section id="sec-nonlin-regression" class="level2" data-number="13.2">
-<h2 data-number="13.2" class="anchored" data-anchor-id="sec-nonlin-regression"><span class="header-section-number">13.2</span> Nonlinear regression</h2>
+<section id="sec-nonlin-regression" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="sec-nonlin-regression"><span class="header-section-number">14.2</span> Nonlinear regression</h2>
 <p>The relationship between CO<sub>2</sub> concentration and uptake rates are definitely not linear, regardless of treatment or type. So the question arises: can one fit a <em>nonlinear</em> function to these data? As an example, let us focus on just Quebec and the nonchilled treatment, to better illustrate the ideas behind nonlinear regression. Here are the data:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(CO2) <span class="sc">%&gt;%</span></span>
@@ -520,8 +525,8 @@ F-statistic: 30.52 on 7 and 76 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <p>So guessing that <span class="math inline">\(V\)</span> is about 43 and <span class="math inline">\(K\)</span> is about 125 seems to be close to the mark.</p>
 <p>To actually perform the nonlinear regression, one can use the <code>nls</code> function (“Nonlinear Least Squares”). It begins much like <code>lm</code>, taking a formula and a data frame. However, the formula is no longer a shorthand notation for a linear model, and therefore has to be entered literally. Additionally, there is another argument to <code>nls</code> called <code>start</code>; this is where the starting values have to be specified. The <code>start</code> argument has to be in the form of a <em>list</em>. Lists are an important data structure, worth a little interlude to explain how they work.</p>
-<section id="sec-lists" class="level3" data-number="13.2.1">
-<h3 data-number="13.2.1" class="anchored" data-anchor-id="sec-lists"><span class="header-section-number">13.2.1</span> Interlude: lists</h3>
+<section id="sec-lists" class="level3" data-number="14.2.1">
+<h3 data-number="14.2.1" class="anchored" data-anchor-id="sec-lists"><span class="header-section-number">14.2.1</span> Interlude: lists</h3>
 <p>Lists are like vectors except they can hold arbitrary data in their entries. So unlike vectors which are composed of either all numbers or all character strings or all logical values, lists may have a combination of these. Furthermore, list entries are not restricted to elementary types: vectors, or even data frames may also be list entries. To define a list, all one needs to do is type <code>list</code>, and then give a sequence of named entries. For example, the following creates a list with three entries: <code>a</code> will be equal to 3, <code>b</code> to the string <code>"Hello!"</code>, and <code>myTable</code> to a small tibble.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(<span class="at">a =</span> <span class="dv">3</span>, <span class="at">b =</span> <span class="st">"Hello!"</span>, <span class="at">myTable =</span> <span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -586,8 +591,8 @@ $myTable
 </div>
 </div>
 </section>
-<section id="back-to-nonlinear-regression" class="level3" data-number="13.2.2">
-<h3 data-number="13.2.2" class="anchored" data-anchor-id="back-to-nonlinear-regression"><span class="header-section-number">13.2.2</span> Back to nonlinear regression</h3>
+<section id="back-to-nonlinear-regression" class="level3" data-number="14.2.2">
+<h3 data-number="14.2.2" class="anchored" data-anchor-id="back-to-nonlinear-regression"><span class="header-section-number">14.2.2</span> Back to nonlinear regression</h3>
 <p>With this brief introduction to lists, we now understand what it means that the <code>start</code> argument to <code>nls</code> must be a list, with the entries named after the parameters to be fitted. Using the previously-guessed values of <span class="math inline">\(V\)</span> and <span class="math inline">\(K\)</span> being around 43 and 125, respectively, means we can use <code>start = list(V = 43, K = 125)</code>. We can now look at the <code>nls</code> function and use it to produce a fit of the Michaelis–Menten curve to our data:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>nonlinearFit <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(CO2) <span class="sc">%&gt;%</span></span>
@@ -673,8 +678,8 @@ Achieved convergence tolerance: 9.728e-06</code></pre>
 <p>The result is much the same as before, although carefully looking at the dashed line shows that the second curve is smoother than the first. In this case, this does not matter much, but it could be aesthetically more relevant in others.</p>
 </section>
 </section>
-<section id="exercises" class="level2" data-number="13.3">
-<h2 data-number="13.3" class="anchored" data-anchor-id="exercises"><span class="header-section-number">13.3</span> Exercises</h2>
+<section id="exercises" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="exercises"><span class="header-section-number">14.3</span> Exercises</h2>
 <section id="exponential-growth" class="level4">
 <h4 class="anchored" data-anchor-id="exponential-growth">Exponential growth</h4>
 <p>Let <span class="math inline">\(N(t)\)</span> be the population abundance of some organism at time <span class="math inline">\(t\)</span>. An exponentially growing population increases according to <span class="math display">\[ N(t) = N_0 \mathrm{e}^{rt} \]</span> where <span class="math inline">\(N_0\)</span> is the initial population size at time <span class="math inline">\(t=0\)</span>, and <span class="math inline">\(r\)</span> is the exponential rate of increase.</p>
@@ -849,12 +854,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./Linear_regression.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Simple linear regression</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Simple linear regression</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./Intro_map.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Higher-order functions and mapping</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Higher-order functions and mapping</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

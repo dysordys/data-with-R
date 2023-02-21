@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Introduction to data analysis and visualization with R - 10&nbsp; The Kruskal–Wallis test and one-way ANOVA</title>
+<title>Introduction to data analysis and visualization with R - 11&nbsp; The Kruskal–Wallis test and one-way ANOVA</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -134,7 +134,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -174,72 +174,77 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Data_reading.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Reading tabular data from disk</span></a>
+  <a href="./Functions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Functions</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Basic_data_wrangling.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Basic data manipulation</span></a>
+  <a href="./Data_reading.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Reading tabular data from disk</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and tidy data</span></a>
+  <a href="./Basic_data_wrangling.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Basic data manipulation</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Creating_figures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Creating publication-grade figures</span></a>
+  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Summary statistics and tidy data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Further_plotting_options.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Some further plotting options; introducing factors</span></a>
+  <a href="./Creating_figures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Creating publication-grade figures</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Joining_data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Joining data</span></a>
+  <a href="./Further_plotting_options.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Some further plotting options; introducing factors</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Intro_statistics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introducing statistical inference</span></a>
+  <a href="./Joining_data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Joining data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Anova.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></a>
+  <a href="./Intro_statistics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Introducing statistical inference</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Anova_two_way.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></a>
+  <a href="./Anova.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Linear_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Simple linear regression</span></a>
+  <a href="./Anova_two_way.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Nonlinear_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">More general linear models; nonlinear regression</span></a>
+  <a href="./Linear_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Simple linear regression</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Intro_map.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Higher-order functions and mapping</span></a>
+  <a href="./Nonlinear_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">More general linear models; nonlinear regression</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Multiple_analysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Nested data and multiple analysis</span></a>
+  <a href="./Intro_map.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Higher-order functions and mapping</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">References</span></a>
+  <a href="./Multiple_analysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Nested data and multiple analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">References</span></a>
   </div>
 </li>
     </ul>
@@ -251,11 +256,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#the-kruskalwallis-and-dunn-tests" id="toc-the-kruskalwallis-and-dunn-tests" class="nav-link active" data-scroll-target="#the-kruskalwallis-and-dunn-tests"><span class="toc-section-number">10.1</span>  The Kruskal–Wallis and Dunn tests</a></li>
-  <li><a href="#one-way-anova" id="toc-one-way-anova" class="nav-link" data-scroll-target="#one-way-anova"><span class="toc-section-number">10.2</span>  One-way ANOVA</a></li>
-  <li><a href="#sec-diagnostics" id="toc-sec-diagnostics" class="nav-link" data-scroll-target="#sec-diagnostics"><span class="toc-section-number">10.3</span>  Diagnostic plots</a></li>
-  <li><a href="#sec-tukey" id="toc-sec-tukey" class="nav-link" data-scroll-target="#sec-tukey"><span class="toc-section-number">10.4</span>  Tukey’s honest significant differences</a></li>
-  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="toc-section-number">10.5</span>  Exercises</a></li>
+  <li><a href="#the-kruskalwallis-and-dunn-tests" id="toc-the-kruskalwallis-and-dunn-tests" class="nav-link active" data-scroll-target="#the-kruskalwallis-and-dunn-tests"><span class="toc-section-number">11.1</span>  The Kruskal–Wallis and Dunn tests</a></li>
+  <li><a href="#one-way-anova" id="toc-one-way-anova" class="nav-link" data-scroll-target="#one-way-anova"><span class="toc-section-number">11.2</span>  One-way ANOVA</a></li>
+  <li><a href="#sec-diagnostics" id="toc-sec-diagnostics" class="nav-link" data-scroll-target="#sec-diagnostics"><span class="toc-section-number">11.3</span>  Diagnostic plots</a></li>
+  <li><a href="#sec-tukey" id="toc-sec-tukey" class="nav-link" data-scroll-target="#sec-tukey"><span class="toc-section-number">11.4</span>  Tukey’s honest significant differences</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="toc-section-number">11.5</span>  Exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -264,7 +269,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-ANOVA" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></span></h1>
+<h1 class="title"><span id="sec-ANOVA" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></span></h1>
 </div>
 
 
@@ -279,9 +284,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<section id="the-kruskalwallis-and-dunn-tests" class="level2" data-number="10.1">
-<h2 data-number="10.1" class="anchored" data-anchor-id="the-kruskalwallis-and-dunn-tests"><span class="header-section-number">10.1</span> The Kruskal–Wallis and Dunn tests</h2>
-<p>The tools of <a href="Intro_statistics.html"><span>Chapter&nbsp;9</span></a> allow us to compare two groups of data. But what do we do when we have more than two groups? For example, we might wish to know how different treatments influence plant growth, as measured by dry weight. If there are two treatments, then there will be three (instead of two) groups, because the treatments will be compared with a control group which does not receive treatment.</p>
+<section id="the-kruskalwallis-and-dunn-tests" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="the-kruskalwallis-and-dunn-tests"><span class="header-section-number">11.1</span> The Kruskal–Wallis and Dunn tests</h2>
+<p>The tools of <a href="Intro_statistics.html"><span>Chapter&nbsp;10</span></a> allow us to compare two groups of data. But what do we do when we have more than two groups? For example, we might wish to know how different treatments influence plant growth, as measured by dry weight. If there are two treatments, then there will be three (instead of two) groups, because the treatments will be compared with a control group which does not receive treatment.</p>
 <p>Such a dataset is, in fact, built into R, and is called <code>PlantGrowth</code>. Here it is:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -430,8 +435,8 @@ Kruskal-Wallis chi-squared = 7.9882, df = 2, p-value = 0.01842</code></pre>
 <p>The table above is the output of the test, and has four columns. The first column shows which two groups are being compared. The next column, called <code>Z</code>, is the value of the test statistic, which we need not concern ourselves with here. Next, we have the unadjusted p-values; and finally, the adjusted p-values (<code>P.adj</code>), which have been corrected to account for the multiple testing problem mentioned above. Therefore, the adjusted p-values will always be as large or larger than the unadjusted ones.</p>
 <p>What has the Dunn test revealed? Precisely what we have been suspecting: that the only difference worth noting is the one between the two treatments (last row of the table, where the adjusted p-value is sufficiently small to have a chance of meaning something).</p>
 </section>
-<section id="one-way-anova" class="level2" data-number="10.2">
-<h2 data-number="10.2" class="anchored" data-anchor-id="one-way-anova"><span class="header-section-number">10.2</span> One-way ANOVA</h2>
+<section id="one-way-anova" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="one-way-anova"><span class="header-section-number">11.2</span> One-way ANOVA</h2>
 <p>The Kruskal–Wallis test is the non-parametric analogue of the <em>one-way ANOVA</em> (ANalysis Of VAriance). The “one-way” in the name refers to the property that there is a single factor indexing the groups, as discussed earlier. ANOVA relies on assumptions such as normality of the residuals and having the same number of observations in each group (balanced design). Otherwise, it is much like the Kruskal–Wallis test.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> The function in R that performs an ANOVA is <code>lm</code> (short for “linear model”):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -485,7 +490,7 @@ Multiple R-squared:  0.2641,    Adjusted R-squared:  0.2096
 F-statistic: 4.846 on 2 and 27 DF,  p-value: 0.01591</code></pre>
 </div>
 </div>
-<p>The output first prints the function call to <code>lm</code> we used. Then it gives a quick overview of the residuals: the minimum and maximum values, the point of the first and third quantiles, and the median—in other words, it contains the same information one would use to create a box plot with. This ought to give a quick and rough idea of whether the residuals are violently skewed, or have at least a chance of being normally distributed, which is a key assumption behind ANOVA. (We will discuss a better method for assessing the normality of the residuals in <a href="#sec-diagnostics"><span>Section&nbsp;10.3</span></a>.) The next item in the output is the table of fitted regression coefficients. Here we can find the estimated values of the coefficients, their standard error, the associated t-statistic, and the p-values (the <code>Pr(&gt;|t|)</code> column). Here the p-values refer to the likelihood that the observed difference from zero is due to chance.</p>
+<p>The output first prints the function call to <code>lm</code> we used. Then it gives a quick overview of the residuals: the minimum and maximum values, the point of the first and third quantiles, and the median—in other words, it contains the same information one would use to create a box plot with. This ought to give a quick and rough idea of whether the residuals are violently skewed, or have at least a chance of being normally distributed, which is a key assumption behind ANOVA. (We will discuss a better method for assessing the normality of the residuals in <a href="#sec-diagnostics"><span>Section&nbsp;11.3</span></a>.) The next item in the output is the table of fitted regression coefficients. Here we can find the estimated values of the coefficients, their standard error, the associated t-statistic, and the p-values (the <code>Pr(&gt;|t|)</code> column). Here the p-values refer to the likelihood that the observed difference from zero is due to chance.</p>
 <p>To interpret the coefficients, note that R computes them relative to some reference group—which, unless specified otherwise, is the factor that comes first in the alphabet. From <code>ctrl</code>, <code>trt1</code>, and <code>trt2</code>, it is <code>ctrl</code> that comes first, and therefore the control serves as the baseline. The row called <code>(Intercept)</code> tells us the estimated value made by the regression, assuming that all non-baseline variables are set to zero. In this context, this means that both <code>trt1</code> and <code>trt2</code> are zeroed out, and therefore <code>(Intercept)</code> simply measures the average value within the group <code>ctrl</code>. The estimates in the rows <code>grouptrt1</code> and <code>grouptrt2</code> (these names were created by mushing together the name of the column in which the factor is found with the factors’ names themselves) are the <em>deviations</em> from the baseline provided by <code>(Intercept)</code>—that is, from the mean within the control. So we can surmise that the estimated mean of <code>trt1</code> is 5.032 - 0.371 = 4.661, and that of <code>trt2</code> is 5.032 + 0.494 = 5.526. Indeed, this is what we find relying on simple summaries computing the means in each group:</p>
 <div class="cell">
 
@@ -509,8 +514,8 @@ F-statistic: 4.846 on 2 and 27 DF,  p-value: 0.01591</code></pre>
 </div>
 <p>After the table of regression coefficients, we get some information on the residual standard error, degrees of freedom, the coefficient of determination R<sup>2</sup> (a value between 0 and 1; the closer it is to 1, the more tightly the data fit the model), the adjusted R<sup>2</sup> (which is like the regular R<sup>2</sup> but with a penalty for using too many fitting parameters), the F-statistic, and the overall p-value—this is the same as the one in the ANOVA table earlier, created with the <code>anova</code> function.</p>
 </section>
-<section id="sec-diagnostics" class="level2" data-number="10.3">
-<h2 data-number="10.3" class="anchored" data-anchor-id="sec-diagnostics"><span class="header-section-number">10.3</span> Diagnostic plots</h2>
+<section id="sec-diagnostics" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="sec-diagnostics"><span class="header-section-number">11.3</span> Diagnostic plots</h2>
 <p>Since ANOVA is a parametric method relying on equal variances in each group and the normality of the residuals, it is important to check whether these assumptions in fact hold. There is a convenient way to do so, via <em>diagnostic plots</em>. Such plots can be created via the <code>autoplot</code> function of the <code>ggfortify</code> package. We can therefore install this package first, in case we do not have it already:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggfortify"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -548,8 +553,8 @@ F-statistic: 4.846 on 2 and 27 DF,  p-value: 0.01591</code></pre>
 </div>
 </div>
 </section>
-<section id="sec-tukey" class="level2" data-number="10.4">
-<h2 data-number="10.4" class="anchored" data-anchor-id="sec-tukey"><span class="header-section-number">10.4</span> Tukey’s honest significant differences</h2>
+<section id="sec-tukey" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="sec-tukey"><span class="header-section-number">11.4</span> Tukey’s honest significant differences</h2>
 <p>Just as the Dunn test is a post-hoc test for the Kruskal–Wallis test, the Tukey test (or Tukey’s honest significant test) is a post-hoc test for an ANOVA. The corresponding function in R is called <code>TukeyHSD</code>, and it should be applied to the result of the <code>lm</code> function—with one caveat. The Tukey test requires the output of the ANOVA to be in a particular format. Therefore, before passing the result of <code>lm</code> to <code>TukeyHSD</code>, we first have to pass it to a helper function called <code>aov</code> (“analysis of variance”). Like this:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">%&gt;%</span> <span class="fu">aov</span>() <span class="sc">%&gt;%</span> <span class="fu">TukeyHSD</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -590,8 +595,8 @@ trt2-trt1  0.865  0.1737839 1.5562161 0.0120064</code></pre>
 </div>
 </div>
 </section>
-<section id="exercises" class="level2" data-number="10.5">
-<h2 data-number="10.5" class="anchored" data-anchor-id="exercises"><span class="header-section-number">10.5</span> Exercises</h2>
+<section id="exercises" class="level2" data-number="11.5">
+<h2 data-number="11.5" class="anchored" data-anchor-id="exercises"><span class="header-section-number">11.5</span> Exercises</h2>
 <ol type="1">
 <li>The file <a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/daphnia_growth.csv"><code>daphnia_growth.csv</code></a> contains data on the growth rate of <em>Daphnia</em> populations that are infected with various parasites. There are four groups of observations: the control (no parasites), infection with <em>Metschnikowia bicuspidata</em>, infection with <em>Pansporella perplexa</em>, and finally, infection with <em>Pasteuria ramosa</em>. Each group has ten replicate observations. Are growth rates affected by parasite load?
 <ul>
@@ -608,7 +613,7 @@ trt2-trt1  0.865  0.1737839 1.5562161 0.0120064</code></pre>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>In <a href="Anova_two_way.html"><span>Chapter&nbsp;11</span></a> we will see examples where multiple independent factors are varied, and each possible combination results in a separate group. For example, if the effects of three different dosages of vitamin C are examined on the tooth growth of Guinea pigs, and the vitamin is also supplied in two distinct forms of either orange juice or raw ascorbic acid, then there will be <span class="math inline">\(3 \cdot 2 = 6\)</span> groups, defined by the two factors of dosage and form of supplement.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>In <a href="Anova_two_way.html"><span>Chapter&nbsp;12</span></a> we will see examples where multiple independent factors are varied, and each possible combination results in a separate group. For example, if the effects of three different dosages of vitamin C are examined on the tooth growth of Guinea pigs, and the vitamin is also supplied in two distinct forms of either orange juice or raw ascorbic acid, then there will be <span class="math inline">\(3 \cdot 2 = 6\)</span> groups, defined by the two factors of dosage and form of supplement.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>The Kruskal–Wallis test is sometimes referred to as “non-parametric ANOVA”. While this is perfectly fine as a label, one should be aware that it is, strictly speaking, a misnomer: the Kruskal–Wallis test does not rely on computing variances at all.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>Since the comparison is against the <em>standard</em> normal distribution with variance 1, but the data might have any variance, the dashed line might not correspond to the identity line, but to some other straight line. It is still true that the closer the data fall to it, the more perfectly normal the residuals are.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
@@ -751,12 +756,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./Intro_statistics.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introducing statistical inference</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Introducing statistical inference</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./Anova_two_way.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

@@ -9,6 +9,7 @@ book:
     - index.qmd
     - Intro_R_RStudio.qmd
     - R_programming_basics.qmd
+    - Functions.qmd
     - Data_reading.qmd
     - Basic_data_wrangling.qmd
     - Summaries_normalization.qmd

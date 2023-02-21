@@ -22,27 +22,22 @@ On a Mac, open the downloaded disk image and drag the RStudio application into y
 
 ## Getting Around RStudio
 
-RStudio should be available in the usual places: the Applications folder (on a Mac) or the Start menu (on Windows). When you start it up, you will see four sections of the screen. In short:
+RStudio should be available in the usual places: the Applications folder (on a Mac) or the Start menu (on Windows). When you start it up, you will see four sections of the screen. The most important items found in each are:
 
 -   Upper-left: an area for viewing and editing text files
 -   Lower-left: **Console**, where you send commands to R
--   Upper-right:
-    -   **Environment**: for loading, saving, and examining data
-    -   **History**: a list of commands you have typed
-    -   **Connections**: for establishing remote connections with data sources
-    -   **Tutorial**: resources for learning R
+-   Upper-right: **Environment**, for loading, saving, and examining data
 -   Lower-right:
     -   **Files**: a list of files in the "working directory" (more on this later)
     -   **Plots**: where the plots (graphs) you draw show up
     -   **Packages**: an area for managing installed R packages
     -   **Help**: access to all the official documentation for R
-    -   **Viewer**: you can view certain objects here, e.g., formatted tables of data
 
 ![RStudio starting screen](rstudio_startup.png){#rstudio-screenshot fig-align="center"}
 
 ### A Simple Calculation {#sec-simpcalc}
 
-Even if you don't know R, you can start by typing some simple calculations into the console. The `>` symbol indicates that R is waiting for you to type something. Click on the console, type `2 + 2`, hit Enter (or Return on a Mac), and you should see R produce the right answer:
+Even if you don't know R, you can start by typing some simple calculations into the console. The `>` symbol indicates that R is waiting for you to type something. Click on the console, type `2 + 2`, and hit Enter (or Return on a Mac). You should see that R produces the right answer:
 
 ```{r}
 #| eval: false
@@ -51,7 +46,7 @@ Even if you don't know R, you can start by typing some simple calculations into 
 >
 ```
 
-Now, press the Up arrow on the keyboard. You will notice that the `2 + 2` you typed before shows up. You can use the Up and Down arrows to go back and forth through past things you have typed, which can save a lot of repetitive typing when you are trying things out. You can change the text in these historical commands: change the `2` to a `3` and press Enter (Return, on a Mac) again:
+Now, press the Up arrow on the keyboard. You will notice that the `2 + 2` you typed before shows up. You can use the Up and Down arrows to go back and forth through past commands you have typed, which can save a lot of repetitive typing when you are trying things out. You can change the text in these historical commands: change the `2` to a `3` and press Enter (Return, on a Mac) again:
 
 ```{r}
 #| eval: false
@@ -60,13 +55,13 @@ Now, press the Up arrow on the keyboard. You will notice that the `2 + 2` you ty
 >
 ```
 
-(The `[1]` at the beginning of the result just means that the following number is at position 1 of a vector. In this case, the vector only has one element, but when R needs to print out a long vector, it splits it into into multiple lines tells you at the beginning of each line what position you are at.)
+(The `[1]` at the beginning of the result just means that the following number is at position 1 of a vector. In this case, the vector only has one element, but when R needs to print out a long vector, it splits it into multiple lines tells you at the beginning of each line what position you are at.)
 
 Before going deeper into R programming, we need to discuss a few things to enable you to get around R and RStudio more easily.
 
 ### Writing R scripts
 
-The upper-right part of RStudio is a simple text editor where you can write R code. But, instead of having to enter it one line at a time as we did in the console above, you can string long sequences of R instructions together that build on one another. You can save such a text file (Ctrl-S on Windows; Cmd-S on a Mac), giving it an appropriate name. It is then known as an R *script*, a text file containing R code that can be run from within R.
+The upper left part of RStudio is a simple text editor where you can write R code. But, instead of having to enter it one line at a time as we did in the console above, you can string long sequences of R instructions together that build on one another. You can save such a text file (Ctrl-S on Windows; Cmd-S on a Mac), giving it an appropriate name. It is then known as an R *script*, a text file containing R code that can be run from within R.
 
 As an example, enter the following code. Do not worry about how or why it works just yet. It is a simple simulation and visualization of regulated (logistic) population growth:
 
@@ -78,7 +73,9 @@ pop <- Reduce(growthFun, rep(0.01, times = length(time)), accumulate = TRUE)
 plot(time, pop, xlab = "time", ylab = "population density", type = "b")
 ```
 
-After having typed this, highlight all lines (either with a mouse, or by pressing Ctrl-A on Windows / Cmd-A on a Mac, or by using the arrow keys while holding the Shift key down). Then, to send these instructions to R for processing, press Ctrl-Enter (Windows) or Cmd-Return (Mac). If all went well, the lower right screen section should have jumped to the **Plots** panel, showing the following graph:
+(The `<-` symbol consists of a less-than symbol `<` and a minus sign or dash, `-`, written next to each other. Together, they look like an arrow pointing towards the left. It is also possible to create this symbol by pressing Alt and - together. More on `<-` in @sec-assignment.)
+
+After having typed this, highlight all lines. You can do this either with a mouse, or by pressing Ctrl-A on Windows / Cmd-A on a Mac, or by using the arrow keys while holding the Shift key down. Then, to send these instructions to R for processing, press Ctrl-Enter (Cmd-Return on a Mac). If all went well, the lower right screen section should have jumped to the **Plots** panel, showing the following graph:
 
 ```{r}
 #| echo: false

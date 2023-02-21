@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Introduction to data analysis and visualization with R - 7&nbsp; Some further plotting options; introducing factors</title>
+<title>Introduction to data analysis and visualization with R - 8&nbsp; Some further plotting options; introducing factors</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -152,7 +152,7 @@ div.csl-indent {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Some further plotting options; introducing factors</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Some further plotting options; introducing factors</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -192,72 +192,77 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Data_reading.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Reading tabular data from disk</span></a>
+  <a href="./Functions.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Functions</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Basic_data_wrangling.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Basic data manipulation</span></a>
+  <a href="./Data_reading.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Reading tabular data from disk</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Summary statistics and tidy data</span></a>
+  <a href="./Basic_data_wrangling.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Basic data manipulation</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Creating_figures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Creating publication-grade figures</span></a>
+  <a href="./Summaries_normalization.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Summary statistics and tidy data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Further_plotting_options.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Some further plotting options; introducing factors</span></a>
+  <a href="./Creating_figures.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Creating publication-grade figures</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Joining_data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Joining data</span></a>
+  <a href="./Further_plotting_options.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Some further plotting options; introducing factors</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Intro_statistics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introducing statistical inference</span></a>
+  <a href="./Joining_data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Joining data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Anova.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></a>
+  <a href="./Intro_statistics.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Introducing statistical inference</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Anova_two_way.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></a>
+  <a href="./Anova.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Linear_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Simple linear regression</span></a>
+  <a href="./Anova_two_way.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Nonlinear_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">More general linear models; nonlinear regression</span></a>
+  <a href="./Linear_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Simple linear regression</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Intro_map.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Higher-order functions and mapping</span></a>
+  <a href="./Nonlinear_regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">More general linear models; nonlinear regression</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Multiple_analysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Nested data and multiple analysis</span></a>
+  <a href="./Intro_map.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Higher-order functions and mapping</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">References</span></a>
+  <a href="./Multiple_analysis.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Nested data and multiple analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./References.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">References</span></a>
   </div>
 </li>
     </ul>
@@ -269,12 +274,12 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#smoothing-and-regression-lines" id="toc-smoothing-and-regression-lines" class="nav-link active" data-scroll-target="#smoothing-and-regression-lines"><span class="toc-section-number">7.1</span>  Smoothing and regression lines</a></li>
-  <li><a href="#scales" id="toc-scales" class="nav-link" data-scroll-target="#scales"><span class="toc-section-number">7.2</span>  Scales</a></li>
-  <li><a href="#sec-factors" id="toc-sec-factors" class="nav-link" data-scroll-target="#sec-factors"><span class="toc-section-number">7.3</span>  Reordering labels using factors</a></li>
-  <li><a href="#sec-faceting" id="toc-sec-faceting" class="nav-link" data-scroll-target="#sec-faceting"><span class="toc-section-number">7.4</span>  Facets</a></li>
-  <li><a href="#saving-plots" id="toc-saving-plots" class="nav-link" data-scroll-target="#saving-plots"><span class="toc-section-number">7.5</span>  Saving plots</a></li>
-  <li><a href="#sec-moreggplot-exercises" id="toc-sec-moreggplot-exercises" class="nav-link" data-scroll-target="#sec-moreggplot-exercises"><span class="toc-section-number">7.6</span>  Exercises</a></li>
+  <li><a href="#smoothing-and-regression-lines" id="toc-smoothing-and-regression-lines" class="nav-link active" data-scroll-target="#smoothing-and-regression-lines"><span class="toc-section-number">8.1</span>  Smoothing and regression lines</a></li>
+  <li><a href="#scales" id="toc-scales" class="nav-link" data-scroll-target="#scales"><span class="toc-section-number">8.2</span>  Scales</a></li>
+  <li><a href="#sec-factors" id="toc-sec-factors" class="nav-link" data-scroll-target="#sec-factors"><span class="toc-section-number">8.3</span>  Reordering labels using factors</a></li>
+  <li><a href="#sec-faceting" id="toc-sec-faceting" class="nav-link" data-scroll-target="#sec-faceting"><span class="toc-section-number">8.4</span>  Facets</a></li>
+  <li><a href="#saving-plots" id="toc-saving-plots" class="nav-link" data-scroll-target="#saving-plots"><span class="toc-section-number">8.5</span>  Saving plots</a></li>
+  <li><a href="#sec-moreggplot-exercises" id="toc-sec-moreggplot-exercises" class="nav-link" data-scroll-target="#sec-moreggplot-exercises"><span class="toc-section-number">8.6</span>  Exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -283,7 +288,7 @@ div.csl-indent {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-moreggplot" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Some further plotting options; introducing factors</span></span></h1>
+<h1 class="title"><span id="sec-moreggplot" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Some further plotting options; introducing factors</span></span></h1>
 </div>
 
 
@@ -298,9 +303,9 @@ div.csl-indent {
 
 </header>
 
-<section id="smoothing-and-regression-lines" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="smoothing-and-regression-lines"><span class="header-section-number">7.1</span> Smoothing and regression lines</h2>
-<p>In <a href="Creating_figures.html"><span>Chapter&nbsp;6</span></a> we learned about aesthetic mappings and various <code>geom_</code> options such as <code>geom_point</code>, <code>geom_histogram</code>, and <code>geom_boxplot</code>. Let us explore another type of <code>geom_</code>, which approximates the trend of a set of data points with a line and an error bar that shows the confidence interval of the estimate at each point:</p>
+<section id="smoothing-and-regression-lines" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="smoothing-and-regression-lines"><span class="header-section-number">8.1</span> Smoothing and regression lines</h2>
+<p>In <a href="Creating_figures.html"><span>Chapter&nbsp;7</span></a> we learned about aesthetic mappings and various <code>geom_</code> options such as <code>geom_point</code>, <code>geom_histogram</code>, and <code>geom_boxplot</code>. Let us explore another type of <code>geom_</code>, which approximates the trend of a set of data points with a line and an error bar that shows the confidence interval of the estimate at each point:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -380,8 +385,8 @@ div.csl-indent {
 </div>
 </div>
 </section>
-<section id="scales" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="scales"><span class="header-section-number">7.2</span> Scales</h2>
+<section id="scales" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="scales"><span class="header-section-number">8.2</span> Scales</h2>
 <p>The aesthetic mappings of a graph (x-axis, y-axis, color, fill, size, shape, alpha, …) are automatically rendered into the displayed plot, based on certain default settings within <code>ggplot2</code>. These defaults can be altered, however. Consider the following bare-bones plot:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
@@ -484,8 +489,8 @@ Note
 </div>
 <p>We used the built-in color names <code>"steelblue"</code>, <code>"goldenrod"</code>, and <code>"forestgreen"</code> above. A useful R color cheat sheet can be found <a href="https://www.nceas.ucsb.edu/sites/default/files/2020-04/colorPaletteCheatsheet.pdf">here</a>, for more options and built-in color names.</p>
 </section>
-<section id="sec-factors" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="sec-factors"><span class="header-section-number">7.3</span> Reordering labels using factors</h2>
+<section id="sec-factors" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="sec-factors"><span class="header-section-number">8.3</span> Reordering labels using factors</h2>
 <p>In the previous examples, the order of text labels was always automatically determined. The basic rule in R is that the ordering follows the alphabet: the default is for <code>setosa</code> to precede <code>versicolor</code>, which will be followed by <code>virginica</code>. This default ordering can be inconvenient, however. Consider the following table of data, with hypothetical temperature measurements (in Celsius degrees) for each month of the year:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">month =</span> month.abb, <span class="at">temperature =</span> <span class="dv">10</span> <span class="sc">-</span> <span class="dv">15</span><span class="sc">*</span><span class="fu">cos</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="sc">*</span>pi, <span class="at">l=</span><span class="dv">12</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -546,8 +551,8 @@ Note
 </div>
 <p>Also, the use of <code>fct_relevel</code> need not be this laborious. If all we want to do is place a few factor levels to be first ones without changing any of the others, it is possible to enter just their names. Often, for example, a factor column holds various experimental treatments, one of which is called <code>"control"</code>. In that case, all we might want to do is to make the control be the first factor level, without altering any of the others. If <code>treatment</code> is the name of the vector (or column in a data frame) that holds the different experimental treatment names, then this can be done with <code>fct_relevel(treatment, "control")</code>.</p>
 </section>
-<section id="sec-faceting" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="sec-faceting"><span class="header-section-number">7.4</span> Facets</h2>
+<section id="sec-faceting" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="sec-faceting"><span class="header-section-number">8.4</span> Facets</h2>
 <p>Plots can be <em>faceted</em> (subplots created and arranged in a grid layout) based on some variable or variables. For instance, let us create histograms of petal lengths in the <code>iris</code> dataset, like we did last time:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
@@ -619,8 +624,8 @@ Note
 </div>
 </div>
 </section>
-<section id="saving-plots" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="saving-plots"><span class="header-section-number">7.5</span> Saving plots</h2>
+<section id="saving-plots" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="saving-plots"><span class="header-section-number">8.5</span> Saving plots</h2>
 <p>To save the most recently created ggplot figure, simply type</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">"graph.pdf"</span>, <span class="at">width =</span> <span class="dv">4</span>, <span class="at">height =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -642,11 +647,11 @@ Note
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="at">filename =</span> <span class="st">"graph.pdf"</span>, <span class="at">plot =</span> p, <span class="at">width =</span> <span class="dv">4</span>, <span class="at">height =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="sec-moreggplot-exercises" class="level2" data-number="7.6">
-<h2 data-number="7.6" class="anchored" data-anchor-id="sec-moreggplot-exercises"><span class="header-section-number">7.6</span> Exercises</h2>
-<p>Let us revisit the data of <span class="citation" data-cites="Fauchaldetal2017">Fauchald et al. (<a href="References.html#ref-Fauchaldetal2017" role="doc-biblioref">2017</a>)</span> which we used in <a href="Creating_figures.html#sec-ggplot-exercises"><span>Section&nbsp;6.4</span></a>, tracking the population size of various herds of caribou in North America over time and correlating population cycling with the amount of vegetation and sea-ice cover. Using the file <a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/sea_ice.tsv"><code>sea_ice.tsv</code></a> (sea ice cover per year and month for each caribou herd), do the following:</p>
+<section id="sec-moreggplot-exercises" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="sec-moreggplot-exercises"><span class="header-section-number">8.6</span> Exercises</h2>
+<p>Let us revisit the data of <span class="citation" data-cites="Fauchaldetal2017">Fauchald et al. (<a href="References.html#ref-Fauchaldetal2017" role="doc-biblioref">2017</a>)</span> which we used in <a href="Creating_figures.html#sec-ggplot-exercises"><span>Section&nbsp;7.4</span></a>, tracking the population size of various herds of caribou in North America over time and correlating population cycling with the amount of vegetation and sea-ice cover. Using the file <a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/sea_ice.tsv"><code>sea_ice.tsv</code></a> (sea ice cover per year and month for each caribou herd), do the following:</p>
 <ol type="1">
-<li><p>One exercise from <a href="Creating_figures.html#sec-ggplot-exercises"><span>Section&nbsp;6.4</span></a> was to plot <code>Year</code> along the x-axis and <code>Month</code> along the y-axis, with color tile shading indicating the level of ice cover for the herd labeled <code>WAH</code> in each month-year pair (using <code>geom_tile</code>). The resulting graph had an obvious weakness: the months along the y-axis were not in proper chronological order. Fix this problem, by converting the <code>Month</code> column from character strings to factors whose levels go from January to December.</p></li>
+<li><p>One exercise from <a href="Creating_figures.html#sec-ggplot-exercises"><span>Section&nbsp;7.4</span></a> was to plot <code>Year</code> along the x-axis and <code>Month</code> along the y-axis, with color tile shading indicating the level of ice cover for the herd labeled <code>WAH</code> in each month-year pair (using <code>geom_tile</code>). The resulting graph had an obvious weakness: the months along the y-axis were not in proper chronological order. Fix this problem, by converting the <code>Month</code> column from character strings to factors whose levels go from January to December.</p></li>
 <li><p>Create a similar plot, but do not filter for one single herd. Instead, have each herd occupy a different facet (sub-plot). Do this with the different herds making up a single row of facets, and then a single column of them.</p></li>
 <li><p>Since there are 11 different herds altogether, neither the row-wise nor the column-wise arrangement of the facets above is very satisfying: there are too many of them next to one another. Try re-plotting the results, but instead of <code>facet_grid</code>, use <code>facet_wrap(~ Herd)</code> which allows one to lay out the facets in several rows. (As usual, look up the help pages of <code>facet_wrap</code> if needed.)</p></li>
 </ol>
@@ -802,12 +807,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./Creating_figures.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Creating publication-grade figures</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Creating publication-grade figures</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./Joining_data.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Joining data</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Joining data</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
