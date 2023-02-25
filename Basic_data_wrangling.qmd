@@ -32,7 +32,7 @@ It is also possible to deselect columns, by prepending a minus sign (`-`) in fro
 select(goldbergDat, -Species)
 ```
 
-Since there were only two columns in the data to begin with, only the `Status` column remained in the data after removing `Species`.
+Since there were only two columns in the data to begin with, only the `Status` column remained in the data after removing `Species`. One can deselect multiple columns in a similar vein: `select(goldbergDat, -Species, -Status)` would remove both columns of the data and would therefore return an empty tibble (try it).
 
 There are several other options within `select`, which mostly help with selecting several columns at a time fulfilling certain criteria. The collection of these options and methods is called *tidy selection*. A few examples follow. First, one can use logical operations to select columns. `select(goldbergDat, !Species)` means "select all columns that are not `Species`". In this case, the only such column is `Status`:
 
@@ -187,13 +187,19 @@ read_csv("Goldberg2010_data.csv") %>%
 ## Exercises {#sec-wrangling-exercises}
 
 1. The [`Smith2003_data.txt`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/Smith2003_data.txt) dataset we worked with in @sec-reading occasionally has the entry `-999` in its last three columns. This stands for unavailable data. In R, there is a built-in way of referring to such information: by setting a variable to `NA`. (So, for example, `x <- NA` will set the variable `x` to `NA`.) Modify these columns (using `mutate`) so that the entries which are equal to `-999` are replaced with `NA`.
+
 2. Remove all rows from the data which contain one or more `NA` values (hint: look up the function `drop_na`). How many rows are retained? And what was the original number of rows?
 
 The `iris` dataset is a built-in table in R. It contains measurements of petal and sepal characteristics from three flower species belonging to the genus *Iris* ([*I. setosa*](https://en.wikipedia.org/wiki/Iris_setosa), [*I. versicolor*](https://en.wikipedia.org/wiki/Iris_versicolor), and [*I. virginica*](https://en.wikipedia.org/wiki/Iris_virginica)). If you type `iris` in the console, you will see the dataset displayed. In solving the problems below, feel free to use the all-important [`dplyr` cheat sheet](https://btep.ccr.cancer.gov/docs/rintro/resources/dplyr_cheatsheet.pdf).
 
 3. The format of the data is not a `tibble`, but a `data.frame`. As mentioned in the previous chapter, the two are basically the same for practical purposes, though internally, `tibble`s do offer some advantages. Convert the `iris` data frame into a tibble. (Hint: look up the `as_tibble` function.)
+
 4. Select the columns containing petal and sepal length, and species identity.
+
 5. Get those rows of the data with petal length less than 4 cm, but sepal length greater than 4 cm.
+
 6. Sort the data by increasing petal length but decreasing sepal length.
+
 7. Create a new column called `MeanLength`. It should contain the average of the petal and sepal length (i.e., petal length plus sepal length, divided by 2) of each individual flower.
+
 8. Perform the operations from the previous two exercises in a single long function call using function composition via pipes.

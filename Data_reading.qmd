@@ -87,7 +87,7 @@ Finally, let us take one more look at the output again:
 print(goldbergDat)
 ```
 
-When displaying large tibbles, R will not dump all the data at you. Instead, it will display the first 10 rows, with a message indicating how many more rows remain (in our case, we have `...with 346 more rows` written at the end of the printout). The system is still aware of the other rows; it just does not show them. To get a full view of a tibble in a more digestible, spreadsheet-like style, one can use the `view` function. Try running `view(dat)` and see what happens!
+When displaying large tibbles, R will not dump all the data at you. Instead, it will display the first 10 rows, with a message indicating how many more rows remain (in our case, we have `...with 346 more rows` written at the end of the printout). The system is still aware of the other rows; it just does not show them. To get a full view of a tibble in a more digestible, spreadsheet-like style, one can use the `view` function. Try running `view(goldbergDat)` and see what happens!
 
 ### The TSV file format {#sec-tsv}
 
@@ -175,13 +175,14 @@ Finally, data can not only be read from a file, but also written out to one. The
 
 ```{r}
 #| eval: false
-write_csv(dat, "/path/to/file.csv")
+write_csv(dat, file = "/path/to/file.csv")
 ```
 
-where `/path/to/file.csv` should be replaced by the path and file name with which the data should be saved.
+where `/path/to/file.csv` should be replaced by the path and file name with which the data ought to be saved.
 
 
 ## Exercises
 
 1. The columns of the file [`Smith2003_data.txt`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/Smith2003_data.txt) are, in order: Continent (AF=Africa, etc.), Status (extinct, historical, introduction, or extant), Order, Family, Genus, Species, Base-10 Log Mass, Combined Mass (grams), and Reference (numbers, referring to a numerically ordered list of published works -- no need to worry about the details). Rename each column appropriately, using the `rename()` function.
+
 1. The data file [`ladybugs.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/ladybugs.csv) contains information on whether ladybugs sampled from rural versus industrial areas tend to be red or black morphs. Black morphs are thought to be an adaptation to more polluted industrial environments where the dark coloration provides better camouflage. The file is comma-separated and lacks headers. The meanings of the columns are, in order: habitat type, site code where the sampling was done, morph color, and the number of individuals sampled. Load this file into a tibble in R, and give the following names to its columns: `habitat`, `site`, `morph`, and `number`.

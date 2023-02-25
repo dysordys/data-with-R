@@ -1,53 +1,11 @@
 1.2 What about Linux? :-)
 1.3.3
 * Maybe mention R Projects?
-clicking the "More" -> people had trouble locating this; maybe use "Session -> Set working directory" instead
-1.3.4
-* Mention that install might fail, and require some operations outside R (e.g., install curl, ffmpeg, etc.)
-Note that you can omit the quotation marks when loading a package
-2.1 5th power)
-2.2
-[1] "heads" this might be different depending on the seed
-* Maybe mention set.seed() somewhere around here
-2.3
-* Maybe mention prod as well
-creates numbers ranging from 0 to 10 INCLUSIVE (different from Python)
-2.4
-* Some functions do not return values, but do something else...
-2.4.1
-* Maybe be more explicit on order of arguments
-2.4.2
-would be stranger
-2.4.4
-* %>% is CTRL SHIFT M
-3.2
+4.2
 * Many had trouble downloading the files, because they open as some form of HTML
-3.2.2
-view(goldbergDat) instead of view(dat)
-3.2.6
-write_csv(dat, file = "/path/to/file.csv")
+4.2.6
 * Maybe this chapter would be good for a paragraph or two on 1) how to organize code/data; 2) how to name files/variables
-4.1.1
-* How to remove multiple cols?
-4.1.5
+5.1.5
 * Mention transmute?
-5.1
-"patch A, time 2"
-5.2
-* Liked the almost-Tolstoy quote :-)
-* Tidy form forces you to specify what you measured---i.e. 8.43 is a density
-This is natural: since the number of COLS was reduced
+6.2
 * I now always use summarise(..., .groups = "drop") instead of summarise() %>% ungroup() because sometimes it does not remove all groupings?
-5.3
-average PETAL LENGTH ACROSS ALL FLOWERS IN THE DATASET
-7.2
-take a look look at its help
-mention a few of THEM
-The limits argument ACCEPTS a vector
-7.4
-* Mention facet_wrap(scales = "free") because it is very useful
-* No exercises?
-8.1
-about the same MEASUREMENTS is scattered
-8.2
-* Only gender-neutral names :-)

@@ -7,7 +7,7 @@
 library(tidyverse) # Loading the tidyverse, before doing anything else
 ```
 
-In @sec-basics we learned how to create user-defined functions. An example was provided in @sec-tukey, where we made our life easier by eliminating the need to always call `aov` before performing a Tukey test with `TukeyHSD`. Without the function, we must write:
+In @sec-functions we learned how to create user-defined functions. An example was provided in @sec-tukey, where we made our life easier by eliminating the need to always call `aov` before performing a Tukey test with `TukeyHSD`. Without the function, we must write:
 
 ```{r}
 lm(weight ~ group, data = PlantGrowth) %>% aov() %>% TukeyHSD()
@@ -89,11 +89,11 @@ If we think about the `stats` function above, something strange has happened. We
 
 In R, this is perfectly legal, and its use and interpretation is every bit as natural as it was in `stats`. Functions which take other functions as arguments are often called *higher-order functions*.^[Functions that return a function as their output are also called higher-order functions. For an example which both takes functions as arguments and produces a function as its output, check out the `compose` function from the `purrr` package (part of the `tidyverse`).] To emphasize again: there really is nothing special about such functions, and they can be used in much the same way as "ordinary" functions.
 
-One very natural example for a higher-order function is integration. An integral (at least in simple cases) takes three inputs: a function to integrate, a lower limit of integration, and an upper limit of integration. The output is the (sign-weighted) area under the function's curve in between the lower and upper limits. This is stressed even in the usual mathematical notation for integrals: when we write
+One very natural example for a higher-order function is integration. An integral (at least in simple cases) takes three inputs: a function to integrate, a lower limit of integration, and an upper limit of integration. The output is the (sign-weighted) area under the function's curve, evaluated between the lower and upper limits. This is stressed even in the usual mathematical notation for integrals: when we write
 $$ \int_0^1 x^2 \,\text{d} x = \frac{1}{3}$$
 (a true statement), we show the lower and upper limits of 0 and 1 at the bottom and top of the integral sign, and the function to be integrated (in this case, $f(x) = x^2$) in between the integral sign and $\text{d} x$.
 
-If you do not know how integrals do their magic, there is no need to worry, because R has a built in function called `integrate` to do the calculations for you. `integrate` takes the three arguments described above: the function to integrate, and the lower and upper limits of integration. To perform the above integral, we can write:
+If you do not know how integrals do their magic, there is no need to worry, because R has a built-in function called `integrate` to do the calculations for you. `integrate` takes the three arguments described above: the function to integrate, and the lower and upper limits of integration. To perform the above integral, we can write:
 
 ```{r}
 # The squaring function: sqr(2) returns 4, sqr(4) returns 16, etc.
@@ -168,7 +168,7 @@ plantTrt <- filter(PlantGrowth, group != "ctrl")
 print(plantTrt)
 ```
 
-We might want to perform a Wilcoxon test on these data, but with a number of different confidence levels. A naive approach would be to supply the required confidence levels as a vector:
+We might want to perform a Wilcoxon rank sum test on these data, but with a number of different confidence levels. A naive approach would be to supply the required confidence levels as a vector:
 
 ```{r}
 #| error: true
@@ -202,4 +202,5 @@ c(0.8, 0.9, 0.95, 0.99) %>% map(wilcoxConf)
     * Define a new vector, `x`, which contains the cosine (`cos`) of each value in `values`. Use `map_dbl`.
     * Now define another vector, `y`, and again using `map_dbl`, compute the function `sin(t) + cos(14 * t / 5) / 5` for every value  *t* in `values`. You can either define this function separately to use inside `map_dbl`, or create it anonymously.
     * Finally, create a tibble whose two columns are `x` and `y`, and plot them against each other using `geom_path`. See what you get!
+
 2. How does the integral of $\cos(x)$ change if the lower limit of integration is fixed at zero, but the upper limit gradually increases from $0$ to $2\pi$? Define a sequence of upper limits `upper <- seq(0, 2*pi, by = 0.1)`. Then, using `map_dbl`, create a vector `integrals` whose entries are the integral of $\cos(x)$ from zero to each upper limit. Finally, plot `integrals` against `upper`, using `geom_point` or `geom_line`. What is the function you see? (Note: the `integrate` function returns a complicated list object instead of just a single number. To access just the value of the integral, you can use `integrate(...)$value`, where `...` means all the arguments to the function you are supposed to write when solving the problem.)

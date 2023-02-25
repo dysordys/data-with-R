@@ -73,7 +73,7 @@ iris %>%
   geom_histogram(position = "identity")
 ```
 
-(There are other options as well, such as `position = "dodge"` -- feel free to experiment. In general, you can learn what options each of the `geom_`s have by invoking the Help, or asking Google.) The figure above is almost perfect; the one remaining problem is that the bars belonging to different species cover each other completely. So let us change the fill's *transparency*, which is called `alpha` in ggplot. The `alpha` property can take on any value between 0 (fully transparent object, to the point of invisibility) to 1 (fully solid object with no transparency, like above; this is the default). Setting it to 0.2 (say) will finally fully reveal the distribution of each species:
+(There are other options as well, such as `position = "dodge"` -- feel free to experiment. In general, you can learn what options each of the `geom_`s have by taking a look at their help pages, or by asking Google.) The figure above is almost perfect; the one remaining problem is that the bars belonging to different species cover each other completely. So let us change the fill's *transparency*, which is called `alpha` in ggplot. The `alpha` property can take on any value between 0 (fully transparent object, to the point of invisibility) to 1 (fully solid object with no transparency, like above; this is the default). Setting it to 0.2 (say) will finally fully reveal the distribution of each species:
 
 ```{r}
 #| message: false

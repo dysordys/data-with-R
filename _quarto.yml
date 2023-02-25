@@ -7,23 +7,29 @@ book:
   author: "György Barabás"
   chapters:
     - index.qmd
-    - Intro_R_RStudio.qmd
-    - R_programming_basics.qmd
-    - Functions.qmd
-    - Data_reading.qmd
-    - Basic_data_wrangling.qmd
-    - Summaries_normalization.qmd
-    - Creating_figures.qmd
-    - Further_plotting_options.qmd
-    - Joining_data.qmd
-    - Intro_statistics.qmd
-    - Anova.qmd
-    - Anova_two_way.qmd
-    - Linear_regression.qmd
-    - Nonlinear_regression.qmd
-    - Intro_map.qmd
-    - Multiple_analysis.qmd
-    - References.qmd
+    - part: "Part I: Processing and visualizing data with R"
+      chapters:
+      - Intro_R_RStudio.qmd
+      - R_programming_basics.qmd
+      - Functions.qmd
+      - Data_reading.qmd
+      - Basic_data_wrangling.qmd
+      - Summaries_normalization.qmd
+      - Creating_figures.qmd
+      - Further_plotting_options.qmd
+      - Joining_data.qmd
+    - part: "Part II: Statistical inference"
+      chapters:
+      - Intro_statistics.qmd
+      - Anova.qmd
+      - Anova_two_way.qmd
+      - Linear_regression.qmd
+      - Nonlinear_regression.qmd
+      - Intro_map.qmd
+      - Multiple_analysis.qmd
+    - part: "References"
+      chapters:
+      - References.qmd
 
 bibliography: biblio.bib
 

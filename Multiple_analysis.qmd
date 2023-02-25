@@ -27,7 +27,7 @@ ggplot(fly) +
   theme_bw()
 ```
 
-Looking at this figure, it does appear as if females often had larger wings than males within the same species. The main question in this chapter is how we can test this---for instance, how would it be possible to perform a Wilcoxon test for all 55 species in the data?
+Looking at this figure, it does appear as if females often had larger wings than males within the same species. The main question in this chapter is how we can test this---for instance, how would it be possible to perform a Wilcoxon rank sum test for all 55 species in the data?
 
 
 ## Nested data frames
@@ -74,7 +74,7 @@ fly %>% nest(data = !Species & !Sex) %>% unnest(data)
 
 ## Performing statistical tests using nested data
 
-How can we test for all 55 fly species in this dataset whether there is a significant difference between average male and female wing lengths? The answer is to first nest the data using `fly %>% nest(data = !Species)`, so that we end up with a table which has one row per each species. We then need to run a Wilcoxon test on each of them. But this we know how to do from @sec-map: we can rely on the `map` function.
+How can we test for all 55 fly species in this dataset whether there is a significant difference between average male and female wing lengths? The answer is to first nest the data using `fly %>% nest(data = !Species)`, so that we end up with a table which has one row per each species. We then need to run a Wilcoxon rank sum test on each of them. But this we know how to do from @sec-map: we can rely on the `map` function.
 
 ```{r}
 fly %>%
@@ -82,7 +82,7 @@ fly %>%
   mutate(test = map(data, function(x) wilcox.test(L2Length ~ Sex, data = x)))
 ```
 
-And *voilà:* we now have the Wilcoxon test results in the column `test`, for each species! All we need to do is retrieve this information.
+And *voilà:* we now have the Wilcoxon rank sum test results in the column `test`, for each species! All we need to do is retrieve this information.
 
 Doing so is not completely straightforward, because `wilcox.test` does not return a data frame or tibble. Instead, it returns a complicated model fit object which cannot be unnested into the outer table. If we try, we get an error:
 
@@ -94,13 +94,13 @@ fly %>%
   unnest(test)
 ```
 
-Fortunately, there is an easy way to convert the output of the Wilcoxon test into a tibble. The `broom` package is designed to do exactly this. It is part of the `tidyverse`, though it does not get automatically loaded with it. We load this package first:
+Fortunately, there is an easy way to convert the output of the Wilcoxon rank sum test into a tibble. The `broom` package is designed to do exactly this. It is part of the `tidyverse`, though it does not get automatically loaded with it. We load this package first:
 
 ```{r}
 library(broom)
 ```
 
-The function in this package that creates a tibble out of the results of statistical models (almost any model in fact, not just the Wilcoxon test) is called `tidy`. Let us see how it works. If we do a Wilcoxon test between females and males for the whole data (without distinguishing between species), we get:
+The function in this package that creates a tibble out of the results of statistical models (almost any model in fact, not just the Wilcoxon rank sum test) is called `tidy`. Let us see how it works. If we do a Wilcoxon rank sum test between females and males for the whole data (without distinguishing between species), we get:
 
 ```{r}
 wilcox.test(WingSize ~ Sex, data = fly, conf.int = TRUE)
@@ -180,11 +180,13 @@ In summary, a very powerful way of analyzing data is to perform many analyses at
     * How many species are there where females have longer wings on average? How many where males do?
     * Which species shows the largest degree of sexual dimorphism?
     * List the species where males have, on average, longer wings than females.
+
 2. The goal of the original study by Bolstad et al. (2015 PNAS) was to see the allometric relationship between wing length and the length of the L2 vein that runs across the wing, in different species of fruit flies.
     * Obtain the slope from a linear regression between wing size and L2 vein length (which has been logged in the data) for each species and sex.
     * Create a histogram of the regression slopes. What is the (approximate) distribution of the slopes?
     * What is the mean and the standard deviation of the distribution of slopes? What is their range? Are the slopes all positive, all negative, or vary between the two? What does this tell you about the relationship between wing size and L2 vein length in general?
     * Plot your results, with the regression slopes along the x-axis and the species-sex combination along the y-axis, sorted in the order of the regression slopes. Which species-sex combination has the largest slope? Which one has the smallest?
+
 3. The `gapminder` package contains information on the population size, average life expectancy, and per capita GDP for 142 countries, from 1952 to 2007 (in steps of 5 years). Download and install this package via `install.packages("gapminder")`, then load it with `library(gapminder)`. If you now type `gapminder` in the console, you should see a table with six columns. Here we will be focusing on the columns `country`, `continent`, `year`, and `pop` (the population size of the country in the given year). Now do the following exercises.
     * Let us see if and when population growth has been exponential in these countries. If the growth of the population size is exponential, then the growth of its logarithm is linear. Therefore, as a first step, take the logarithms of all population sizes in the `pop` column.
     * Nest the data by country and continent, and obtain a linear fit of log population size against year for each.
@@ -193,6 +195,7 @@ In summary, a very powerful way of analyzing data is to perform many analyses at
     * Make the same plot but first reorder the countries by `r.squared`.
     * Which handful of countries stand out as having a particularly poor fit with the linear model? Make a plot of just the seven countries with the lowest R^2^ values. Let `year` be along the x-axis, the log population size along the y-axis, and the different countries be in separate facets. Bonus exercise: alongside these population curves, display also the predictions from the linear regressions.
     * Which are the countries with the worst model fit? Do they tend to come from a particular continent or region? Given your knowledge of recent history, can you speculate on what the reasons could be for their deviations from exponential growth?
+
 4. In this exercise, we explore the goodness-of-fit of linear models between sepal and petal lengths in the `iris` dataset.
     * First, visualize the data. Create a plot of the `iris` dataset, using points whose x-coordinate is sepal length and y-coordinate is petal length. Let them be colored by species. Finally, show linear regressions on the points belonging to each species, using `geom_smooth`.
     * Obtain the slope of the fit for each species, and the associated p-value. Do this by first nesting the data by species, then fitting a linear model to each of them (with `map`), and extracting slopes and p-values by applying the `tidy` function in the `broom` package. Finally, `unnest` the data. What are the slopes? And are they significantly different from zero?

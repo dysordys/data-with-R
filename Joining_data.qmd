@@ -2,7 +2,7 @@
 
 ## Merging two related tables into one
 
-So far, we have been working with a single table of data at a time. Often however, information about the same thing is scattered across multiple tables and files. In such cases, we sometimes want to *join* those separate tables into a single one. To illustrate how this can be done, let us create two simple tables. The first will contain the names of students, along with their chosen subject:
+So far, we have been working with a single table of data at a time. Often however, information about the same observation or experiment is scattered across multiple tables and files. In such cases, we sometimes want to *join* those separate tables into a single one. To illustrate how this can be done, let us create two simple tables. The first will contain the names of students, along with their chosen subject:
 
 ```{r, message=FALSE}
 library(tidyverse)
@@ -26,7 +26,7 @@ stage <- tibble(
 print(stage)
 ```
 
-Notice that, while Sacha and Alex appear in both tables, Gabe is only included in `studies` and Jamie only in `stage`. While in such tiny datasets this might seem like an avoidable oversight, such non-perfect alignment of data is often the norm when working with data spanning hundreds, thousands, or more rows. Here, for the purposes of illustration, we use small tables, but the principles we learn here apply in a broader context as well.
+Notice that, while Sacha and Alex appear in both tables, Gabe is only included in `studies` and Jamie only in `stage`. While in our tiny tables might seem like an avoidable oversight, such non-perfect alignment of data is often the norm when working with data spanning hundreds or more rows. Here, for the purposes of illustration, we use small tables, but the principles we learn here apply in a broader context as well.
 
 There are four commonly used ways of joining these tables into one single dataset. All of them follow the same general pattern: the arguments are two tibbles to be joined, plus a `by = ` argument which lists, in quotes, the names of the columns based on which the tables should be joined. The output is always a single tibble, containing some type of joining of the data. Let us now look at each joining method in detail.
 

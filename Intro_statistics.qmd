@@ -1,6 +1,6 @@
 # Introducing statistical inference {#sec-wilcox}
 
-## Introductory example and the Wilcoxon test {#sec-example-wilcox}
+## Introductory example and the Wilcoxon rank sum test {#sec-example-wilcox}
 
 In this chapter we will take a first look at statistical tests of a very simple kind: comparing two groups of data. To illustrate why statistical inference is needed in such comparisons, let us take a look at a fictive dataset ([`fictive_bird_example.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/fictive_bird_example.csv)) which contains equally fictive weight measurements of different bird individuals from the same species. The birds are assumed to come from two islands, a larger and a smaller one. The question is: do the data provide evidence of *insular dwarfism*---the phenomenon that the body sizes of species tend to decline on small islands over evolutionary time?
 
@@ -57,7 +57,7 @@ bird %>%
 
 As seen, there is overlap between the 95% confidence intervals. While that by itself is not conclusive, it is an indication that the difference between the two samples may not be as relevant as it might have initially looked.
 
-Let us wait no longer, and perform a statistical test. One widely used test to check if two samples differ from one another is the *Wilcoxon test* (also known as the *Mann-Whitney test*). Its implementation is as follows:
+Let us wait no longer, and perform a statistical test. One widely used test to check if two samples differ from one another is the *Wilcoxon rank sum test* (also known as the *Mann-Whitney test*). Its implementation is as follows:
 
 ```{r}
 wilcox.test(weight ~ island, data = bird)
@@ -73,7 +73,7 @@ One piece of datum we are interested in is the p-value. This tells us the probab
 In many subfields of science, it is standard practice to consider p-values falling below 0.05 as "significant" and those falling above as "non-significant". Besides the fact that such a one-size-fits-all approach ought to be suspect even under the best of circumstances, a significance threshold of 0.05 is awfully permissive to errors. In fact, we should expect about one out of twenty ($1 / 0.05$) of all papers ever published which have reported $p = 0.05$ to be wrong! Digging deeper into this issue reveals that the figure is possibly much worse---see, e.g., @Colquhoun2014. One way to ameliorate the problem is to adopt a less exclusive and parochial view of p-values. Instead of having rigid significance thresholds, p-values can simply be reported as-is, and interpreted for what they are: the probability that the outcome is at least as extreme as observed, assuming that the null model holds. Treating this information as just another piece of the larger data puzzle is a first step towards avoiding the erroneous classification of random patterns as results.
 :::
 
-Apart from the p-value which measures whether the observed effect is likely to have been due to chance alone, another important piece of information is some measure of the *effect size:* how different are the two samples? We have already computed the means and medians; their differences across the islands provide one way of measuring this effect size. It is possible to add a calculation of the effect size, as well as the confidence intervals, to the Wilcoxon test. All one needs to do is pass `conf.int = TRUE` as an argument:
+Apart from the p-value which measures whether the observed effect is likely to have been due to chance alone, another important piece of information is some measure of the *effect size:* how different are the two samples? We have already computed the means and medians; their differences across the islands provide one way of measuring this effect size. It is possible to add a calculation of the effect size, as well as the confidence intervals, to the Wilcoxon rank sum test. All one needs to do is pass `conf.int = TRUE` as an argument:
 
 ```{r}
 wilcox.test(weight ~ island, data = bird, conf.int = TRUE)
@@ -87,7 +87,7 @@ The default confidence level of 95% can be changed via the `conf.level` argument
 wilcox.test(weight ~ island, data = bird, conf.int = TRUE, conf.level = 0.99)
 ```
 
-In summary, the Wilcoxon test failed to yield serious evidence in favor of rejecting the null hypothesis. Therefore, we cannot claim with any confidence that our fictive birds have different sizes across the two islands. While failure to reject the null is not the same as confirming that the null is true (absence of evidence is not evidence of absence!), the notion that the two samples are different could not be supported. In this particular case, since we ourselves have created the original data using the null hypothesis, we have the privilege of knowing that this is the truth. When working with real data, such knowledge is generally not available.
+In summary, the Wilcoxon rank sum test failed to yield serious evidence in favor of rejecting the null hypothesis. Therefore, we cannot claim with any confidence that our fictive birds have different sizes across the two islands. While failure to reject the null is not the same as confirming that the null is true (absence of evidence is not evidence of absence!), the notion that the two samples are different could not be supported. In this particular case, since we ourselves have created the original data using the null hypothesis, we have the privilege of knowing that this is the truth. When working with real data, such knowledge is generally not available.
 
 
 ## Some general conclusions
@@ -101,21 +101,21 @@ Second, we only performed the statistical test after we have made an effort to u
 
 ## Parametric versus non-parametric tests
 
-The Wilcoxon test we employed is *non-parametric:* it does not assume either the data or the residuals to come from any particular distribution. This is both the test's advantage and disadvantage. It is an advantage because fewer assumptions must be satisfied for the test to be applicable. Non-parametric techniques also tend to fare better when only limited data are available. Since in many areas of biology (such as ecology) data are hard to come by, datasets are correspondingly small, making non-parametric techniques a natural candidate for interrogating the data with. On the downside, non-parametric tests tend to be less powerful than parametric ones: the additional assumptions of parametric tests may allow for sharper inference---provided that those assumptions are actually met by the real data, of course.
+The Wilcoxon rank sum test we employed is *non-parametric:* it does not assume either the data or the residuals to come from any particular distribution. This is both the test's advantage and disadvantage. It is an advantage because fewer assumptions must be satisfied for the test to be applicable. Non-parametric techniques also tend to fare better when only limited data are available. Since in many areas of biology (such as ecology) data are hard to come by, datasets are correspondingly small, making non-parametric techniques a natural candidate for interrogating the data with. On the downside, non-parametric tests tend to be less powerful than parametric ones: the additional assumptions of parametric tests may allow for sharper inference---provided that those assumptions are actually met by the real data, of course.
 
-One of the most common parametric alternatives to the Wilcoxon test is Welch's *t*-test. Like the Wilcoxon test, the *t*-test assumes the independence of the two samples. In addition, it also assumes that the samples are normally distributed. Let us see what the *t*-test says about our fictive bird data:
+One of the most common parametric alternatives to the Wilcoxon rank sum test is Welch's *t*-test. Like the Wilcoxon rank sum test, the *t*-test assumes the independence of the two samples. In addition, it also assumes that the samples are normally distributed. Let us see what the *t*-test says about our fictive bird data:
 
 ```{r}
 t.test(weight ~ island, data = bird)
 ```
 
-The format of the output is similar to the one with the Wilcoxon test; the main differences are that the confidence intervals are included by default, and that the observed means of the two samples are also reported. Like with `wilcox.test`, the confidence level can be adjusted through the argument `conf.level`:
+The format of the output is similar to the one with the Wilcoxon rank sum test; the main differences are that the confidence intervals are included by default, and that the observed means of the two samples are also reported. Like with `wilcox.test`, the confidence level can be adjusted through the argument `conf.level`:
 
 ```{r}
 t.test(weight ~ island, data = bird, conf.level = 0.99)
 ```
 
-Importantly, the message conveyed by the p-value of 0.069 is in line with what we saw from the Wilcoxon test: there is no strong evidence to claim that the two samples are different. In this particular case, it does not make any qualitative difference whether one uses the parametric *t*-test or the non-parametric Wilcoxon test.
+Importantly, the message conveyed by the p-value of 0.069 is in line with what we saw from the Wilcoxon rank sum test: there is no strong evidence to claim that the two samples are different. In this particular case, it does not make any qualitative difference whether one uses the parametric *t*-test or the non-parametric Wilcoxon rank sum test.
 
 In other situations, the choice of test may matter more. The data in [`t_wilcox_example.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/t_wilcox_example.csv) have also been artificially created as an example. They contain two groups of "measurements". In the first group (group `x`), the data have been sampled from a lognormal distribution with mean 0 and standard deviation 1. In the second group (group `y`), the data have been sampled from a lognormal distribution with mean 1 and standard deviation 1. Thus, we know *a priori* that the two distributions from which the samples were created have different means, and a statistical test may be able to reveal this difference. However, since the data are heavily non-normal, a *t*-test will struggle to do so. Let us load and visualize the data first:
 
@@ -136,7 +136,7 @@ Applying a *t*-test first:
 t.test(measurement ~ group, data = example)
 ```
 
-The parametric *t*-test cannot detect a difference between the samples. The fact is, since its assumption of normality is violated, such a test should not have been attempted in the first place. By contrast, the non-parametric Wilcoxon test correctly suggests that there might be a difference:
+The parametric *t*-test cannot detect a difference between the samples. The fact is, since its assumption of normality is violated, such a test should not have been attempted in the first place. By contrast, the non-parametric Wilcoxon rank sum test correctly suggests that there might be a difference:
 
 ```{r}
 wilcox.test(measurement ~ group, data = example, conf.int = TRUE)
@@ -199,5 +199,7 @@ In this case, the first argument to `mutate`, as always, is the piped-in tibble.
 ## Exercises
 
 1. Atmospheric ozone levels are important for urban gardens, because ozone concentrations above 80 parts per hundred million can damage lettuce plants. The file [`ozone.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/ozone.csv) contains measured ozone concentrations in gardens distributed around a city. The gardens were either east or west of the city center. Is there a difference in average ozone concentration between eastern vs. western gardens? Create a plot of the concentrations first and try to guess the answer, before performing any statistical analyses. Then do the statistics, using both nonparametric and parametric methods. What result do you find? Do the outcomes of the different methods agree with one another?
+
 2. In the built-in `iris` dataset, the sepal and petal characteristics of the various species differ. Let us focus on just petal length here. Is there a detectable difference between the petal lengths of *Iris versicolor* and *I. virginica*? (Since we are not working with *I. setosa* in this exercise, make sure to remove them from the data first---e.g., by using `filter`.) Like before, start with a graph which you can base a hypothesis on. Then perform both nonparametric and parametric tests to see if your hypothesis can be supported.
+
 3. Repeat the above exercise for any and all of the possible trait-species pair combinations in the `iris` dataset. E.g., one can compare the sepal widths of *I. setosa* and *I. virginica*, or the petal widths of *I. versicolor* and *I. setosa*, and so on.

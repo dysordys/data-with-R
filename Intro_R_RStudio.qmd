@@ -73,8 +73,6 @@ pop <- Reduce(growthFun, rep(0.01, times = length(time)), accumulate = TRUE)
 plot(time, pop, xlab = "time", ylab = "population density", type = "b")
 ```
 
-(The `<-` symbol consists of a less-than symbol `<` and a minus sign or dash, `-`, written next to each other. Together, they look like an arrow pointing towards the left. It is also possible to create this symbol by pressing Alt and - together. More on `<-` in @sec-assignment.)
-
 After having typed this, highlight all lines. You can do this either with a mouse, or by pressing Ctrl-A on Windows / Cmd-A on a Mac, or by using the arrow keys while holding the Shift key down. Then, to send these instructions to R for processing, press Ctrl-Enter (Cmd-Return on a Mac). If all went well, the lower right screen section should have jumped to the **Plots** panel, showing the following graph:
 
 ```{r}
@@ -93,11 +91,11 @@ The first thing you should do when starting a project is to create a directory (
 
 The R function `setwd("/path/to/directory")` is used to set the working directory, where you substitute in the actual path and directory name in place of `path/to/directory`. In turn, `getwd()` tells you what the current working directory is. The path can be found using File Explorer on a Windows PC, but you will need to change backslashes to forward slashes (`\` to `/`). On a Mac, you can find the path by selecting a folder and choosing File \> Get Info (the path is under "Where:").
 
-There is also a convenient graphical way to set the working directory in RStudio. In the **Files** panel, you can navigate around the computer's file space. You can do this either in the panel itself, or using the ellipsis (...) to bring up the system-standard file browser. Looking around there does *not* immediately set the working directory, but you can set it by clicking the "More" button and choosing "Set as Working Directory".
+There is also a convenient graphical way to set the working directory in RStudio. In the **Files** panel, you can navigate around the computer's file space. You can do this either in the panel itself, or using the ellipsis (...) to bring up the system-standard file browser. Looking around there does *not* immediately set the working directory, but you can set it by clicking the "Session" menu point at the top menu bar, hovering over "Set Working Directory" with the mouse, and choosing "To Files Pane Location" from the list of sub-options when they appear.
 
 
-:::{.callout-note}
-It is worth repeating: **finding the appropriate directory in the Files panel is not enough.** It will not set the working directory automatically. You need to actually choose "Set as Working Directory" by clicking on it.
+::: {.callout-warning}
+It is worth repeating: **finding the appropriate directory in the Files panel is not enough.** It will not set the working directory automatically. You need to actually click the "Session" menu and then click on "To Files Pane Location" under "Set Working Directory".
 :::
 
 
@@ -118,7 +116,11 @@ install.packages("tidyverse")
 
 and press Enter (Return, on a Mac). Note that some packages can take quite a while to install. If you are installing `tidyverse` for instance, it could take anywhere between five minutes to an hour (!) depending on your computer setup. This is normal, and the good news is that you only need to do this once on a computer. Once the package is installed, it will stick around.
 
-However, to actually use a previously installed package in an R session, you need to load it from your disk directly into the computer's memory. That can be done like this:
+::: {.callout-note}
+It is possible for the installation of packages to fail. The most common reason is that the package relies on some external software (e.g., curl, ffmpeg, a C++ compiler, etc.) which is not installed on your computer. In such cases, make sure the required software is installed first, then try installing the package again.
+:::
+
+To actually use a previously installed package in an R session, you need to load it from your disk directly into the computer's memory. That can be done like this:
 
 ```{r}
 #| eval: false
@@ -142,7 +144,10 @@ RStudio:
 
 ## Exercises
 
-1. Create a folder named `analysis_of_biological_data` on your computer and set it as the working directory in R. Make certain that the working directory has indeed been set properly.
-2. Use the RStudio file browser to set the working directory somewhere else on your hard drive, and then set it back to the `analysis_of_biological_data` folder you created earlier. Make sure it is being set properly at each step.
+1. Create a folder named `data_analysis_in_R` on your computer and set it as the working directory in R. Make certain that the working directory has indeed been set properly.
+
+2. Use the RStudio file browser to set the working directory somewhere else on your hard drive, and then set it back to the `data_analysis_in_R` folder you created earlier. Make sure it is being set properly at each step.
+
 3. Install an R package called `vegan`, using `install.packages` as discussed in @sec-packages. (The `vegan` package contains various utilities for community ecology.)
+
 4. Load the `vegan` package invoking `library(vegan)`. Afterwards, try unloading and then loading the `vegan` package again, using the **Packages** panel in RStudio this time.

@@ -50,7 +50,7 @@ So far, this is not particularly interesting; in fact, the exact same effect wou
 pop %>% group_by(patch)
 ```
 
-Seemingly nothing has happened; the only difference is the extra line of comment above, before the printed table, saying `Groups: patch [2]`. What this means is that the rows of the data were internally split into two groups. The first have `"A"` as their patch, and the second have `"B"`. Whenever one groups data using `group_by`, rows which share the same unique combination of the grouping variables now belong together, and *subsequent* operations will act separately on each group instead of acting on the table as a whole (which is what we have been doing so far). That is, `group_by` does not actually alter the data; it only alters the behaviour of the functions applied to the grouped data.
+Seemingly nothing has happened; the only difference is the extra line of comment above, before the printed table, saying `Groups: patch [2]`. What this means is that the rows of the data were internally split into two groups. The first have `"A"` as their patch, and the second have `"B"`. Whenever one groups data using `group_by`, rows which share the same unique combination of the grouping variables now belong together, and *subsequent* operations will act separately on each group instead of acting on the table as a whole (which is what we have been doing so far). That is, `group_by` does not actually alter the data; it only alters the behavior of the functions applied to the grouped data.
 
 If we group not just by `patch` but also by `time`, the comment above the table will read `Groups: patch, time [100]`:
 
@@ -59,7 +59,7 @@ If we group not just by `patch` but also by `time`, the comment above the table 
 pop %>% group_by(patch, time)
 ```
 
-This is because there are 100 unique combinations of patch and time: two different `patch` values (`"A"` and `"B"`), and fifty points in time (1, 2, ..., 50). So we have "patch A, time 1" as group 1, "patch B, time 1" as group 2, "patch A, time 3" as group 3, and so on until "patch B, time 50" as our group 100.
+This is because there are 100 unique combinations of patch and time: two different `patch` values (`"A"` and `"B"`), and fifty points in time (1, 2, ..., 50). So we have "patch A, time 1" as group 1, "patch B, time 1" as group 2, "patch A, time 2" as group 3, and so on until "patch B, time 50" as our group 100.
 
 As mentioned, functions that are applied to grouped data will act on the groups separately. To return to the example of calculating the mean population density of species 1 in the two patches, we can write:
 
@@ -146,9 +146,9 @@ In science, we often strive to work with *tidy data* (also known as *long-format
 1. Each variable is in its own column;
 2. Each observation is in its own row.
 
-Tidy data are suitable for performing operations, statistics, and plotting on. Furthermore, tidy data have a certain well-groomed feel to them, in the sense that their organization always follows the same general pattern regardless of the type of dataset one studies. (By contrast, every non-tidy dataset tends to be messy in its own unique way.) The `tidyverse` offers a simple and convenient way of putting data in tidy format.
+Tidy data are suitable for performing operations, statistics, and plotting on. Furthermore, tidy data have a certain well-groomed feel to them, in the sense that their organization always follows the same general pattern regardless of the type of dataset one studies. Paraphrasing Tolstoy: tidy data are all alike; by contrast, every non-tidy dataset tends to be messy in its own unique way.
 
-For example, the `pop` table from the previous section is not tidy. This is because although each variable is in its own column, it is not true that each observation is in its own row. In fact, each row contains three observations: the densities of species 1, 2, and 3 at a given time and place. To tidy up these data, we create *key-value pairs*. We merge the columns for species densities into just two new ones. The first of these (the *key*) indicates whether it is species 1, or 2, or 3 which the given row refers to. The second column (the *value*) contains the population density of the given species. Such key-value pairs are created by the function `pivot_longer`:
+The `tidyverse` offers a simple and convenient way of putting data in tidy format. The `pop` table from the previous section is not tidy, because although each variable is in its own column, it is not true that each observation is in its own row. Instead, each row contains three observations: the densities of species 1, 2, and 3 at a given time and place. To tidy up these data, we create *key-value pairs*. We merge the columns for species densities into just two new ones. The first of these (the *key*) indicates whether it is species 1, or 2, or 3 which the given row refers to. The second column (the *value*) contains the population density of the given species. Such key-value pairs are created by the function `pivot_longer`:
 
 ```{r}
 pop %>% pivot_longer(cols = 3:5, names_to = "species", values_to = "density")
@@ -158,9 +158,9 @@ The function `pivot_longer` takes three arguments in addition to the first (data
 
 Second, the argument `names_to` in the function `pivot_longer` is the name of the new key column. And third, `values_to` is the name of the new value column.
 
-Notice that the above table is now in tidy form: each column records a single variable, and each row contains a single observation. Notice also that, unlike the original `pop` which had 100 rows and 5 columns, the tidy version has 300 rows and 4 columns. This is natural: since the number of rows was reduced, there must be some extra rows to prevent the loss of information.
+The above table is now in tidy form: each column records a single variable, and each row contains a single observation. Notice that, unlike the original `pop` which had 100 rows and 5 columns, the tidy version has 300 rows and 4 columns. This is natural: since the number of columns was reduced, there must be some extra rows to prevent the loss of information. And one should notice another benefit to casting the data in tidy format: it forces one to explicitly specify what was measured. By having named the value column `density`, we now know that the numbers 8.43, 6.62, etc. are density measurements. In contrast, it is not immediately obvious what these same numbers mean under the columns `species1`, `species2`, ... in the original data.
 
-It is possible to "undo" the effect `pivot_longer`. To do so, use `pivot_wider`:
+It is possible to undo the effect `pivot_longer`. To do so, use `pivot_wider`:
 
 ```{r}
 pop %>%
@@ -210,7 +210,7 @@ The exercises below use the `iris` dataset---the same that we used in the previo
 
 2. Create a new column in the `iris` dataset which contains the deviation of petal lengths from the average *of each species*. (Hint: `group_by` the species and then `mutate`!)
 
-3. Create a table where the rows are the three species, and the columns are: average petal length, variance of petal length, average sepal length, and variance of sepal length.
+3. Create a table where the rows are the three species, and the columns are: average petal length, variance of petal length, average sepal length, and variance of sepal length (each across flowers of the corresponding species).
 
 4. Create key-value pairs in the `iris` dataset for the petal characteristics. In other words, have a column called `Petal.Trait` (whose values are either `Petal.Length` or `Petal.Width`), and another column called `Petal.Value` (with the length/width values).
 

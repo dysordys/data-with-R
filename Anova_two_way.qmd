@@ -150,7 +150,7 @@ ToothGrowth %>%
   scheirerRayHare(len ~ dose * supp, data = .)
 ```
 
-Note that this test is skeptical about the role of the supplement type, and definitely thinks that the interaction between it and dosage is not different from what one might get by pure chance. This illustrates one problem with the test: it is not very powerful in detecting patterns, even when they are there. To make matters worse, there is no appropriate post-hoc test available in conjunction with the Scheirer--Ray--Hare test. For these reasons, its use is more restricted than of other non-parametric tests, like the Wilcoxon and Kruskal--Wallis tests. It is good to know about it as an option, but often one must rely on other methods, such as the parametric two-way ANOVA.
+Note that this test is skeptical about the role of the supplement type, and definitely thinks that the interaction between it and dosage is not different from what one might get by pure chance. This illustrates one problem with the test: it is not very powerful in detecting patterns, even when they are there. To make matters worse, there is no appropriate post-hoc test available in conjunction with the Scheirer--Ray--Hare test. For these reasons, its use is more restricted than of other non-parametric tests, like the Wilcoxon rank sum and Kruskal--Wallis tests. It is good to know about it as an option, but often one must rely on other methods, such as the parametric two-way ANOVA.
 
 
 ## Exercises {#sec-exercises-anova-two-way}
@@ -158,6 +158,7 @@ Note that this test is skeptical about the role of the supplement type, and defi
 1. The file [`cow_growth.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/cow_growth.csv) has data on the growth of individual cows which have received different grains (wheat, oats, or barley) and, independently, one of four different dietary supplements (one of which is no supplement, for control). Each of these diet combinations (twelve diets: three grains, times four supplements) had four cows observed. Is there any effect of these treatments on cow growth? Is there any interaction between the grain and the supplement given to the cows---some secret super-combination which makes the cows grow especially well (or poorly)?
     * As usual, before doing any tests, visualize and explore the data, and make sure you have a solid expectation for the results of any statistical analysis.
     * Answer the question by applying a parametric test. Run post-hoc tests as well if needed. Do not forget to create *diagnostic plots*, to see if the assumptions behind the parametric test are satisfied to an acceptable degree.
+
 2. The built-in `CO2` data frame contains measurements from an experiment on the cold tolerance of the grass species [*Echinochloa crus-galli*](https://en.wikipedia.org/wiki/Echinochloa_crus-galli). The dataset has five columns:
 
     * `Plant`: unique identifier for each plant individual.
@@ -166,4 +167,4 @@ Note that this test is skeptical about the role of the supplement type, and defi
     * `conc`: carbon dioxide concentration in the surrounding environment.
     * `uptake`: carbon dioxide uptake rate.
 
-    How do uptake rates depend on `Type`, `Treatment`, and their interaction? (For this exercise, you can ignore `Plant` and `conc`.) Start by forming a hypothesis based on visualizing the data. Then perform a parametric test and a corresponding post-hoc test. Make sure to use diagnostic plots to gauge the quality of its assumptions.
+    How do uptake rates depend on `Type`, `Treatment`, and their interaction? (For this exercise, you can ignore `Plant` and `conc`.) Start by forming a hypothesis based on visualizing the data. Then perform a parametric test and a corresponding post-hoc test. Make sure to use diagnostic plots to gauge the quality of the test's assumptions.

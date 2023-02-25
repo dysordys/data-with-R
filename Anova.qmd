@@ -26,7 +26,7 @@ ggplot(PlantGrowth) +
 
 Based on the figure, it is reasonable to expect there to be a real difference between treatment 1 and treatment 2. But whether there is good reason to think that the control truly differs from any of the treatments is unclear.
 
-One way of finding out could be to perform pairwise Wilcoxon tests between each pair of groups. This, in fact, would be quite feasible here, because there are only three comparisons to be made (control vs. treatment 1; control vs. treatment 2, and treatment 1 vs. treatment 2). Here are the results of doing this:
+One way of finding out could be to perform pairwise Wilcoxon rank sum tests between each pair of groups. This, in fact, would be quite feasible here, because there are only three comparisons to be made (control vs. treatment 1; control vs. treatment 2, and treatment 1 vs. treatment 2). Here are the results of doing this:
 
 ```{r}
 #| warning: false
@@ -45,13 +45,13 @@ as_tibble(PlantGrowth) %>%
 
 As expected, the difference between the control and the two treatments is not particularly credible (especially in the case of treatment 1), but there is good indication that the difference between the two treatments is not just due to chance.
 
-While this method of using repeated Wilcoxon tests worked fine above, there are some problems with this approach. One is that it can quickly get out of hand, because having $n$ groups means there will be $n (n - 1) / 2$ pairs to consider. For instance, if the number of groups is 12 (not a particularly large number), then there are 66 unique pairs already. It would not be pleasant to perform this many tests, even if any single test is quite simple to run.
+While this method of using repeated Wilcoxon rank sum tests worked fine above, there are some problems with this approach. One is that it can quickly get out of hand, because having $n$ groups means there will be $n (n - 1) / 2$ pairs to consider. For instance, if the number of groups is 12 (not a particularly large number), then there are 66 unique pairs already. It would not be pleasant to perform this many tests, even if any single test is quite simple to run.
 
 The other problem has to do with *multiple testing* and its influence on the interpretation of p-values. Very simply put, the problem is that if sufficiently many groups are compared, then we might find at least one pair with a low p-value---not because the null hypothesis is false, but because across a large number of observations some p-values will turn out lower than others just by chance. Remember: p-values measure, in effect, the probability that the observed effect is too stark to be due to simple coincidence. But if we create sufficiently many opportunities for such a coincidence to arise, then of course one eventually will. One of the best explanations of this point is in the following cartoon by [xkcd](https://xkcd.com/):
 
 ![](significant.png)
 
-Fortunately, there is no need to rely on repeated Wilcoxon tests when there are more than two groups, as other methods are available. One such method is the *Kruskal--Wallis test*, which can be used with any number of groups as long as those groups vary within a single factor.^[In @sec-SRH we will see examples where multiple independent factors are varied, and each possible combination results in a separate group. For example, if the effects of three different dosages of vitamin C are examined on the tooth growth of Guinea pigs, and the vitamin is also supplied in two distinct forms of either orange juice or raw ascorbic acid, then there will be $3 \cdot 2 = 6$ groups, defined by the two factors of dosage and form of supplement.] The Kruskal--Wallis test is non-parametric, and therefore does not rely on assumptions such as the normality of the residuals. Its application is precisely analogous to how the Wilcoxon test is implemented. Therefore, to perform the test on the `PlantGrowth` data:
+Fortunately, there is no need to rely on repeated Wilcoxon rank sum tests when there are more than two groups, as other methods are available. One such method is the *Kruskal--Wallis test*, which can be used with any number of groups as long as those groups vary within a single factor.^[In @sec-SRH we will see examples where multiple independent factors are varied, and each possible combination results in a separate group. For example, if the effects of three different dosages of vitamin C are examined on the tooth growth of Guinea pigs, and the vitamin is also supplied in two distinct forms of either orange juice or raw ascorbic acid, then there will be $3 \cdot 2 = 6$ groups, defined by the two factors of dosage and form of supplement.] The Kruskal--Wallis test is non-parametric, and therefore does not rely on assumptions such as the normality of the residuals. Its application is precisely analogous to how the Wilcoxon rank sum test is implemented. Therefore, to perform the test on the `PlantGrowth` data:
 
 ```{r}
 kruskal.test(weight ~ group, data = PlantGrowth)
@@ -59,7 +59,7 @@ kruskal.test(weight ~ group, data = PlantGrowth)
 
 The null hypothesis of the Kruskal--Wallis test is that the observations from all groups were sampled from the same underlying distribution---that is, that there are no differences between the groups other than those attributed to random noise. Consequently, when the p-value is low (like above), this means that it is unlikely that the data in all groups come from the same distribution, and thus that *at least* one group differs from the others.
 
-While that is something, we want more: an actual comparison of the groups (like we have done with our repeated Wilcoxon tests). The way forward is to perform a *post hoc* (Latin "after this") test. In this case, the *Dunn test* is one such post hoc test. This test is implemented in R, but not in any of the basic packages. To use it, one must first install the `FSA` package:
+While that is something, we want more: an actual comparison of the groups (like we have done with our repeated Wilcoxon rank sum tests). The way forward is to perform a *post hoc* (Latin "after this") test. In this case, the *Dunn test* is one such post hoc test. This test is implemented in R, but not in any of the basic packages. To use it, one must first install the `FSA` package:
 
 ```{r}
 #| eval: false
@@ -211,4 +211,5 @@ lm(weight ~ group, data = PlantGrowth) %>% tukey.test()
     * Answer the question whether growth rates affected by parasite load by first applying a non-parametric test (and a subsequent non-parametric post-hoc test if needed).
     * Next, apply a parametric test in the same way: by applying the test and running post-hoc tests if needed.
     * Do not forget to create *diagnostic plots*, to see if the assumptions behind the parametric test are satisfied to an acceptable degree. Is that the case? And do the results from the parametric and non-parametric tests agree with one another?
+
 2. In [`ponds.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/ponds.csv), measured acidity data (pH) is reported from four different ponds. Do the ponds differ in acidity, and if so, which ones from which others? Answer using both non-parametric and parametric tests, with appropriate post-hoc analyses. Check whether these different methods of analysis agree, and make sure that the assumptions behind the parametric test are satisfied using diagnostic plots. (Note: in this dataset, some values are missing.)
