@@ -272,7 +272,7 @@ seq(0, 3, by = 0.2)
 
 creates a vector of numbers ranging from 0 to 3, in steps of 0.2.
 
-Just as one can create a vector of numerical values, it is also possible to create a vector of character strings of logical values. For example:
+Just as one can create a vector of numerical values, it is also possible to create a vector of character strings or of logical values. For example:
 
 ```{r}
 #| eval: false

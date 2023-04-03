@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -415,7 +415,7 @@ F-statistic: 360.9 on 1 and 1076 DF,  p-value: &lt; 2.2e-16</code></pre>
 <h2 data-number="13.1" class="anchored" data-anchor-id="interpreting-the-results-of-a-linear-regression"><span class="header-section-number">13.1</span> Interpreting the results of a linear regression</h2>
 <p>The intercept and slope which minimize the sum of the squared deviations from the fit can be obtained for any data. But the question is: does such a linear fit actually mean anything? The situation is similar to what we discussed in <a href="Intro_statistics.html#sec-example-wilcox"><span>Section&nbsp;10.1</span></a>: one can always compute the difference of the means between two groups of data, but whether the observed difference is meaningfully different from zero is another question. In the case of the two groups, we introduced techniques such as the Wilcoxon rank sum test and the <em>t</em>-test to answer that question.</p>
 <p>For linear regression, a similar thing is possible. As seen, the output of <code>lm</code> above contains p-values and other statistics. The p-values are both practically zero, indicating that one can be absolutely certain that the observed nonzero intercept and slope aren’t simply due to chance. But for these conclusions to be meaningful, the usual assumptions must hold: the residuals should be independent from one another, should be normally distributed, and should be homoscedastic (have equal variance for all values of the predictor).</p>
-<p>One can check whether these assumptions hold with diagnostic plots. In this particular example, we have a nearly perfect match-up between theory and the data, so the statistical results fro the linear regression should be reliable:</p>
+<p>One can check whether these assumptions hold with diagnostic plots. In this particular example, we have a nearly perfect match-up between theory and the data, so the statistical results for the linear regression should be reliable:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggfortify)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -444,7 +444,7 @@ F-statistic: 360.9 on 1 and 1076 DF,  p-value: &lt; 2.2e-16</code></pre>
 11  5  5  5  8  5.68 4.74  5.73  6.89</code></pre>
 </div>
 </div>
-<p>These are actually four datasets merged into one: <code>x1</code> and <code>y1</code> are x and y coordinates of the points from the first set, <code>x1</code> and <code>y2</code> from the second set, and so on. We can use <code>pivot_longer</code> to put these data in tidy format:</p>
+<p>These are actually four datasets merged into one: <code>x1</code> and <code>y1</code> are x and y coordinates of the points from the first set, <code>x2</code> and <code>y2</code> from the second set, and so on. We can use <code>pivot_longer</code> to put these data in tidy format:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ans_long <span class="ot">&lt;-</span> anscombe <span class="sc">%&gt;%</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">".value"</span>, <span class="st">"set"</span>),</span>

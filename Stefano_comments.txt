@@ -1,11 +1,25 @@
 1.2 What about Linux? :-)
 1.3.3
-* Maybe mention R Projects?
+- Maybe mention R Projects?
+
 4.2
-* Many had trouble downloading the files, because they open as some form of HTML
+- Many had trouble downloading the files, because they open as some form of HTML
 4.2.6
-* Maybe this chapter would be good for a paragraph or two on 1) how to organize code/data; 2) how to name files/variables
+- Maybe this chapter would be good for a paragraph or two on 1) how to organize code/data; 2) how to name files/variables
+
 5.1.5
-* Mention transmute?
+- Mention transmute?
+
 6.2
-* I now always use summarise(..., .groups = "drop") instead of summarise() %>% ungroup() because sometimes it does not remove all groupings?
+- I now always use summarise(..., .groups = "drop") instead of summarise() %>% ungroup() because sometimes it does not remove all groupings?
+
+Ch 9 (Introducing statistical inference)
+- Maybe have a link to the code generating the data
+
+Ch10
+- Some people were confused about the first diagnostic plot; in the QQ plot, the curve seems to deviate considerably from 1:1 for high quantiles
+- Footnote on QQ plot: the residuals are also standardized; thus it should always be the 1:1 line
+- the difference between the two TREATMENT groups stands a reasonable
+
+Ch 12
+- In the Anscombe data, also R^2 is the same for all data sets. Speaking of which, maybe it's worth introducing R^2 as it is often reported

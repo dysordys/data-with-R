@@ -57,7 +57,7 @@ lm(uptake ~ conc + Type * Treatment, data = CO2) %>%
   theme_bw()
 ```
 
-While the Q--Q plot could be better, there is not much reason not to trust the model---other than the fact, or course, that the data in fact depend on concentrations in a manifestly nonlinear way. We will come back to this point in @sec-nonlin-regression.
+While the Q--Q plot could be better, there is not much reason not to trust the model---other than the fact, of course, that the data in fact depend on concentrations in a manifestly nonlinear way. We will come back to this point in @sec-nonlin-regression.
 
 It is also informative to apply the function `summary` on the model fit in addition to `anova`, to obtain the regression slopes and intercept:
 

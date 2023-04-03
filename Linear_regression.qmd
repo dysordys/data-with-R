@@ -59,7 +59,7 @@ The intercept and slope which minimize the sum of the squared deviations from th
 
 For linear regression, a similar thing is possible. As seen, the output of `lm` above contains p-values and other statistics. The p-values are both practically zero, indicating that one can be absolutely certain that the observed nonzero intercept and slope aren't simply due to chance. But for these conclusions to be meaningful, the usual assumptions must hold: the residuals should be independent from one another, should be normally distributed, and should be homoscedastic (have equal variance for all values of the predictor).
 
-One can check whether these assumptions hold with diagnostic plots. In this particular example, we have a nearly perfect match-up between theory and the data, so the statistical results fro the linear regression should be reliable:
+One can check whether these assumptions hold with diagnostic plots. In this particular example, we have a nearly perfect match-up between theory and the data, so the statistical results for the linear regression should be reliable:
 
 ```{r}
 #| warning: false
@@ -77,7 +77,7 @@ To further illustrate possible difficulties of interpretation, let us take a loo
 print(anscombe)
 ```
 
-These are actually four datasets merged into one: `x1` and `y1` are x and y coordinates of the points from the first set, `x1` and `y2` from the second set, and so on. We can use `pivot_longer` to put these data in tidy format:
+These are actually four datasets merged into one: `x1` and `y1` are x and y coordinates of the points from the first set, `x2` and `y2` from the second set, and so on. We can use `pivot_longer` to put these data in tidy format:
 
 ```{r}
 ans_long <- anscombe %>%

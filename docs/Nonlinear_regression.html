@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -416,7 +416,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p><img src="Nonlinear_regression_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>While the Q–Q plot could be better, there is not much reason not to trust the model—other than the fact, or course, that the data in fact depend on concentrations in a manifestly nonlinear way. We will come back to this point in <a href="#sec-nonlin-regression"><span>Section&nbsp;14.2</span></a>.</p>
+<p>While the Q–Q plot could be better, there is not much reason not to trust the model—other than the fact, of course, that the data in fact depend on concentrations in a manifestly nonlinear way. We will come back to this point in <a href="#sec-nonlin-regression"><span>Section&nbsp;14.2</span></a>.</p>
 <p>It is also informative to apply the function <code>summary</code> on the model fit in addition to <code>anova</code>, to obtain the regression slopes and intercept:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">+</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -639,7 +639,7 @@ $myTable
  residual sum-of-squares: 319.2
 
 Number of iterations to convergence: 6 
-Achieved convergence tolerance: 9.728e-06</code></pre>
+Achieved convergence tolerance: 9.723e-06</code></pre>
 </div>
 </div>
 <p>Observe that in the formula, we use the column name <code>conc</code> when we want to use the data inside that column, but use made-up names (in this case, <code>V</code> and <code>K</code>) for the unknown parameters we are trying to obtain. Their starting values were filled in from our earlier visual estimation. From these starting values, the best fitting solution is found. We see that their values are 51.36 for <span class="math inline">\(V\)</span> and 136.32 for <span class="math inline">\(K\)</span>.</p>
@@ -660,7 +660,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 Residual standard error: 4.099 on 19 degrees of freedom
 
 Number of iterations to convergence: 6 
-Achieved convergence tolerance: 9.728e-06</code></pre>
+Achieved convergence tolerance: 9.723e-06</code></pre>
 </div>
 </div>
 <p>As in the case of linear regression, the statistical analysis will only be reliable if the assumptions of the independence, normality, and homoscedasticity of the residuals are maintained.</p>

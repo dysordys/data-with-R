@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -634,7 +634,7 @@ difference in location
 </div>
 </div>
 <p>The dot stands for the object being piped in—which, in our case, is simply the tibble <code>bird</code>. The <code>data = .</code> argument therefore evaluates to <code>data = bird</code>.</p>
-<p>This ought to conclude all there is to using the dot notation, except that there are a few subtleties involved. As we know, the pipe substitutes the object on the left as the first argument of the object on the right. In the above expression, this behavior was overridden: by using the dot, the data were substituted as the second argument instead. This will be the case as long as the dot appears alone, without being nested into some other function call. <em>However, if the dot is part of another function, then the expression to the left of the pipe will additionally be substituted, silently, as the first argument on the right.</em> For example, suppose that we want to remove rows with missing data from the table first, before doing a statistical test. We can do this with the <code>drop_na</code> function. (Since the <code>bird</code> table does not have any rows with <code>NA</code> values, this does not actually do anything in this context, but it is easy to imagine data where some rows do have missing entries, in which case removing them first could be useful.) But then, the following piece of code will fail:</p>
+<p>This ought to conclude all there is to using the dot notation, except that there are a few subtleties involved. As we know, the pipe substitutes the tibble on the left as the first argument of the function on the right. In the above expression, this behavior was overridden: by using the dot, the data were substituted as the second argument instead. This will be the case as long as the dot appears alone, without being nested into some other function call. <em>However, if the dot is part of another function, then the expression to the left of the pipe will additionally be substituted, silently, as the first argument on the right.</em> For example, suppose that we want to remove rows with missing data from the table first, before doing a statistical test. We can do this with the <code>drop_na</code> function. (Since the <code>bird</code> table does not have any rows with <code>NA</code> values, this does not actually do anything in this context, but it is easy to imagine data where some rows do have missing entries, in which case removing them first could be useful.) But then, the following piece of code will fail:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">%&gt;%</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> island, <span class="at">data =</span> <span class="fu">drop_na</span>(.), <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -671,7 +671,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>While this behavior of the dot notation may appear arbitrary, there is method to the madness. In most situations, including the dot within another function indeed means that we would <em>like</em> the dot to also be passed as the first argument. For example, we could add row numbers to the bird tibble, by creating a new column whose entries range from one to the number of columns in the data. The number of columns can be obtained with the <code>nrow</code> function. Therefore, the following is possible:</p>
+<p>While this behavior of the dot notation may appear arbitrary, there is method to the madness. In most situations, including the dot within another function indeed means that we would <em>like</em> the dot to also be passed as the first argument. For example, we could add row numbers to the bird tibble, by creating a new column whose entries range from one to the number of rows in the data. The number of rows can be obtained with the <code>nrow</code> function. Therefore, the following is possible:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">%&gt;%</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rowID =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(.)) <span class="sc">%&gt;%</span> <span class="co"># Create new column, numbering the rows</span></span>
