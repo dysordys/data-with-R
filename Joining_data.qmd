@@ -28,30 +28,30 @@ print(stage)
 
 Notice that, while Sacha and Alex appear in both tables, Gabe is only included in `studies` and Jamie only in `stage`. While in our tiny tables might seem like an avoidable oversight, such non-perfect alignment of data is often the norm when working with data spanning hundreds or more rows. Here, for the purposes of illustration, we use small tables, but the principles we learn here apply in a broader context as well.
 
-There are four commonly used ways of joining these tables into one single dataset. All of them follow the same general pattern: the arguments are two tibbles to be joined, plus a `by = ` argument which lists, in quotes, the names of the columns based on which the tables should be joined. The output is always a single tibble, containing some type of joining of the data. Let us now look at each joining method in detail.
+There are four commonly used ways of joining these tables into one single dataset. All of them follow the same general pattern: the arguments are two tibbles to be joined, plus a `by = ` argument which defines a *join specification* of the columns by which the tables should be joined. The join specification can be given using a helper function called `join_by`. It simply receives the names of the columns to use for joining.^[It can also do a lot more; you can check its help pages by typing `?join_by`.] The output is always a single tibble, containing some type of joining of the data. Let us now look at each joining method in detail.
 
 ### `left_join`
 
 The `left_join` function keeps only those rows that appear in the *first* of the two tables to be joined:
 
 ```{r}
-left_join(studies, stage, by = "name")
+left_join(studies, stage, by = join_by(name))
 ```
 
-There are two things to notice. First, Jamie is missing from the `name` column above, even though s/he did appear in the `stage` tibble. This is exactly the point of `left_join`: if a row entry in the joining column (specified in `by = `) does not appear in the *first* table listed in the arguments (here, the `name` column of `studies`), then it is omitted. Second, the `year` entry for Gabe is `NA`. This is because Gabe is absent from the `stage` table, and therefore has no associated year of study. Rather than make up nonsense, R fills out such missing data with `NA` values.
+There are two things to notice. First, Jamie is missing from the `name` column above, even though s/he did appear in the `stage` tibble. This is exactly the point of `left_join`: if a row entry in the joining column (specified in `by = join_by(...)`) does not appear in the *first* table listed in the arguments, then it is omitted. (Here, that was the `name` column of `studies`.) Second, the `year` entry for Gabe is `NA`. This is because Gabe is absent from the `stage` table, and therefore has no associated year of study. Rather than make up nonsense, R fills out such missing data with `NA` values.
 
 ### `right_join`
 
 This function works just like `left_join`, except only those rows are retained which appear in the *second* of the two tables to be joined:
 
 ```{r}
-right_join(studies, stage, by = "name")
+right_join(studies, stage, by = join_by(name))
 ```
 
 In other words, this is exactly the same as calling `left_join` with its first two arguments reversed:
 
 ```{r}
-left_join(stage, studies, by = "name")
+left_join(stage, studies, by = join_by(name))
 ```
 
 The only difference is in the ordering of the columns, but the data contained in the tables are identical.
@@ -60,10 +60,10 @@ In this case, the columns `subject` is `NA` for Jamie. The reason is the same as
 
 ### `inner_join`
 
-This function retains only those rows which appear in *both* tables to be joined. For our example, since Gabe only appears in `studies` and Jamie only in `stage`, they will be dropped by `inner_join` and only Sacha and Alex are retained (since they appear in both tables):
+This function retains only those rows which appear in *both* tables to be joined. For our example, since Gabe only appears in `studies` and Jamie only in `stage`, they will be dropped by `inner_join` and only Sacha and Alex are retained (as they appear in both tables):
 
 ```{r}
-inner_join(studies, stage, by = "name")
+inner_join(studies, stage, by = join_by(name))
 ```
 
 ### `full_join`
@@ -71,7 +71,7 @@ inner_join(studies, stage, by = "name")
 The complement to `inner_join`, this function retains all rows in all tables, filling in missing values with `NA`s everywhere:
 
 ```{r}
-full_join(studies, stage, by = "name")
+full_join(studies, stage, by = join_by(name))
 ```
 
 A useful table summarizing these options, taken from a more comprehensive  (though slightly out-of-date) [cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf), is below:
@@ -104,36 +104,24 @@ progress <- tibble(
 print(progress)
 ```
 
-And now, since the tables share not just one but two columns, it makes sense to join them using both. This can be done by specifying each column inside a vector in the `by = ` argument. For example, left-joining `program` and `progress` by both `name` and `subject` leads to a joint table in which all unique `name`-`subject` combinations found in `program` are retained, but those found only in `progress` are discarded:
+And now, since the tables share not just one but two columns, it makes sense to join them using both. This can be done by specifying each column inside `join_by` in the `by = ` argument. For example, left-joining `program` and `progress` by both `name` and `subject` leads to a joint table in which all unique `name`-`subject` combinations found in `program` are retained, but those found only in `progress` are discarded:
 
 ```{r}
-left_join(program, progress, by = c("name", "subject"))
+left_join(program, progress, by = join_by(name, subject))
 ```
-
-
-:::{.callout-warning}
-As mentioned, the columns by which one joins the tables must be included in a vector. Forgetting to do this will either fail or produce faulty output:
-
-```{r}
-left_join(program, progress, by = "name", "subject")
-```
-
-The problem is that the comma after `name` is interpreted as the start of the next argument to `left_join`, instead of being a part of the `by = ` argument. Again, the solution is simple: enclose multiple column names in a vector.
-:::
-
 
 The other joining functions also work as expected:
 
 ```{r}
-right_join(program, progress, by = c("name", "subject"))
+right_join(program, progress, by = join_by(name, subject))
 ```
 
 ```{r}
-inner_join(program, progress, by = c("name", "subject"))
+inner_join(program, progress, by = join_by(name, subject))
 ```
 
 ```{r}
-full_join(program, progress, by = c("name", "subject"))
+full_join(program, progress, by = join_by(name, subject))
 ```
 
 
@@ -162,7 +150,7 @@ print(studies2)
 The tables have the exact same structure, in that the column names and types are identical. It's just that the rows are, for some reason, disparate. To combine them together, we could recourse to full-joining the tables by both their columns:
 
 ```{r}
-full_join(studies1, studies2, by = c("name", "subject"))
+full_join(studies1, studies2, by = join_by(name, subject))
 ```
 
 This, however, is not necessary. Whenever all we need to do is take two tables and stick their rows together, there is the simpler `bind_rows`:
