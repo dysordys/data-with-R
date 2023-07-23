@@ -360,7 +360,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>As a reminder, this can be written equivalently, using pipes:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">total =</span> species1 <span class="sc">+</span> species2 <span class="sc">+</span> species3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">total =</span> species1 <span class="sc">+</span> species2 <span class="sc">+</span> species3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 100 × 6
     time patch species1 species2 species3 total
@@ -382,7 +382,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="6.1" class="anchored" data-anchor-id="creating-summary-data"><span class="header-section-number">6.1</span> Creating summary data</h2>
 <p>One can create summaries of data using the <code>summarise</code> function. This will simply apply some function to a column. For example, to calculate the average population density of species 1 in <code>pop</code>, across both time and patches, one can write</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 1
   meanDensity1
@@ -393,7 +393,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Here <code>meanDensity1</code> is the name of the new column to be created, and the <code>mean</code> function is our summary function, collapsing the data into a single number.</p>
 <p>So far, this is not particularly interesting; in fact, the exact same effect would have been achieved by typing the shorter <code>mean(pop$species1)</code> instead. The real power of <code>summarise</code> comes through when combined with <code>group_by</code>. This groups the data based on the given grouping variables. Let us see how this works in practice:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(patch)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span> <span class="fu">group_by</span>(patch)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 100 × 5
 # Groups:   patch [2]
@@ -415,7 +415,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Seemingly nothing has happened; the only difference is the extra line of comment above, before the printed table, saying <code>Groups: patch [2]</code>. What this means is that the rows of the data were internally split into two groups. The first have <code>"A"</code> as their patch, and the second have <code>"B"</code>. Whenever one groups data using <code>group_by</code>, rows which share the same unique combination of the grouping variables now belong together, and <em>subsequent</em> operations will act separately on each group instead of acting on the table as a whole (which is what we have been doing so far). That is, <code>group_by</code> does not actually alter the data; it only alters the behavior of the functions applied to the grouped data.</p>
 <p>If we group not just by <code>patch</code> but also by <code>time</code>, the comment above the table will read <code>Groups: patch, time [100]</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(patch, time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span> <span class="fu">group_by</span>(patch, time)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 100 × 5
 # Groups:   patch, time [100]
@@ -437,8 +437,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>This is because there are 100 unique combinations of patch and time: two different <code>patch</code> values (<code>"A"</code> and <code>"B"</code>), and fifty points in time (1, 2, …, 50). So we have “patch A, time 1” as group 1, “patch B, time 1” as group 2, “patch A, time 2” as group 3, and so on until “patch B, time 50” as our group 100.</p>
 <p>As mentioned, functions that are applied to grouped data will act on the groups separately. To return to the example of calculating the mean population density of species 1 in the two patches, we can write:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch) <span class="sc">|&gt;</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 2
@@ -450,8 +450,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>One may obtain multiple summary statistics within the same <code>summarise</code> function. Below we compute both the mean and the standard deviation of the densities per patch:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch) <span class="sc">|&gt;</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1), <span class="at">sdDensity1 =</span> <span class="fu">sd</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 3
@@ -463,8 +463,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Let us see what happens if we calculate the mean density of species 1—but grouping by <code>time</code> instead of <code>patch</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(time) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(time) <span class="sc">|&gt;</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 50 × 2
@@ -496,18 +496,18 @@ Warning
 <div class="callout-body-container callout-body">
 <p>One common mistake when first encountering grouping and summaries is to assume that if we call <code>group_by(patch)</code>, then the subsequent summaries will be taken over patches. <em>This is not the case</em>, and it is important to take a moment to understand why. When we apply <code>group_by(patch)</code>, we are telling R to treat different patch values as group indicators. Therefore, when creating a summary, only the patch identities are retained from the original data (apart from the new summary statistics we calculate, of course). This means that the subsequent summaries are taken over everything <em>except</em> the patches. This should be clear after comparing the outputs of</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(patch) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span> <span class="fu">group_by</span>(patch) <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>and</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(time) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span> <span class="fu">group_by</span>(time) <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The first distinguishes the rows of the data only by <code>patch</code>, and therefore the average is taken over time. The second distinguishes the rows by <code>time</code>, so the average is taken over the patches. Run the two expressions again to see the difference between them!</p>
 </div>
 </div>
 <p>We can use functions such as <code>mutate</code> or <code>filter</code> on grouped data. For example, we might want to know the deviation of species 1’s density from its average <em>in each patch</em>. Doing the following does not quite do what we want:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">species1Dev =</span> species1 <span class="sc">-</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">species1Dev =</span> species1 <span class="sc">-</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 100 × 6
     time patch species1 species2 species3 species1Dev
@@ -527,8 +527,8 @@ Warning
 </div>
 <p>This will put the difference of species 1’s density from its mean density across both time and patches into the new column <code>species1Dev</code>. That is not the same as calculating the difference from the mean in a given patch—patch A for rows corresponding to patch A, and patch B for the others. To achieve this, all one needs to do is to group the data by <code>patch</code> before invoking <code>mutate</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch) <span class="sc">|&gt;</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">species1Dev =</span> species1 <span class="sc">-</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 100 × 6
@@ -551,9 +551,9 @@ Warning
 <p>Comparing this with the previous table, we see that the values in the <code>species1Dev</code> column are now different, because this time the differences are taken with respect to the average densities per each patch.</p>
 <p>Finally, since <code>group_by</code> changes subsequent behaviour, we might eventually want to get rid of the grouping in our data. This can be done with the function <code>ungroup</code>. For example:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch) <span class="sc">%&gt;%</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1), <span class="at">sdDensity1 =</span> <span class="fu">sd</span>(species1)) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch) <span class="sc">|&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1), <span class="at">sdDensity1 =</span> <span class="fu">sd</span>(species1)) <span class="sc">|&gt;</span></span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 3
@@ -575,7 +575,7 @@ Warning
 <p>Tidy data are suitable for performing operations, statistics, and plotting on. Furthermore, tidy data have a certain well-groomed feel to them, in the sense that their organization always follows the same general pattern regardless of the type of dataset one studies. Paraphrasing Tolstoy: tidy data are all alike; by contrast, every non-tidy dataset tends to be messy in its own unique way.</p>
 <p>The <code>tidyverse</code> offers a simple and convenient way of putting data in tidy format. The <code>pop</code> table from the previous section is not tidy, because although each variable is in its own column, it is not true that each observation is in its own row. Instead, each row contains three observations: the densities of species 1, 2, and 3 at a given time and place. To tidy up these data, we create <em>key-value pairs</em>. We merge the columns for species densities into just two new ones. The first of these (the <em>key</em>) indicates whether it is species 1, or 2, or 3 which the given row refers to. The second column (the <em>value</em>) contains the population density of the given species. Such key-value pairs are created by the function <code>pivot_longer</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">names_to =</span> <span class="st">"species"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">names_to =</span> <span class="st">"species"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 300 × 4
     time patch species  density
@@ -598,10 +598,10 @@ Warning
 <p>The above table is now in tidy form: each column records a single variable, and each row contains a single observation. Notice that, unlike the original <code>pop</code> which had 100 rows and 5 columns, the tidy version has 300 rows and 4 columns. This is natural: since the number of columns was reduced, there must be some extra rows to prevent the loss of information. And one should notice another benefit to casting the data in tidy format: it forces one to explicitly specify what was measured. By having named the value column <code>density</code>, we now know that the numbers 8.43, 6.62, etc. are density measurements. In contrast, it is not immediately obvious what these same numbers mean under the columns <code>species1</code>, <code>species2</code>, … in the original data.</p>
 <p>It is possible to undo the effect <code>pivot_longer</code>. To do so, use <code>pivot_wider</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"species"</span>),</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"species"</span>,</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="st">"species"</span>, <span class="at">values_from =</span> <span class="st">"density"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 100 × 5
@@ -623,10 +623,10 @@ Warning
 <p>The two named arguments of <code>pivot_wider</code> above are <code>names_from</code> (which specifies the column from which the names for the new columns will be taken), and <code>values_from</code> (the column whose values will be used to fill in the rows under those new columns).</p>
 <p>As a remark, one could make the data even “wider”, by not only making columns out of the population densities, but the densities at a given patch. Doing so is simple: one just needs to specify both the <code>species</code> and <code>patch</code> columns from which the new column names will be compiled.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"species"</span>),</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"species"</span>,</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> <span class="fu">c</span>(<span class="st">"species"</span>, <span class="st">"patch"</span>), <span class="at">values_from =</span> <span class="st">"density"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 50 × 7
@@ -648,15 +648,15 @@ Warning
 <p>If tidy data are what we strive for, what is the practical use of <code>pivot_wider</code>? There are two answers to this question. First, while non-tidy data are indeed less efficient from a computational and data analysis standpoint, they are often more human-readable. For example, the <code>pop</code> table is easy to read despite the lack of tidiness, because each row corresponds to a given time and place. By tidying the data, information referring to any given time and place will be spread out over multiple (in our case, three) rows—one for each species. While this is preferable from a data analysis point of view, it can be more difficult to digest visually. Second, wide data lend themselves very well to a class of statistical techniques called <em>multivariate analysis</em>. In case one wants to perform multivariate analysis, wide-format data are often better than tidy data. We will see an example application of this in <a href="Nonlinear_regression.html#sec-ancova"><span>Section&nbsp;14.1</span></a>.</p>
 <p>Finally, it is worth noting the power of tidy data in, e.g., generating summary statistics. To obtain the mean and the standard deviation of the population densities for each species in each patch, all one has to do is this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Tidy up the data:</span></span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">"species"</span>),</span>
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"species"</span>,</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"density"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Group data by both species and patch:</span></span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch, species) <span class="sc">%&gt;%</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch, species) <span class="sc">|&gt;</span></span>
 <span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Obtain statistics:</span></span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanDensity =</span> <span class="fu">mean</span>(density), <span class="at">sdDensity =</span> <span class="fu">sd</span>(density)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanDensity =</span> <span class="fu">mean</span>(density), <span class="at">sdDensity =</span> <span class="fu">sd</span>(density)) <span class="sc">|&gt;</span></span>
 <span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Don't forget to ungroup the data at the end:</span></span>
 <span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">

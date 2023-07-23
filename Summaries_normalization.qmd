@@ -29,7 +29,7 @@ mutate(pop, total = species1 + species2 + species3)
 As a reminder, this can be written equivalently, using pipes:
 
 ```{r}
-pop %>% mutate(total = species1 + species2 + species3)
+pop |> mutate(total = species1 + species2 + species3)
 ```
 
 
@@ -38,7 +38,7 @@ pop %>% mutate(total = species1 + species2 + species3)
 One can create summaries of data using the `summarise` function. This will simply apply some function to a column. For example, to calculate the average population density of species 1 in `pop`, across both time and patches, one can write
 
 ```{r}
-pop %>% summarise(meanDensity1 = mean(species1))
+pop |> summarise(meanDensity1 = mean(species1))
 ```
 
 Here `meanDensity1` is the name of the new column to be created, and the `mean` function is our summary function, collapsing the data into a single number.
@@ -47,7 +47,7 @@ So far, this is not particularly interesting; in fact, the exact same effect wou
 
 ```{r}
 #| message: false
-pop %>% group_by(patch)
+pop |> group_by(patch)
 ```
 
 Seemingly nothing has happened; the only difference is the extra line of comment above, before the printed table, saying `Groups: patch [2]`. What this means is that the rows of the data were internally split into two groups. The first have `"A"` as their patch, and the second have `"B"`. Whenever one groups data using `group_by`, rows which share the same unique combination of the grouping variables now belong together, and *subsequent* operations will act separately on each group instead of acting on the table as a whole (which is what we have been doing so far). That is, `group_by` does not actually alter the data; it only alters the behavior of the functions applied to the grouped data.
@@ -56,7 +56,7 @@ If we group not just by `patch` but also by `time`, the comment above the table 
 
 ```{r}
 #| message: false
-pop %>% group_by(patch, time)
+pop |> group_by(patch, time)
 ```
 
 This is because there are 100 unique combinations of patch and time: two different `patch` values (`"A"` and `"B"`), and fifty points in time (1, 2, ..., 50). So we have "patch A, time 1" as group 1, "patch B, time 1" as group 2, "patch A, time 2" as group 3, and so on until "patch B, time 50" as our group 100.
@@ -65,8 +65,8 @@ As mentioned, functions that are applied to grouped data will act on the groups 
 
 ```{r}
 #| message: false
-pop %>%
-  group_by(patch) %>%
+pop |>
+  group_by(patch) |>
   summarise(meanDensity1 = mean(species1))
 ```
 
@@ -74,8 +74,8 @@ One may obtain multiple summary statistics within the same `summarise` function.
 
 ```{r}
 #| message: false
-pop %>%
-  group_by(patch) %>%
+pop |>
+  group_by(patch) |>
   summarise(meanDensity1 = mean(species1), sdDensity1 = sd(species1))
 ```
 
@@ -83,8 +83,8 @@ Let us see what happens if we calculate the mean density of species 1---but grou
 
 ```{r}
 #| message: false
-pop %>%
-  group_by(time) %>%
+pop |>
+  group_by(time) |>
   summarise(meanDensity1 = mean(species1))
 ```
 
@@ -96,14 +96,14 @@ One common mistake when first encountering grouping and summaries is to assume t
 
 ```{r}
 #| eval: false
-pop %>% group_by(patch) %>% summarise(meanDensity1 = mean(species1))
+pop |> group_by(patch) |> summarise(meanDensity1 = mean(species1))
 ```
 
 and
 
 ```{r}
 #| eval: false
-pop %>% group_by(time) %>% summarise(meanDensity1 = mean(species1))
+pop |> group_by(time) |> summarise(meanDensity1 = mean(species1))
 ```
 
 The first distinguishes the rows of the data only by `patch`, and therefore the average is taken over time. The second distinguishes the rows by `time`, so the average is taken over the patches. Run the two expressions again to see the difference between them!
@@ -113,14 +113,14 @@ The first distinguishes the rows of the data only by `patch`, and therefore the 
 We can use functions such as `mutate` or `filter` on grouped data. For example, we might want to know the deviation of species 1's density from its average *in each patch*. Doing the following does not quite do what we want:
 
 ```{r}
-pop %>% mutate(species1Dev = species1 - mean(species1))
+pop |> mutate(species1Dev = species1 - mean(species1))
 ```
 
 This will put the difference of species 1's density from its mean density across both time and patches into the new column `species1Dev`. That is not the same as calculating the difference from the mean in a given patch---patch A for rows corresponding to patch A, and patch B for the others. To achieve this, all one needs to do is to group the data by `patch` before invoking `mutate`:
 
 ```{r}
-pop %>%
-  group_by(patch) %>%
+pop |>
+  group_by(patch) |>
   mutate(species1Dev = species1 - mean(species1))
 ```
 
@@ -130,9 +130,9 @@ Finally, since `group_by` changes subsequent behaviour, we might eventually want
 
 ```{r}
 #| message: false
-pop %>%
-  group_by(patch) %>%
-  summarise(meanDensity1 = mean(species1), sdDensity1 = sd(species1)) %>%
+pop |>
+  group_by(patch) |>
+  summarise(meanDensity1 = mean(species1), sdDensity1 = sd(species1)) |>
   ungroup()
 ```
 
@@ -151,7 +151,7 @@ Tidy data are suitable for performing operations, statistics, and plotting on. F
 The `tidyverse` offers a simple and convenient way of putting data in tidy format. The `pop` table from the previous section is not tidy, because although each variable is in its own column, it is not true that each observation is in its own row. Instead, each row contains three observations: the densities of species 1, 2, and 3 at a given time and place. To tidy up these data, we create *key-value pairs*. We merge the columns for species densities into just two new ones. The first of these (the *key*) indicates whether it is species 1, or 2, or 3 which the given row refers to. The second column (the *value*) contains the population density of the given species. Such key-value pairs are created by the function `pivot_longer`:
 
 ```{r}
-pop %>% pivot_longer(cols = 3:5, names_to = "species", values_to = "density")
+pop |> pivot_longer(cols = 3:5, names_to = "species", values_to = "density")
 ```
 
 The function `pivot_longer` takes three arguments in addition to the first (data) argument that we may pipe in, like above. First, `cols` is the list of columns to be converted into key-value pairs. It uses the same tidy selection mechanisms as the function `select` (@sec-select). This means that one can refer to the columns by number: `cols = 3:5` is the same as `cols = c(3, 4, 5)` and selects the third, fourth, and fifth columns (the ones corresponding to the population densities). One can also write `cols = c(species1, species2, species3)` instead, choosing columns by their names. This can give greater clarity, albeit at the cost of more typing. Or---perhaps the best and cleanest in this case---one can use `cols = starts_with("species")` to select those columns which start with the string `"species"`.
@@ -163,10 +163,10 @@ The above table is now in tidy form: each column records a single variable, and 
 It is possible to undo the effect `pivot_longer`. To do so, use `pivot_wider`:
 
 ```{r}
-pop %>%
+pop |>
   pivot_longer(cols = starts_with("species"),
                names_to = "species",
-               values_to = "density") %>%
+               values_to = "density") |>
   pivot_wider(names_from = "species", values_from = "density")
 ```
 
@@ -175,10 +175,10 @@ The two named arguments of `pivot_wider` above are `names_from` (which specifies
 As a remark, one could make the data even "wider", by not only making columns out of the population densities, but the densities at a given patch. Doing so is simple: one just needs to specify both the `species` and `patch` columns from which the new column names will be compiled.
 
 ```{r}
-pop %>%
+pop |>
   pivot_longer(cols = starts_with("species"),
                names_to = "species",
-               values_to = "density") %>%
+               values_to = "density") |>
   pivot_wider(names_from = c("species", "patch"), values_from = "density")
 ```
 
@@ -188,15 +188,15 @@ Finally, it is worth noting the power of tidy data in, e.g., generating summary 
 
 ```{r}
 #| message: false
-pop %>%
+pop |>
   # Tidy up the data:
   pivot_longer(cols = starts_with("species"),
                names_to = "species",
-               values_to = "density") %>%
+               values_to = "density") |>
   # Group data by both species and patch:
-  group_by(patch, species) %>%
+  group_by(patch, species) |>
   # Obtain statistics:
-  summarise(meanDensity = mean(density), sdDensity = sd(density)) %>%
+  summarise(meanDensity = mean(density), sdDensity = sd(density)) |>
   # Don't forget to ungroup the data at the end:
   ungroup()
 ```

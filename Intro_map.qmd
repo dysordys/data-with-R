@@ -10,19 +10,19 @@ library(tidyverse) # Loading the tidyverse, before doing anything else
 In @sec-functions we learned how to create user-defined functions. An example was provided in @sec-tukey, where we made our life easier by eliminating the need to always call `aov` before performing a Tukey test with `TukeyHSD`. Without the function, we must write:
 
 ```{r}
-lm(weight ~ group, data = PlantGrowth) %>% aov() %>% TukeyHSD()
+lm(weight ~ group, data = PlantGrowth) |> aov() |> TukeyHSD()
 ```
 
 Instead, we can write a simple function that takes a linear model fit object as its input and produces the Tukey test as its output:
 
 ```{r}
-tukeyTest <- function(modelFit) modelFit %>% aov() %>% TukeyHSD()
+tukeyTest <- function(modelFit) modelFit |> aov() |> TukeyHSD()
 ```
 
 Using this function, we can now simply write:
 
 ```{r}
-lm(weight ~ group, data = PlantGrowth) %>% tukeyTest()
+lm(weight ~ group, data = PlantGrowth) |> tukeyTest()
 ```
 
 :::{.callout-note}
@@ -33,7 +33,7 @@ Second, in this function the `return` keyword was not used. Like curly braces, `
 Whether to use braces and `return` even in cases when they are not needed is largely a question of personal coding style. From now on, they will often be omitted whenever their absence does not hamper program readability.
 :::
 
-Another useful function we can write helps use statistical procedures within a pipeline. As we have seen, most statistical functions take a formula as their first argument and the data as their second (and then they may take further, method-specific arguments as well, like `conf.int` in the function `wilcox.test`). Since the pipe operator `%>%` is often used in conjunction with functions like `select`, `mutate`, `pivot_longer`, `summarise`, etc. which all return a data frame, it would be convenient to reverse the order of arguments in all statistical functions, with the data coming first and the formula coming second. In fact, such a function is easy to write. We could call it `stats`:
+Another useful function we can write helps use statistical procedures within a pipeline. As we have seen, most statistical functions take a formula as their first argument and the data as their second (and then they may take further, method-specific arguments as well, like `conf.int` in the function `wilcox.test`). Since the pipe operator `|>` is often used in conjunction with functions like `select`, `mutate`, `pivot_longer`, `summarise`, etc. which all return a data frame, it would be convenient to reverse the order of arguments in all statistical functions, with the data coming first and the formula coming second. In fact, such a function is easy to write. We could call it `stats`:
 
 ```{r}
 stats <- function(data, formula, method) method(formula, data)
@@ -42,17 +42,17 @@ stats <- function(data, formula, method) method(formula, data)
 Here `method` is the statistical function we wish to use. For example:
 
 ```{r}
-PlantGrowth %>%
-  filter(group != "ctrl") %>%
+PlantGrowth |>
+  filter(group != "ctrl") |>
   stats(weight ~ group, wilcox.test)
 ```
 
 This is now fully equivalent to:
 
 ```{r}
-PlantGrowth %>%
-  filter(group != "ctrl") %>%
-  wilcox.test(weight ~ group, data = .)
+PlantGrowth |>
+  filter(group != "ctrl") |>
+  wilcox.test(weight ~ group, data = _)
 ```
 
 We can add a further improvement to the `stats` function. As it is, it can only take the formula and the data as inputs, but not any other, function-specific arguments. In R, there is a way of passing arbitrary extra arguments, using the ellipsis (`...`). We can redefine `stats` this way:
@@ -66,8 +66,8 @@ stats <- function(data, formula, method, ...) {
 And now, we can pass extra arguments that we would not have been able to do before. For instance, we can request confidence intervals from `wilcox.test`:
 
 ```{r}
-PlantGrowth %>%
-  filter(group != "ctrl") %>%
+PlantGrowth |>
+  filter(group != "ctrl") |>
   stats(weight ~ group, wilcox.test, conf.int = TRUE, conf.level = 0.99)
 ```
 
@@ -76,10 +76,10 @@ From now on, we can use  `stats` for performing various statistical procedures:
 ```{r}
 #| message: false
 library(FSA) # For the Dunn test
-PlantGrowth %>% stats(weight ~ group, lm) %>% anova()
-PlantGrowth %>% stats(weight ~ group, lm) %>% tukeyTest()
-PlantGrowth %>% stats(weight ~ group, kruskal.test)
-PlantGrowth %>% stats(weight ~ group, dunnTest)
+PlantGrowth |> stats(weight ~ group, lm) |> anova()
+PlantGrowth |> stats(weight ~ group, lm) |> tukeyTest()
+PlantGrowth |> stats(weight ~ group, kruskal.test)
+PlantGrowth |> stats(weight ~ group, dunnTest)
 ```
 
 
@@ -144,7 +144,7 @@ map_dbl(1:10, function(x) x^2)
 Similarly, there are functions `map_chr`, `map_lgl`, and some others, which create vectors of the appropriate type. For example, to append the agglutination "-ing" to various verbs, we can do:
 
 ```{r}
-c("attend", "visit", "support", "help", "savour") %>%
+c("attend", "visit", "support", "help", "savour") |>
   map_chr(function(text) paste0(text, "ing"))
 ```
 
@@ -179,7 +179,7 @@ wilcox.test(weight ~ group, data = plantTrt,
 This generates an error: because of the way `wilcox.test` is internally implemented in R, it does not allow or recognize a vector input in place of `conf.level`. It must be a single number instead. This, however, can be overcome if we just use `map`:
 
 ```{r}
-c(0.8, 0.9, 0.95, 0.99) %>% # The vector of confidence levels
+c(0.8, 0.9, 0.95, 0.99) |> # The vector of confidence levels
   map(function(confLevel) wilcox.test(weight ~ group, data = plantTrt,
                             conf.int = TRUE, conf.level = confLevel))
 ```
@@ -192,7 +192,7 @@ wilcoxConf <- function(confLevel) {
               conf.int = TRUE, conf.level = confLevel)
 }
 
-c(0.8, 0.9, 0.95, 0.99) %>% map(wilcoxConf)
+c(0.8, 0.9, 0.95, 0.99) |> map(wilcoxConf)
 ```
 
 

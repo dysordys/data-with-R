@@ -148,7 +148,7 @@ print(onlySpeciesDat)
 
 This, however, requires inventing arbitrary variable names at every step, or else overwriting variables. For such a short example, this is not problematic, but doing the same for a long pipeline of dozens of steps could get confusing, as well as dangerous due to the repeatedly modified variables.
 
-It turns out that one can get the best of both worlds: the safety of function composition with the conceptual clarity of repeated assignments. This only requires that we make use of the pipe operator `%>%` that we learned about in @sec-pipes. As a reminder, for any function `f` and function argument `x`, `f(x, y, ...)` is the same as `x %>% f(y, ...)`, where the `...` denote potential further arguments to `f`. That is, the first argument of the function can be moved from the argument list to in front of the function, before the pipe symbol. The `tidyverse` functions take the data as their first argument, which means that the use of pipes allow us to very conveniently chain together multiple steps of data analysis. In our case, we can rewrite the original and quite confusing
+It turns out that one can get the best of both worlds: the safety of function composition with the conceptual clarity of repeated assignments. This only requires that we make use of the pipe operator `|>` that we learned about in @sec-pipes. As a reminder, for any function `f` and function argument `x`, `f(x, y, ...)` is the same as `x |> f(y, ...)`, where the `...` denote potential further arguments to `f`. That is, the first argument of the function can be moved from the argument list to in front of the function, before the pipe symbol. The `tidyverse` functions take the data as their first argument, which means that the use of pipes allow us to very conveniently chain together multiple steps of data analysis. In our case, we can rewrite the original and quite confusing
 
 ```{r}
 #| eval: false
@@ -165,21 +165,21 @@ with the use of pipes, in a much more transparent way:
 
 ```{r}
 #| eval: false
-goldbergDat %>%
-  mutate(Selfing = ifelse(Status < 2, "simple", "complex")) %>%
-  filter(Selfing == "complex") %>%
+goldbergDat |>
+  mutate(Selfing = ifelse(Status < 2, "simple", "complex")) |>
+  filter(Selfing == "complex") |>
   select(Species)
 ```
 
-Again, the pipe `%>%` should be pronounced *then*. We take the data, *then* we mutate it, *then* we filter for complex selfing, and *then* we select one of the columns. In performing these steps, each function both receives and returns data. Thus, by starting out with the original `goldbergDat`, we no longer need to write out the data argument of the functions explicitly. Instead, the pipe takes care of that automatically for us, making the functions receive as their first input argument the piped-in data, and in turn producing transformed data as their output---which becomes the input for the next function in line.
+Again, the pipe `|>` should be pronounced *then*. We take the data, *then* we mutate it, *then* we filter for complex selfing, and *then* we select one of the columns. In performing these steps, each function both receives and returns data. Thus, by starting out with the original `goldbergDat`, we no longer need to write out the data argument of the functions explicitly. Instead, the pipe takes care of that automatically for us, making the functions receive as their first input argument the piped-in data, and in turn producing transformed data as their output---which becomes the input for the next function in line.
 
 In fact, there is technically no need to even assign `goldbergDat`. The pipe can just as well start with `read_csv` to import the dataset:
 
 ```{r}
 #| message: false
-read_csv("Goldberg2010_data.csv") %>%
-  mutate(Selfing = ifelse(Status < 2, "simple", "complex")) %>%
-  filter(Selfing == "complex") %>%
+read_csv("Goldberg2010_data.csv") |>
+  mutate(Selfing = ifelse(Status < 2, "simple", "complex")) |>
+  filter(Selfing == "complex") |>
   select(Species)
 ```
 

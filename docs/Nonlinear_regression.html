@@ -361,7 +361,7 @@ div.csl-indent {
 </div>
 <p>We can plot the observed distributions of CO<sub>2</sub> uptake rates for each type and treatment:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(CO2) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(CO2) <span class="sc">|&gt;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> uptake)) <span class="sc">+</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">fill =</span> <span class="st">"steelblue"</span>,</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
@@ -378,7 +378,7 @@ div.csl-indent {
 </div>
 <p>This, however, is only part of the story, as becomes obvious if we also plot the ambient CO<sub>2</sub> concentrations (<code>conc</code>) along the x-axis:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(CO2) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(CO2) <span class="sc">|&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> conc, <span class="at">y =</span> uptake)) <span class="sc">+</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(Type <span class="sc">~</span> Treatment) <span class="sc">+</span></span>
@@ -390,7 +390,7 @@ div.csl-indent {
 </div>
 <p>We see that there is also a clear, saturating relationship between CO<sub>2</sub> concentration and uptake rates. It is definitely not a linear relationship, but a saturating one. This does not mean that a linear model is useless for analyzing these data: the trend of whether the data increase or decrease can still be captured (although it is not recommended to use the model for numerical prediction purposes). One model that may come to mind is as follows:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">+</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">%&gt;%</span> <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">+</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">|&gt;</span> <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
 
@@ -409,7 +409,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggfortify)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">+</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">+</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">|&gt;</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="at">which=</span><span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">smooth.colour=</span><span class="cn">NA</span>, <span class="at">colour=</span><span class="st">"steelblue"</span>, <span class="at">alpha=</span><span class="fl">0.7</span>) <span class="sc">+</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -419,7 +419,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p>While the Q–Q plot could be better, there is not much reason not to trust the model—other than the fact, of course, that the data in fact depend on concentrations in a manifestly nonlinear way. We will come back to this point in <a href="#sec-nonlin-regression"><span>Section&nbsp;14.2</span></a>.</p>
 <p>It is also informative to apply the function <code>summary</code> on the model fit in addition to <code>anova</code>, to obtain the regression slopes and intercept:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">+</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">+</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -446,7 +446,7 @@ F-statistic: 47.69 on 4 and 79 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <p>As good as this model looks, one can argue based on the plot of the data that there could also be an interaction between <code>conc</code> and the other two factors. After all, the saturation levels of the uptake rate are always higher in Quebec than in Mississippi, and the effect of chilling also depends on <code>Type</code>. A model which accounts for all these effects and their interactions is <code>uptake ~ conc * Type * Treatment</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">*</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">%&gt;%</span> <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">*</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">|&gt;</span> <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
 
@@ -463,7 +463,7 @@ Residuals           76 2547.2    33.5
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">*</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">*</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -490,7 +490,7 @@ Residual standard error: 5.789 on 76 degrees of freedom
 Multiple R-squared:  0.7376,    Adjusted R-squared:  0.7134 
 F-statistic: 30.52 on 7 and 76 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">*</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">*</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">|&gt;</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="at">which=</span><span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">smooth.colour=</span><span class="cn">NA</span>, <span class="at">colour=</span><span class="st">"steelblue"</span>, <span class="at">alpha=</span><span class="fl">0.7</span>) <span class="sc">+</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -503,8 +503,8 @@ F-statistic: 30.52 on 7 and 76 DF,  p-value: &lt; 2.2e-16</code></pre>
 <h2 data-number="14.2" class="anchored" data-anchor-id="sec-nonlin-regression"><span class="header-section-number">14.2</span> Nonlinear regression</h2>
 <p>The relationship between CO<sub>2</sub> concentration and uptake rates are definitely not linear, regardless of treatment or type. So the question arises: can one fit a <em>nonlinear</em> function to these data? As an example, let us focus on just Quebec and the nonchilled treatment, to better illustrate the ideas behind nonlinear regression. Here are the data:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(CO2) <span class="sc">%&gt;%</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Type <span class="sc">==</span> <span class="st">"Quebec"</span>, Treatment <span class="sc">==</span> <span class="st">"nonchilled"</span>) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(CO2) <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Type <span class="sc">==</span> <span class="st">"Quebec"</span>, Treatment <span class="sc">==</span> <span class="st">"nonchilled"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> conc, <span class="at">y =</span> uptake)) <span class="sc">+</span></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"concentration"</span>, <span class="at">y =</span> <span class="st">"uptake rate"</span>) <span class="sc">+</span></span>
@@ -517,10 +517,10 @@ F-statistic: 30.52 on 7 and 76 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">expand_grid</span>(<span class="at">V =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>), <span class="co"># This function creates a tibble with all</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">K =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">10</span>),   <span class="co"># possible combinations of the inputs</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">concentration =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">60</span>, <span class="at">l =</span> <span class="dv">201</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(V, K) <span class="sc">%&gt;%</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">uptake =</span> V <span class="sc">*</span> concentration <span class="sc">/</span> (K <span class="sc">+</span> concentration)) <span class="sc">%&gt;%</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">concentration =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">60</span>, <span class="at">l =</span> <span class="dv">201</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(V, K) <span class="sc">|&gt;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">uptake =</span> V <span class="sc">*</span> concentration <span class="sc">/</span> (K <span class="sc">+</span> concentration)) <span class="sc">|&gt;</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> concentration, <span class="at">y =</span> uptake) <span class="sc">+</span></span>
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
@@ -535,8 +535,8 @@ F-statistic: 30.52 on 7 and 76 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>The interpretation of <span class="math inline">\(K\)</span> is slightly less straightforward, but still simple. To see what it means, let us ask what the uptake rate would be, were the concentration’s value equal to <span class="math inline">\(K\)</span>. In that case, we get <span class="math inline">\(\rho = V K / (K + K)\)</span> (we simply substituted <span class="math inline">\(c = K\)</span> into the formula), or <span class="math inline">\(\rho = VK / (2K) = V/2\)</span>. That is, <span class="math inline">\(K\)</span> is the concentration at which the uptake rate reaches half its maximum.</p>
 <p>Looking at the data again, both these parameters can be roughly estimated:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(CO2) <span class="sc">%&gt;%</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Type <span class="sc">==</span> <span class="st">"Quebec"</span>, Treatment <span class="sc">==</span> <span class="st">"nonchilled"</span>) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(CO2) <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Type <span class="sc">==</span> <span class="st">"Quebec"</span>, Treatment <span class="sc">==</span> <span class="st">"nonchilled"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> conc, <span class="at">y =</span> uptake)) <span class="sc">+</span></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">43</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">colour =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
@@ -625,15 +625,15 @@ $myTable
 <h3 data-number="14.2.2" class="anchored" data-anchor-id="back-to-nonlinear-regression"><span class="header-section-number">14.2.2</span> Back to nonlinear regression</h3>
 <p>With this brief introduction to lists, we now understand what it means that the <code>start</code> argument to <code>nls</code> must be a list, with the entries named after the parameters to be fitted. Using the previously-guessed values of <span class="math inline">\(V\)</span> and <span class="math inline">\(K\)</span> being around 43 and 125, respectively, means we can use <code>start = list(V = 43, K = 125)</code>. We can now look at the <code>nls</code> function and use it to produce a fit of the Michaelis–Menten curve to our data:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>nonlinearFit <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(CO2) <span class="sc">%&gt;%</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Type <span class="sc">==</span> <span class="st">"Quebec"</span>, Treatment <span class="sc">==</span> <span class="st">"nonchilled"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nls</span>(uptake <span class="sc">~</span> V<span class="sc">*</span>conc<span class="sc">/</span>(K <span class="sc">+</span> conc), <span class="at">data =</span> ., <span class="at">start =</span> <span class="fu">list</span>(<span class="at">V =</span> <span class="dv">43</span>, <span class="at">K =</span> <span class="dv">125</span>))</span>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>nonlinearFit <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(CO2) <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Type <span class="sc">==</span> <span class="st">"Quebec"</span>, Treatment <span class="sc">==</span> <span class="st">"nonchilled"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nls</span>(uptake <span class="sc">~</span> V<span class="sc">*</span>conc<span class="sc">/</span>(K <span class="sc">+</span> conc), <span class="at">data =</span> _, <span class="at">start =</span> <span class="fu">list</span>(<span class="at">V =</span> <span class="dv">43</span>, <span class="at">K =</span> <span class="dv">125</span>))</span>
 <span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(nonlinearFit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Nonlinear regression model
   model: uptake ~ V * conc/(K + conc)
-   data: .
+   data: filter(as_tibble(CO2), Type == "Quebec", Treatment == "nonchilled")
      V      K 
  51.36 136.32 
  residual sum-of-squares: 319.2
@@ -675,9 +675,9 @@ Achieved convergence tolerance: 9.728e-06</code></pre>
 </div>
 <p>returns a vector for each <code>conc</code> in the original data, documenting what the model thinks the corresponding uptake rate ought to be. They can then be compared with the data:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(CO2) <span class="sc">%&gt;%</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Type <span class="sc">==</span> <span class="st">"Quebec"</span>, Treatment <span class="sc">==</span> <span class="st">"nonchilled"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(nonlinearFit)) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(CO2) <span class="sc">|&gt;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Type <span class="sc">==</span> <span class="st">"Quebec"</span>, Treatment <span class="sc">==</span> <span class="st">"nonchilled"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pred =</span> <span class="fu">predict</span>(nonlinearFit)) <span class="sc">|&gt;</span></span>
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> conc, <span class="at">y =</span> uptake), <span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
 <span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> conc, <span class="at">y =</span> pred), <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
@@ -693,8 +693,8 @@ Achieved convergence tolerance: 9.728e-06</code></pre>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>V_fitted <span class="ot">&lt;-</span> <span class="fu">coef</span>(nonlinearFit)[<span class="st">"V"</span>] <span class="co"># Get fitted values of V and K</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>K_fitted <span class="ot">&lt;-</span> <span class="fu">coef</span>(nonlinearFit)[<span class="st">"K"</span>] <span class="co"># from the vector of coefficients</span></span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(CO2) <span class="sc">%&gt;%</span></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Type <span class="sc">==</span> <span class="st">"Quebec"</span>, Treatment <span class="sc">==</span> <span class="st">"nonchilled"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(CO2) <span class="sc">|&gt;</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Type <span class="sc">==</span> <span class="st">"Quebec"</span>, Treatment <span class="sc">==</span> <span class="st">"nonchilled"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> conc, <span class="at">y =</span> uptake), <span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
 <span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_function</span>(<span class="at">fun =</span> <span class="cf">function</span>(x) V_fitted <span class="sc">*</span> x <span class="sc">/</span> (K_fitted <span class="sc">+</span> x),</span>

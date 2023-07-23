@@ -418,7 +418,7 @@ div.csl-indent {
 <h2 data-number="8.2" class="anchored" data-anchor-id="scales"><span class="header-section-number">8.2</span> Scales</h2>
 <p>The aesthetic mappings of a graph (x-axis, y-axis, color, fill, size, shape, alpha, …) are automatically rendered into the displayed plot, based on certain default settings within <code>ggplot2</code>. These defaults can be altered, however. Consider the following bare-bones plot:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">|&gt;</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> Petal.Length) <span class="sc">+</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -429,7 +429,7 @@ div.csl-indent {
 <p>We can now change, for example, how the y-axis is displayed. The component to be added to the plot is <code>scale_y_continuous()</code>. Here <code>scale</code> means we are going to change the scaling of some aesthetic mapping, <code>y</code> refers to the y-axis (as expected, it can be replaced with <code>x</code>, <code>colour</code>, <code>fill</code>, etc.), and <code>continuous</code> means that the scaling of the axis is not via discrete values (e.g., either 1 or 2 or 3 but nothing in between), but continuous (every real number is permissible along the y-axis). The plot component <code>scale_y_continuous()</code> takes several arguments; take a look at its help page to see all possible options. Here we mention a few of them. First, there is the <code>name</code> option, which is used to relabel the axis. The <code>limits</code> argument accepts a vector of two values, containing the lower and upper limits of the plot. If any of them is set to <code>NA</code>, the corresponding limit will be determined automatically. Next, the <code>breaks</code> argument controls where the tick marks along the axis go. It is given as a vector, with its entries corresponding to the y-coordinates of the tick marks. Finally, <code>labels</code> determines what actually gets written on the axis at the tick mark points—it is therefore also a vector, its length matching that of <code>breaks</code>.</p>
 <p>As an example, let us scale the y-axis of the previous graph in the following way. The axis label should read “Petal length [cm]”, instead of the current “Petal.Length”. It should go from 0 to 7, with a break at those two values and also halfway in between at 3.5. Here is how to do this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">|&gt;</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> Petal.Length) <span class="sc">+</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
@@ -442,7 +442,7 @@ div.csl-indent {
 </div>
 <p>What should we do if, for some reason, we would additionally like the “3.5” in the middle to be displayed as “7/2” instead (an exact value)? In that case, we can add an appropriate <code>labels</code> option as an argument to <code>scale_y_continuous</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">|&gt;</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> Petal.Length) <span class="sc">+</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
@@ -456,7 +456,7 @@ div.csl-indent {
 </div>
 <p>The x-axis can be scaled similarly. One important difference though is that here the x-axis has a <em>discrete</em> scale. Since we are displaying the species along it, any value must be either <em>setosa</em> or <em>versicolor</em> or <em>virginica</em>; it makes no sense to talk about what is “halfway in between <em>setosa</em> and <em>versicolor</em>”. Therefore, one should use <code>scale_x_discrete()</code>. Its options are similar to those of <code>scale_x_continuous()</code>. For instance, let us override the axis label, spelling out that the three species belong to the genus <em>Iris</em>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">|&gt;</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> Petal.Length) <span class="sc">+</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
@@ -471,7 +471,7 @@ div.csl-indent {
 </div>
 <p>Alternatively, one could also redefine the labels and get an equally good graph:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">|&gt;</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> Petal.Length) <span class="sc">+</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
@@ -500,7 +500,7 @@ Note
 </div>
 <p>Other aesthetic mappings can also be adjusted, such as <code>colour</code>, <code>fill</code>, <code>size</code>, or <code>alpha</code>. One useful way to do it is through <code>scale_colour_manual()</code>, <code>scale_fill_manual()</code>, and so on. These are like <code>scale_colour_discrete()</code>, <code>scale_fill_discrete()</code> etc., except that they allow one to specify a discrete set of values by hand. Let us do this for color and fill:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">|&gt;</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Species, <span class="at">y =</span> Petal.Length, <span class="at">colour =</span> Species, <span class="at">fill =</span> Species) <span class="sc">+</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
@@ -543,7 +543,7 @@ Note
 </div>
 <p>(<code>month.abb</code> is a built-in vector of character strings in R, with the abbreviations of the months’ names from January to December.) So far so good. However, if we plot this with months along the x-axis and temperature along the y-axis, we run into trouble because R displays items by alphabetical instead of chronological order:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">month =</span> month.abb, <span class="at">temperature =</span> <span class="dv">10</span> <span class="sc">-</span> <span class="dv">15</span><span class="sc">*</span><span class="fu">cos</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="sc">*</span>pi, <span class="at">l=</span><span class="dv">12</span>))) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">month =</span> month.abb, <span class="at">temperature =</span> <span class="dv">10</span> <span class="sc">-</span> <span class="dv">15</span><span class="sc">*</span><span class="fu">cos</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="sc">*</span>pi, <span class="at">l=</span><span class="dv">12</span>))) <span class="sc">|&gt;</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> month, <span class="at">y =</span> temperature) <span class="sc">+</span></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
@@ -555,8 +555,8 @@ Note
 <p>To fix this, one must convert the type of <code>month</code> from a simple vector of character strings to a vector of <em>factors</em>. Factors are categorical variables (i.e., take on well-defined distinct values instead of varying on a continuous scale like double-precision numbers), but with an extra attribute which determines the order of those values. This ordering is often referred to as the <em>levels</em> of the factor. The first of the values has level 1, the next one level 2, and so on.</p>
 <p>One very convenient way of assigning factor levels is through the <code>tidyverse</code> function <code>as_factor</code>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> This function takes a vector of values and, if the values are numeric, assigns them levels based on those numerical values. However, if the values are character strings, then the levels are assigned in order of appearance within the vector. This is perfect for us, because the months are in proper order already within the tibble:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">month =</span> month.abb, <span class="at">temperature =</span> <span class="dv">10</span> <span class="sc">-</span> <span class="dv">15</span><span class="sc">*</span><span class="fu">cos</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="sc">*</span>pi, <span class="at">l=</span><span class="dv">12</span>))) <span class="sc">%&gt;%</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month =</span> <span class="fu">as_factor</span>(month)) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">month =</span> month.abb, <span class="at">temperature =</span> <span class="dv">10</span> <span class="sc">-</span> <span class="dv">15</span><span class="sc">*</span><span class="fu">cos</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="sc">*</span>pi, <span class="at">l=</span><span class="dv">12</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month =</span> <span class="fu">as_factor</span>(month)) <span class="sc">|&gt;</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> month, <span class="at">y =</span> temperature) <span class="sc">+</span></span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
@@ -567,9 +567,9 @@ Note
 </div>
 <p>It is also possible to take a factor and reassign its factor levels manually. This can be done with the <code>fct_relevel</code> function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">month =</span> month.abb, <span class="at">temperature =</span> <span class="dv">10</span> <span class="sc">-</span> <span class="dv">15</span><span class="sc">*</span><span class="fu">cos</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="sc">*</span>pi, <span class="at">l=</span><span class="dv">12</span>))) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">month =</span> month.abb, <span class="at">temperature =</span> <span class="dv">10</span> <span class="sc">-</span> <span class="dv">15</span><span class="sc">*</span><span class="fu">cos</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="sc">*</span>pi, <span class="at">l=</span><span class="dv">12</span>))) <span class="sc">|&gt;</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month =</span> <span class="fu">fct_relevel</span>(month, <span class="st">"Jan"</span>, <span class="st">"Feb"</span>, <span class="st">"Mar"</span>, <span class="st">"Apr"</span>, <span class="st">"May"</span>, <span class="st">"Jun"</span>,</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"Jul"</span>, <span class="st">"Aug"</span>, <span class="st">"Sep"</span>, <span class="st">"Oct"</span>, <span class="st">"Nov"</span>, <span class="st">"Dec"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"Jul"</span>, <span class="st">"Aug"</span>, <span class="st">"Sep"</span>, <span class="st">"Oct"</span>, <span class="st">"Nov"</span>, <span class="st">"Dec"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> month, <span class="at">y =</span> temperature) <span class="sc">+</span></span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
@@ -584,7 +584,7 @@ Note
 <h2 data-number="8.4" class="anchored" data-anchor-id="sec-faceting"><span class="header-section-number">8.4</span> Facets</h2>
 <p>Plots can be <em>faceted</em> (subplots created and arranged in a grid layout) based on some variable or variables. For instance, let us create histograms of petal lengths in the <code>iris</code> dataset, like we did last time:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">|&gt;</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Petal.Length) <span class="sc">+</span></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -594,7 +594,7 @@ Note
 </div>
 <p>This way, one cannot see which part of the histogram belongs to which species. One fix to this is to color the histogram by species—this is what we have done before. Another is to separate the plot into three facets, each displaying data for one of the species only:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">|&gt;</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Petal.Length) <span class="sc">+</span></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
@@ -605,7 +605,7 @@ Note
 </div>
 <p>The component <code>facet_grid(x ~ y)</code> means that the data will be grouped based on columns <code>x</code> and <code>y</code>, with the distinct values of column <code>x</code> making up the rows and those of column <code>y</code> the columns of the grid of plots. If one of them is replaced with a dot (as above), then that variable is ignored, and only the other variable is used in creating a row (or column) of subplots. So, to display the same data but with the facets arranged in one column instead of one row, we simply replace <code>facet_grid(. ~ Species)</code> with <code>facet_grid(Species ~ .)</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">|&gt;</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Petal.Length) <span class="sc">+</span></span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
@@ -617,7 +617,7 @@ Note
 <p>In this particular case, the above graph is preferable to the previous one, because the three subplots now share the same x-axis. This makes it easier to compare the distribution of petal lengths across the species.</p>
 <p>To illustrate how to make a two-dimensional grid of facets, let us put the <code>iris</code> dataset in tidy form using <code>pivot_longer()</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(iris) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(iris) <span class="sc">|&gt;</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(Sepal.Length,Sepal.Width,Petal.Length,Petal.Width),</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"Trait"</span>,</span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"Measurement"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -640,10 +640,10 @@ Note
 </div>
 <p>As seen, now the <code>Measurement</code> in every row is characterized by two other variables: <code>Species</code> and <code>Trait</code> (i.e., whether the given value refers to the sepal length, petal width etc. of the given species). We can create a histogram of each measured trait for each species now, in a remarkably simple way:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(iris) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(iris) <span class="sc">|&gt;</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(Sepal.Length,Sepal.Width,Petal.Length,Petal.Width),</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"Trait"</span>,</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"Measurement"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"Measurement"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> Measurement) <span class="sc">+</span></span>
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>

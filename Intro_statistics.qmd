@@ -32,22 +32,22 @@ In the above plot, `geom_jitter` was used to display the actual data points that
 Furthermore, the computed difference between the means and medians of the two samples are also clearly different:
 
 ```{r}
-bird %>%
-  group_by(island) %>%
+bird |>
+  group_by(island) |>
   summarise(mean = mean(weight), median = median(weight))
 ```
 
 Can we conclude that the two samples are indeed different, and birds on the smaller island tend to be smaller, supporting the insular dwarfism hypothesis? As mentioned above, the data are fictive---they are not based on actual measurements. **In fact, these "observations" were created by sampling each data point from the same distribution, regardless of island**: a normal distribution with mean 20 and standard deviation 5. This means that any supposedly observed difference between the samples must be accidental. Would various statistical methods detect a difference? One thing we can do is what we have learned in @sec-CI: compute the 95% confidence intervals of the means, and see whether and how much they overlap.
 
 ```{r}
-bird %>%
-  group_by(island) %>%
+bird |>
+  group_by(island) |>
   summarise(mean = mean(weight), # Means of the two groups
             sd = sd(weight), # Standard deviations
             N = n(), # Sample sizes
             SEM = sd / sqrt(N), # Standard errors of the means
-            CI = qt(1 - 0.025, N - 1)) %>% # Confidence intervals
-  ungroup() %>% # Ungroup the data (not necessary here, but a good habit)
+            CI = qt(1 - 0.025, N - 1)) |> # Confidence intervals
+  ungroup() |> # Ungroup the data (not necessary here, but a good habit)
   ggplot(aes(x = island, y = mean, ymin = mean - CI, ymax = mean + CI)) +
   geom_point(colour = "steelblue") +
   geom_errorbar(colour = "steelblue", width = 0.2) +
@@ -145,54 +145,46 @@ wilcox.test(measurement ~ group, data = example, conf.int = TRUE)
 The p-value of 0.01 means that there is a one-in-a-hundred probability that the observed difference is due only to chance.
 
 
-## Statistical tests in a data analysis pipeline: The dot notation {#sec-dot}
+## Statistical tests in a data analysis pipeline: The underscore notation {#sec-dot}
 
 One natural question is whether statistical tests can be included in a data analysis pipeline. The answer is yes, but not without having to consider some complications that are due to historical accidents. Attempting the following results in an error:
 
 ```{r}
 #| error: true
-bird %>%
+bird |>
   wilcox.test(weight ~ island, conf.int = TRUE)
 ```
 
-The reason for the error is in how the pipe operator `%>%` works: it substitutes the expression on the left of the pipe into the *first* argument of the expression on the right. This works splendidly with functions of the `tidyverse`, since these are designed to always take the data as their first argument. However, a quick glance at the documentation of both `wilcox.test` and `t.test` (neither of which are `tidyverse` functions) reveals that they take the data as their *second* argument, with the formula coming first. A naive application of the pipe operator, like above, will therefore fail.
+The reason for the error is in how the pipe operator `|>` works: it substitutes the expression on the left of the pipe into the *first* argument of the expression on the right. This works splendidly with functions of the `tidyverse`, since these are designed to always take the data as their first argument. However, a quick glance at the documentation of both `wilcox.test` and `t.test` (neither of which are `tidyverse` functions) reveals that they take the data as their *second* argument, with the formula coming first. A naive application of the pipe operator, like above, will therefore fail.
 
-Fortunately, there is a way to work around this. One may use the *dot* (`.`) in an expression to stand for whatever was being piped into it. The following will therefore work:
+Fortunately, there is a way to work around this. One may use the *underscore* (`_`) in an expression to stand for whatever was being piped into it. The following will therefore work:
+
+```{r}
+bird |>
+  wilcox.test(weight ~ island, data = _, conf.int = TRUE)
+```
+
+The underscore stands for the object being piped in---which, in our case, is simply the tibble `bird`. The `data = _` argument therefore evaluates to `data = bird`.
+
+This *almost* concludes all there is to using the underscore notation, except there are three subtleties involved. The first is a simple rule: the underscore must always be used in conjunction with a named argument. So in the above piece of code, writing `wilcox.test(weight ~ island, _, conf.int = TRUE)` will fail---the argument name must be written out, as `data = _`. Second, the underscore can only appear at most once in a function call. And third, using the underscore overrides the default behavior of silently substituting the data as the first argument to the function on the right of the pipe. That is, if one uses the underscore, then the data on the left of the pipe will be substituted *only* where the underscore is.
+
+
+:::{.callout-note}
+In case you are using the `magrittr` pipe `%>%` instead of the built-in pipe `|>`, you can observe all of the rules above, except you should replace the underscore by a dot (`.`). So
+
+```{r}
+bird |>
+  wilcox.test(weight ~ island, data = _, conf.int = TRUE)
+```
+
+can be equivalently rewritten as
 
 ```{r}
 bird %>%
   wilcox.test(weight ~ island, data = ., conf.int = TRUE)
 ```
 
-The dot stands for the object being piped in---which, in our case, is simply the tibble `bird`. The `data = .` argument therefore evaluates to `data = bird`.
-
-This ought to conclude all there is to using the dot notation, except that there are a few subtleties involved. As we know, the pipe substitutes the tibble on the left as the first argument of the function on the right. In the above expression, this behavior was overridden: by using the dot, the data were substituted as the second argument instead. This will be the case as long as the dot appears alone, without being nested into some other function call. *However, if the dot is part of another function, then the expression to the left of the pipe will additionally be substituted, silently, as the first argument on the right.* For example, suppose that we want to remove rows with missing data from the table first, before doing a statistical test. We can do this with the `drop_na` function. (Since the `bird` table does not have any rows with `NA` values, this does not actually do anything in this context, but it is easy to imagine data where some rows do have missing entries, in which case removing them first could be useful.) But then, the following piece of code will fail:
-
-```{r}
-#| error: true
-bird %>%
-  wilcox.test(weight ~ island, data = drop_na(.), conf.int = TRUE)
-```
-
-Here the dot appears as part of the `drop_na` function. Thus, `bird` is not just substituted where the dot is, but also silently as the first function argument to `wilcox.test`. Which then makes the function think that `bird` is the formula, and `weight ~ island` is the data---consequently, we get an error.
-
-If necessary, it is possible to override this behavior, by putting curly braces around the expression(s) into which we are piping. The curly braces always prevent the silent substitution of the piped expression, which will therefore only be substituted wherever the dot explicitly appears. The above, faulty code can therefore be fixed by using curly braces:
-
-```{r}
-bird %>%
-  { wilcox.test(weight ~ island, data = drop_na(.), conf.int = TRUE) }
-```
-
-:::{.callout-note}
-While this behavior of the dot notation may appear arbitrary, there is method to the madness. In most situations, including the dot within another function indeed means that we would *like* the dot to also be passed as the first argument. For example, we could add row numbers to the bird tibble, by creating a new column whose entries range from one to the number of rows in the data. The number of rows can be obtained with the `nrow` function. Therefore, the following is possible:
-
-```{r}
-bird %>%
-  mutate(rowID = 1:nrow(.)) %>% # Create new column, numbering the rows
-  select(rowID, island, weight) # Reorder the columns so rowID is first
-```
-
-In this case, the first argument to `mutate`, as always, is the piped-in tibble. Due to the convention that the dot gets silently substituted as the first argument as well (because the dot appeared within a function call), we did not need to write `mutate(., rowID = 1:nrow(.))` above in the second line. Thus, the seemingly arbitrary rules do lead to less awkward code, at least some of the time.
+There are other subtle differences in how `%>%` works compared with `|>`; you can look at the help pages of both (`` ?`%>%` ``, resp. `` ?`|>` ``) for a more thorough explanation.
 :::
 
 

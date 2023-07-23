@@ -321,12 +321,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>In <a href="Functions.html"><span>Chapter&nbsp;3</span></a> we learned how to create user-defined functions. An example was provided in <a href="Anova.html#sec-tukey"><span>Section&nbsp;11.4</span></a>, where we made our life easier by eliminating the need to always call <code>aov</code> before performing a Tukey test with <code>TukeyHSD</code>. Without the function, we must write:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">%&gt;%</span> <span class="fu">aov</span>() <span class="sc">%&gt;%</span> <span class="fu">TukeyHSD</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span> <span class="fu">aov</span>() <span class="sc">|&gt;</span> <span class="fu">TukeyHSD</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Tukey multiple comparisons of means
     95% family-wise confidence level
 
-Fit: aov(formula = .)
+Fit: aov(formula = lm(weight ~ group, data = PlantGrowth))
 
 $group
             diff        lwr       upr     p adj
@@ -337,16 +337,16 @@ trt2-trt1  0.865  0.1737839 1.5562161 0.0120064</code></pre>
 </div>
 <p>Instead, we can write a simple function that takes a linear model fit object as its input and produces the Tukey test as its output:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>tukeyTest <span class="ot">&lt;-</span> <span class="cf">function</span>(modelFit) modelFit <span class="sc">%&gt;%</span> <span class="fu">aov</span>() <span class="sc">%&gt;%</span> <span class="fu">TukeyHSD</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>tukeyTest <span class="ot">&lt;-</span> <span class="cf">function</span>(modelFit) modelFit <span class="sc">|&gt;</span> <span class="fu">aov</span>() <span class="sc">|&gt;</span> <span class="fu">TukeyHSD</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Using this function, we can now simply write:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">%&gt;%</span> <span class="fu">tukeyTest</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span> <span class="fu">tukeyTest</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Tukey multiple comparisons of means
     95% family-wise confidence level
 
-Fit: aov(formula = .)
+Fit: aov(formula = modelFit)
 
 $group
             diff        lwr       upr     p adj
@@ -370,14 +370,14 @@ Note
 <p>Whether to use braces and <code>return</code> even in cases when they are not needed is largely a question of personal coding style. From now on, they will often be omitted whenever their absence does not hamper program readability.</p>
 </div>
 </div>
-<p>Another useful function we can write helps use statistical procedures within a pipeline. As we have seen, most statistical functions take a formula as their first argument and the data as their second (and then they may take further, method-specific arguments as well, like <code>conf.int</code> in the function <code>wilcox.test</code>). Since the pipe operator <code>%&gt;%</code> is often used in conjunction with functions like <code>select</code>, <code>mutate</code>, <code>pivot_longer</code>, <code>summarise</code>, etc. which all return a data frame, it would be convenient to reverse the order of arguments in all statistical functions, with the data coming first and the formula coming second. In fact, such a function is easy to write. We could call it <code>stats</code>:</p>
+<p>Another useful function we can write helps use statistical procedures within a pipeline. As we have seen, most statistical functions take a formula as their first argument and the data as their second (and then they may take further, method-specific arguments as well, like <code>conf.int</code> in the function <code>wilcox.test</code>). Since the pipe operator <code>|&gt;</code> is often used in conjunction with functions like <code>select</code>, <code>mutate</code>, <code>pivot_longer</code>, <code>summarise</code>, etc. which all return a data frame, it would be convenient to reverse the order of arguments in all statistical functions, with the data coming first and the formula coming second. In fact, such a function is easy to write. We could call it <code>stats</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="cf">function</span>(data, formula, method) <span class="fu">method</span>(formula, data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here <code>method</code> is the statistical function we wish to use. For example:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"ctrl"</span>) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"ctrl"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stats</span>(weight <span class="sc">~</span> group, wilcox.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -390,9 +390,9 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 </div>
 <p>This is now fully equivalent to:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">%&gt;%</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"ctrl"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> .)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"ctrl"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> _)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Wilcoxon rank sum exact test
@@ -410,8 +410,8 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 </div>
 <p>And now, we can pass extra arguments that we would not have been able to do before. For instance, we can request confidence intervals from <code>wilcox.test</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">%&gt;%</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"ctrl"</span>) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"ctrl"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stats</span>(weight <span class="sc">~</span> group, wilcox.test, <span class="at">conf.int =</span> <span class="cn">TRUE</span>, <span class="at">conf.level =</span> <span class="fl">0.99</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -430,7 +430,7 @@ difference in location
 <p>From now on, we can use <code>stats</code> for performing various statistical procedures:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA) <span class="co"># For the Dunn test</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">%&gt;%</span> <span class="fu">stats</span>(weight <span class="sc">~</span> group, lm) <span class="sc">%&gt;%</span> <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span> <span class="fu">stats</span>(weight <span class="sc">~</span> group, lm) <span class="sc">|&gt;</span> <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
 
@@ -441,12 +441,12 @@ Residuals 27 10.4921  0.3886
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">%&gt;%</span> <span class="fu">stats</span>(weight <span class="sc">~</span> group, lm) <span class="sc">%&gt;%</span> <span class="fu">tukeyTest</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span> <span class="fu">stats</span>(weight <span class="sc">~</span> group, lm) <span class="sc">|&gt;</span> <span class="fu">tukeyTest</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Tukey multiple comparisons of means
     95% family-wise confidence level
 
-Fit: aov(formula = .)
+Fit: aov(formula = modelFit)
 
 $group
             diff        lwr       upr     p adj
@@ -454,7 +454,7 @@ trt1-ctrl -0.371 -1.0622161 0.3202161 0.3908711
 trt2-ctrl  0.494 -0.1972161 1.1852161 0.1979960
 trt2-trt1  0.865  0.1737839 1.5562161 0.0120064</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">%&gt;%</span> <span class="fu">stats</span>(weight <span class="sc">~</span> group, kruskal.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span> <span class="fu">stats</span>(weight <span class="sc">~</span> group, kruskal.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Kruskal-Wallis rank sum test
@@ -462,7 +462,7 @@ trt2-trt1  0.865  0.1737839 1.5562161 0.0120064</code></pre>
 data:  weight by group
 Kruskal-Wallis chi-squared = 7.9882, df = 2, p-value = 0.01842</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">%&gt;%</span> <span class="fu">stats</span>(weight <span class="sc">~</span> group, dunnTest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span> <span class="fu">stats</span>(weight <span class="sc">~</span> group, dunnTest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Comparison         Z    P.unadj      P.adj
 1 ctrl - trt1  1.117725 0.26368427 0.26368427
@@ -585,7 +585,7 @@ Kruskal-Wallis chi-squared = 7.9882, df = 2, p-value = 0.01842</code></pre>
 </div>
 <p>Similarly, there are functions <code>map_chr</code>, <code>map_lgl</code>, and some others, which create vectors of the appropriate type. For example, to append the agglutination “-ing” to various verbs, we can do:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"attend"</span>, <span class="st">"visit"</span>, <span class="st">"support"</span>, <span class="st">"help"</span>, <span class="st">"savour"</span>) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="st">"attend"</span>, <span class="st">"visit"</span>, <span class="st">"support"</span>, <span class="st">"help"</span>, <span class="st">"savour"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map_chr</span>(<span class="cf">function</span>(text) <span class="fu">paste0</span>(text, <span class="st">"ing"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "attending"  "visiting"   "supporting" "helping"    "savouring" </code></pre>
@@ -646,7 +646,7 @@ Kruskal-Wallis chi-squared = 7.9882, df = 2, p-value = 0.01842</code></pre>
 </div>
 <p>This generates an error: because of the way <code>wilcox.test</code> is internally implemented in R, it does not allow or recognize a vector input in place of <code>conf.level</code>. It must be a single number instead. This, however, can be overcome if we just use <code>map</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">0.9</span>, <span class="fl">0.95</span>, <span class="fl">0.99</span>) <span class="sc">%&gt;%</span> <span class="co"># The vector of confidence levels</span></span>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">0.9</span>, <span class="fl">0.95</span>, <span class="fl">0.99</span>) <span class="sc">|&gt;</span> <span class="co"># The vector of confidence levels</span></span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="cf">function</span>(confLevel) <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> plantTrt,</span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">conf.int =</span> <span class="cn">TRUE</span>, <span class="at">conf.level =</span> confLevel))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -713,7 +713,7 @@ difference in location
 <span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">conf.int =</span> <span class="cn">TRUE</span>, <span class="at">conf.level =</span> confLevel)</span>
 <span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">0.9</span>, <span class="fl">0.95</span>, <span class="fl">0.99</span>) <span class="sc">%&gt;%</span> <span class="fu">map</span>(wilcoxConf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fl">0.8</span>, <span class="fl">0.9</span>, <span class="fl">0.95</span>, <span class="fl">0.99</span>) <span class="sc">|&gt;</span> <span class="fu">map</span>(wilcoxConf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
 

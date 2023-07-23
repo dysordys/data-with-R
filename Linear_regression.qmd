@@ -47,7 +47,7 @@ This last part is what we are interested in. Galton's way of doing this was to p
 One can imagine that there must be some reasonably straightforward mathematical procedure to obtain the intercept and slope from arbitrary data. This is indeed the case. But fortunately, there is no need to do it by hand, because the `lm` function automates this process.^[It has been doing this same minimization even for the one- and two-way ANOVA we have been working with in @sec-ANOVA and @sec-SRH.] Let us perform the regression on the height data:
 
 ```{r}
-lm(Son ~ Father, data = heightDat) %>% summary()
+lm(Son ~ Father, data = heightDat) |> summary()
 ```
 
 Recall that `summary` returns a table of regression coefficients (under "Coefficients:" above). The two fitted coefficients are the intercept and the slope. The intercept is conveniently called `(Intercept)`, but the slope is labeled by the predictor---consistently with the behavior of `lm` in one- and two-way ANOVA calculations. We see that the intercept is about 33.9 inches; this would be the average height of a son born to a father with zero height.^[This also illustrates the dangers of extrapolating the results of linear regression too far: generally, a linear relationship will only hold within a restricted range of values.] The slope is about 0.5; that is, a father who is one inch taller than another father will have, on average, sons who are half an inch taller (than the sons of the first, shorter father).
@@ -66,7 +66,7 @@ One can check whether these assumptions hold with diagnostic plots. In this part
 #| fig-height: 3
 library(ggfortify)
 
-lm(Son ~ Father, data = heightDat) %>%
+lm(Son ~ Father, data = heightDat) |>
   autoplot(which=3:2, smooth.colour=NA, colour="steelblue", alpha=0.4) +
   theme_bw()
 ```
@@ -80,7 +80,7 @@ print(anscombe)
 These are actually four datasets merged into one: `x1` and `y1` are x and y coordinates of the points from the first set, `x2` and `y2` from the second set, and so on. We can use `pivot_longer` to put these data in tidy format:
 
 ```{r}
-ans_long <- anscombe %>%
+ans_long <- anscombe |>
   pivot_longer(cols = everything(), names_to = c(".value", "set"),
                names_pattern = "(.)(.)")
 print(ans_long)
@@ -90,7 +90,7 @@ We can now visualize each set, along with linear fits:
 
 ```{r}
 #| message: false
-ans_long %>%
+ans_long |>
   ggplot() +
   aes(x = x, y = y, colour = set) +
   geom_point() +
@@ -104,8 +104,8 @@ The data have been carefully crafted so that the least-squares regression line h
 ```{r}
 #| warning: false
 #| fig-height: 3
-lm(y ~ x, data = filter(ans_long, set == "1")) %>% summary()
-lm(y ~ x, data = filter(ans_long, set == "1")) %>%
+lm(y ~ x, data = filter(ans_long, set == "1")) |> summary()
+lm(y ~ x, data = filter(ans_long, set == "1")) |>
   autoplot(which = 3:2, smooth.colour = NA, colour = "steelblue") +
   theme_bw()
 ```
@@ -117,8 +117,8 @@ The situation changes for the other three sets. Let us look at set 2:
 ```{r}
 #| warning: false
 #| fig-height: 3
-lm(y ~ x, data = filter(ans_long, set == "2")) %>% summary()
-lm(y ~ x, data = filter(ans_long, set == "2")) %>%
+lm(y ~ x, data = filter(ans_long, set == "2")) |> summary()
+lm(y ~ x, data = filter(ans_long, set == "2")) |>
   autoplot(which = 3:2, smooth.colour = NA, colour = "steelblue") +
   theme_bw()
 ```
@@ -130,8 +130,8 @@ In set 3, the trends are driven too much by a single outlier:
 ```{r}
 #| warning: false
 #| fig-height: 3
-lm(y ~ x, data = filter(ans_long, set == "3")) %>% summary()
-lm(y ~ x, data = filter(ans_long, set == "3")) %>%
+lm(y ~ x, data = filter(ans_long, set == "3")) |> summary()
+lm(y ~ x, data = filter(ans_long, set == "3")) |>
   autoplot(which = 3:2, smooth.colour = NA, colour = "steelblue") +
   theme_bw()
 ```
@@ -141,8 +141,8 @@ As before, the diagnostic plots show that the independence of the residuals is v
 ```{r}
 #| warning: false
 #| fig-height: 3
-lm(y ~ x, data = filter(ans_long, set == "4")) %>% summary()
-lm(y ~ x, data = filter(ans_long, set == "4")) %>%
+lm(y ~ x, data = filter(ans_long, set == "4")) |> summary()
+lm(y ~ x, data = filter(ans_long, set == "4")) |>
   autoplot(which = 3:2, smooth.colour = NA, colour = "steelblue") +
   theme_bw()
 ```
@@ -180,7 +180,7 @@ The function performing the regression is itself called `mblm`. A note of cautio
 
 ```{r}
 #| warning: false
-mblm(y ~ x, dataframe = filter(ans_long, set == "3")) %>% summary()
+mblm(y ~ x, dataframe = filter(ans_long, set == "3")) |> summary()
 ```
 
 As seen, the predicted intercept and slope are no longer 3 and 0.5, but 4 and 0.35 instead. Visualizing this, side by side with the ordinary least-squares regression:
@@ -189,12 +189,12 @@ As seen, the predicted intercept and slope are no longer 3 and 0.5, but 4 and 0.
 leastSquaresFit <-lm(y ~ x, data = filter(ans_long, set == "3"))
 TheilSenFit <-mblm(y ~ x, dataframe = filter(ans_long, set == "3"))
 
-ans_long %>%
-  filter(set == "3") %>%
+ans_long |>
+  filter(set == "3") |>
   mutate(`least squares` = predict(leastSquaresFit),
-         `Theil-Sen` = predict(TheilSenFit)) %>%
+         `Theil-Sen` = predict(TheilSenFit)) |>
   pivot_longer(cols = c("least squares", "Theil-Sen"),
-               names_to = "type", values_to = "prediction") %>%
+               names_to = "type", values_to = "prediction") |>
   ggplot() +
   geom_point(aes(x = x, y = y), colour = "steelblue") +
   geom_line(aes(x = x, y = prediction), colour = "goldenrod") +

@@ -16,8 +16,8 @@ as_tibble(ToothGrowth)
 Exploring the data more closely, it turns out that there are three dosage levels (0.5, 1, and 2) and two types of supplement (`VC` for raw vitamin C or ascorbic acid, and `OJ` for orange juice). As usual, we first visualize the data. In doing so, it is useful to convert `dose` to a factor (@sec-factors): the three dosage levels play the role of a categorical variable ("low", "medium" ,and "high" levels of vitamin C dosage), and we are not so interested in the actual magnitudes of those dosages.
 
 ```{r}
-as_tibble(ToothGrowth) %>%
-  mutate(dose = as_factor(dose)) %>%
+as_tibble(ToothGrowth) |>
+  mutate(dose = as_factor(dose)) |>
   ggplot() +
   aes(x = supp, y = len) +
   geom_boxplot(alpha = 0.2, outlier.shape = NA,
@@ -31,9 +31,9 @@ as_tibble(ToothGrowth) %>%
 Intuitively, we would expect there to be an effect of dosage, because the higher the dosage the longer the teeth become. We would also expect an effect of supplement type, because orange juice seems to perform better (at least no worse) than raw ascorbic acid in facilitating tooth growth. Continuing with the linear models from @sec-ANOVA, it is easy to include two factors:
 
 ```{r}
-ToothGrowth %>%
-  mutate(dose = as_factor(dose)) %>%
-  lm(len ~ dose + supp, data = .) %>%
+ToothGrowth |>
+  mutate(dose = as_factor(dose)) |>
+  lm(len ~ dose + supp, data = _) |>
   anova()
 ```
 
@@ -44,9 +44,9 @@ However, this model ignores something that might be potentially relevant: the *i
 Accounting for interaction terms in a statistical model is easy. All one needs to do is add one more term to the formula, denoted `dose:supp`:
 
 ```{r}
-ToothGrowth %>%
-  mutate(dose = as_factor(dose)) %>%
-  lm(len ~ dose + supp + dose:supp, data = .) %>%
+ToothGrowth |>
+  mutate(dose = as_factor(dose)) |>
+  lm(len ~ dose + supp + dose:supp, data = _) |>
   anova()
 ```
 
@@ -55,9 +55,9 @@ The model result confirms that our intuition was likely correct: there does appe
 The inclusion of two factors with their interaction is so common in linear models that there is a shorthand notation to make it easier. Writing `dose * supp` is exactly the same as the above `dose + supp + dose:supp`. Let us see this in action:
 
 ```{r}
-ToothGrowth %>%
-  mutate(dose = as_factor(dose)) %>%
-  lm(len ~ dose * supp, data = .) %>%
+ToothGrowth |>
+  mutate(dose = as_factor(dose)) |>
+  lm(len ~ dose * supp, data = _) |>
   anova()
 ```
 
@@ -70,9 +70,9 @@ As in the case of one-way ANOVA, diagnostic plots and post-hoc testing (Tukey te
 #| fig-height: 3
 library(ggfortify)
 
-ToothGrowth %>%
-  mutate(dose = as_factor(dose)) %>%
-  lm(len ~ dose * supp, data = .) %>%
+ToothGrowth |>
+  mutate(dose = as_factor(dose)) |>
+  lm(len ~ dose * supp, data = _) |>
   autoplot(which=3:2, smooth.colour=NA, colour="steelblue", alpha=0.7) +
   theme_bw()
 ```
@@ -80,18 +80,18 @@ ToothGrowth %>%
 The Tukey test can be used to compare each factor in isolation, as well as their combinations:
 
 ```{r}
-ToothGrowth %>%
-  mutate(dose = as_factor(dose)) %>%
-  lm(len ~ dose * supp, data = .) %>%
-  aov() %>%
+ToothGrowth |>
+  mutate(dose = as_factor(dose)) |>
+  lm(len ~ dose * supp, data = _) |>
+  aov() |>
   TukeyHSD()
 ```
 
 (Again, due to how `TukeyHSD` is designed, the `aov` function must be called before one can use it on a linear model fit.) Here we first have a comparison between the dosage levels, averaging over supplement type. Even after this averaging there is a clear difference between the effects of each dosage level, as can be suspected based on a plot which ignores the `supp` factor:
 
 ```{r}
-as_tibble(ToothGrowth) %>%
-  mutate(dose = as_factor(dose)) %>%
+as_tibble(ToothGrowth) |>
+  mutate(dose = as_factor(dose)) |>
   ggplot() +
   aes(x = dose, y = len) +
   geom_boxplot(alpha = 0.2, outlier.shape = NA,
@@ -104,7 +104,7 @@ as_tibble(ToothGrowth) %>%
 Similarly, the difference between the two supplement types appears to be real (the Tukey test gave `p adj = 0.0002312`), even when not distinguishing by dosage---although this is somewhat less visible on a graph:
 
 ```{r}
-as_tibble(ToothGrowth) %>%
+as_tibble(ToothGrowth) |>
   ggplot() +
   aes(x = supp, y = len) +
   geom_boxplot(alpha = 0.2, outlier.shape = NA,
@@ -119,9 +119,9 @@ Finally, in the `` $`dose:supp` `` part of the table, one can compare every part
 It is possible to use the `summary` function instead of `anova` when running the linear model. However, this table is likely not what we are looking for, because instead of having one row per factor and their interaction, it prints one row per fitted parameter. In case one is curious, here is what it looks like:
 
 ```{r}
-ToothGrowth %>%
-  mutate(dose = as_factor(dose)) %>%
-  lm(len ~ dose * supp, data = .) %>%
+ToothGrowth |>
+  mutate(dose = as_factor(dose)) |>
+  lm(len ~ dose * supp, data = _) |>
   summary()
 ```
 
@@ -145,9 +145,9 @@ library(rcompanion)
 And now, we can use the function `scheirerRayHare` much like `kruskal.test` or `lm`:
 
 ```{r}
-ToothGrowth %>%
-  mutate(dose = as_factor(dose)) %>%
-  scheirerRayHare(len ~ dose * supp, data = .)
+ToothGrowth |>
+  mutate(dose = as_factor(dose)) |>
+  scheirerRayHare(len ~ dose * supp, data = _)
 ```
 
 Note that this test is skeptical about the role of the supplement type, and definitely thinks that the interaction between it and dosage is not different from what one might get by pure chance. This illustrates one problem with the test: it is not very powerful in detecting patterns, even when they are there. To make matters worse, there is no appropriate post-hoc test available in conjunction with the Scheirer--Ray--Hare test. For these reasons, its use is more restricted than of other non-parametric tests, like the Wilcoxon rank sum and Kruskal--Wallis tests. It is good to know about it as an option, but often one must rely on other methods, such as the parametric two-way ANOVA.

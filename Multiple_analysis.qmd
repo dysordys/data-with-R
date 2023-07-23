@@ -37,15 +37,15 @@ We are by now used to the idea that the columns of tibbles can hold numbers, cha
 The short answer is yes. The somewhat longer answer is that this is possible, but not directly so. Instead, one has to make the column into a list (@sec-lists).^[The reason is that columns of tibbles must always hold elementary pieces of data. The way lists work is that they do not actually hold the information corresponding to their entries. Instead, they only contain references, or *pointers*, to where the information can be found in memory. Since lists only store these pointers (which can be represented by simple numbers) instead of the tibbles or other data structures inside them, they can be used without problems within tibbles.] While this could be done by hand using the `list` function, there are other options in the `tidyverse` which facilitate creating tibbles which have other tibbles in their columns. One of these is called `nest`. This function receives a name first, which will become the name of the newly-created column holding the sub-tibbles. Then, after an equality sign, one lists the columns, in a vector, which one would like to package into those sub-tibbles. For example, to keep `Species` as a separate column and wrap everything else into sub-tibbles, we can do:
 
 ```{r}
-fly %>% nest(data = c(ID, Date, Sex, WingSize, L2Length))
+fly |> nest(data = c(ID, Date, Sex, WingSize, L2Length))
 ```
 
 What do we see? We ended up with a tibble that has two columns. One is `Species` and has type character string. The other is `data` and has the type of list, as indicated by the `<list>` tag. The entries in this column are tibbles, with varying numbers of rows (as many as the number of individuals for the given species), and five columns; namely, those that we specified we wanted to nest. We can check and see what is inside these tibbles. For example, the contents of the first row (species: *D. acutila*) are:
 
 ```{r}
-fly %>%
-  nest(data = c(ID, Date, Sex, WingSize, L2Length)) %>%
-  pull(data) %>% # Get contents of just the "data" column
+fly |>
+  nest(data = c(ID, Date, Sex, WingSize, L2Length)) |>
+  pull(data) |> # Get contents of just the "data" column
   pluck(1) # Take the first of all those tibbles
 ```
 
@@ -54,13 +54,13 @@ So this sub-table contains the information that pertains to just *D. acutila* in
 When choosing which columns to wrap into sub-tibbles with `nest`, all the tidy selection conventions and functionalities apply that one can use with the `select` function (@sec-select). So the above nesting could be equivalently and more simply be performed with:
 
 ```{r}
-fly %>% nest(data = !Species)
+fly |> nest(data = !Species)
 ```
 
 That is: apply the nesting to all columns that are *not* called `Species`. This can be used in more complicated cases as well. For example, if we wish to nest data pertaining to particular species-sex combinations, we can do the following:
 
 ```{r}
-fly %>% nest(data = !Species & !Sex)
+fly |> nest(data = !Species & !Sex)
 ```
 
 where `nest(data = !Species & !Sex)` (nest all columns that are not `Species` and not `Sex`) is equivalent to the longer `nest(data = c(ID, Date, WingSize, L2Length))`.
@@ -68,17 +68,17 @@ where `nest(data = !Species & !Sex)` (nest all columns that are not `Species` an
 Finally, columns holding nested data can be unnested, meaning that their contents are expanded back into the original data frame. The function to do this with is called `unnest`:
 
 ```{r}
-fly %>% nest(data = !Species & !Sex) %>% unnest(data)
+fly |> nest(data = !Species & !Sex) |> unnest(data)
 ```
 
 
 ## Performing statistical tests using nested data
 
-How can we test for all 55 fly species in this dataset whether there is a significant difference between average male and female wing lengths? The answer is to first nest the data using `fly %>% nest(data = !Species)`, so that we end up with a table which has one row per each species. We then need to run a Wilcoxon rank sum test on each of them. But this we know how to do from @sec-map: we can rely on the `map` function.
+How can we test for all 55 fly species in this dataset whether there is a significant difference between average male and female wing lengths? The answer is to first nest the data using `fly |> nest(data = !Species)`, so that we end up with a table which has one row per each species. We then need to run a Wilcoxon rank sum test on each of them. But this we know how to do from @sec-map: we can rely on the `map` function.
 
 ```{r}
-fly %>%
-  nest(data = !Species) %>%
+fly |>
+  nest(data = !Species) |>
   mutate(test = map(data, function(x) wilcox.test(L2Length ~ Sex, data = x)))
 ```
 
@@ -88,9 +88,9 @@ Doing so is not completely straightforward, because `wilcox.test` does not retur
 
 ```{r}
 #| error: true
-fly %>%
-  nest(data = !Species) %>%
-  mutate(test = map(data, function(x) wilcox.test(L2Length~Sex, data=x))) %>%
+fly |>
+  nest(data = !Species) |>
+  mutate(test = map(data, function(x) wilcox.test(L2Length~Sex, data=x))) |>
   unnest(test)
 ```
 
@@ -109,16 +109,16 @@ wilcox.test(WingSize ~ Sex, data = fly, conf.int = TRUE)
 By applying the `tidy` function to this result, it gets converted into a tibble:
 
 ```{r}
-wilcox.test(WingSize ~ Sex, data = fly, conf.int = TRUE) %>% tidy()
+wilcox.test(WingSize ~ Sex, data = fly, conf.int = TRUE) |> tidy()
 ```
 
 So we can insert a step into our analysis pipeline which converts the `test` column into a list of data frames:
 
 ```{r}
-fly %>%
-  nest(data = !Species) %>%
-  mutate(test = map(data, function(x) wilcox.test(L2Length~Sex, data=x))) %>%
-  mutate(test = map(test, tidy)) %>%
+fly |>
+  nest(data = !Species) |>
+  mutate(test = map(data, function(x) wilcox.test(L2Length~Sex, data=x))) |>
+  mutate(test = map(test, tidy)) |>
   unnest(test)
 ```
 
@@ -126,13 +126,13 @@ And now we have the results. As an example, we can check the distribution of p-v
 
 ```{r}
 #| fig-height: 9
-fly %>%
-  nest(data = !Species) %>%
-  mutate(test = map(data, function(x) wilcox.test(L2Length~Sex, data=x))) %>%
-  mutate(test = map(test, tidy)) %>%
-  unnest(test) %>%
-  arrange(p.value) %>%
-  mutate(Species = as_factor(Species)) %>%
+fly |>
+  nest(data = !Species) |>
+  mutate(test = map(data, function(x) wilcox.test(L2Length~Sex, data=x))) |>
+  mutate(test = map(test, tidy)) |>
+  unnest(test) |>
+  arrange(p.value) |>
+  mutate(Species = as_factor(Species)) |>
   ggplot(aes(x = p.value, y = Species)) +
   geom_col(colour = "steelblue", fill = "steelblue", alpha = 0.3) +
   scale_x_continuous(name = "p-value", limits = c(0, 1)) +
@@ -142,13 +142,13 @@ fly %>%
 This graph shows that most species have very small p-values, but that there are four clear outliers. We can extract the names of these outlier species:
 
 ```{r}
-outlierSpecies <- fly %>%
-  nest(data = !Species) %>%
-  mutate(test = map(data, function(x) wilcox.test(L2Length~Sex, data=x))) %>%
-  mutate(test = map(test, tidy)) %>%
-  unnest(test) %>%
-  arrange(desc(p.value)) %>%
-  slice(1:4) %>% # Choose first 4 rows from the sorted table
+outlierSpecies <- fly |>
+  nest(data = !Species) |>
+  mutate(test = map(data, function(x) wilcox.test(L2Length~Sex, data=x))) |>
+  mutate(test = map(test, tidy)) |>
+  unnest(test) |>
+  arrange(desc(p.value)) |>
+  slice(1:4) |> # Choose first 4 rows from the sorted table
   pull(Species) # Get the 4 species names
 
 print(outlierSpecies)
@@ -157,8 +157,8 @@ print(outlierSpecies)
 And then we can plot the wing length data for just these ones:
 
 ```{r}
-fly %>%
-  filter(Species %in% outlierSpecies) %>%
+fly |>
+  filter(Species %in% outlierSpecies) |>
   ggplot() +
   aes(x = Sex, y = WingSize) +
   geom_boxplot(colour = "steelblue", fill = "steelblue",

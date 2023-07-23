@@ -337,8 +337,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Exploring the data more closely, it turns out that there are three dosage levels (0.5, 1, and 2) and two types of supplement (<code>VC</code> for raw vitamin C or ascorbic acid, and <code>OJ</code> for orange juice). As usual, we first visualize the data. In doing so, it is useful to convert <code>dose</code> to a factor (<a href="Further_plotting_options.html#sec-factors"><span>Section&nbsp;8.3</span></a>): the three dosage levels play the role of a categorical variable (“low”, “medium” ,and “high” levels of vitamin C dosage), and we are not so interested in the actual magnitudes of those dosages.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(ToothGrowth) <span class="sc">%&gt;%</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(ToothGrowth) <span class="sc">|&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">|&gt;</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> supp, <span class="at">y =</span> len) <span class="sc">+</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>,</span>
@@ -353,9 +353,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Intuitively, we would expect there to be an effect of dosage, because the higher the dosage the longer the teeth become. We would also expect an effect of supplement type, because orange juice seems to perform better (at least no worse) than raw ascorbic acid in facilitating tooth growth. Continuing with the linear models from <a href="Anova.html"><span>Chapter&nbsp;11</span></a>, it is easy to include two factors:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ToothGrowth <span class="sc">%&gt;%</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">%&gt;%</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(len <span class="sc">~</span> dose <span class="sc">+</span> supp, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ToothGrowth <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(len <span class="sc">~</span> dose <span class="sc">+</span> supp, <span class="at">data =</span> _) <span class="sc">|&gt;</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
@@ -373,9 +373,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p>However, this model ignores something that might be potentially relevant: the <em>interaction</em> between the two factors. This means that the nature of the relationship between tooth length and one of the predictors depends on the value of the other predictor. For the Guinea pig data, a case can be made that the effect of the supplement type depends on dosage: when the dosage level is either 0.5 or 1 mg/day, orange juice leads to longer teeth than ascorbic acid—but this benefit disappears at the highest dosage level of 2 mg/day.</p>
 <p>Accounting for interaction terms in a statistical model is easy. All one needs to do is add one more term to the formula, denoted <code>dose:supp</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ToothGrowth <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(len <span class="sc">~</span> dose <span class="sc">+</span> supp <span class="sc">+</span> dose<span class="sc">:</span>supp, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ToothGrowth <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(len <span class="sc">~</span> dose <span class="sc">+</span> supp <span class="sc">+</span> dose<span class="sc">:</span>supp, <span class="at">data =</span> _) <span class="sc">|&gt;</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
@@ -393,9 +393,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p>The model result confirms that our intuition was likely correct: there does appear to be a real interaction effect between the two factors.</p>
 <p>The inclusion of two factors with their interaction is so common in linear models that there is a shorthand notation to make it easier. Writing <code>dose * supp</code> is exactly the same as the above <code>dose + supp + dose:supp</code>. Let us see this in action:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ToothGrowth <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(len <span class="sc">~</span> dose <span class="sc">*</span> supp, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ToothGrowth <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(len <span class="sc">~</span> dose <span class="sc">*</span> supp, <span class="at">data =</span> _) <span class="sc">|&gt;</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
@@ -415,9 +415,9 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggfortify)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>ToothGrowth <span class="sc">%&gt;%</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">%&gt;%</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(len <span class="sc">~</span> dose <span class="sc">*</span> supp, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>ToothGrowth <span class="sc">|&gt;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">|&gt;</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(len <span class="sc">~</span> dose <span class="sc">*</span> supp, <span class="at">data =</span> _) <span class="sc">|&gt;</span></span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="at">which=</span><span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">smooth.colour=</span><span class="cn">NA</span>, <span class="at">colour=</span><span class="st">"steelblue"</span>, <span class="at">alpha=</span><span class="fl">0.7</span>) <span class="sc">+</span></span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -426,16 +426,16 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 <p>The Tukey test can be used to compare each factor in isolation, as well as their combinations:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ToothGrowth <span class="sc">%&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">%&gt;%</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(len <span class="sc">~</span> dose <span class="sc">*</span> supp, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aov</span>() <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ToothGrowth <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(len <span class="sc">~</span> dose <span class="sc">*</span> supp, <span class="at">data =</span> _) <span class="sc">|&gt;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aov</span>() <span class="sc">|&gt;</span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">TukeyHSD</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Tukey multiple comparisons of means
     95% family-wise confidence level
 
-Fit: aov(formula = .)
+Fit: aov(formula = lm(len ~ dose * supp, data = mutate(ToothGrowth, dose = as_factor(dose))))
 
 $dose
         diff       lwr       upr   p adj
@@ -468,8 +468,8 @@ $`dose:supp`
 </div>
 <p>(Again, due to how <code>TukeyHSD</code> is designed, the <code>aov</code> function must be called before one can use it on a linear model fit.) Here we first have a comparison between the dosage levels, averaging over supplement type. Even after this averaging there is a clear difference between the effects of each dosage level, as can be suspected based on a plot which ignores the <code>supp</code> factor:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(ToothGrowth) <span class="sc">%&gt;%</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(ToothGrowth) <span class="sc">|&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">|&gt;</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> dose, <span class="at">y =</span> len) <span class="sc">+</span></span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>,</span>
@@ -483,7 +483,7 @@ $`dose:supp`
 </div>
 <p>Similarly, the difference between the two supplement types appears to be real (the Tukey test gave <code>p adj = 0.0002312</code>), even when not distinguishing by dosage—although this is somewhat less visible on a graph:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(ToothGrowth) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(ToothGrowth) <span class="sc">|&gt;</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> supp, <span class="at">y =</span> len) <span class="sc">+</span></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">outlier.shape =</span> <span class="cn">NA</span>,</span>
@@ -498,14 +498,14 @@ $`dose:supp`
 <p>Finally, in the <code>$`dose:supp`</code> part of the table, one can compare every particular experimental group (indexed by both <code>dose</code> and <code>supp</code>) with every other.</p>
 <p>It is possible to use the <code>summary</code> function instead of <code>anova</code> when running the linear model. However, this table is likely not what we are looking for, because instead of having one row per factor and their interaction, it prints one row per fitted parameter. In case one is curious, here is what it looks like:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ToothGrowth <span class="sc">%&gt;%</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">%&gt;%</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(len <span class="sc">~</span> dose <span class="sc">*</span> supp, <span class="at">data =</span> .) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ToothGrowth <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lm</span>(len <span class="sc">~</span> dose <span class="sc">*</span> supp, <span class="at">data =</span> _) <span class="sc">|&gt;</span></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
-lm(formula = len ~ dose * supp, data = .)
+lm(formula = len ~ dose * supp, data = mutate(ToothGrowth, dose = as_factor(dose)))
 
 Residuals:
    Min     1Q Median     3Q    Max 
@@ -538,9 +538,9 @@ F-statistic: 41.56 on 5 and 54 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <p>And now, we can use the function <code>scheirerRayHare</code> much like <code>kruskal.test</code> or <code>lm</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ToothGrowth <span class="sc">%&gt;%</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">%&gt;%</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scheirerRayHare</span>(len <span class="sc">~</span> dose <span class="sc">*</span> supp, <span class="at">data =</span> .)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>ToothGrowth <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">dose =</span> <span class="fu">as_factor</span>(dose)) <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scheirerRayHare</span>(len <span class="sc">~</span> dose <span class="sc">*</span> supp, <span class="at">data =</span> _)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 DV:  len 

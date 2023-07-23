@@ -15,7 +15,7 @@ as_tibble(CO2)
 We can plot the observed distributions of CO~2~ uptake rates for each type and treatment:
 
 ```{r}
-as_tibble(CO2) %>%
+as_tibble(CO2) |>
   ggplot(aes(x = 0, y = uptake)) +
   geom_boxplot(colour = "steelblue", fill = "steelblue",
                alpha = 0.2, outlier.shape = NA) +
@@ -31,7 +31,7 @@ as_tibble(CO2) %>%
 This, however, is only part of the story, as becomes obvious if we also plot the ambient CO~2~ concentrations (`conc`) along the x-axis:
 
 ```{r}
-as_tibble(CO2) %>%
+as_tibble(CO2) |>
   ggplot(aes(x = conc, y = uptake)) +
   geom_point(colour = "steelblue", alpha = 0.8) +
   facet_grid(Type ~ Treatment) +
@@ -42,7 +42,7 @@ as_tibble(CO2) %>%
 We see that there is also a clear, saturating relationship between CO~2~ concentration and uptake rates. It is definitely not a linear relationship, but a saturating one. This does not mean that a linear model is useless for analyzing these data: the trend of whether the data increase or decrease can still be captured (although it is not recommended to use the model for numerical prediction purposes). One model that may come to mind is as follows:
 
 ```{r}
-lm(uptake ~ conc + Type * Treatment, data = CO2) %>% anova()
+lm(uptake ~ conc + Type * Treatment, data = CO2) |> anova()
 ```
 
 In other words, the uptake rates are modeled via a combination of the effect of concentration (a continuous variable) plus the interaction of type and treatment (two categorical variables). Recall that `Type * Treatment` is shorthand for `Type + Treatment + Type:Treatment`, the sum of the main effects and the interaction between them. The rationale for choosing this model is that the boxplot above reveals a potential interaction between the two factors `Type` and `Treatment` (the effect of changing `Treatment` from chilled to nonchilled depends on whether the `Type` was Quebec or Mississippi), and on top of this, we also want to capture the positive dependence on CO~2~ concentration. The ANOVA table above concurs: each of these categories come out with low p-values, indicating that what we see is unlikely to be due to just chance. To make sure that the assumptions on which this interpretation rests are held, we look at the diagnostic plots:
@@ -52,7 +52,7 @@ In other words, the uptake rates are modeled via a combination of the effect of 
 #| fig-height: 3
 library(ggfortify)
 
-lm(uptake ~ conc + Type * Treatment, data = CO2) %>%
+lm(uptake ~ conc + Type * Treatment, data = CO2) |>
   autoplot(which=3:2, smooth.colour=NA, colour="steelblue", alpha=0.7) +
   theme_bw()
 ```
@@ -62,7 +62,7 @@ While the Q--Q plot could be better, there is not much reason not to trust the m
 It is also informative to apply the function `summary` on the model fit in addition to `anova`, to obtain the regression slopes and intercept:
 
 ```{r}
-lm(uptake ~ conc + Type * Treatment, data = CO2) %>% summary()
+lm(uptake ~ conc + Type * Treatment, data = CO2) |> summary()
 ```
 
 As good as this model looks, one can argue based on the plot of the data that there could also be an interaction between `conc` and the other two factors. After all, the saturation levels of the uptake rate are always higher in Quebec than in Mississippi, and the effect of chilling also depends on `Type`. A model which accounts for all these effects and their interactions is `uptake ~ conc * Type * Treatment`:
@@ -70,9 +70,9 @@ As good as this model looks, one can argue based on the plot of the data that th
 ```{r}
 #| warning: false
 #| fig-height: 3
-lm(uptake ~ conc * Type * Treatment, data = CO2) %>% anova()
-lm(uptake ~ conc * Type * Treatment, data = CO2) %>% summary()
-lm(uptake ~ conc * Type * Treatment, data = CO2) %>%
+lm(uptake ~ conc * Type * Treatment, data = CO2) |> anova()
+lm(uptake ~ conc * Type * Treatment, data = CO2) |> summary()
+lm(uptake ~ conc * Type * Treatment, data = CO2) |>
   autoplot(which=3:2, smooth.colour=NA, colour="steelblue", alpha=0.7) +
   theme_bw()
 ```
@@ -85,8 +85,8 @@ This confirms what we saw on the plot of the data: that the basic shape of the r
 The relationship between CO~2~ concentration and uptake rates are definitely not linear, regardless of treatment or type. So the question arises: can one fit a *nonlinear* function to these data? As an example, let us focus on just Quebec and the nonchilled treatment, to better illustrate the ideas behind nonlinear regression. Here are the data:
 
 ```{r}
-as_tibble(CO2) %>%
-  filter(Type == "Quebec", Treatment == "nonchilled") %>%
+as_tibble(CO2) |>
+  filter(Type == "Quebec", Treatment == "nonchilled") |>
   ggplot(aes(x = conc, y = uptake)) +
   geom_point(colour = "steelblue", alpha = 0.8) +
   labs(x = "concentration", y = "uptake rate") +
@@ -101,10 +101,10 @@ Here $\rho$ is the uptake rate, $c$ is the concentration, and $V$ and $K$ are tw
 #| message: false
 expand_grid(V = c(10, 20, 30), # This function creates a tibble with all
             K = c(1, 5, 10),   # possible combinations of the inputs
-            concentration = seq(0, 60, l = 201)) %>%
-  group_by(V, K) %>%
-  mutate(uptake = V * concentration / (K + concentration)) %>%
-  ungroup() %>%
+            concentration = seq(0, 60, l = 201)) |>
+  group_by(V, K) |>
+  mutate(uptake = V * concentration / (K + concentration)) |>
+  ungroup() |>
   ggplot() +
   aes(x = concentration, y = uptake) +
   geom_line(colour = "steelblue") +
@@ -121,8 +121,8 @@ The interpretation of $K$ is slightly less straightforward, but still simple. To
 Looking at the data again, both these parameters can be roughly estimated:
 
 ```{r}
-as_tibble(CO2) %>%
-  filter(Type == "Quebec", Treatment == "nonchilled") %>%
+as_tibble(CO2) |>
+  filter(Type == "Quebec", Treatment == "nonchilled") |>
   ggplot(aes(x = conc, y = uptake)) +
   geom_point(colour = "steelblue", alpha = 0.8) +
   geom_hline(yintercept = 43, linetype = "dashed", colour = "steelblue") +
@@ -193,9 +193,9 @@ sum(list(1, 2, 3))
 With this brief introduction to lists, we now understand what it means that the `start` argument to `nls` must be a list, with the entries named after the parameters to be fitted. Using the previously-guessed values of $V$ and $K$ being around 43 and 125, respectively, means we can use `start = list(V = 43, K = 125)`. We can now look at the `nls` function and use it to produce a fit of the Michaelis--Menten curve to our data:
 
 ```{r}
-nonlinearFit <- as_tibble(CO2) %>%
-  filter(Type == "Quebec", Treatment == "nonchilled") %>%
-  nls(uptake ~ V*conc/(K + conc), data = ., start = list(V = 43, K = 125))
+nonlinearFit <- as_tibble(CO2) |>
+  filter(Type == "Quebec", Treatment == "nonchilled") |>
+  nls(uptake ~ V*conc/(K + conc), data = _, start = list(V = 43, K = 125))
 
 print(nonlinearFit)
 ```
@@ -219,9 +219,9 @@ predict(nonlinearFit)
 returns a vector for each `conc` in the original data, documenting what the model thinks the corresponding uptake rate ought to be. They can then be compared with the data:
 
 ```{r}
-as_tibble(CO2) %>%
-  filter(Type == "Quebec", Treatment == "nonchilled") %>%
-  mutate(pred = predict(nonlinearFit)) %>%
+as_tibble(CO2) |>
+  filter(Type == "Quebec", Treatment == "nonchilled") |>
+  mutate(pred = predict(nonlinearFit)) |>
   ggplot() +
   geom_point(aes(x = conc, y = uptake), colour = "steelblue", alpha = 0.8) +
   geom_line(aes(x = conc, y = pred), linetype = "dashed", alpha = 0.5) +
@@ -237,8 +237,8 @@ The second method can be useful if the data are sufficiently scarce that the fit
 V_fitted <- coef(nonlinearFit)["V"] # Get fitted values of V and K
 K_fitted <- coef(nonlinearFit)["K"] # from the vector of coefficients
 
-as_tibble(CO2) %>%
-  filter(Type == "Quebec", Treatment == "nonchilled") %>%
+as_tibble(CO2) |>
+  filter(Type == "Quebec", Treatment == "nonchilled") |>
   ggplot() +
   geom_point(aes(x = conc, y = uptake), colour = "steelblue", alpha = 0.8) +
   geom_function(fun = function(x) V_fitted * x / (K_fitted + x),

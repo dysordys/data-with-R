@@ -387,7 +387,7 @@ div.csl-indent {
 <p>This last part is what we are interested in. Galton’s way of doing this was to pick the slope and intercept of the line such that the summed deviations of the points from the line are minimized. Or, rather, the sum of <em>squared</em> deviations, to prevent very large positive and very large negative deviations canceling each other in the sum, making it appear as if the total deviation was very small.</p>
 <p>One can imagine that there must be some reasonably straightforward mathematical procedure to obtain the intercept and slope from arbitrary data. This is indeed the case. But fortunately, there is no need to do it by hand, because the <code>lm</code> function automates this process.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Let us perform the regression on the height data:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(Son <span class="sc">~</span> Father, <span class="at">data =</span> heightDat) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(Son <span class="sc">~</span> Father, <span class="at">data =</span> heightDat) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -418,7 +418,7 @@ F-statistic: 360.9 on 1 and 1076 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggfortify)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(Son <span class="sc">~</span> Father, <span class="at">data =</span> heightDat) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(Son <span class="sc">~</span> Father, <span class="at">data =</span> heightDat) <span class="sc">|&gt;</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="at">which=</span><span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">smooth.colour=</span><span class="cn">NA</span>, <span class="at">colour=</span><span class="st">"steelblue"</span>, <span class="at">alpha=</span><span class="fl">0.4</span>) <span class="sc">+</span></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -445,7 +445,7 @@ F-statistic: 360.9 on 1 and 1076 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <p>These are actually four datasets merged into one: <code>x1</code> and <code>y1</code> are x and y coordinates of the points from the first set, <code>x2</code> and <code>y2</code> from the second set, and so on. We can use <code>pivot_longer</code> to put these data in tidy format:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ans_long <span class="ot">&lt;-</span> anscombe <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ans_long <span class="ot">&lt;-</span> anscombe <span class="sc">|&gt;</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">".value"</span>, <span class="st">"set"</span>),</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_pattern =</span> <span class="st">"(.)(.)"</span>)</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ans_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -468,7 +468,7 @@ F-statistic: 360.9 on 1 and 1076 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <p>We can now visualize each set, along with linear fits:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ans_long <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>ans_long <span class="sc">|&gt;</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">colour =</span> set) <span class="sc">+</span></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
@@ -481,7 +481,7 @@ F-statistic: 360.9 on 1 and 1076 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <p>The data have been carefully crafted so that the least-squares regression line has an intercept of 3 and a slope of 0.5 for each of the four sets. Furthermore, the p-values are also identical to many decimal places. But this visual representation reveals what would have been much harder to intuit otherwise: that only the first set has a real chance of conforming to the assumptions of linear regression. Performing the regression on just this set and creating diagnostic plots:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"1"</span>)) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"1"</span>)) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -502,7 +502,7 @@ Residual standard error: 1.237 on 9 degrees of freedom
 Multiple R-squared:  0.6665,    Adjusted R-squared:  0.6295 
 F-statistic: 17.99 on 1 and 9 DF,  p-value: 0.00217</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"1"</span>)) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"1"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="at">which =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">smooth.colour =</span> <span class="cn">NA</span>, <span class="at">colour =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -512,7 +512,7 @@ F-statistic: 17.99 on 1 and 9 DF,  p-value: 0.00217</code></pre>
 <p>There is nothing to suggest on the diagnostic plots that there should be anything wrong with the regression—and, in fact, there isn’t anything wrong with it. The computed p-values for the intercept and slope are therefore reliable.</p>
 <p>The situation changes for the other three sets. Let us look at set 2:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"2"</span>)) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"2"</span>)) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -533,7 +533,7 @@ Residual standard error: 1.237 on 9 degrees of freedom
 Multiple R-squared:  0.6662,    Adjusted R-squared:  0.6292 
 F-statistic: 17.97 on 1 and 9 DF,  p-value: 0.002179</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"2"</span>)) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"2"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="at">which =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">smooth.colour =</span> <span class="cn">NA</span>, <span class="at">colour =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -543,7 +543,7 @@ F-statistic: 17.97 on 1 and 9 DF,  p-value: 0.002179</code></pre>
 <p>Blindly reading off the p-values without considering the diagnostic plots might lead one to take them seriously. This would be wrong however, as the assumptions of the linear regression are clearly not fulfilled based on the diagnostic plots. Especially the left one shows that the residuals are not independent, and certainly not identically and normally distributed.</p>
 <p>In set 3, the trends are driven too much by a single outlier:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"3"</span>)) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"3"</span>)) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -564,7 +564,7 @@ Residual standard error: 1.236 on 9 degrees of freedom
 Multiple R-squared:  0.6663,    Adjusted R-squared:  0.6292 
 F-statistic: 17.97 on 1 and 9 DF,  p-value: 0.002176</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"3"</span>)) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"3"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="at">which =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">smooth.colour =</span> <span class="cn">NA</span>, <span class="at">colour =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -573,7 +573,7 @@ F-statistic: 17.97 on 1 and 9 DF,  p-value: 0.002176</code></pre>
 </div>
 <p>As before, the diagnostic plots show that the independence of the residuals is violated. Finally, in set 4, the whole regression is based on a single point whose predictor is different from the rest:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"4"</span>)) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"4"</span>)) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -594,7 +594,7 @@ Residual standard error: 1.236 on 9 degrees of freedom
 Multiple R-squared:  0.6667,    Adjusted R-squared:  0.6297 
 F-statistic:    18 on 1 and 9 DF,  p-value: 0.002165</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"4"</span>)) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"4"</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="at">which =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">smooth.colour =</span> <span class="cn">NA</span>, <span class="at">colour =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -621,7 +621,7 @@ F-statistic:    18 on 1 and 9 DF,  p-value: 0.002165</code></pre>
 </div>
 <p>The function performing the regression is itself called <code>mblm</code>. A note of caution: its data argument, for some reason, is not called <code>data</code> but <code>dataframe</code>. Let us apply it to set 3 in the Anscombe dataset (the one with the single strong outlier):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mblm</span>(y <span class="sc">~</span> x, <span class="at">dataframe =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"3"</span>)) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mblm</span>(y <span class="sc">~</span> x, <span class="at">dataframe =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"3"</span>)) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -646,12 +646,12 @@ Residual standard error: 1.415 on 9 degrees of freedom</code></pre>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>leastSquaresFit <span class="ot">&lt;-</span><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"3"</span>))</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>TheilSenFit <span class="ot">&lt;-</span><span class="fu">mblm</span>(y <span class="sc">~</span> x, <span class="at">dataframe =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"3"</span>))</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>ans_long <span class="sc">%&gt;%</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(set <span class="sc">==</span> <span class="st">"3"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>ans_long <span class="sc">|&gt;</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(set <span class="sc">==</span> <span class="st">"3"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">`</span><span class="at">least squares</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">predict</span>(leastSquaresFit),</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Theil-Sen</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">predict</span>(TheilSenFit)) <span class="sc">%&gt;%</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">`</span><span class="at">Theil-Sen</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">predict</span>(TheilSenFit)) <span class="sc">|&gt;</span></span>
 <span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">"least squares"</span>, <span class="st">"Theil-Sen"</span>),</span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"type"</span>, <span class="at">values_to =</span> <span class="st">"prediction"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"type"</span>, <span class="at">values_to =</span> <span class="st">"prediction"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
 <span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y), <span class="at">colour =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
 <span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> prediction), <span class="at">colour =</span> <span class="st">"goldenrod"</span>) <span class="sc">+</span></span>

@@ -321,7 +321,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">%&gt;%</span> <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span> <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> <span class="fu">print</span>(<span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 30 × 2
    weight group
@@ -373,9 +373,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Based on the figure, it is reasonable to expect there to be a real difference between treatment 1 and treatment 2. But whether there is good reason to think that the control truly differs from any of the treatments is unclear.</p>
 <p>One way of finding out could be to perform pairwise Wilcoxon rank sum tests between each pair of groups. This, in fact, would be quite feasible here, because there are only three comparisons to be made (control vs.&nbsp;treatment 1; control vs.&nbsp;treatment 2, and treatment 1 vs.&nbsp;treatment 2). Here are the results of doing this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(PlantGrowth) <span class="sc">%&gt;%</span> <span class="co"># The PlantGrowth dataset, converted to a tibble</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"trt2"</span>) <span class="sc">%&gt;%</span> <span class="co"># Keep only the control and treatment 1</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> ., <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(PlantGrowth) <span class="sc">|&gt;</span> <span class="co"># The PlantGrowth dataset, converted to a tibble</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"trt2"</span>) <span class="sc">|&gt;</span> <span class="co"># Keep only the control and treatment 1</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> _, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Wilcoxon rank sum test with continuity correction
@@ -389,9 +389,9 @@ sample estimates:
 difference in location 
              0.4213948 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(PlantGrowth) <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"trt1"</span>) <span class="sc">%&gt;%</span> <span class="co"># Keep only the control and treatment 2</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> ., <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(PlantGrowth) <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"trt1"</span>) <span class="sc">|&gt;</span> <span class="co"># Keep only the control and treatment 2</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> _, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Wilcoxon rank sum exact test
@@ -405,9 +405,9 @@ sample estimates:
 difference in location 
                  -0.49 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(PlantGrowth) <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"ctrl"</span>) <span class="sc">%&gt;%</span> <span class="co"># Keep only treatments 1 and 2</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> ., <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(PlantGrowth) <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"ctrl"</span>) <span class="sc">|&gt;</span> <span class="co"># Keep only treatments 1 and 2</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> _, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Wilcoxon rank sum exact test
@@ -482,7 +482,7 @@ Coefficients:
 </div>
 <p>The output is not particularly informative: it simply lists the regression coefficients without the requisite information to see whether those coefficients actually mean anything. To get more, one can pass the result of the <code>lm</code> function to one of two other functions: either <code>anova</code> or <code>summary</code>. The former generates an ANOVA or sum-of-squares table (thus, despite its name, it does not actually perform the anova, just formats its output in a specific way). In this table, each factor indexing the groups, as well as their interactions (if present), get one row:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">%&gt;%</span> <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span> <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
 
@@ -497,7 +497,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <p>The p-value above (in the row belonging to the factor <code>group</code>, under the column <code>Pr(&gt;F)</code>) is the analogue of the p-value calculated by the Kruskal–Wallis test (which was 0.01842). We can see that the two tests agree qualitatively.</p>
 <p>The latter, <code>summary</code> function focuses on the regression coefficients instead, listing all of them in a table, alongside other information:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -523,9 +523,9 @@ F-statistic: 4.846 on 2 and 27 DF,  p-value: 0.01591</code></pre>
 <p>The output first prints the function call to <code>lm</code> we used. Then it gives a quick overview of the residuals: the minimum and maximum values, the point of the first and third quantiles, and the median—in other words, it contains the same information one would use to create a box plot with. This ought to give a quick and rough idea of whether the residuals are violently skewed, or have at least a chance of being normally distributed, which is a key assumption behind ANOVA. (We will discuss a better method for assessing the normality of the residuals in <a href="#sec-diagnostics"><span>Section&nbsp;11.3</span></a>.) The next item in the output is the table of fitted regression coefficients. Here we can find the estimated values of the coefficients, their standard error, the associated t-statistic, and the p-values (the <code>Pr(&gt;|t|)</code> column). Here the p-values refer to the likelihood that the observed difference from zero is due to chance.</p>
 <p>To interpret the coefficients, note that R computes them relative to some reference group—which, unless specified otherwise, is the factor that comes first in the alphabet. From <code>ctrl</code>, <code>trt1</code>, and <code>trt2</code>, it is <code>ctrl</code> that comes first, and therefore the control serves as the baseline. The row called <code>(Intercept)</code> tells us the estimated value made by the regression, assuming that all non-baseline variables are set to zero. In this context, this means that both <code>trt1</code> and <code>trt2</code> are zeroed out, and therefore <code>(Intercept)</code> simply measures the average value within the group <code>ctrl</code>. The estimates in the rows <code>grouptrt1</code> and <code>grouptrt2</code> (these names were created by mushing together the name of the column in which the factor is found with the factors’ names themselves) are the <em>deviations</em> from the baseline provided by <code>(Intercept)</code>—that is, from the mean within the control. So we can surmise that the estimated mean of <code>trt1</code> is 5.032 - 0.371 = 4.661, and that of <code>trt2</code> is 5.032 + 0.494 = 5.526. Indeed, this is what we find relying on simple summaries computing the means in each group:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">%&gt;%</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(group) <span class="sc">%&gt;%</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanWeight =</span> <span class="fu">mean</span>(weight)) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(group) <span class="sc">|&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanWeight =</span> <span class="fu">mean</span>(weight)) <span class="sc">|&gt;</span></span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="co"># Not necessary here, strictly speaking, but does not hurt</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
@@ -550,7 +550,7 @@ F-statistic: 4.846 on 2 and 27 DF,  p-value: 0.01591</code></pre>
 </div>
 <p>And now, we can simply give the result of the <code>lm</code> function as input to the function <code>autoplot</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">%&gt;%</span> <span class="fu">autoplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span> <span class="fu">autoplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Anova_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -561,7 +561,7 @@ F-statistic: 4.846 on 2 and 27 DF,  p-value: 0.01591</code></pre>
 <p>The bottom right graph measures the “leverage” of each point, which is a measure of how sensitively the regression reacts to removing one data point. We will not be concerned with this plot.</p>
 <p>In fact, we can remove this graph from the diagnostic plots. We may even remove the top left one, since the bottom left carries the same information in a better way. Further, we can also remove the blue lines, which often do more to confuse than to help. (For example, one can see a slight downward trend in the blue line in the bottom left graph. Looking at all points together reveals how little this trend means.) To select only the bottom-left and top-right diagnostic plots, one can pass the argument <code>which = 3:2</code> to <code>autoplot</code>, which chooses just the third and second of the graphs (in that order). In turn, the <code>smooth.colour = NA</code> argument will remove the blue lines:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="at">which =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">smooth.colour =</span> <span class="cn">NA</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="Anova_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
@@ -569,7 +569,7 @@ F-statistic: 4.846 on 2 and 27 DF,  p-value: 0.01591</code></pre>
 </div>
 <p>One may can go even further. Since <code>autoplot</code> returns a standard <code>ggplot</code> object, we can add various theme options:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="at">which=</span><span class="dv">3</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">smooth.colour=</span><span class="cn">NA</span>, <span class="at">colour=</span><span class="st">"steelblue"</span>, <span class="at">alpha=</span><span class="fl">0.7</span>) <span class="sc">+</span></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -581,12 +581,12 @@ F-statistic: 4.846 on 2 and 27 DF,  p-value: 0.01591</code></pre>
 <h2 data-number="11.4" class="anchored" data-anchor-id="sec-tukey"><span class="header-section-number">11.4</span> Tukey’s honest significant differences</h2>
 <p>Just as the Dunn test is a post-hoc test for the Kruskal–Wallis test, the Tukey test (or Tukey’s honest significant test) is a post-hoc test for an ANOVA. The corresponding function in R is called <code>TukeyHSD</code>, and it should be applied to the result of the <code>lm</code> function—with one caveat. The Tukey test requires the output of the ANOVA to be in a particular format. Therefore, before passing the result of <code>lm</code> to <code>TukeyHSD</code>, we first have to pass it to a helper function called <code>aov</code> (“analysis of variance”). Like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">%&gt;%</span> <span class="fu">aov</span>() <span class="sc">%&gt;%</span> <span class="fu">TukeyHSD</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span> <span class="fu">aov</span>() <span class="sc">|&gt;</span> <span class="fu">TukeyHSD</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Tukey multiple comparisons of means
     95% family-wise confidence level
 
-Fit: aov(formula = .)
+Fit: aov(formula = lm(weight ~ group, data = PlantGrowth))
 
 $group
             diff        lwr       upr     p adj
@@ -599,17 +599,17 @@ trt2-trt1  0.865  0.1737839 1.5562161 0.0120064</code></pre>
 <p>The <code>aov</code> function serves no purpose above, except to put the data in a format which <code>TukeyHSD</code> can work with. In case using this intermediary feels like a hassle, one can easily make life simpler, by writing a helper function which automatically calls it, together with the Tukey test:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>tukey.test <span class="ot">&lt;-</span> <span class="cf">function</span>(lmFit) {</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  lmFit <span class="sc">%&gt;%</span> <span class="fu">aov</span>() <span class="sc">%&gt;%</span> <span class="fu">TukeyHSD</span>()</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  lmFit <span class="sc">|&gt;</span> <span class="fu">aov</span>() <span class="sc">|&gt;</span> <span class="fu">TukeyHSD</span>()</span>
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here <code>lmFit</code> is a model fit object returned by the <code>lm</code> function. Using this, we can rewrite the above more simply:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">%&gt;%</span> <span class="fu">tukey.test</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span> <span class="fu">tukey.test</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Tukey multiple comparisons of means
     95% family-wise confidence level
 
-Fit: aov(formula = .)
+Fit: aov(formula = lmFit)
 
 $group
             diff        lwr       upr     p adj

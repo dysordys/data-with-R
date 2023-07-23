@@ -27,15 +27,15 @@ ggplot(iris) +
   geom_point()
 ```
 
-Here we defined the **data** (`iris`; feel free to use pipes, as in `iris %>% ggplot() + ...`), then the **aesthetic mappings** with `aes()`, and finally the **geometry** of how to display the data with `geom_point()`. The important thing to remember is that the aesthetic mappings are all those aspects of the figure that are governed by the data. For instance, if you wanted to set the color of all points to blue, this would not be an aesthetic mapping, because it applies regardless of what the data are (in case you want to do this, you would have to specify `geom_point(colour = "blue")` in the last line). The **geometry** of your plot governs the overall visual arrangement of your data (points, lines, histograms, etc). There are many different `geom_`s; we will learn about some here, but when in doubt, Google and a [`ggplot2` cheat sheet](https://nyu-cdsc.github.io/learningr/assets/data-visualization-2.1.pdf) are your best friends.
+Here we defined the **data** (`iris`; feel free to use pipes, as in `iris |> ggplot() + ...`), then the **aesthetic mappings** with `aes()`, and finally the **geometry** of how to display the data with `geom_point()`. The important thing to remember is that the aesthetic mappings are all those aspects of the figure that are governed by the data. For instance, if you wanted to set the color of all points to blue, this would not be an aesthetic mapping, because it applies regardless of what the data are (in case you want to do this, you would have to specify `geom_point(colour = "blue")` in the last line). The **geometry** of your plot governs the overall visual arrangement of your data (points, lines, histograms, etc). There are many different `geom_`s; we will learn about some here, but when in doubt, Google and a [`ggplot2` cheat sheet](https://nyu-cdsc.github.io/learningr/assets/data-visualization-2.1.pdf) are your best friends.
 
-Notice that the different "grammatical" components of the plot (aesthetics, geometry) are *added* to the plot, using the `+` symbol for addition. This is due to a somewhat unfortunate historical accident. As it happens, `ggplot2` is older than the rest of the `tidyverse`, and so when it was first designed, the pipe operator `%>%` did not yet exist. This means that within the creating of a ggplot graph, one must use `+` to compose the various graph elements; but outside that, the usual `%>%` is used for function composition.
+Notice that the different "grammatical" components of the plot (aesthetics, geometry) are *added* to the plot, using the `+` symbol for addition. This is due to a somewhat unfortunate historical accident. As it happens, `ggplot2` is older than the rest of the `tidyverse`, and so when it was first designed, the pipe operator `|>` did not yet exist. This means that within the creating of a ggplot graph, one must use `+` to compose the various graph elements; but outside that, the usual `|>` is used for function composition.
 
 To look at a different kind of geometry, let us create a histogram of the petal lengths. This is done using `geom_histogram`:
 
 ```{r}
 #| message: false
-iris %>%
+iris |>
   ggplot() +
   aes(x = Petal.Length) +
   geom_histogram()
@@ -45,7 +45,7 @@ We see two clusters of data. Why is that? One might suspect that this is because
 
 ```{r}
 #| message: false
-iris %>%
+iris |>
   ggplot() +
   aes(x = Petal.Length, colour = Species) +
   geom_histogram()
@@ -55,7 +55,7 @@ iris %>%
 
 ```{r}
 #| message: false
-iris %>%
+iris |>
   ggplot() +
   aes(x = Petal.Length, colour = Species, fill = Species) +
   geom_histogram()
@@ -67,7 +67,7 @@ It may be easier to interpret the histogram if all bars start at the bottom, eve
 
 ```{r}
 #| message: false
-iris %>%
+iris |>
   ggplot() +
   aes(x = Petal.Length, colour = Species, fill = Species) +
   geom_histogram(position = "identity")
@@ -77,7 +77,7 @@ iris %>%
 
 ```{r}
 #| message: false
-iris %>%
+iris |>
   ggplot() +
   aes(x = Petal.Length, colour = Species, fill = Species) +
   geom_histogram(position = "identity", alpha = 0.2)
@@ -86,7 +86,7 @@ iris %>%
 There are plenty of other `geom_`s as well, such as `geom_boxplot`, `geom_violin`, etc. Let us try `geom_boxplot` for instance. Let us create one box plot of the distribution of petal lengths for each species. Putting the species along the x-axis and petal length along the y-axis:
 
 ```{r}
-iris %>%
+iris |>
   ggplot() +
   aes(x = Species, y = Petal.Length) +
   geom_boxplot()
@@ -95,7 +95,7 @@ iris %>%
 Although this is sufficient, one should feel free to make the plots prettier. For instance, one could use colors, like before. One can also use different themes. There are pre-defined themes such as `theme_classic()`, `theme_bw()`, and so on. For example, using `theme_bw()` gets rid of the default gray background and replaces it with a white one. The version of the graph below applies this theme, and also changes the color and fill to be based on species identity:
 
 ```{r}
-iris %>%
+iris |>
   ggplot() +
   aes(x = Species, y = Petal.Length, colour = Species, fill = Species) +
   geom_boxplot(alpha = 0.2) +
@@ -111,11 +111,11 @@ Let us first obtain the mean and the standard deviation of the petal lengths for
 
 ```{r}
 #| message: false
-iris %>%
-  group_by(Species) %>% # Perform summary calculations for each species
+iris |>
+  group_by(Species) |> # Perform summary calculations for each species
   summarise(mP = mean(Petal.Length), # Mean petal length
-            sP = sd(Petal.Length)) %>% # Standard deviation of petal length
-  ungroup() %>% # Ungroup data
+            sP = sd(Petal.Length)) |> # Standard deviation of petal length
+  ungroup() |> # Ungroup data
   ggplot() + # Start plotting
   aes(x = Species, y = mP, ymin = mP - sP, ymax = mP + sP) + # Mean +/- sd
   geom_point() + # This takes the y aesthetic, for plotting the mean
@@ -128,13 +128,13 @@ In case we want to calculate the 95% confidence intervals of the mean values, we
 
 ```{r}
 #| message: false
-iris %>%
-  group_by(Species) %>%
+iris |>
+  group_by(Species) |>
   summarise(mP = mean(Petal.Length), # Mean petal length per species
             sP = sd(Petal.Length), # Standard deviation per species
             N = n(), # Sample size (number of observations) per species
             SEM = sP / sqrt(N), # Standard error of the mean
-            CI = SEM * qt(1 - 0.025, N - 1)) %>% # Confidence interval,
+            CI = SEM * qt(1 - 0.025, N - 1)) |> # Confidence interval,
                  # read off at 1 - 0.025 because +/- 2.5% adds up to 5%
   ggplot() +
   aes(x = Species, y = mP, ymin = mP - CI, ymax = mP + CI) +
@@ -148,13 +148,13 @@ In the literature, it is common to encounter bar-and-whisker plots to represent 
 
 ```{r}
 #| message: false
-iris %>%
-  group_by(Species) %>%
+iris |>
+  group_by(Species) |>
   summarise(mP = mean(Petal.Length),
             sP = sd(Petal.Length),
             N = n(),
             SEM = sP / sqrt(N),
-            CI = SEM * qt(1 - 0.025, N - 1)) %>%
+            CI = SEM * qt(1 - 0.025, N - 1)) |>
   ggplot() +
   aes(x = Species, y = mP, ymin = mP - CI, ymax = mP + CI) +
   # Below we change geom_point to geom_col (for "column"):
@@ -170,7 +170,7 @@ While means and their confidence intervals are often displayed with bar-and-whis
 ```{r}
 tibble(Species = c("species 1", "species 2"),
        Average = c(148, 152),
-       CI = c(0.8, 0.9)) %>%
+       CI = c(0.8, 0.9)) |>
   ggplot() +
   aes(x = Species, y = Average, ymin = Average - CI, ymax = Average + CI) +
   geom_col(alpha = 0.4, colour = "steelblue", fill = "steelblue") +
@@ -184,7 +184,7 @@ It is impossible to see whether there are any relevant differences between the t
 ```{r}
 tibble(Species = c("species 1", "species 2"),
        Average = c(148, 152),
-       CI = c(0.8, 0.9)) %>%
+       CI = c(0.8, 0.9)) |>
   ggplot() +
   aes(x = Species, y = Average, ymin = Average - CI, ymax = Average + CI) +
   geom_point(colour = "steelblue") +

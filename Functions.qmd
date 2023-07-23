@@ -122,29 +122,23 @@ But all this is quite difficult to see when looking at the expression
 exp(mean(log(seq(-3, 11, by = 2)), na.rm = TRUE))
 ```
 
-Part of the reason is the awkward backwards order of function applications which makes it hard to see which function the argument `na.rm = TRUE` belongs to. Fortunately, there is a simple operator in R called a *pipe* (written `%>%`), which allows one to write the same code in a more streamlined way. The pipe was originally provided by the `magrittr` package,^[As of R 4.1.0, the R language also supports a native, built-in pipe operator `|>` as well. The package name `magrittr` is an allusion to Belgian surrealist artist René Magritte (1898-1967) because of his famous painting [La trahison des images](https://en.wikipedia.org/wiki/The_Treachery_of_Images).] but invoking `tidyverse` will also load it automatically:
+Part of the reason is the awkward backwards order of function applications which makes it hard to see which function the argument `na.rm = TRUE` belongs to. Fortunately, there is a simple operator in R called a *pipe* (written `|>`), which allows one to write the same code in a more streamlined way. The pipe allows one to write function application in reverse order (first the argument and then the function), making the code more transparent. Formally, `x |> f()` is equivalent to `f(x)` for any function `f`. For example, `sqrt(9)` can also be written `9 |> sqrt()`. Thus, `sqrt(sin(cos(log(1))))` can be written as `1 |> log() |> cos() |> sin() |> sqrt()`, which reads straightforwardly as "start with the number 1; *then* take its log; *then* take the cosine of the result; *then* take the sine of that result; and *then*, finally, take the square root to obtain the final output". In general, it helps to pronounce `|>` as "then".^[This built-in pipe `|>` has only been available since R 4.1. Upgrade your R version if necessary. Alternatively, you can use another pipe operator that is provided by the `magrittr` package. It is written `%>%` instead of `|>`, but otherwise works identically (at least at this level; we will be mentioning some of the subtler differences in @sec-dot.) To use the `magrittr` pipe, install the package first with `install.packages("magrittr")` and then load it with `library(magrittr)`. Now you can use `%>%`. Incidentally, the package name `magrittr` is an allusion to Belgian surrealist artist René Magritte (1898-1967) because of his famous painting [La trahison des images](https://en.wikipedia.org/wiki/The_Treachery_of_Images).]
 
-```{r}
-#| message: false
-library(tidyverse)
-```
-
-The pipe allows one to write function application in reverse order (first the argument and then the function), making the code more transparent. Formally,  `x %>% f()` is equivalent to `f(x)` for any function `f`. For example, `sqrt(9)` can also be written `9 %>% sqrt()`. Thus, `sqrt(sin(cos(log(1))))` can be written as `1 %>% log() %>% cos() %>% sin() %>% sqrt()`, which reads straightforwardly as "start with the number 1; *then* take its log; *then* take the cosine of the result; *then* take the sine of that result; and *then*, finally, take the square root to obtain the final output". In general, it helps to pronounce `%>%` as "then".
-
-The pipe also works for functions with multiple arguments. In that case, `x %>% f(y, ...)` is equivalent to `f(x, y, ...)`. That is, the pipe refers to the function's first argument (though, as we will see in @sec-dot, it is possible to override this). Instead of the awkward and hard-to-read `mean(log(seq(-3, 11, by = 2)), na.rm = TRUE)`, we can therefore write:
+The pipe also works for functions with multiple arguments. In that case, `x |> f(y, ...)` is equivalent to `f(x, y, ...)`. That is, the pipe refers to the function's first argument (though, as we will see in @sec-dot, it is possible to override this). Instead of the awkward and hard-to-read `mean(log(seq(-3, 11, by = 2)), na.rm = TRUE)`, we can therefore write:
 
 ```{r, warning=FALSE}
-seq(-3, 11, by = 2) %>%
-  log() %>%
-  mean(na.rm = TRUE) %>%
+seq(-3, 11, by = 2) |>
+  log() |>
+  mean(na.rm = TRUE) |>
   exp()
 ```
 
 This is fully equivalent to the traditional form, but is much more readable, because the functions are written in the order in which they actually get applied. Moreover, even though the program is built only from the composition of functions, it reads straightforwardly as if it was a sequence of imperative instructions: we start from the vector of integers `c(-3, -1, 1, 3, 5, 7, 9, 11)`; *then* we take the logarithm of each; *then* we take their average, discarding any invalid entries (produced in this case by taking the logarithm of negative numbers); and *then*, finally, we exponentiate the result back to obtain the geometric mean.
 
 ::: {.callout-tip}
-One can create the pipe symbol `%>%` with the keyboard shortcut Ctrl+Shift+M (Cmd+Shift+M on a Mac).
+One can create the pipe symbol `|>` with the keyboard shortcut Ctrl+Shift+M (Cmd+Shift+M on a Mac). In case you get the symbol `%>%` instead, do the following: in RStudio, click on the **Tools** menu at the top, and select **Global options**. A new menu will pop up. Click on **Code** in the panel on the left, and tick the box **Use native pipe operator, |> (requires R 4.1+)**. (In case you cannot see this option, then you are likely using a version of R earlier than 4.1; you should upgrade your R installation.)
 :::
+
 
 ## Exercises
 

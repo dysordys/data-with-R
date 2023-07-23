@@ -10,7 +10,7 @@ Such a dataset is, in fact, built into R, and is called `PlantGrowth`. Here it i
 #| message: false
 library(tidyverse)
 
-PlantGrowth %>% as_tibble() %>% print(n = Inf)
+PlantGrowth |> as_tibble() |> print(n = Inf)
 ```
 
 (The `PlantGrowth` data are in the form of a data frame instead of a tibble; hence we convert it above by using `as_tibble`.) We see that each group consists of ten observations, and we have three groups: the control (`ctrl`) treatment 1 (`trt1`), and treatment 2 (`trt2`). As usual, we visualize the data first, before doing any tests:
@@ -30,17 +30,17 @@ One way of finding out could be to perform pairwise Wilcoxon rank sum tests betw
 
 ```{r}
 #| warning: false
-as_tibble(PlantGrowth) %>% # The PlantGrowth dataset, converted to a tibble
-  filter(group != "trt2") %>% # Keep only the control and treatment 1
-  wilcox.test(weight ~ group, data = ., conf.int = TRUE)
+as_tibble(PlantGrowth) |> # The PlantGrowth dataset, converted to a tibble
+  filter(group != "trt2") |> # Keep only the control and treatment 1
+  wilcox.test(weight ~ group, data = _, conf.int = TRUE)
 
-as_tibble(PlantGrowth) %>%
-  filter(group != "trt1") %>% # Keep only the control and treatment 2
-  wilcox.test(weight ~ group, data = ., conf.int = TRUE)
+as_tibble(PlantGrowth) |>
+  filter(group != "trt1") |> # Keep only the control and treatment 2
+  wilcox.test(weight ~ group, data = _, conf.int = TRUE)
 
-as_tibble(PlantGrowth) %>%
-  filter(group != "ctrl") %>% # Keep only treatments 1 and 2
-  wilcox.test(weight ~ group, data = ., conf.int = TRUE)
+as_tibble(PlantGrowth) |>
+  filter(group != "ctrl") |> # Keep only treatments 1 and 2
+  wilcox.test(weight ~ group, data = _, conf.int = TRUE)
 ```
 
 As expected, the difference between the control and the two treatments is not particularly credible (especially in the case of treatment 1), but there is good indication that the difference between the two treatments is not just due to chance.
@@ -95,7 +95,7 @@ lm(weight ~ group, data = PlantGrowth)
 The output is not particularly informative: it simply lists the regression coefficients without the requisite information to see whether those coefficients actually mean anything. To get more, one can pass the result of the `lm` function to one of two other functions: either `anova` or `summary`. The former generates an ANOVA or sum-of-squares table (thus, despite its name, it does not actually perform the anova, just formats its output in a specific way). In this table, each factor indexing the groups, as well as their interactions (if present), get one row:
 
 ```{r}
-lm(weight ~ group, data = PlantGrowth) %>% anova()
+lm(weight ~ group, data = PlantGrowth) |> anova()
 ```
 
 The p-value above (in the row belonging to the factor `group`, under the column `Pr(>F)`) is the analogue of the p-value calculated by the Kruskal--Wallis test (which was 0.01842). We can see that the two tests agree qualitatively.
@@ -103,7 +103,7 @@ The p-value above (in the row belonging to the factor `group`, under the column 
 The latter, `summary` function focuses on the regression coefficients instead, listing all of them in a table, alongside other information:
 
 ```{r}
-lm(weight ~ group, data = PlantGrowth) %>% summary()
+lm(weight ~ group, data = PlantGrowth) |> summary()
 ```
 
 The output first prints the function call to `lm` we used. Then it gives a quick overview of the residuals: the minimum and maximum values, the point of the first and third quantiles, and the median---in other words, it contains the same information one would use to create a box plot with. This ought to give a quick and rough idea of whether the residuals are violently skewed, or have at least a chance of being normally distributed, which is a key assumption behind ANOVA. (We will discuss a better method for assessing the normality of the residuals in @sec-diagnostics.) The next item in the output is the table of fitted regression coefficients. Here we can find the estimated values of the coefficients, their standard error, the associated t-statistic, and the p-values (the `Pr(>|t|)` column). Here the p-values refer to the likelihood that the observed difference from zero is due to chance.
@@ -116,9 +116,9 @@ options(pillar.sigfig = 4)
 ```
 
 ```{r}
-PlantGrowth %>%
-  group_by(group) %>%
-  summarise(meanWeight = mean(weight)) %>%
+PlantGrowth |>
+  group_by(group) |>
+  summarise(meanWeight = mean(weight)) |>
   ungroup() # Not necessary here, strictly speaking, but does not hurt
 ```
 
@@ -148,7 +148,7 @@ library(ggfortify)
 And now, we can simply give the result of the `lm` function as input to the function `autoplot`:
 
 ```{r}
-lm(weight ~ group, data = PlantGrowth) %>% autoplot()
+lm(weight ~ group, data = PlantGrowth) |> autoplot()
 ```
 
 We see four plots above. The top left of these shows the residuals against the fitted values (notice that the three values along the x-axis correspond to the means of the three groups `ctrl`, `trt1`, and `trt2`). If the points have no trend of increase or decrease, and the spread of the points is roughly constant, then they adhere to ANOVA assumptions. The blue line is a moving regression line which helps decide whether there is a trend; in this case, it would be hard to argue that any trend is due to something else than chance.
@@ -164,7 +164,7 @@ In fact, we can remove this graph from the diagnostic plots. We may even remove 
 ```{r}
 #| warning: false
 #| fig-height: 3
-lm(weight ~ group, data = PlantGrowth) %>%
+lm(weight ~ group, data = PlantGrowth) |>
   autoplot(which = 3:2, smooth.colour = NA)
 ```
 
@@ -173,7 +173,7 @@ One may can go even further. Since `autoplot` returns a standard `ggplot` object
 ```{r}
 #| warning: false
 #| fig-height: 3
-lm(weight ~ group, data = PlantGrowth) %>%
+lm(weight ~ group, data = PlantGrowth) |>
   autoplot(which=3:2, smooth.colour=NA, colour="steelblue", alpha=0.7) +
   theme_bw()
 ```
@@ -184,7 +184,7 @@ lm(weight ~ group, data = PlantGrowth) %>%
 Just as the Dunn test is a post-hoc test for the Kruskal--Wallis test, the Tukey test (or Tukey's honest significant test) is a post-hoc test for an ANOVA. The corresponding function in R is called `TukeyHSD`, and it should be applied to the result of the `lm` function---with one caveat. The Tukey test requires the output of the ANOVA to be in a particular format. Therefore, before passing the result of `lm` to `TukeyHSD`, we first have to pass it to a helper function called `aov` ("analysis of variance"). Like this:
 
 ```{r}
-lm(weight ~ group, data = PlantGrowth) %>% aov() %>% TukeyHSD()
+lm(weight ~ group, data = PlantGrowth) |> aov() |> TukeyHSD()
 ```
 
 The table is similar to the one produced by the Dunn test, with a few differences. The first column tells us which groups of data are compared. The second column is the raw difference between the group means, the third and fourth are the lower and upper limits of a 95% confidence interval for the difference, and the last one are the p-values (adjusted for multiple comparisons). In this case, the results from the Dunn test and the Tukey test are in agreement: only the difference between the two control groups stands a reasonable chance of being real. The fact that multiple methods lead to the same conclusion increases the trust we can place in their results being correct.
@@ -193,14 +193,14 @@ The `aov` function serves no purpose above, except to put the data in a format w
 
 ```{r}
 tukey.test <- function(lmFit) {
-  lmFit %>% aov() %>% TukeyHSD()
+  lmFit |> aov() |> TukeyHSD()
 }
 ```
 
 Here `lmFit` is a model fit object returned by the `lm` function. Using this, we can rewrite the above more simply:
 
 ```{r}
-lm(weight ~ group, data = PlantGrowth) %>% tukey.test()
+lm(weight ~ group, data = PlantGrowth) |> tukey.test()
 ```
 
 

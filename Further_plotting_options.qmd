@@ -89,7 +89,7 @@ ggplot(iris) +
 The aesthetic mappings of a graph (x-axis, y-axis, color, fill, size, shape, alpha, ...) are automatically rendered into the displayed plot, based on certain default settings within `ggplot2`. These defaults can be altered, however. Consider the following bare-bones plot:
 
 ```{r}
-iris %>%
+iris |>
   ggplot() +
   aes(x = Species, y = Petal.Length) +
   geom_boxplot()
@@ -100,7 +100,7 @@ We can now change, for example, how the y-axis is displayed. The component to be
 As an example, let us scale the y-axis of the previous graph in the following way. The axis label should read "Petal length [cm]", instead of the current "Petal.Length". It should go from 0 to 7, with a break at those two values and also halfway in between at 3.5. Here is how to do this:
 
 ```{r}
-iris %>%
+iris |>
   ggplot() +
   aes(x = Species, y = Petal.Length) +
   geom_boxplot() +
@@ -112,7 +112,7 @@ iris %>%
 What should we do if, for some reason, we would additionally like the "3.5" in the middle to be displayed as "7/2" instead (an exact value)? In that case, we can add an appropriate `labels` option as an argument to `scale_y_continuous`:
 
 ```{r}
-iris %>%
+iris |>
   ggplot() +
   aes(x = Species, y = Petal.Length) +
   geom_boxplot() +
@@ -125,7 +125,7 @@ iris %>%
 The x-axis can be scaled similarly. One important difference though is that here the x-axis has a *discrete* scale. Since we are displaying the species along it, any value must be either *setosa* or *versicolor* or *virginica*; it makes no sense to talk about what is "halfway in between *setosa* and *versicolor*". Therefore, one should use `scale_x_discrete()`. Its options are similar to those of `scale_x_continuous()`. For instance, let us override the axis label, spelling out that the three species belong to the genus *Iris*:
 
 ```{r}
-iris %>%
+iris |>
   ggplot() +
   aes(x = Species, y = Petal.Length) +
   geom_boxplot() +
@@ -139,7 +139,7 @@ iris %>%
 Alternatively, one could also redefine the labels and get an equally good graph:
 
 ```{r}
-iris %>%
+iris |>
   ggplot() +
   aes(x = Species, y = Petal.Length) +
   geom_boxplot() +
@@ -160,7 +160,7 @@ In case you would like to display the species names in *italics*, as is standard
 Other aesthetic mappings can also be adjusted, such as `colour`, `fill`, `size`, or `alpha`. One useful way to do it is through `scale_colour_manual()`, `scale_fill_manual()`, and so on. These are like `scale_colour_discrete()`, `scale_fill_discrete()` etc., except that they allow one to specify a discrete set of values by hand. Let us do this for color and fill:
 
 ```{r}
-iris %>%
+iris |>
   ggplot() +
   aes(x = Species, y = Petal.Length, colour = Species, fill = Species) +
   geom_boxplot(alpha = 0.2) +
@@ -188,7 +188,7 @@ tibble(month = month.abb, temperature = 10 - 15*cos(seq(0, 2*pi, l=12)))
 (`month.abb` is a built-in vector of character strings in R, with the abbreviations of the months' names from January to December.) So far so good. However, if we plot this with months along the x-axis and temperature along the y-axis, we run into trouble because R displays items by alphabetical instead of chronological order:
 
 ```{r}
-tibble(month = month.abb, temperature = 10 - 15*cos(seq(0, 2*pi, l=12))) %>%
+tibble(month = month.abb, temperature = 10 - 15*cos(seq(0, 2*pi, l=12))) |>
   ggplot() +
   aes(x = month, y = temperature) +
   geom_point(colour = "steelblue") +
@@ -200,8 +200,8 @@ To fix this, one must convert the type of `month` from a simple vector of charac
 One very convenient way of assigning factor levels is through the `tidyverse` function `as_factor`.^[There also exists a similarly-named function called `as.factor`, in addition to `as_factor`. It is the base R version of the same functionality. As usual, the `tidyverse` version offers improvements over the original, so it is recommended not to use `as.factor` at all, relying on just `as_factor` instead.] This function takes a vector of values and, if the values are numeric, assigns them levels based on those numerical values. However, if the values are character strings, then the levels are assigned in order of appearance within the vector. This is perfect for us, because the months are in proper order already within the tibble:
 
 ```{r}
-tibble(month = month.abb, temperature = 10 - 15*cos(seq(0, 2*pi, l=12))) %>%
-  mutate(month = as_factor(month)) %>%
+tibble(month = month.abb, temperature = 10 - 15*cos(seq(0, 2*pi, l=12))) |>
+  mutate(month = as_factor(month)) |>
   ggplot() +
   aes(x = month, y = temperature) +
   geom_point(colour = "steelblue") +
@@ -211,9 +211,9 @@ tibble(month = month.abb, temperature = 10 - 15*cos(seq(0, 2*pi, l=12))) %>%
 It is also possible to take a factor and reassign its factor levels manually. This can be done with the `fct_relevel` function:
 
 ```{r}
-tibble(month = month.abb, temperature = 10 - 15*cos(seq(0, 2*pi, l=12))) %>%
+tibble(month = month.abb, temperature = 10 - 15*cos(seq(0, 2*pi, l=12))) |>
   mutate(month = fct_relevel(month, "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")) %>%
+                             "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")) |>
   ggplot() +
   aes(x = month, y = temperature) +
   geom_point(colour = "steelblue") +
@@ -230,7 +230,7 @@ Plots can be *faceted* (subplots created and arranged in a grid layout) based on
 
 ```{r}
 #| message: false
-iris %>%
+iris |>
   ggplot() +
   aes(x = Petal.Length) +
   geom_histogram()
@@ -240,7 +240,7 @@ This way, one cannot see which part of the histogram belongs to which species. O
 
 ```{r}
 #| message: false
-iris %>%
+iris |>
   ggplot() +
   aes(x = Petal.Length) +
   geom_histogram() +
@@ -251,7 +251,7 @@ The component `facet_grid(x ~ y)` means that the data will be grouped based on c
 
 ```{r}
 #| message: false
-iris %>%
+iris |>
   ggplot() +
   aes(x = Petal.Length) +
   geom_histogram() +
@@ -263,7 +263,7 @@ In this particular case, the above graph is preferable to the previous one, beca
 To illustrate how to make a two-dimensional grid of facets, let us put the `iris` dataset in tidy form using `pivot_longer()`:
 
 ```{r}
-as_tibble(iris) %>%
+as_tibble(iris) |>
   pivot_longer(cols = c(Sepal.Length,Sepal.Width,Petal.Length,Petal.Width),
                names_to = "Trait",
                values_to = "Measurement")
@@ -273,10 +273,10 @@ As seen, now the `Measurement` in every row is characterized by two other variab
 
 ```{r}
 #| message: false
-as_tibble(iris) %>%
+as_tibble(iris) |>
   pivot_longer(cols = c(Sepal.Length,Sepal.Width,Petal.Length,Petal.Width),
                names_to = "Trait",
-               values_to = "Measurement") %>%
+               values_to = "Measurement") |>
   ggplot() +
   aes(x = Measurement) +
   geom_histogram() +

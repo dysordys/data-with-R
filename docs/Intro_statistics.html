@@ -308,7 +308,7 @@ div.csl-indent {
   <li><a href="#sec-example-wilcox" id="toc-sec-example-wilcox" class="nav-link active" data-scroll-target="#sec-example-wilcox"><span class="header-section-number">10.1</span> Introductory example and the Wilcoxon rank sum test</a></li>
   <li><a href="#some-general-conclusions" id="toc-some-general-conclusions" class="nav-link" data-scroll-target="#some-general-conclusions"><span class="header-section-number">10.2</span> Some general conclusions</a></li>
   <li><a href="#parametric-versus-non-parametric-tests" id="toc-parametric-versus-non-parametric-tests" class="nav-link" data-scroll-target="#parametric-versus-non-parametric-tests"><span class="header-section-number">10.3</span> Parametric versus non-parametric tests</a></li>
-  <li><a href="#sec-dot" id="toc-sec-dot" class="nav-link" data-scroll-target="#sec-dot"><span class="header-section-number">10.4</span> Statistical tests in a data analysis pipeline: The dot notation</a></li>
+  <li><a href="#sec-dot" id="toc-sec-dot" class="nav-link" data-scroll-target="#sec-dot"><span class="header-section-number">10.4</span> Statistical tests in a data analysis pipeline: The underscore notation</a></li>
   <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">10.5</span> Exercises</a></li>
   </ul>
 </nav>
@@ -415,8 +415,8 @@ Note
 </div>
 <p>Furthermore, the computed difference between the means and medians of the two samples are also clearly different:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">%&gt;%</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(island) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(island) <span class="sc">|&gt;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(weight), <span class="at">median =</span> <span class="fu">median</span>(weight))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 3
@@ -428,14 +428,14 @@ Note
 </div>
 <p>Can we conclude that the two samples are indeed different, and birds on the smaller island tend to be smaller, supporting the insular dwarfism hypothesis? As mentioned above, the data are fictive—they are not based on actual measurements. <strong>In fact, these “observations” were created by sampling each data point from the same distribution, regardless of island</strong>: a normal distribution with mean 20 and standard deviation 5. This means that any supposedly observed difference between the samples must be accidental. Would various statistical methods detect a difference? One thing we can do is what we have learned in <a href="Creating_figures.html#sec-CI"><span>Section&nbsp;7.3</span></a>: compute the 95% confidence intervals of the means, and see whether and how much they overlap.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(island) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(island) <span class="sc">|&gt;</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(weight), <span class="co"># Means of the two groups</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd =</span> <span class="fu">sd</span>(weight), <span class="co"># Standard deviations</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">N =</span> <span class="fu">n</span>(), <span class="co"># Sample sizes</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">SEM =</span> sd <span class="sc">/</span> <span class="fu">sqrt</span>(N), <span class="co"># Standard errors of the means</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">CI =</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.025</span>, N <span class="sc">-</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span> <span class="co"># Confidence intervals</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="co"># Ungroup the data (not necessary here, but a good habit)</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">CI =</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.025</span>, N <span class="sc">-</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span> <span class="co"># Confidence intervals</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> <span class="co"># Ungroup the data (not necessary here, but a good habit)</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> island, <span class="at">y =</span> mean, <span class="at">ymin =</span> mean <span class="sc">-</span> CI, <span class="at">ymax =</span> mean <span class="sc">+</span> CI)) <span class="sc">+</span></span>
 <span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
 <span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">width =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
@@ -605,20 +605,20 @@ difference in location
 <p>The p-value of 0.01 means that there is a one-in-a-hundred probability that the observed difference is due only to chance.</p>
 </section>
 <section id="sec-dot" class="level2" data-number="10.4">
-<h2 data-number="10.4" class="anchored" data-anchor-id="sec-dot"><span class="header-section-number">10.4</span> Statistical tests in a data analysis pipeline: The dot notation</h2>
+<h2 data-number="10.4" class="anchored" data-anchor-id="sec-dot"><span class="header-section-number">10.4</span> Statistical tests in a data analysis pipeline: The underscore notation</h2>
 <p>One natural question is whether statistical tests can be included in a data analysis pipeline. The answer is yes, but not without having to consider some complications that are due to historical accidents. Attempting the following results in an error:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">|&gt;</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> island, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
-<pre><code>Error in wilcox.test.default(., weight ~ island, conf.int = TRUE): 'x' must be numeric</code></pre>
+<pre><code>Error in wilcox.test.default(bird, weight ~ island, conf.int = TRUE): 'x' must be numeric</code></pre>
 </div>
 </div>
-<p>The reason for the error is in how the pipe operator <code>%&gt;%</code> works: it substitutes the expression on the left of the pipe into the <em>first</em> argument of the expression on the right. This works splendidly with functions of the <code>tidyverse</code>, since these are designed to always take the data as their first argument. However, a quick glance at the documentation of both <code>wilcox.test</code> and <code>t.test</code> (neither of which are <code>tidyverse</code> functions) reveals that they take the data as their <em>second</em> argument, with the formula coming first. A naive application of the pipe operator, like above, will therefore fail.</p>
-<p>Fortunately, there is a way to work around this. One may use the <em>dot</em> (<code>.</code>) in an expression to stand for whatever was being piped into it. The following will therefore work:</p>
+<p>The reason for the error is in how the pipe operator <code>|&gt;</code> works: it substitutes the expression on the left of the pipe into the <em>first</em> argument of the expression on the right. This works splendidly with functions of the <code>tidyverse</code>, since these are designed to always take the data as their first argument. However, a quick glance at the documentation of both <code>wilcox.test</code> and <code>t.test</code> (neither of which are <code>tidyverse</code> functions) reveals that they take the data as their <em>second</em> argument, with the formula coming first. A naive application of the pipe operator, like above, will therefore fail.</p>
+<p>Fortunately, there is a way to work around this. One may use the <em>underscore</em> (<code>_</code>) in an expression to stand for whatever was being piped into it. The following will therefore work:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">%&gt;%</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> island, <span class="at">data =</span> ., <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">|&gt;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> island, <span class="at">data =</span> _, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Wilcoxon rank sum exact test
@@ -633,34 +633,8 @@ difference in location
               3.436204 </code></pre>
 </div>
 </div>
-<p>The dot stands for the object being piped in—which, in our case, is simply the tibble <code>bird</code>. The <code>data = .</code> argument therefore evaluates to <code>data = bird</code>.</p>
-<p>This ought to conclude all there is to using the dot notation, except that there are a few subtleties involved. As we know, the pipe substitutes the tibble on the left as the first argument of the function on the right. In the above expression, this behavior was overridden: by using the dot, the data were substituted as the second argument instead. This will be the case as long as the dot appears alone, without being nested into some other function call. <em>However, if the dot is part of another function, then the expression to the left of the pipe will additionally be substituted, silently, as the first argument on the right.</em> For example, suppose that we want to remove rows with missing data from the table first, before doing a statistical test. We can do this with the <code>drop_na</code> function. (Since the <code>bird</code> table does not have any rows with <code>NA</code> values, this does not actually do anything in this context, but it is easy to imagine data where some rows do have missing entries, in which case removing them first could be useful.) But then, the following piece of code will fail:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">%&gt;%</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> island, <span class="at">data =</span> <span class="fu">drop_na</span>(.), <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error in wilcox.test.default(., weight ~ island, data = drop_na(.), conf.int = TRUE): 'x' must be numeric</code></pre>
-</div>
-</div>
-<p>Here the dot appears as part of the <code>drop_na</code> function. Thus, <code>bird</code> is not just substituted where the dot is, but also silently as the first function argument to <code>wilcox.test</code>. Which then makes the function think that <code>bird</code> is the formula, and <code>weight ~ island</code> is the data—consequently, we get an error.</p>
-<p>If necessary, it is possible to override this behavior, by putting curly braces around the expression(s) into which we are piping. The curly braces always prevent the silent substitution of the piped expression, which will therefore only be substituted wherever the dot explicitly appears. The above, faulty code can therefore be fixed by using curly braces:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">%&gt;%</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  { <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> island, <span class="at">data =</span> <span class="fu">drop_na</span>(.), <span class="at">conf.int =</span> <span class="cn">TRUE</span>) }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Wilcoxon rank sum exact test
-
-data:  weight by island
-W = 271, p-value = 0.05589
-alternative hypothesis: true location shift is not equal to 0
-95 percent confidence interval:
- -0.018386  6.820811
-sample estimates:
-difference in location 
-              3.436204 </code></pre>
-</div>
-</div>
+<p>The underscore stands for the object being piped in—which, in our case, is simply the tibble <code>bird</code>. The <code>data = _</code> argument therefore evaluates to <code>data = bird</code>.</p>
+<p>This <em>almost</em> concludes all there is to using the underscore notation, except there are three subtleties involved. The first is a simple rule: the underscore must always be used in conjunction with a named argument. So in the above piece of code, writing <code>wilcox.test(weight ~ island, _, conf.int = TRUE)</code> will fail—the argument name must be written out, as <code>data = _</code>. Second, the underscore can only appear at most once in a function call. And third, using the underscore overrides the default behavior of silently substituting the data as the first argument to the function on the right of the pipe. That is, if one uses the underscore, then the data on the left of the pipe will be substituted <em>only</em> where the underscore is.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -671,29 +645,43 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>While this behavior of the dot notation may appear arbitrary, there is method to the madness. In most situations, including the dot within another function indeed means that we would <em>like</em> the dot to also be passed as the first argument. For example, we could add row numbers to the bird tibble, by creating a new column whose entries range from one to the number of rows in the data. The number of rows can be obtained with the <code>nrow</code> function. Therefore, the following is possible:</p>
+<p>In case you are using the <code>magrittr</code> pipe <code>%&gt;%</code> instead of the built-in pipe <code>|&gt;</code>, you can observe all of the rules above, except you should replace the underscore by a dot (<code>.</code>). So</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">%&gt;%</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rowID =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(.)) <span class="sc">%&gt;%</span> <span class="co"># Create new column, numbering the rows</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(rowID, island, weight) <span class="co"># Reorder the columns so rowID is first</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> island, <span class="at">data =</span> _, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 40 × 3
-   rowID island  weight
-   &lt;int&gt; &lt;chr&gt;    &lt;dbl&gt;
- 1     1 smaller  21.8 
- 2     2 smaller  19.0 
- 3     3 smaller  19.0 
- 4     4 smaller  21.2 
- 5     5 smaller  15.8 
- 6     6 smaller  14.3 
- 7     7 smaller  19.9 
- 8     8 smaller   9.68
- 9     9 smaller  17.0 
-10    10 smaller  12.7 
-# ℹ 30 more rows</code></pre>
+<pre><code>
+    Wilcoxon rank sum exact test
+
+data:  weight by island
+W = 271, p-value = 0.05589
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.018386  6.820811
+sample estimates:
+difference in location 
+              3.436204 </code></pre>
 </div>
 </div>
-<p>In this case, the first argument to <code>mutate</code>, as always, is the piped-in tibble. Due to the convention that the dot gets silently substituted as the first argument as well (because the dot appeared within a function call), we did not need to write <code>mutate(., rowID = 1:nrow(.))</code> above in the second line. Thus, the seemingly arbitrary rules do lead to less awkward code, at least some of the time.</p>
+<p>can be equivalently rewritten as</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> island, <span class="at">data =</span> ., <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Wilcoxon rank sum exact test
+
+data:  weight by island
+W = 271, p-value = 0.05589
+alternative hypothesis: true location shift is not equal to 0
+95 percent confidence interval:
+ -0.018386  6.820811
+sample estimates:
+difference in location 
+              3.436204 </code></pre>
+</div>
+</div>
+<p>There are other subtle differences in how <code>%&gt;%</code> works compared with <code>|&gt;</code>; you can look at the help pages of both (<code>?`%&gt;%`</code>, resp. <code>?`|&gt;`</code>) for a more thorough explanation.</p>
 </div>
 </div>
 </section>
