@@ -173,6 +173,7 @@ This *almost* concludes all there is to using the underscore notation, except th
 In case you are using the `magrittr` pipe `%>%` instead of the built-in pipe `|>`, you can observe all of the rules above, except you should replace the underscore by a dot (`.`). So
 
 ```{r}
+#| eval: false
 bird |>
   wilcox.test(weight ~ island, data = _, conf.int = TRUE)
 ```
@@ -180,6 +181,7 @@ bird |>
 can be equivalently rewritten as
 
 ```{r}
+#| eval: false
 bird %>%
   wilcox.test(weight ~ island, data = ., conf.int = TRUE)
 ```
