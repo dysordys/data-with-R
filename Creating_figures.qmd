@@ -29,8 +29,6 @@ ggplot(iris) +
 
 Here we defined the **data** (`iris`; feel free to use pipes, as in `iris |> ggplot() + ...`), then the **aesthetic mappings** with `aes()`, and finally the **geometry** of how to display the data with `geom_point()`. The important thing to remember is that the aesthetic mappings are all those aspects of the figure that are governed by the data. For instance, if you wanted to set the color of all points to blue, this would not be an aesthetic mapping, because it applies regardless of what the data are (in case you want to do this, you would have to specify `geom_point(colour = "blue")` in the last line). The **geometry** of your plot governs the overall visual arrangement of your data (points, lines, histograms, etc). There are many different `geom_`s; we will learn about some here, but when in doubt, Google and a [`ggplot2` cheat sheet](https://nyu-cdsc.github.io/learningr/assets/data-visualization-2.1.pdf) are your best friends.
 
-Notice that the different "grammatical" components of the plot (aesthetics, geometry) are *added* to the plot, using the `+` symbol for addition. This is due to a somewhat unfortunate historical accident. As it happens, `ggplot2` is older than the rest of the `tidyverse`, and so when it was first designed, the pipe operator `|>` did not yet exist. This means that within the creating of a ggplot graph, one must use `+` to compose the various graph elements; but outside that, the usual `|>` is used for function composition.
-
 To look at a different kind of geometry, let us create a histogram of the petal lengths. This is done using `geom_histogram`:
 
 ```{r}
@@ -41,7 +39,18 @@ iris |>
   geom_histogram()
 ```
 
-We see two clusters of data. Why is that? One might suspect that this is because of a species-level difference. To check if that is the case, let us color the histogram by species:
+Before looking at the result, notice that the different "grammatical" components of the plot (aesthetics, geometry) are *added* to the plot, using the `+` symbol for addition. A common source of error is to accidentally keep using the pipe operator `|>` even within a plot. The rule of thumb is that after invoking `ggplot`, one must use `+` to compose the various graph elements, but outside of that, the usual `|>` is used for function composition. If one uses `|>` instead of `+` within a plot, R will give back a confusing message instead of graphics:
+
+```{r}
+iris |>
+  ggplot() |>
+  aes(x = Petal.Length) |>
+  geom_histogram()
+```
+
+Just be sure to remember this so you can correct the mistake, should you accidentally run up against it.
+
+Let us now look at the plot above. We see two clusters of data. Why is that? One might suspect that this is because of a species-level difference. To check if that is the case, let us color the histogram by species:
 
 ```{r}
 #| message: false
