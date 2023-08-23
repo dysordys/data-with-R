@@ -24,59 +24,115 @@ In general, it is a good idea to load all necessary packages at the top of your 
 :::
 
 
-## Reading tabular data
+## Data file formats
 
-One of the packages loaded by default with `tidyverse` is called `readr`. This package contains tools for loading data files, and writing them to disk. To see how it works, download the files [`Goldberg2010_data.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/Goldberg2010_data.csv), [`Goldberg2010_data.xlsx`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/Goldberg2010_data.xlsx), and [`Smith2003_data.txt`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/Smith2003_data.txt) (click the file names to get a link to these and other data files used throughout the book). Then set the working directory in RStudio to the folder where you have saved them. As a reminder, you can do this by executing `setwd(/path/to/files)`, where you should substitute in your own path in place of `/path/to/files`.
+One of the packages loaded by default with the `tidyverse` is called `readr`. This package contains tools for loading data files and writing them to disk. We will explore how it works using an example dataset. Before turning to the data however, it is worth mentioning a few things about data file formats.
+
+*Tabular data* (i.e., data which can be organized into a table with rows and named columns) may be stored in many different forms. By far the most popular choice is to use Excel spreadsheets. While these may have many good properties, they are decidedly not recommended for scientific use. Instead, in science we strive to rely on *plain text files* to store our data. Plain text files have several advantages. First, they can be read by any machine without the need for special or proprietary software (such as Excel). Second, they will never go obsolete: one will always be able to open plain text files on any machine. By contrast, there is no guarantee that an Excel file saved today will still open ten years from now in future versions of Excel. And third, file formats such as Excel's `.xls` and `.xlsx` contain a lot of metadata about formatting, font types, locale, etc. that are obscured from the user, but which have the potential to be in the way when performing scientific analyses. By contrast, plain text files have nothing up their sleeve: what you see they contain is exactly what you get; no more, no less. For these reasons, this book will emphasize workflows that rely on data stored in plain text files. However, due to the popularity of Excel, we will also learn how to read data from Excel files into R (@sec-excel), even though their use is otherwise not recommended.
 
 ### The CSV file format
 
-@Goldbergetal2010 collected data on self-incompatibility in the family Solanaceae (nightshades). It contains a list of 356 species, along with a flag determining self-incompatibility status (0: self-incompatible; 1: self-compatible; 2-5: more complicated selfing scenarios). The data are in the file `Goldberg2010_data.csv`. This is a so-called *comma-separated value* (CSV) file, meaning that the different columns of the data are separated by commas. One can see this by viewing the file in any simple text editor. For example, this can be done in RStudio itself, by clicking on the file in the **Files** panel in the lower right part of the RStudio window, and then choosing the option "View file" (ignore the other option called "Import dataset..."). Having done this, a new tab opens in your editor panel (upper left region) where you should see something like the following:
+How can one store data in plain text files? There are various solutions, but the one we will be relying on is called a *delimited file*. These files contain information as in a spreadsheet, with contents from every row in a different line. The column entries are separated by some *delimiter*---a character that represents the end of the information in one column and the start of the next. As an example, let us consider some actual data on land snail species from the Galápagos Islands.^[The data have been adapted from @Barabasetal2022.] The data file is available by clicking on this link: [`islands-FL.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.csv) (this and other data files used throughout the book will be accessible in a similar way). Set the working directory in RStudio to the folder where you have saved it. As a reminder, one can do this by executing `setwd("/path/to/files")`, where one should substitute in one's own path in place of `/path/to/files`. Then one can open `islands-FL.csv` in RStudio by clicking on it in the **Files** panel in the lower right part of the RStudio window, and then choosing the option "View file" (ignore the other option called "Import dataset..."). Having done this, a new tab opens in the editor panel (upper left region) where something like the following should appear:
 
 ```
-Species,Status
-Acnistus_arborescens,1
-Anisodus_tanguticus,1
-Atropa_belladonna,1
-Brachistus_stramonifolius,1
-Brugmansia_aurea,0
-Brugmansia_sanguinea,0
-Capsicum_annuum,1
-Capsicum_baccatum,1
-Capsicum_cardenasii,2
-Capsicum_chacoense,1
+habitat,species,size,shape1,shape2
+humid,ustulatus,17.088,-0.029,0.021
+humid,ustulatus,20.06,-0.001,0.001
+humid,ustulatus,16.34,0.014,0.009
+arid,calvus,13.734,-0.043,0.017
+humid,nux,21.898,-0.042,0.007
+humid,ustulatus,16.848,-0.023,-0.005
+humid,ustulatus,19.162,0.014,0.016
+humid,ustulatus,16.017,0.042,0.002
+arid,galapaganus,18.894,0.011,-0.025
+humid,nux,26.59,0,-0.014
 ```
 
-And so on. As you can see, the first line (`Species,Status`) is actually an indicator of what the corresponding columns of data will contain: the first column has the species name, and the second one the numerical flag indicating self-compatibility status. The subsequent rows hold the actual data. Notice that the boundary between the columns is always indicated by a comma. This is what gave rise to the name "comma-separated value" (CSV) file.
+And so on. Here the first row does not contain data, but instead contains the names of the different columns. Both the names in the first row and the data in subsequent ones are separated by a comma, which is our delimiter that separates information belonging in different columns. This also explains the strange-looking extension `.csv` to the file: this stands for *comma-separated values*. Comma-separated value files are some of the most often used ones in science, and we will be relying on them frequently throughout the book.
 
-The above raw format is not yet amenable to processing within R. To make it so, we first need to import the data. For comma-separated value files, there is a convenient function, `read_csv`, that makes this especially simple:^[Warning: there exists a similarly-named function called `read.csv` which is part of base R. It does much the same thing as `read_csv`; however, its use is clunkier and less flexible. You can think of `read_csv` as a `tidyverse`-provided upgrade to the original `read.csv`. My recommendation is to stick with using just `read_csv`---it is simpler and at the same time more powerful than its predecessor.]
+### The Galápagos land snail data {#sec-snail}
+
+It is worth explaining what this dataset represents, as we will be using it repeatedly in subsequent examples. Each row contains information on one land snail individual sampled from the Galápagos Islands. To simplify the data, the individuals have been restricted to just those that are from Floreana Island in the Galápagos. The information are `habitat` (this can be either "arid" or "humid"); `species` (which species the individual belongs to; the Genus is always *Naesiotus*, from the family Bulimulidae); `size` (a measurement of the absolute volume of the snail's shell); and finally, `shape1` and `shape2` (two measurements for different aspects of the shell's shape). Below are some pictures of these snails---courtesy of [Christine E. Parent](https://parentlab.weebly.com/) who took the photographs:
+
+![*Naesiotus ustulatus* -- a land snail from Floreana Island, Galápagos. Photo credits: Dr. Christine E. Parent.](N-ustulatus.jpg)
+
+![*N. ochsneri* -- a land snail from Santa Cruz Island, Galápagos. Photo credits: Dr. Christine E. Parent.](N-ochsneri.jpg)
+
+![*N. chemnitzioides* -- a land snail from San Cristóbal Island, Galápagos. Photo credits: Dr. Christine E. Parent.](N-chemnitzioides.jpg)
+
+The last three columns (`size`, `shape1`, and `shape2`) are given in units we are not concerned with here, but see @ParentCrespi2009, @Kraemeretal2018, and @Kraemeretal2022 for more information. The first shape measurement, `shape1`, has small values for bulky and round shells and large ones for long and slender shells. The other shape measurement, `shape2`, is not so simple to describe in words, but it is also far less important in explaining shell shape variation than `shape1`. Shell morphology is an important indicator of microhabitat specialization in these snails: species with long slender shells (see the picture of *N. chemnitzioides* above for an example) are adaptations to arid environments due to their better surface-to-volume ratios, whereas species with round and bulky shells are better adapted to humid environments.
+
+### Tabulator-separated and other delimited files
+
+Above we have discussed comma-separated files. Another type of file uses tabulators instead of commas as the column separator. These are called *tab-separated value* (TSV) files. Just like CSV files, TSV files are also very widely used. An example is provided by the file [`islands-FL.tsv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.tsv). The data in this file are exactly identical to the one in [`islands-FL.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.csv). The only difference is that the commas are replaced by tabulators. Opening the file in RStudio, the first few lines look like this:
+
+```
+habitat	species	size	shape1	shape2
+humid	ustulatus	17.088	-0.029	0.021
+humid	ustulatus	20.06	-0.001	0.001
+humid	ustulatus	16.34	0.014	0.009
+arid	calvus	13.734	-0.043	0.017
+humid	nux	21.898	-0.042	0.007
+humid	ustulatus	16.848	-0.023	-0.005
+humid	ustulatus	19.162	0.014	0.016
+humid	ustulatus	16.017	0.042	0.002
+arid	galapaganus	18.894	0.011	-0.025
+humid	nux	26.59	0	-0.014
+```
+
+Commas and tabulators are not the only possible delimiters however, and in principle any character could play that role. The only thing to be wary of is that choosing some "regular" character as the delimiter might create unintended side effects. For instance, if the character `4` is the delimiter, then a number such as `0.143` will no longer be interpreted as a single number, but as two numbers in separate columns (`0.1` and `3`, respectively). For this reason, only those characters should be used as delimiters which we can be certain will never be confused with the actual data.
+
+To give an example: it is perfectly possible and legal (even if not very common) to use a "dollar-separated value" representation where the symbol `$` is the delimiter. Here is what that would look like with the same land snail data (one can download it from [`islands-FL.dsv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.dsv)):
+
+```
+habitat$species$size$shape1$shape2
+humid$ustulatus$17.088$-0.029$0.021
+humid$ustulatus$20.06$-0.001$0.001
+humid$ustulatus$16.34$0.014$0.009
+arid$calvus$13.734$-0.043$0.017
+humid$nux$21.898$-0.042$0.007
+humid$ustulatus$16.848$-0.023$-0.005
+humid$ustulatus$19.162$0.014$0.016
+humid$ustulatus$16.017$0.042$0.002
+arid$galapaganus$18.894$0.011$-0.025
+humid$nux$26.59$0$-0.014
+```
+
+:::{.callout-warning}
+The common file extensions `.csv` and `.tsv` are useful and suggestive: they can indicate that the data are comma- or tab-separated. However, one must bear in mind that these are mere naming conventions which are not forced in any way. That is, while not necessarily a good idea, it is perfectly possible to save comma-separated data in a file called `mydata.tsv`, or tab-separated data in `mydata.csv`. Furthermore, plain text files often have extensions such as `.txt` ("text") or `.dat` ("data"), neither of which reveal what form the data were stored in. To be absolutely sure, one must open the file in a text editor such as RStudio's top left editor panel, and see what was used as a delimiter. If you open a file like this, make absolutely sure not to modify and save it accidentally. Doing so compromises your hard-won data, which then no longer accurately capture your true observations.
+:::
+
+
+## The `tibble` data structure
+
+The above raw formats are not yet amenable to processing within R. To make it so, we first need to import them. For delimited files there is a convenient function, `read_delim`, which makes this especially simple:^[Warning: there exists a similarly-named function called `read.delim` which is part of base R. It does much the same thing as `read_delim`; however, its use is clunkier and less flexible. You can think of `read_delim` as the `tidyverse` upgrade to the original `read.delim`. My recommendation is to stick with using just `read_delim`---it is simpler and at the same time more powerful than its predecessor.]
 
 ```{r}
 #| message: false
-read_csv("Goldberg2010_data.csv")
+read_delim("island-FL.csv", delim = ",")
 ```
 
-(We will interpret the output in the next subsection.) The above line loads the data, but does not save it into a variable. That is perfectly fine in case we immediately start performing operations on it via function composition---we will see many, many examples later on. However, in case we do want to assign the result to a variable, we can do so without problems. For instance, to put the table into the variable `goldbergDat`, we simply write:
+The function `read_delim` takes two inputs: the name of the file (with a path if needed), and `delim`, which is the delimiter used to separate the columns in the file. We will discuss how it works in greater detail in @sec-delim.
+
+Look at the output that was produced by `read_delim("island-FL.csv", delim = ",")` above, starting with `# A tibble: 223 x 5`. A *tibble* (or *data frame*^[Data frames (a feature of base R) and tibbles (a `tidyverse` construct) are equivalent for most practical purposes. Tibbles offer some features that are absent from data frames and omit quirks of data frames which tend to get in the way. Like with `read_delim` and `read.delim`, tibbles can be thought of as a slightly upgraded and more user-friendly version of data frames. You do not need to be overly concerned with the precise differences between the two. In this book we will be using tibbles almost exclusively.]) is the R-equivalent of an Excel-style spreadsheet. In this case, it has 223 rows and 5 columns (hence the `223 x 5`). The way to conceive of a tibble is as a collection of vectors, each arranged in a column, glued together side-by-side to form a table of data. Importantly, although each vector must consist of entries of the same type as usual (e.g., they can be vectors of numbers, vectors of strings, or vectors of logical values), the different columns need not share types. For example, in the above table, the first and second columns consist of character strings, but the third, fourth, and fifth ones consist of numerical values. This can be seen right below the header information. Below `habitat` and `species`, you can see `<chr>`, which stands for "character string". Below `size`, `shape1`, and `shape2`, we have `<dbl>` which, confusing as it may look at first, refers simply to ordinary numbers.^[The abbreviation `<dbl>` happens to stand for [double-precision numerical value](https://en.wikipedia.org/wiki/Double-precision_floating-point_format), a standard way of representing numbers on computers.] In turn, columns comprising of logical values would have the tag `<lgl>` underneath them (in this case though, we don't have such a column). The point is that by looking at the type information below the header, you can see how R has interpreted each of the columns at a glance.
+
+The fact that the individual columns are simply vectors can be made explicit, by relying on the `$`-notation. To access a given column of the table as a vector, we write the name of the table, followed by the `$` symbol, followed by the name of the column in question. To make the illustration easier, let us first assign the tibble to a variable called `snailDat`:
 
 ```{r}
 #| message: false
-goldbergDat <- read_csv("Goldberg2010_data.csv")
+snailDat <- read_delim("island-FL.csv", delim = ",")
 ```
 
-
-### The `tibble` data structure
-
-Look at the output produced by `read_csv("Goldberg2010_data.csv")` above, starting with `# A tibble: 356 x 2`. A *tibble* (or *data frame*^[Data frames (a feature of base R) and tibbles (a `tidyverse` construct) are equivalent for most practical purposes. Tibbles offer some features that are absent from data frames, and omit certain quirks of data frames which tend to be in the way. Like with `read_csv` and `read.csv`, tibbles can be thought of as a slightly upgraded and more user-friendly version of data frames. You do not need to be overly concerned with the precise differences between the two. In this book we will be using tibbles almost exclusively.]) is the R-equivalent of an Excel-style spreadsheet. In this case, it has 356 rows and 2 columns (hence the `356 x 2`). The way to conceive of a tibble is as a collection of vectors, each arranged in a column, glued together side-by-side to form a table of data. Importantly, although each vector must consist of entries of the same type as usual (e.g., they can be vectors of numbers, vectors of strings, or vectors of logical values), the different columns need not share types. For example, in the above table, the first column consists of character strings, but the second one consists of numerical values. This can be seen right below the header information. Below `Species`, you can see `<chr>`, which stands for "character string". Below `Status`, we have `<dbl>` which, confusing as it may look at first, refers simply to ordinary numbers.^[The abbreviation `<dbl>` happens to stand for [double-precision numerical value](https://en.wikipedia.org/wiki/Double-precision_floating-point_format), a standard way of representing numbers on computers.] In turn, columns comprising of logical values would have the tag `<lgl>` underneath them (in this case though, we don't have such a column). The point is that by looking at the type information below the header, you can see how R has interpreted each of the columns at a glance.
-
-The fact that the individual columns are simply vectors can be made explicit, by relying on the `$`-notation. To access a given column of the table as a vector, we write the name of the table, followed by the `$` symbol, followed by the name of the column in question. For example, we can access the `Status` column from the `goldbergDat` table as a vector of numbers like this:
+And now one can access e.g. the `size` column from the `snailDat` table as a vector of numbers like this:
 
 ```{r}
-goldbergDat$Status
+snailDat$size
 ```
 
-Here `goldbergDat$Status` is really just a vector, and can be treated as such. For example, to get the 9th entry of this vector, we can use the usual bracket notation:
+Here `snailDat$size` is really just a vector, and can be treated as such. For example, to get the 9th entry of this vector, we can use the usual bracket notation:
 
 ```{r}
-goldbergDat$Status[9]
+snailDat$size[9]
 ```
 
 The result is an ordinary numerical value.
@@ -84,94 +140,130 @@ The result is an ordinary numerical value.
 Finally, let us take one more look at the output again:
 
 ```{r}
-print(goldbergDat)
+print(snailDat)
 ```
 
-When displaying large tibbles, R will not dump all the data at you. Instead, it will display the first 10 rows, with a message indicating how many more rows remain (in our case, we have `...with 346 more rows` written at the end of the printout). The system is still aware of the other rows; it just does not show them. To get a full view of a tibble in a more digestible, spreadsheet-like style, one can use the `view` function. Try running `view(goldbergDat)` and see what happens!
+When displaying large tibbles, R will not dump all the data at you. Instead, it will display the first 10 rows, with a message indicating how many more rows remain (in our case, we have `...with 213 more rows` written at the end of the printout). The system is still aware of the other rows; it just does not show them. To get a full view of a tibble in a more digestible, spreadsheet-like style, one can use the `view` function. Try running `view(snailDat)` and see what happens!
 
-### The TSV file format {#sec-tsv}
 
-Another type of file is one where the columns are separated by tabulators instead of commas. These are called *tab-separated value* (TSV) files. An example is provided by the file associated with data from @Smithetal2003. The authors compiled a database of the body mass of mammals of the late Quaternary period. The data file is `Smith2003_data.txt`. Its rows are the different mammal species; its columns are: the species' native continent; whether the species is still alive or extinct; the order, family, genus, and species names; the base-10 log body mass; the actual body mass (in grams); and numbered references representing research papers which served as the source of the data.
+## Reading delimited files {#sec-delim}
 
-Viewing the TSV file `Smith2003_data.txt` in its raw form begins something like the following:
-
-```
-AF	extant	Artiodactyla	Bovidae	Addax	nasomaculatus	4.85	70000.3	60
-AF	extant	Artiodactyla	Bovidae	Aepyceros	melampus	4.72	52500.1	"63, 70"
-AF	extant	Artiodactyla	Bovidae	Alcelaphus	buselaphus	5.23	171001.5	"63, 70"
-AF	extant	Artiodactyla	Bovidae	Ammodorcas	clarkei	4.45	28049.8	60
-AF	extant	Artiodactyla	Bovidae	Ammotragus	lervia	4.68	48000	75
-AF	extant	Artiodactyla	Bovidae	Antidorcas	marsupialis	4.59	39049.9	60
-AF	extinct	Artiodactyla	Bovidae	Antidorcas	bondi	4.53	34000	1
-AF	extinct	Artiodactyla	Bovidae	Antidorcas	australis	4.6	40000	2
-AF	extant	Artiodactyla	Bovidae	Bos	taurus	5.95	900000	-999
-AF	extant	Artiodactyla	Bovidae	Capra	walie	5	100000	-999
-```
-
-Since the file is tab- and not comma-separated, trying to load it using `read_csv` will not work correctly:
-
-```{r}
-read_csv("Smith2003_data.txt")
-```
-
-As you can see, there is even a warning at the top about "One or more parsing issues", meaning that `read_csv` had a hard time reading in the file. Below the message, you can also see that the attempted read is a mess, with all data in the rows treated as being part of a single column.
-
-Instead, to correctly read TSV files, one should use `read_tsv`:
+We have seen that the function `read_delim` works by taking two inputs: the name of the file to read, and the delimiter character. So to read a comma-separated file, we can write
 
 ```{r}
 #| message: false
-read_tsv("Smith2003_data.txt")
+read_delim("island-FL.csv", delim = ",")
 ```
 
-This is now a neatly formatted table, with 9 columns as needed.
-
-There is a problem though. This file does not contain a header---a row, which is the first in a data file, specifying the names of the various columns. (Recall that the first row of `Goldberg2010_data.csv` contained not data, but the names of the columns.) Instead, the first row is itself part of the data. To override the default behavior of treating the first row as one of column names, one can use the `col_names = FALSE` option:
+Similarly, in case we want to read a dollar-separated file such as [`islands-FL.dsv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.dsv), all we need to do is change the delimiter:
 
 ```{r}
 #| message: false
-read_tsv("Smith2003_data.txt", col_names = FALSE)
+read_delim("island-FL.dsv", delim = "$")
 ```
 
-The `col_names` argument is set by default to `TRUE`; in case we wish to override this, we must explicitly change it, just like above.
+The output is exactly as before, since the file contained the same information (just represented differently due to the different delimiter).
 
-### Renaming columns {#sec-rename}
-
-While the above works, the column names now default to the moderately informative labels `X1`, `X2`, ... Fortunately, columns can be renamed using the `rename` function from the `tidyverse`. This function takes a tibble as its first argument, and a renaming instruction as its second, of the form `new_name = old_name`. For example, to rename the first column (which, as you may remember, refers to the continent of the corresponding mammal):
+To read a tab-separated file, remember *not* to simply press the tabulator key between the quotes of the `delim` argument. Instead, R uses the character string `"\t"` to represent a single press of the tabulator:
 
 ```{r}
 #| message: false
-smithData <- read_tsv("Smith2003_data.txt", col_names = FALSE)
-rename(smithData, Continent = X1) # Rename column "X1" to "Continent"
+read_delim("island-FL.tsv", delim = "\t")
 ```
 
-As seen, the name of the first column now reads `Continent` instead of `X1`. One can similarly rename other columns as well. To rename the first two columns:
+What happens if the wrong delimiter is specified---for instance, if we type `read_delim("island-FL.csv", delim = "$")`? In that case R will look for the `$` character to separate the columns, but since these do not occur anywhere, each row will be interpreted as a single column entry in its entirety:
 
 ```{r}
 #| message: false
-rename(smithData, Continent = X1, Status = X2)
+read_delim("island-FL.csv", delim = "$")
 ```
 
-And so on.
+As seen, we have a tibble with a single column called `` `habitat,species,size,shape1,shape2` ``, which has the type `<chr>` (character string). One must beware of such mistakes, because the computer will not signal any errors: for all it cares, we *did* intend `$` to be the delimiter. However, one will not be able to properly work with the data subsequently if it gets loaded in this mistaken form.
 
-### Excel tables
+The CSV and TSV file formats are so common that there are shorthands available for loading them. Instead of writing `read_delim("island-FL.csv", delim = ",")`, one can equivalently type `read_csv("island-FL.csv")` for the same effect:
 
-Although their use is discouraged in science, one should know how to read in data from an Excel spreadsheet. To do this, one needs to load the `readxl` package. This package is part of the `tidyverse`, but does not get automatically loaded when running `library(tidyverse)`. Therefore, we first load the package:
+```{r}
+#| message: false
+read_csv("island-FL.csv")
+```
+
+Similarly, `read_tsv("island-FL.tsv")` is an equivalent shorthand to `read_delim("island-FL.tsv", delim = "\t")`:
+
+```{r}
+#| message: false
+read_tsv("island-FL.tsv")
+```
+
+
+## Naming (and renaming) columns {#sec-rename}
+
+All of the files we have looked at so far contained a *header* as their first row: instead of containing data, they contained the names of the data columns. Having such a header is good practice. Sometimes however, the header may be missing. For example, the file [`islands-FL-nohead.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL-nohead.csv) contains the same land snail data as the other files above, but it lacks a header. The first few lines of the file look like this:
+
+```
+humid,ustulatus,17.088,-0.029,0.021
+humid,ustulatus,20.06,-0.001,0.001
+humid,ustulatus,16.34,0.014,0.009
+arid,calvus,13.734,-0.043,0.017
+humid,nux,21.898,-0.042,0.007
+humid,ustulatus,16.848,-0.023,-0.005
+humid,ustulatus,19.162,0.014,0.016
+humid,ustulatus,16.017,0.042,0.002
+arid,galapaganus,18.894,0.011,-0.025
+humid,nux,26.59,0,-0.014
+```
+
+If one tries to read this file either with `read_delim("island-FL-nohead.csv", delim = ",")` or the shorthand `read_csv("island-FL-nohead.csv")`, we get the following:
+
+```{r}
+#| message: false
+read_delim("island-FL-nohead.csv", delim = ",")
+```
+
+The fact that a header is missing is obvious to a human reading the file---but not to the computer, which simply took the first row to be the header names anyway and interpreted the data in there as if they were column names. To avoid doing this, one can pass `col_names = FALSE` as an argument to either `read_delim`, `read_csv`, or `read_tsv`. The `col_names` argument is set by default to `TRUE`; to override it, we must explicitly change it like this:
+
+```{r}
+#| message: false
+read_delim("island-FL-nohead.csv", delim = ",", col_names = FALSE)
+```
+
+While this works, the column names now default to the moderately informative labels `X1`, `X2`, and so on. In fact, one can use the `col_names` argument to explicitly specify a vector of character strings, which are then interpreted as the names to be given to the columns in case no header information exists within the file itself. For example:
+
+```{r}
+#| message: false
+read_delim("island-FL-nohead.csv", delim = ",",
+           col_names = c("habitat", "species", "size", "shape1", "shape2"))
+```
+
+And now these data are identical to our earlier `snailDat` tibble.
+
+
+## Excel tables {#sec-excel}
+
+Although their use is discouraged in science, one should know how to read data from an Excel spreadsheet. To do this, one needs to load the `readxl` package. This package is part of the `tidyverse`, but does not get automatically attached when running `library(tidyverse)`. Therefore, we first load the package:
 
 ```{r}
 library(readxl)
 ```
 
-We can now load Excel files with the function `read_excel()`. At the start, we downloaded an Excel version of the data from @Goldbergetal2010, called `Goldberg2010_data.xlsx`. It holds the exact same data as the original CSV file, just saved in Excel format for instructive purposes. Let us load this file:
+We can now load Excel files with the function `read_excel()`. At the start, we downloaded an Excel version of the land snail data, called [`island-FL.xlsx`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.xlsx). It holds the exact same data as the original CSV file, just saved in Excel format for instructive purposes. Let us load this file:
 
 ```{r}
-read_excel("Goldberg2010_data.xlsx")
+read_excel("island-FL.xlsx")
 ```
 
-The functions `read_csv`, `read_tsv`, and `read_excel` have several further options. For example, given an Excel table with multiple sheets, one can specify which one to import, using the `sheet` argument. Check the help pages of these functions, and experiment with their options.
+The function `read_excel` has several further options. For example, given an Excel table with multiple sheets, one can specify which one to import, using the `sheet` argument. Check the help page of `read_excel`, and experiment with its options.
 
-### Writing data to files
 
-Finally, data can not only be read from a file, but also written out to one. Then, instead of `read_csv`, `read_tsv` and the like, one uses `write_csv`, `write_tsv`, and so on. For instance, to save `dat` in CSV form:
+## Writing data to files
+
+Finally, data can not only be read from a file, but also written out to one. Then, instead of `read_delim`, `read_csv`, `read_tsv` and the like, one uses `write_delim`, `write_csv`, `write_tsv`, and so on. For instance, to save some tibble called `dat` in CSV form, one can do either
+
+```{r}
+#| eval: false
+write_delim(dat, file = "/path/to/file.csv", delim = ",")
+```
+
+or the equivalent but shorter
 
 ```{r}
 #| eval: false
@@ -181,8 +273,19 @@ write_csv(dat, file = "/path/to/file.csv")
 where `/path/to/file.csv` should be replaced by the path and file name with which the data ought to be saved.
 
 
-## Exercises
+## Exercises {#sec-reading-exercises}
 
-1. The columns of the file [`Smith2003_data.txt`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/Smith2003_data.txt) are, in order: Continent (AF=Africa, etc.), Status (extinct, historical, introduction, or extant), Order, Family, Genus, Species, Base-10 Log Mass, Combined Mass (grams), and Reference (numbers, referring to a numerically ordered list of published works -- no need to worry about the details). Rename each column appropriately, using the `rename()` function.
+1. @Goldbergetal2010 collected data on self-incompatibility in the family Solanaceae (nightshades). It contains a list of 356 species, along with a column determining self-incompatibility status (0: self-incompatible; 1: self-compatible; 2-5: more complicated selfing scenarios). The data are in the file [`Goldberg2010_data.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/Goldberg2010_data.csv). An equivalent version is available in [`Goldberg2010_data.xlsx`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/Goldberg2010_data.xlsx), with the only difference that it is saved in Excel format.
+    -   Read the file `Goldberg2010_data.csv` using `read_delim`.
+    -   Read the file `Goldberg2010_data.csv` using `read_csv`.
+    -   Read the Excel file `Goldberg2010_data.xlsx` using `read_excel` from the `readxl` package.
+    -   Read the file `Goldberg2010_data.csv` using `read_csv`, and assign it to a variable called `goldbergDat`.
+    -   Extract the species names (first column, called `Species`) from `goldbergDat` as a vector of character strings, using the `$` notation. What are the 42nd and 137th entries of this vector?
 
-1. The data file [`ladybugs.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/ladybugs.csv) contains information on whether ladybugs sampled from rural versus industrial areas tend to be red or black morphs. Black morphs are thought to be an adaptation to more polluted industrial environments where the dark coloration provides better camouflage. The file is comma-separated and lacks headers. The meanings of the columns are, in order: habitat type, site code where the sampling was done, morph color, and the number of individuals sampled. Load this file into a tibble in R, and give the following names to its columns: `habitat`, `site`, `morph`, and `number`.
+2. The data file [`ladybugs.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/ladybugs.csv) contains information on whether ladybugs sampled from rural versus industrial areas tend to be red or black morphs. Black morphs are thought to be an adaptation to more polluted industrial environments where the dark coloration provides better camouflage. The file is comma-separated and lacks headers. The meanings of the columns are, in order: habitat type, site code where the sampling was done, morph color, and the number of individuals sampled.
+    -   Load this file into a tibble in R, and give the following names to its columns: `habitat`, `site`, `morph`, and `number`.
+    -   Extract the last column (`number`) as a vector and calculate its mean and variance.
+
+3. @Smithetal2003 compiled a database of the body masses of mammals of the late Quaternary period. The data are in the file [`Smith2003_data.txt`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/Smith2003_data.txt). The column names are not specified in the file, but they are, in order: Continent (AF=Africa, etc.), Status (extinct, historical, introduction, or extant), Order, Family, Genus, Species, Base-10 Log Mass, Combined Mass (grams), and Reference (numbers, referring to a numerically ordered list of published works---no need to worry about the details).
+    -   What is the delimiter in this data file?
+    -   Load the data and give appropriate names to its columns, based on the information above.
