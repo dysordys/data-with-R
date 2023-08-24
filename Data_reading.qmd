@@ -35,24 +35,24 @@ One of the packages loaded by default with the `tidyverse` is called `readr`. Th
 How can one store data in plain text files? There are various solutions, but the one we will be relying on is called a *delimited file*. These files contain information as in a spreadsheet, with contents from every row in a different line. The column entries are separated by some *delimiter*---a character that represents the end of the information in one column and the start of the next. As an example, let us consider some actual data on land snail species from the Galápagos Islands.^[The data have been adapted from @Barabasetal2022.] The data file is available by clicking on this link: [`islands-FL.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.csv) (this and other data files used throughout the book will be accessible in a similar way). Set the working directory in RStudio to the folder where you have saved it. As a reminder, one can do this by executing `setwd("/path/to/files")`, where one should substitute in one's own path in place of `/path/to/files`. Then one can open `islands-FL.csv` in RStudio by clicking on it in the **Files** panel in the lower right part of the RStudio window, and then choosing the option "View file" (ignore the other option called "Import dataset..."). Having done this, a new tab opens in the editor panel (upper left region) where something like the following should appear:
 
 ```
-habitat,species,size,shape1,shape2
-humid,ustulatus,17.088,-0.029,0.021
-humid,ustulatus,20.06,-0.001,0.001
-humid,ustulatus,16.34,0.014,0.009
-arid,calvus,13.734,-0.043,0.017
-humid,nux,21.898,-0.042,0.007
-humid,ustulatus,16.848,-0.023,-0.005
-humid,ustulatus,19.162,0.014,0.016
-humid,ustulatus,16.017,0.042,0.002
-arid,galapaganus,18.894,0.011,-0.025
-humid,nux,26.59,0,-0.014
+habitat,species,size,shape
+humid,ustulatus,17.088,-0.029
+humid,ustulatus,20.06,-0.001
+humid,ustulatus,16.34,0.014
+arid,calvus,13.734,-0.043
+humid,nux,21.898,-0.042
+humid,ustulatus,16.848,-0.023
+humid,ustulatus,19.162,0.014
+humid,ustulatus,16.017,0.042
+arid,galapaganus,18.894,0.011
+humid,nux,26.59,0
 ```
 
 And so on. Here the first row does not contain data, but instead contains the names of the different columns. Both the names in the first row and the data in subsequent ones are separated by a comma, which is our delimiter that separates information belonging in different columns. This also explains the strange-looking extension `.csv` to the file: this stands for *comma-separated values*. Comma-separated value files are some of the most often used ones in science, and we will be relying on them frequently throughout the book.
 
 ### The Galápagos land snail data {#sec-snail}
 
-It is worth explaining what this dataset represents, as we will be using it repeatedly in subsequent examples. Each row contains information on one land snail individual sampled from the Galápagos Islands. To simplify the data, the individuals have been restricted to just those that are from Floreana Island in the Galápagos. The information are `habitat` (this can be either "arid" or "humid"); `species` (which species the individual belongs to; the Genus is always *Naesiotus*, from the family Bulimulidae); `size` (a measurement of the absolute volume of the snail's shell); and finally, `shape1` and `shape2` (two measurements for different aspects of the shell's shape). Below are some pictures of these snails---courtesy of [Christine E. Parent](https://parentlab.weebly.com/) who took the photographs:
+It is worth explaining what this dataset represents, as we will be using it repeatedly in subsequent examples. Each row contains information on one land snail individual sampled from the Galápagos Islands. To simplify the data, the individuals have been restricted to just those that are from Floreana Island in the Galápagos. The information are `habitat` (this can be either "arid" or "humid"); `species` (which species the individual belongs to; the Genus is always *Naesiotus*, from the family Bulimulidae); `size` (a measurement of the absolute volume of the snail's shell); and finally, `shape` (a measurement for the shell's shape). Below are some pictures of these snails---courtesy of [Christine E. Parent](https://parentlab.weebly.com/) who took the photographs:
 
 ![*Naesiotus ustulatus* -- a land snail from Floreana Island, Galápagos. Photo credits: Dr. Christine E. Parent.](N-ustulatus.jpg)
 
@@ -60,42 +60,42 @@ It is worth explaining what this dataset represents, as we will be using it repe
 
 ![*N. chemnitzioides* -- a land snail from San Cristóbal Island, Galápagos. Photo credits: Dr. Christine E. Parent.](N-chemnitzioides.jpg)
 
-The last three columns (`size`, `shape1`, and `shape2`) are given in units we are not concerned with here, but see @ParentCrespi2009, @Kraemeretal2018, and @Kraemeretal2022 for more information. The first shape measurement, `shape1`, has small values for bulky and round shells and large ones for long and slender shells. The other shape measurement, `shape2`, is not so simple to describe in words, but it is also far less important in explaining shell shape variation than `shape1`. Shell morphology is an important indicator of microhabitat specialization in these snails: species with long slender shells (see the picture of *N. chemnitzioides* above for an example) are adaptations to arid environments due to their better surface-to-volume ratios, whereas species with round and bulky shells are better adapted to humid environments.
+The last two columns (`size` and `shape`) are given in units we are not concerned with here, but see @ParentCrespi2009, @Kraemeretal2018, and @Kraemeretal2022 for more information. The shape measurement, `shape`, has small values for bulky and round shells and large ones for long and slender shells. Shell morphology is an important indicator of microhabitat specialization in these snails: species with long slender shells (see the picture of *N. chemnitzioides* above for an example) are adaptations to arid environments due to their better surface-to-volume ratios, whereas species with round and bulky shells are better adapted to humid environments.
 
 ### Tabulator-separated and other delimited files
 
 Above we have discussed comma-separated files. Another type of file uses tabulators instead of commas as the column separator. These are called *tab-separated value* (TSV) files. Just like CSV files, TSV files are also very widely used. An example is provided by the file [`islands-FL.tsv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.tsv). The data in this file are exactly identical to the one in [`islands-FL.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.csv). The only difference is that the commas are replaced by tabulators. Opening the file in RStudio, the first few lines look like this:
 
 ```
-habitat	species	size	shape1	shape2
-humid	ustulatus	17.088	-0.029	0.021
-humid	ustulatus	20.06	-0.001	0.001
-humid	ustulatus	16.34	0.014	0.009
-arid	calvus	13.734	-0.043	0.017
-humid	nux	21.898	-0.042	0.007
-humid	ustulatus	16.848	-0.023	-0.005
-humid	ustulatus	19.162	0.014	0.016
-humid	ustulatus	16.017	0.042	0.002
-arid	galapaganus	18.894	0.011	-0.025
-humid	nux	26.59	0	-0.014
+habitat	species	size	shape
+humid	ustulatus	17.088	-0.029
+humid	ustulatus	20.06	-0.001
+humid	ustulatus	16.34	0.014
+arid	calvus	13.734	-0.043
+humid	nux	21.898	-0.042
+humid	ustulatus	16.848	-0.023
+humid	ustulatus	19.162	0.014
+humid	ustulatus	16.017	0.042
+arid	galapaganus	18.894	0.011
+humid	nux	26.59	0
 ```
 
 Commas and tabulators are not the only possible delimiters however, and in principle any character could play that role. The only thing to be wary of is that choosing some "regular" character as the delimiter might create unintended side effects. For instance, if the character `4` is the delimiter, then a number such as `0.143` will no longer be interpreted as a single number, but as two numbers in separate columns (`0.1` and `3`, respectively). For this reason, only those characters should be used as delimiters which we can be certain will never be confused with the actual data.
 
-To give an example: it is perfectly possible and legal (even if not very common) to use a "dollar-separated value" representation where the symbol `$` is the delimiter. Here is what that would look like with the same land snail data (one can download it from [`islands-FL.dsv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.dsv)):
+To give an example: it is perfectly possible and legal (even if not common) to use a "percent-separated value" representation where the symbol `%` is the delimiter. Here is what that would look like with the same land snail data (one can download it from [`islands-FL.psv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.psv)):
 
 ```
-habitat$species$size$shape1$shape2
-humid$ustulatus$17.088$-0.029$0.021
-humid$ustulatus$20.06$-0.001$0.001
-humid$ustulatus$16.34$0.014$0.009
-arid$calvus$13.734$-0.043$0.017
-humid$nux$21.898$-0.042$0.007
-humid$ustulatus$16.848$-0.023$-0.005
-humid$ustulatus$19.162$0.014$0.016
-humid$ustulatus$16.017$0.042$0.002
-arid$galapaganus$18.894$0.011$-0.025
-humid$nux$26.59$0$-0.014
+habitat%species%size%shape
+humid%ustulatus%17.088%-0.029
+humid%ustulatus%20.06%-0.001
+humid%ustulatus%16.34%0.014
+arid%calvus%13.734%-0.043
+humid%nux%21.898%-0.042
+humid%ustulatus%16.848%-0.023
+humid%ustulatus%19.162%0.014
+humid%ustulatus%16.017%0.042
+arid%galapaganus%18.894%0.011
+humid%nux%26.59%0
 ```
 
 :::{.callout-warning}
@@ -114,7 +114,7 @@ read_delim("island-FL.csv", delim = ",")
 
 The function `read_delim` takes two inputs: the name of the file (with a path if needed), and `delim`, which is the delimiter used to separate the columns in the file. We will discuss how it works in greater detail in @sec-delim.
 
-Look at the output that was produced by `read_delim("island-FL.csv", delim = ",")` above, starting with `# A tibble: 223 x 5`. A *tibble* (or *data frame*^[Data frames (a feature of base R) and tibbles (a `tidyverse` construct) are equivalent for most practical purposes. Tibbles offer some features that are absent from data frames and omit quirks of data frames which tend to get in the way. Like with `read_delim` and `read.delim`, tibbles can be thought of as a slightly upgraded and more user-friendly version of data frames. You do not need to be overly concerned with the precise differences between the two. In this book we will be using tibbles almost exclusively.]) is the R-equivalent of an Excel-style spreadsheet. In this case, it has 223 rows and 5 columns (hence the `223 x 5`). The way to conceive of a tibble is as a collection of vectors, each arranged in a column, glued together side-by-side to form a table of data. Importantly, although each vector must consist of entries of the same type as usual (e.g., they can be vectors of numbers, vectors of strings, or vectors of logical values), the different columns need not share types. For example, in the above table, the first and second columns consist of character strings, but the third, fourth, and fifth ones consist of numerical values. This can be seen right below the header information. Below `habitat` and `species`, you can see `<chr>`, which stands for "character string". Below `size`, `shape1`, and `shape2`, we have `<dbl>` which, confusing as it may look at first, refers simply to ordinary numbers.^[The abbreviation `<dbl>` happens to stand for [double-precision numerical value](https://en.wikipedia.org/wiki/Double-precision_floating-point_format), a standard way of representing numbers on computers.] In turn, columns comprising of logical values would have the tag `<lgl>` underneath them (in this case though, we don't have such a column). The point is that by looking at the type information below the header, you can see how R has interpreted each of the columns at a glance.
+Look at the output that was produced by `read_delim("island-FL.csv", delim = ",")` above, starting with `# A tibble: 223 x 4`. A *tibble* (or *data frame*^[Data frames (a feature of base R) and tibbles (a `tidyverse` construct) are equivalent for most practical purposes. Tibbles offer some features that are absent from data frames and omit quirks of data frames which tend to get in the way. Like with `read_delim` and `read.delim`, tibbles can be thought of as a slightly upgraded and more user-friendly version of data frames. You do not need to be overly concerned with the precise differences between the two. In this book we will be using tibbles almost exclusively.]) is the R-equivalent of an Excel-style spreadsheet. In this case, it has 223 rows and 4 columns (hence the `223 x 4`). The way to conceive of a tibble is as a collection of vectors, each arranged in a column, glued together side-by-side to form a table of data. Importantly, although each vector must consist of entries of the same type as usual (e.g., they can be vectors of numbers, vectors of strings, or vectors of logical values), the different columns need not share types. For example, in the above table, the first and second columns consist of character strings but the third and fourth ones consist of numerical values. This can be seen right below the header information. Below `habitat` and `species` you can see `<chr>`, which stands for "character string". Below `size` and `shape` we have `<dbl>` which, confusing as it may look at first, refers simply to ordinary numbers.^[The abbreviation `<dbl>` happens to stand for [double-precision numerical value](https://en.wikipedia.org/wiki/Double-precision_floating-point_format), a standard way of representing numbers on computers.] In turn, columns comprising of logical values would have the tag `<lgl>` underneath them (in this case though, we don't have such a column). The point is that by looking at the type information below the header, you can see how R has interpreted each of the columns at a glance.
 
 The fact that the individual columns are simply vectors can be made explicit, by relying on the `$`-notation. To access a given column of the table as a vector, we write the name of the table, followed by the `$` symbol, followed by the name of the column in question. To make the illustration easier, let us first assign the tibble to a variable called `snailDat`:
 
@@ -155,11 +155,11 @@ We have seen that the function `read_delim` works by taking two inputs: the name
 read_delim("island-FL.csv", delim = ",")
 ```
 
-Similarly, in case we want to read a dollar-separated file such as [`islands-FL.dsv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.dsv), all we need to do is change the delimiter:
+Similarly, in case we want to read a percent-separated file such as [`islands-FL.psv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.psv), all we need to do is change the delimiter:
 
 ```{r}
 #| message: false
-read_delim("island-FL.dsv", delim = "$")
+read_delim("island-FL.psv", delim = "%")
 ```
 
 The output is exactly as before, since the file contained the same information (just represented differently due to the different delimiter).
@@ -171,14 +171,14 @@ To read a tab-separated file, remember *not* to simply press the tabulator key b
 read_delim("island-FL.tsv", delim = "\t")
 ```
 
-What happens if the wrong delimiter is specified---for instance, if we type `read_delim("island-FL.csv", delim = "$")`? In that case R will look for the `$` character to separate the columns, but since these do not occur anywhere, each row will be interpreted as a single column entry in its entirety:
+What happens if the wrong delimiter is specified---for instance, if we type `read_delim("island-FL.csv", delim = "%")`? In that case R will look for the `%` character to separate the columns, but since these do not occur anywhere, each row will be interpreted as a single column entry in its entirety:
 
 ```{r}
 #| message: false
-read_delim("island-FL.csv", delim = "$")
+read_delim("island-FL.csv", delim = "%")
 ```
 
-As seen, we have a tibble with a single column called `` `habitat,species,size,shape1,shape2` ``, which has the type `<chr>` (character string). One must beware of such mistakes, because the computer will not signal any errors: for all it cares, we *did* intend `$` to be the delimiter. However, one will not be able to properly work with the data subsequently if it gets loaded in this mistaken form.
+As seen, we have a tibble with a single column called `` `habitat,species,size,shape1,shape2` ``, which has the type `<chr>` (character string). One must beware of such mistakes, because the computer will not signal any errors: for all it cares, we *did* intend `%` to be the delimiter. However, one will not be able to properly work with the data subsequently if it gets loaded in this mistaken form.
 
 The CSV and TSV file formats are so common that there are shorthands available for loading them. Instead of writing `read_delim("island-FL.csv", delim = ",")`, one can equivalently type `read_csv("island-FL.csv")` for the same effect:
 
@@ -200,16 +200,16 @@ read_tsv("island-FL.tsv")
 All of the files we have looked at so far contained a *header* as their first row: instead of containing data, they contained the names of the data columns. Having such a header is good practice. Sometimes however, the header may be missing. For example, the file [`islands-FL-nohead.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL-nohead.csv) contains the same land snail data as the other files above, but it lacks a header. The first few lines of the file look like this:
 
 ```
-humid,ustulatus,17.088,-0.029,0.021
-humid,ustulatus,20.06,-0.001,0.001
-humid,ustulatus,16.34,0.014,0.009
-arid,calvus,13.734,-0.043,0.017
-humid,nux,21.898,-0.042,0.007
-humid,ustulatus,16.848,-0.023,-0.005
-humid,ustulatus,19.162,0.014,0.016
-humid,ustulatus,16.017,0.042,0.002
-arid,galapaganus,18.894,0.011,-0.025
-humid,nux,26.59,0,-0.014
+humid,ustulatus,17.088,-0.029
+humid,ustulatus,20.06,-0.001
+humid,ustulatus,16.34,0.014
+arid,calvus,13.734,-0.043
+humid,nux,21.898,-0.042
+humid,ustulatus,16.848,-0.023
+humid,ustulatus,19.162,0.014
+humid,ustulatus,16.017,0.042
+arid,galapaganus,18.894,0.011
+humid,nux,26.59,0
 ```
 
 If one tries to read this file either with `read_delim("island-FL-nohead.csv", delim = ",")` or the shorthand `read_csv("island-FL-nohead.csv")`, we get the following:
@@ -231,7 +231,7 @@ While this works, the column names now default to the moderately informative lab
 ```{r}
 #| message: false
 read_delim("island-FL-nohead.csv", delim = ",",
-           col_names = c("habitat", "species", "size", "shape1", "shape2"))
+           col_names = c("habitat", "species", "size", "shape"))
 ```
 
 And now these data are identical to our earlier `snailDat` tibble.

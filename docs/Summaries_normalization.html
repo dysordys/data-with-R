@@ -310,7 +310,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p>Last time we learned the basics of reading writing, and manipulating data. To review, download <a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/pop_data.csv"><code>pop_data.csv</code></a> and set your working directory to the folder where you saved it. This is a comma-separated file (CSV), so you can load it using <code>read_csv</code>. As usual, we first load the <code>tidyverse</code> package:</p>
+<p><a href="Basic_data_wrangling.html"><span>Chapter&nbsp;5</span></a> introduced the basics of manipulating data. Here we continue by learning how one can efficiently compute summary statistics over a dataset. Additionally, we will take a look at the concept of <em>tidy data</em>. The two are not independent: as we will see, tidy data admit to calculating summaries much more efficiently than non-tidy data.</p>
+<p>We will be relying on the file <a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/pop_data.csv"><code>pop_data.csv</code></a>. Download the file and set your working directory to the folder where you saved it. This is a comma-separated file (CSV), so you can load it using <code>read_csv</code>. As usual, we first load the <code>tidyverse</code> package:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -338,7 +339,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 # ℹ 90 more rows</code></pre>
 </div>
 </div>
-<p>One can now perform various manipulations on these data, by using the functions <code>rename</code>, <code>select</code>, <code>filter</code>, <code>arrange</code>, and <code>mutate</code> we have learned about in <a href="Basic_data_wrangling.html"><span>Chapter&nbsp;5</span></a>. For instance, we could create a new column called <code>total</code> which contains the total community density (sum of the three species’ population densities) at each point in time and each location:</p>
+<p>One can now perform various manipulations on these data, by using the functions we have learned about in <a href="Basic_data_wrangling.html"><span>Chapter&nbsp;5</span></a>. For instance, we could create a new column called <code>total</code> which contains the total community density (sum of the three species’ population densities) at each point in time and each location:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(pop, <span class="at">total =</span> species1 <span class="sc">+</span> species2 <span class="sc">+</span> species3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -358,7 +359,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 # ℹ 90 more rows</code></pre>
 </div>
 </div>
-<p>As a reminder, this can be written equivalently, using pipes:</p>
+<p>As a reminder, this can be written equivalently using pipes as</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">total =</span> species1 <span class="sc">+</span> species2 <span class="sc">+</span> species3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -494,7 +495,7 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>One common mistake when first encountering grouping and summaries is to assume that if we call <code>group_by(patch)</code>, then the subsequent summaries will be taken over patches. <em>This is not the case</em>, and it is important to take a moment to understand why. When we apply <code>group_by(patch)</code>, we are telling R to treat different patch values as group indicators. Therefore, when creating a summary, only the patch identities are retained from the original data (apart from the new summary statistics we calculate, of course). This means that the subsequent summaries are taken over everything <em>except</em> the patches. This should be clear after comparing the outputs of</p>
+<p>One common mistake when first encountering grouping and summaries is to assume that if we call <code>group_by(patch)</code>, then the subsequent summaries will be taken over patches. <em>This is not the case</em>, and it is important to take a moment to understand why. When we apply <code>group_by(patch)</code>, we are telling R to treat different patch values as group indicators. Therefore, when creating a summary, only the patch identities are retained from the original data, to which the newly calculated summary statistics are added. This means that the subsequent summaries are taken over everything <em>except</em> the patches. This should be clear after comparing the outputs of</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span> <span class="fu">group_by</span>(patch) <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -505,69 +506,78 @@ Warning
 <p>The first distinguishes the rows of the data only by <code>patch</code>, and therefore the average is taken over time. The second distinguishes the rows by <code>time</code>, so the average is taken over the patches. Run the two expressions again to see the difference between them!</p>
 </div>
 </div>
-<p>We can use functions such as <code>mutate</code> or <code>filter</code> on grouped data. For example, we might want to know the deviation of species 1’s density from its average <em>in each patch</em>. Doing the following does not quite do what we want:</p>
+<p>We can use functions such as <code>mutate</code> or <code>filter</code> on grouped data. For example, we might want to know the difference of species 1’s density from its average <em>in each patch</em>. Doing the following does not quite do what we want:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">species1Dev =</span> species1 <span class="sc">-</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">species1Diff =</span> species1 <span class="sc">-</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 100 × 6
-    time patch species1 species2 species3 species1Dev
-   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;
- 1     1 A         8.43     6.62    10.1        3.13 
- 2     1 B        10.1      3.28     6.27       4.83 
- 3     2 A         7.76     6.93    10.3        2.46 
- 4     2 B        10.1      3.04     6.07       4.82 
- 5     3 A         7.09     7.24    10.5        1.79 
- 6     3 B        10.1      2.8      5.82       4.82 
- 7     4 A         6.49     7.54    10.6        1.19 
- 8     4 B        10.1      2.56     5.57       4.81 
- 9     5 A         5.99     7.83    10.7        0.685
-10     5 B        10.1      2.33     5.32       4.80 
+    time patch species1 species2 species3 species1Diff
+   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt;
+ 1     1 A         8.43     6.62    10.1         3.13 
+ 2     1 B        10.1      3.28     6.27        4.83 
+ 3     2 A         7.76     6.93    10.3         2.46 
+ 4     2 B        10.1      3.04     6.07        4.82 
+ 5     3 A         7.09     7.24    10.5         1.79 
+ 6     3 B        10.1      2.8      5.82        4.82 
+ 7     4 A         6.49     7.54    10.6         1.19 
+ 8     4 B        10.1      2.56     5.57        4.81 
+ 9     5 A         5.99     7.83    10.7         0.685
+10     5 B        10.1      2.33     5.32        4.80 
 # ℹ 90 more rows</code></pre>
 </div>
 </div>
-<p>This will put the difference of species 1’s density from its mean density across both time and patches into the new column <code>species1Dev</code>. That is not the same as calculating the difference from the mean in a given patch—patch A for rows corresponding to patch A, and patch B for the others. To achieve this, all one needs to do is to group the data by <code>patch</code> before invoking <code>mutate</code>:</p>
+<p>This will put the difference of species 1’s density from its mean density across both time and patches into the new column <code>species1Diff</code>. That is not the same as calculating the difference from the mean in a given patch—patch A for rows corresponding to patch A, and patch B for the others. To achieve this, all one needs to do is to group the data by <code>patch</code> before invoking <code>mutate</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch) <span class="sc">|&gt;</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">species1Dev =</span> species1 <span class="sc">-</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">species1Diff =</span> species1 <span class="sc">-</span> <span class="fu">mean</span>(species1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 100 × 6
 # Groups:   patch [2]
-    time patch species1 species2 species3 species1Dev
-   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;
- 1     1 A         8.43     6.62    10.1        3.14 
- 2     1 B        10.1      3.28     6.27       4.81 
- 3     2 A         7.76     6.93    10.3        2.47 
- 4     2 B        10.1      3.04     6.07       4.80 
- 5     3 A         7.09     7.24    10.5        1.80 
- 6     3 B        10.1      2.8      5.82       4.80 
- 7     4 A         6.49     7.54    10.6        1.20 
- 8     4 B        10.1      2.56     5.57       4.79 
- 9     5 A         5.99     7.83    10.7        0.702
-10     5 B        10.1      2.33     5.32       4.78 
+    time patch species1 species2 species3 species1Diff
+   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt;
+ 1     1 A         8.43     6.62    10.1         3.14 
+ 2     1 B        10.1      3.28     6.27        4.81 
+ 3     2 A         7.76     6.93    10.3         2.47 
+ 4     2 B        10.1      3.04     6.07        4.80 
+ 5     3 A         7.09     7.24    10.5         1.80 
+ 6     3 B        10.1      2.8      5.82        4.80 
+ 7     4 A         6.49     7.54    10.6         1.20 
+ 8     4 B        10.1      2.56     5.57        4.79 
+ 9     5 A         5.99     7.83    10.7         0.702
+10     5 B        10.1      2.33     5.32        4.78 
 # ℹ 90 more rows</code></pre>
 </div>
 </div>
-<p>Comparing this with the previous table, we see that the values in the <code>species1Dev</code> column are now different, because this time the differences are taken with respect to the average densities per each patch.</p>
-<p>Finally, since <code>group_by</code> changes subsequent behaviour, we might eventually want to get rid of the grouping in our data. This can be done with the function <code>ungroup</code>. For example:</p>
+<p>Comparing this with the previous table, we see that the values in the <code>species1Diff</code> column are now different, because this time the differences are taken with respect to the average densities per each patch.</p>
+<p>Finally, since <code>group_by</code> changes subsequent behaviour, we eventually want to get rid of the grouping in our data. This can be done with the function <code>ungroup</code>. For example:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(patch) <span class="sc">|&gt;</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanDensity1 =</span> <span class="fu">mean</span>(species1), <span class="at">sdDensity1 =</span> <span class="fu">sd</span>(species1)) <span class="sc">|&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">species1Diff =</span> species1 <span class="sc">-</span> <span class="fu">mean</span>(species1)) <span class="sc">|&gt;</span></span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 3
-  patch meanDensity1 sdDensity1
-  &lt;chr&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-1 A             5.29      0.833
-2 B             5.32      3.81 </code></pre>
+<pre><code># A tibble: 100 × 6
+    time patch species1 species2 species3 species1Diff
+   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;        &lt;dbl&gt;
+ 1     1 A         8.43     6.62    10.1         3.14 
+ 2     1 B        10.1      3.28     6.27        4.81 
+ 3     2 A         7.76     6.93    10.3         2.47 
+ 4     2 B        10.1      3.04     6.07        4.80 
+ 5     3 A         7.09     7.24    10.5         1.80 
+ 6     3 B        10.1      2.8      5.82        4.80 
+ 7     4 A         6.49     7.54    10.6         1.20 
+ 8     4 B        10.1      2.56     5.57        4.79 
+ 9     5 A         5.99     7.83    10.7         0.702
+10     5 B        10.1      2.33     5.32        4.78 
+# ℹ 90 more rows</code></pre>
 </div>
 </div>
 <p>It is good practice to always <code>ungroup</code> the data after we have calculated what we wanted using the group structure. Otherwise, subsequent calculations could be influenced by the grouping in unexpected ways.</p>
 </section>
 <section id="sec-tidy" class="level2" data-number="6.2">
 <h2 data-number="6.2" class="anchored" data-anchor-id="sec-tidy"><span class="header-section-number">6.2</span> Tidy data</h2>
-<p>In science, we often strive to work with <em>tidy data</em> (also known as <em>long-format data</em> or <em>normalized data</em>). A dataset is tidy if:</p>
+<p>In science, we often strive to work with <em>tidy data</em> (also known as <em>long-format data</em> or <em>normal-form data</em>). A dataset is tidy if:</p>
 <ol type="1">
 <li>Each variable is in its own column;</li>
 <li>Each observation is in its own row.</li>
@@ -575,7 +585,10 @@ Warning
 <p>Tidy data are suitable for performing operations, statistics, and plotting on. Furthermore, tidy data have a certain well-groomed feel to them, in the sense that their organization always follows the same general pattern regardless of the type of dataset one studies. Paraphrasing Tolstoy: tidy data are all alike; by contrast, every non-tidy dataset tends to be messy in its own unique way.</p>
 <p>The <code>tidyverse</code> offers a simple and convenient way of putting data in tidy format. The <code>pop</code> table from the previous section is not tidy, because although each variable is in its own column, it is not true that each observation is in its own row. Instead, each row contains three observations: the densities of species 1, 2, and 3 at a given time and place. To tidy up these data, we create <em>key-value pairs</em>. We merge the columns for species densities into just two new ones. The first of these (the <em>key</em>) indicates whether it is species 1, or 2, or 3 which the given row refers to. The second column (the <em>value</em>) contains the population density of the given species. Such key-value pairs are created by the function <code>pivot_longer</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">names_to =</span> <span class="st">"species"</span>, <span class="at">values_to =</span> <span class="st">"density"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(species1, species2, species3),</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"species"</span>,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">values_to =</span> <span class="st">"density"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 300 × 4
     time patch species  density
@@ -593,9 +606,8 @@ Warning
 # ℹ 290 more rows</code></pre>
 </div>
 </div>
-<p>The function <code>pivot_longer</code> takes three arguments in addition to the first (data) argument that we may pipe in, like above. First, <code>cols</code> is the list of columns to be converted into key-value pairs. It uses the same tidy selection mechanisms as the function <code>select</code> (<a href="Basic_data_wrangling.html#sec-select"><span>Section&nbsp;5.1.1</span></a>). This means that one can refer to the columns by number: <code>cols = 3:5</code> is the same as <code>cols = c(3, 4, 5)</code> and selects the third, fourth, and fifth columns (the ones corresponding to the population densities). One can also write <code>cols = c(species1, species2, species3)</code> instead, choosing columns by their names. This can give greater clarity, albeit at the cost of more typing. Or—perhaps the best and cleanest in this case—one can use <code>cols = starts_with("species")</code> to select those columns which start with the string <code>"species"</code>.</p>
-<p>Second, the argument <code>names_to</code> in the function <code>pivot_longer</code> is the name of the new key column. And third, <code>values_to</code> is the name of the new value column.</p>
-<p>The above table is now in tidy form: each column records a single variable, and each row contains a single observation. Notice that, unlike the original <code>pop</code> which had 100 rows and 5 columns, the tidy version has 300 rows and 4 columns. This is natural: since the number of columns was reduced, there must be some extra rows to prevent the loss of information. And one should notice another benefit to casting the data in tidy format: it forces one to explicitly specify what was measured. By having named the value column <code>density</code>, we now know that the numbers 8.43, 6.62, etc. are density measurements. In contrast, it is not immediately obvious what these same numbers mean under the columns <code>species1</code>, <code>species2</code>, … in the original data.</p>
+<p>The function <code>pivot_longer</code> takes three arguments in addition to the first (data) argument that we may pipe in, like above. First, <code>cols</code> is the list of columns to be converted into key-value pairs. It uses the same tidy selection mechanisms as the function <code>select</code>; see <a href="Basic_data_wrangling.html#sec-select"><span>Section&nbsp;5.1.1</span></a>. (This means that <code>cols = starts_with("species")</code> could also have been used.) Second, the argument <code>names_to</code> is the name of the new key column, specified as a character string. And third, <code>values_to</code> is the name of the new value column, also as a character string.</p>
+<p>The above table is now in tidy form: each column records a single variable, and each row contains a single observation. Notice that, unlike the original <code>pop</code> which had 100 rows and 5 columns, the tidy version has 300 rows and 4 columns. This is natural: since the number of columns was reduced, there must be some extra rows to prevent the loss of information. And one should notice another benefit to casting the data in tidy format: it forces one to explicitly specify what was measured. By having named the value column <code>density</code>, we now know that the numbers 8.43, 6.62, etc. are density measurements. By contrast, it is not immediately obvious what these same numbers mean under the columns <code>species1</code>, <code>species2</code>, … in the original data.</p>
 <p>It is possible to undo the effect <code>pivot_longer</code>. To do so, use <code>pivot_wider</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>pop <span class="sc">|&gt;</span></span>
@@ -674,14 +686,22 @@ Warning
 </section>
 <section id="exercises" class="level2" data-number="6.3">
 <h2 data-number="6.3" class="anchored" data-anchor-id="exercises"><span class="header-section-number">6.3</span> Exercises</h2>
-<p>The exercises below use the <code>iris</code> dataset—the same that we used in the previous chapter’s data wrangling exercises (<a href="Basic_data_wrangling.html#sec-wrangling-exercises"><span>Section&nbsp;5.3</span></a>). Convert the <code>iris</code> data to a tibble with the <code>as_tibble</code> function, and assign it to a variable.</p>
+<p>The first set of problems relies on the <code>iris</code> dataset—the same that we used in the previous chapter’s exercises (<a href="Basic_data_wrangling.html#sec-wrangling-exercises"><span>Section&nbsp;5.3</span></a>). Convert the <code>iris</code> data to a tibble with the <code>as_tibble</code> function, and assign it to a variable.</p>
 <ol type="1">
-<li><p>Create a new column in the <code>iris</code> dataset which contains the deviation of petal lengths from the average of the whole dataset.</p></li>
-<li><p>Create a new column in the <code>iris</code> dataset which contains the deviation of petal lengths from the average <em>of each species</em>. (Hint: <code>group_by</code> the species and then <code>mutate</code>!)</p></li>
+<li><p>Create a new column in the <code>iris</code> dataset which contains the difference of petal lengths from the average of the whole dataset.</p></li>
+<li><p>Create a new column in the <code>iris</code> dataset which contains the difference of petal lengths from the average <em>of each species</em>. (Hint: <code>group_by</code> the species and then <code>mutate</code>!)</p></li>
 <li><p>Create a table where the rows are the three species, and the columns are: average petal length, variance of petal length, average sepal length, and variance of sepal length (each across flowers of the corresponding species).</p></li>
 <li><p>Create key-value pairs in the <code>iris</code> dataset for the petal characteristics. In other words, have a column called <code>Petal.Trait</code> (whose values are either <code>Petal.Length</code> or <code>Petal.Width</code>), and another column called <code>Petal.Value</code> (with the length/width values).</p></li>
 <li><p>Repeat the same exercise, but now for sepal traits.</p></li>
 <li><p>Finally, do it for both petal and sepal traits simultaneously, to obtain a fully tidy form of the <code>iris</code> data. That is, the key column (call it <code>Flower.Trait</code>) will have the values <code>Petal.Length</code>, <code>Petal.Width</code>, <code>Sepal.Length</code>, and <code>Sepal.Width</code>. And the value column (which you can call <code>Trait.Value</code>) will have the corresponding measurements.</p></li>
+</ol>
+<p>The subsequent exercises use the Galápagos land snail data from the previous two chapters (<a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.csv"><code>island-FL.csv</code></a>).</p>
+<ol start="7" type="1">
+<li><p>What is the average shell size of the whole community? What is its standard deviation? How about the average and standard deviation of shell shape?</p></li>
+<li><p>What is the average shell size / shell shape of the community in each habitat type (humid/arid)?</p></li>
+<li><p>What is the average shell size / shell shape in each unique combination of species and habitat type?</p></li>
+<li><p>Based on your answer to the previous question: how many species are there which live in both arid and humid environments?</p></li>
+<li><p>Organize the <code>size</code> and <code>shape</code> columns in key-value pairs: instead of the original <code>size</code> and <code>shape</code>, have a column called <code>trait</code> (which will either be <code>"size"</code> or <code>"shape"</code>) and another column called <code>value</code> which holds the corresponding measurement.</p></li>
 </ol>
 
 

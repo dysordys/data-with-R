@@ -384,22 +384,22 @@ Tip
 <section id="the-csv-file-format" class="level3" data-number="4.2.1">
 <h3 data-number="4.2.1" class="anchored" data-anchor-id="the-csv-file-format"><span class="header-section-number">4.2.1</span> The CSV file format</h3>
 <p>How can one store data in plain text files? There are various solutions, but the one we will be relying on is called a <em>delimited file</em>. These files contain information as in a spreadsheet, with contents from every row in a different line. The column entries are separated by some <em>delimiter</em>—a character that represents the end of the information in one column and the start of the next. As an example, let us consider some actual data on land snail species from the Galápagos Islands.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> The data file is available by clicking on this link: <a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.csv"><code>islands-FL.csv</code></a> (this and other data files used throughout the book will be accessible in a similar way). Set the working directory in RStudio to the folder where you have saved it. As a reminder, one can do this by executing <code>setwd("/path/to/files")</code>, where one should substitute in one’s own path in place of <code>/path/to/files</code>. Then one can open <code>islands-FL.csv</code> in RStudio by clicking on it in the <strong>Files</strong> panel in the lower right part of the RStudio window, and then choosing the option “View file” (ignore the other option called “Import dataset…”). Having done this, a new tab opens in the editor panel (upper left region) where something like the following should appear:</p>
-<pre><code>habitat,species,size,shape1,shape2
-humid,ustulatus,17.088,-0.029,0.021
-humid,ustulatus,20.06,-0.001,0.001
-humid,ustulatus,16.34,0.014,0.009
-arid,calvus,13.734,-0.043,0.017
-humid,nux,21.898,-0.042,0.007
-humid,ustulatus,16.848,-0.023,-0.005
-humid,ustulatus,19.162,0.014,0.016
-humid,ustulatus,16.017,0.042,0.002
-arid,galapaganus,18.894,0.011,-0.025
-humid,nux,26.59,0,-0.014</code></pre>
+<pre><code>habitat,species,size,shape
+humid,ustulatus,17.088,-0.029
+humid,ustulatus,20.06,-0.001
+humid,ustulatus,16.34,0.014
+arid,calvus,13.734,-0.043
+humid,nux,21.898,-0.042
+humid,ustulatus,16.848,-0.023
+humid,ustulatus,19.162,0.014
+humid,ustulatus,16.017,0.042
+arid,galapaganus,18.894,0.011
+humid,nux,26.59,0</code></pre>
 <p>And so on. Here the first row does not contain data, but instead contains the names of the different columns. Both the names in the first row and the data in subsequent ones are separated by a comma, which is our delimiter that separates information belonging in different columns. This also explains the strange-looking extension <code>.csv</code> to the file: this stands for <em>comma-separated values</em>. Comma-separated value files are some of the most often used ones in science, and we will be relying on them frequently throughout the book.</p>
 </section>
 <section id="sec-snail" class="level3" data-number="4.2.2">
 <h3 data-number="4.2.2" class="anchored" data-anchor-id="sec-snail"><span class="header-section-number">4.2.2</span> The Galápagos land snail data</h3>
-<p>It is worth explaining what this dataset represents, as we will be using it repeatedly in subsequent examples. Each row contains information on one land snail individual sampled from the Galápagos Islands. To simplify the data, the individuals have been restricted to just those that are from Floreana Island in the Galápagos. The information are <code>habitat</code> (this can be either “arid” or “humid”); <code>species</code> (which species the individual belongs to; the Genus is always <em>Naesiotus</em>, from the family Bulimulidae); <code>size</code> (a measurement of the absolute volume of the snail’s shell); and finally, <code>shape1</code> and <code>shape2</code> (two measurements for different aspects of the shell’s shape). Below are some pictures of these snails—courtesy of <a href="https://parentlab.weebly.com/">Christine E. Parent</a> who took the photographs:</p>
+<p>It is worth explaining what this dataset represents, as we will be using it repeatedly in subsequent examples. Each row contains information on one land snail individual sampled from the Galápagos Islands. To simplify the data, the individuals have been restricted to just those that are from Floreana Island in the Galápagos. The information are <code>habitat</code> (this can be either “arid” or “humid”); <code>species</code> (which species the individual belongs to; the Genus is always <em>Naesiotus</em>, from the family Bulimulidae); <code>size</code> (a measurement of the absolute volume of the snail’s shell); and finally, <code>shape</code> (a measurement for the shell’s shape). Below are some pictures of these snails—courtesy of <a href="https://parentlab.weebly.com/">Christine E. Parent</a> who took the photographs:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="N-ustulatus.jpg" class="img-fluid figure-img"></p>
@@ -418,35 +418,35 @@ humid,nux,26.59,0,-0.014</code></pre>
 <figcaption class="figure-caption"><em>N. chemnitzioides</em> – a land snail from San Cristóbal Island, Galápagos. Photo credits: Dr.&nbsp;Christine E. Parent.</figcaption>
 </figure>
 </div>
-<p>The last three columns (<code>size</code>, <code>shape1</code>, and <code>shape2</code>) are given in units we are not concerned with here, but see <span class="citation" data-cites="ParentCrespi2009">Parent and Crespi (<a href="References.html#ref-ParentCrespi2009" role="doc-biblioref">2009</a>)</span>, <span class="citation" data-cites="Kraemeretal2018">Kraemer et al. (<a href="References.html#ref-Kraemeretal2018" role="doc-biblioref">2018</a>)</span>, and <span class="citation" data-cites="Kraemeretal2022">Kraemer et al. (<a href="References.html#ref-Kraemeretal2022" role="doc-biblioref">2022</a>)</span> for more information. The first shape measurement, <code>shape1</code>, has small values for bulky and round shells and large ones for long and slender shells. The other shape measurement, <code>shape2</code>, is not so simple to describe in words, but it is also far less important in explaining shell shape variation than <code>shape1</code>. Shell morphology is an important indicator of microhabitat specialization in these snails: species with long slender shells (see the picture of <em>N. chemnitzioides</em> above for an example) are adaptations to arid environments due to their better surface-to-volume ratios, whereas species with round and bulky shells are better adapted to humid environments.</p>
+<p>The last two columns (<code>size</code> and <code>shape</code>) are given in units we are not concerned with here, but see <span class="citation" data-cites="ParentCrespi2009">Parent and Crespi (<a href="References.html#ref-ParentCrespi2009" role="doc-biblioref">2009</a>)</span>, <span class="citation" data-cites="Kraemeretal2018">Kraemer et al. (<a href="References.html#ref-Kraemeretal2018" role="doc-biblioref">2018</a>)</span>, and <span class="citation" data-cites="Kraemeretal2022">Kraemer et al. (<a href="References.html#ref-Kraemeretal2022" role="doc-biblioref">2022</a>)</span> for more information. The shape measurement, <code>shape</code>, has small values for bulky and round shells and large ones for long and slender shells. Shell morphology is an important indicator of microhabitat specialization in these snails: species with long slender shells (see the picture of <em>N. chemnitzioides</em> above for an example) are adaptations to arid environments due to their better surface-to-volume ratios, whereas species with round and bulky shells are better adapted to humid environments.</p>
 </section>
 <section id="tabulator-separated-and-other-delimited-files" class="level3" data-number="4.2.3">
 <h3 data-number="4.2.3" class="anchored" data-anchor-id="tabulator-separated-and-other-delimited-files"><span class="header-section-number">4.2.3</span> Tabulator-separated and other delimited files</h3>
 <p>Above we have discussed comma-separated files. Another type of file uses tabulators instead of commas as the column separator. These are called <em>tab-separated value</em> (TSV) files. Just like CSV files, TSV files are also very widely used. An example is provided by the file <a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.tsv"><code>islands-FL.tsv</code></a>. The data in this file are exactly identical to the one in <a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.csv"><code>islands-FL.csv</code></a>. The only difference is that the commas are replaced by tabulators. Opening the file in RStudio, the first few lines look like this:</p>
-<pre><code>habitat species size    shape1  shape2
-humid   ustulatus   17.088  -0.029  0.021
-humid   ustulatus   20.06   -0.001  0.001
-humid   ustulatus   16.34   0.014   0.009
-arid    calvus  13.734  -0.043  0.017
-humid   nux 21.898  -0.042  0.007
-humid   ustulatus   16.848  -0.023  -0.005
-humid   ustulatus   19.162  0.014   0.016
-humid   ustulatus   16.017  0.042   0.002
-arid    galapaganus 18.894  0.011   -0.025
-humid   nux 26.59   0   -0.014</code></pre>
+<pre><code>habitat species size    shape
+humid   ustulatus   17.088  -0.029
+humid   ustulatus   20.06   -0.001
+humid   ustulatus   16.34   0.014
+arid    calvus  13.734  -0.043
+humid   nux 21.898  -0.042
+humid   ustulatus   16.848  -0.023
+humid   ustulatus   19.162  0.014
+humid   ustulatus   16.017  0.042
+arid    galapaganus 18.894  0.011
+humid   nux 26.59   0</code></pre>
 <p>Commas and tabulators are not the only possible delimiters however, and in principle any character could play that role. The only thing to be wary of is that choosing some “regular” character as the delimiter might create unintended side effects. For instance, if the character <code>4</code> is the delimiter, then a number such as <code>0.143</code> will no longer be interpreted as a single number, but as two numbers in separate columns (<code>0.1</code> and <code>3</code>, respectively). For this reason, only those characters should be used as delimiters which we can be certain will never be confused with the actual data.</p>
-<p>To give an example: it is perfectly possible and legal (even if not very common) to use a “dollar-separated value” representation where the symbol <code>$</code> is the delimiter. Here is what that would look like with the same land snail data (one can download it from <a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.dsv"><code>islands-FL.dsv</code></a>):</p>
-<pre><code>habitat$species$size$shape1$shape2
-humid$ustulatus$17.088$-0.029$0.021
-humid$ustulatus$20.06$-0.001$0.001
-humid$ustulatus$16.34$0.014$0.009
-arid$calvus$13.734$-0.043$0.017
-humid$nux$21.898$-0.042$0.007
-humid$ustulatus$16.848$-0.023$-0.005
-humid$ustulatus$19.162$0.014$0.016
-humid$ustulatus$16.017$0.042$0.002
-arid$galapaganus$18.894$0.011$-0.025
-humid$nux$26.59$0$-0.014</code></pre>
+<p>To give an example: it is perfectly possible and legal (even if not common) to use a “percent-separated value” representation where the symbol <code>%</code> is the delimiter. Here is what that would look like with the same land snail data (one can download it from <a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.psv"><code>islands-FL.psv</code></a>):</p>
+<pre><code>habitat%species%size%shape
+humid%ustulatus%17.088%-0.029
+humid%ustulatus%20.06%-0.001
+humid%ustulatus%16.34%0.014
+arid%calvus%13.734%-0.043
+humid%nux%21.898%-0.042
+humid%ustulatus%16.848%-0.023
+humid%ustulatus%19.162%0.014
+humid%ustulatus%16.017%0.042
+arid%galapaganus%18.894%0.011
+humid%nux%26.59%0</code></pre>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -468,24 +468,24 @@ Warning
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_delim</span>(<span class="st">"island-FL.csv"</span>, <span class="at">delim =</span> <span class="st">","</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 223 × 5
-   habitat species      size shape1 shape2
-   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
- 1 humid   ustulatus    17.1 -0.029  0.021
- 2 humid   ustulatus    20.1 -0.001  0.001
- 3 humid   ustulatus    16.3  0.014  0.009
- 4 arid    calvus       13.7 -0.043  0.017
- 5 humid   nux          21.9 -0.042  0.007
- 6 humid   ustulatus    16.8 -0.023 -0.005
- 7 humid   ustulatus    19.2  0.014  0.016
- 8 humid   ustulatus    16.0  0.042  0.002
- 9 arid    galapaganus  18.9  0.011 -0.025
-10 humid   nux          26.6  0     -0.014
+<pre><code># A tibble: 223 × 4
+   habitat species      size  shape
+   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;
+ 1 humid   ustulatus    17.1 -0.029
+ 2 humid   ustulatus    20.1 -0.001
+ 3 humid   ustulatus    16.3  0.014
+ 4 arid    calvus       13.7 -0.043
+ 5 humid   nux          21.9 -0.042
+ 6 humid   ustulatus    16.8 -0.023
+ 7 humid   ustulatus    19.2  0.014
+ 8 humid   ustulatus    16.0  0.042
+ 9 arid    galapaganus  18.9  0.011
+10 humid   nux          26.6  0    
 # ℹ 213 more rows</code></pre>
 </div>
 </div>
 <p>The function <code>read_delim</code> takes two inputs: the name of the file (with a path if needed), and <code>delim</code>, which is the delimiter used to separate the columns in the file. We will discuss how it works in greater detail in <a href="#sec-delim"><span>Section&nbsp;4.4</span></a>.</p>
-<p>Look at the output that was produced by <code>read_delim("island-FL.csv", delim = ",")</code> above, starting with <code># A tibble: 223 x 5</code>. A <em>tibble</em> (or <em>data frame</em><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>) is the R-equivalent of an Excel-style spreadsheet. In this case, it has 223 rows and 5 columns (hence the <code>223 x 5</code>). The way to conceive of a tibble is as a collection of vectors, each arranged in a column, glued together side-by-side to form a table of data. Importantly, although each vector must consist of entries of the same type as usual (e.g., they can be vectors of numbers, vectors of strings, or vectors of logical values), the different columns need not share types. For example, in the above table, the first and second columns consist of character strings, but the third, fourth, and fifth ones consist of numerical values. This can be seen right below the header information. Below <code>habitat</code> and <code>species</code>, you can see <code>&lt;chr&gt;</code>, which stands for “character string”. Below <code>size</code>, <code>shape1</code>, and <code>shape2</code>, we have <code>&lt;dbl&gt;</code> which, confusing as it may look at first, refers simply to ordinary numbers.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> In turn, columns comprising of logical values would have the tag <code>&lt;lgl&gt;</code> underneath them (in this case though, we don’t have such a column). The point is that by looking at the type information below the header, you can see how R has interpreted each of the columns at a glance.</p>
+<p>Look at the output that was produced by <code>read_delim("island-FL.csv", delim = ",")</code> above, starting with <code># A tibble: 223 x 4</code>. A <em>tibble</em> (or <em>data frame</em><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>) is the R-equivalent of an Excel-style spreadsheet. In this case, it has 223 rows and 4 columns (hence the <code>223 x 4</code>). The way to conceive of a tibble is as a collection of vectors, each arranged in a column, glued together side-by-side to form a table of data. Importantly, although each vector must consist of entries of the same type as usual (e.g., they can be vectors of numbers, vectors of strings, or vectors of logical values), the different columns need not share types. For example, in the above table, the first and second columns consist of character strings but the third and fourth ones consist of numerical values. This can be seen right below the header information. Below <code>habitat</code> and <code>species</code> you can see <code>&lt;chr&gt;</code>, which stands for “character string”. Below <code>size</code> and <code>shape</code> we have <code>&lt;dbl&gt;</code> which, confusing as it may look at first, refers simply to ordinary numbers.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> In turn, columns comprising of logical values would have the tag <code>&lt;lgl&gt;</code> underneath them (in this case though, we don’t have such a column). The point is that by looking at the type information below the header, you can see how R has interpreted each of the columns at a glance.</p>
 <p>The fact that the individual columns are simply vectors can be made explicit, by relying on the <code>$</code>-notation. To access a given column of the table as a vector, we write the name of the table, followed by the <code>$</code> symbol, followed by the name of the column in question. To make the illustration easier, let us first assign the tibble to a variable called <code>snailDat</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>snailDat <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"island-FL.csv"</span>, <span class="at">delim =</span> <span class="st">","</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -531,19 +531,19 @@ Warning
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(snailDat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 223 × 5
-   habitat species      size shape1 shape2
-   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
- 1 humid   ustulatus    17.1 -0.029  0.021
- 2 humid   ustulatus    20.1 -0.001  0.001
- 3 humid   ustulatus    16.3  0.014  0.009
- 4 arid    calvus       13.7 -0.043  0.017
- 5 humid   nux          21.9 -0.042  0.007
- 6 humid   ustulatus    16.8 -0.023 -0.005
- 7 humid   ustulatus    19.2  0.014  0.016
- 8 humid   ustulatus    16.0  0.042  0.002
- 9 arid    galapaganus  18.9  0.011 -0.025
-10 humid   nux          26.6  0     -0.014
+<pre><code># A tibble: 223 × 4
+   habitat species      size  shape
+   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;
+ 1 humid   ustulatus    17.1 -0.029
+ 2 humid   ustulatus    20.1 -0.001
+ 3 humid   ustulatus    16.3  0.014
+ 4 arid    calvus       13.7 -0.043
+ 5 humid   nux          21.9 -0.042
+ 6 humid   ustulatus    16.8 -0.023
+ 7 humid   ustulatus    19.2  0.014
+ 8 humid   ustulatus    16.0  0.042
+ 9 arid    galapaganus  18.9  0.011
+10 humid   nux          26.6  0    
 # ℹ 213 more rows</code></pre>
 </div>
 </div>
@@ -555,39 +555,39 @@ Warning
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_delim</span>(<span class="st">"island-FL.csv"</span>, <span class="at">delim =</span> <span class="st">","</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 223 × 5
-   habitat species      size shape1 shape2
-   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
- 1 humid   ustulatus    17.1 -0.029  0.021
- 2 humid   ustulatus    20.1 -0.001  0.001
- 3 humid   ustulatus    16.3  0.014  0.009
- 4 arid    calvus       13.7 -0.043  0.017
- 5 humid   nux          21.9 -0.042  0.007
- 6 humid   ustulatus    16.8 -0.023 -0.005
- 7 humid   ustulatus    19.2  0.014  0.016
- 8 humid   ustulatus    16.0  0.042  0.002
- 9 arid    galapaganus  18.9  0.011 -0.025
-10 humid   nux          26.6  0     -0.014
+<pre><code># A tibble: 223 × 4
+   habitat species      size  shape
+   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;
+ 1 humid   ustulatus    17.1 -0.029
+ 2 humid   ustulatus    20.1 -0.001
+ 3 humid   ustulatus    16.3  0.014
+ 4 arid    calvus       13.7 -0.043
+ 5 humid   nux          21.9 -0.042
+ 6 humid   ustulatus    16.8 -0.023
+ 7 humid   ustulatus    19.2  0.014
+ 8 humid   ustulatus    16.0  0.042
+ 9 arid    galapaganus  18.9  0.011
+10 humid   nux          26.6  0    
 # ℹ 213 more rows</code></pre>
 </div>
 </div>
-<p>Similarly, in case we want to read a dollar-separated file such as <a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.dsv"><code>islands-FL.dsv</code></a>, all we need to do is change the delimiter:</p>
+<p>Similarly, in case we want to read a percent-separated file such as <a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.psv"><code>islands-FL.psv</code></a>, all we need to do is change the delimiter:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_delim</span>(<span class="st">"island-FL.dsv"</span>, <span class="at">delim =</span> <span class="st">"$"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_delim</span>(<span class="st">"island-FL.psv"</span>, <span class="at">delim =</span> <span class="st">"%"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 223 × 5
-   habitat species      size shape1 shape2
-   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
- 1 humid   ustulatus    17.1 -0.029  0.021
- 2 humid   ustulatus    20.1 -0.001  0.001
- 3 humid   ustulatus    16.3  0.014  0.009
- 4 arid    calvus       13.7 -0.043  0.017
- 5 humid   nux          21.9 -0.042  0.007
- 6 humid   ustulatus    16.8 -0.023 -0.005
- 7 humid   ustulatus    19.2  0.014  0.016
- 8 humid   ustulatus    16.0  0.042  0.002
- 9 arid    galapaganus  18.9  0.011 -0.025
-10 humid   nux          26.6  0     -0.014
+<pre><code># A tibble: 223 × 4
+   habitat species      size  shape
+   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;
+ 1 humid   ustulatus    17.1 -0.029
+ 2 humid   ustulatus    20.1 -0.001
+ 3 humid   ustulatus    16.3  0.014
+ 4 arid    calvus       13.7 -0.043
+ 5 humid   nux          21.9 -0.042
+ 6 humid   ustulatus    16.8 -0.023
+ 7 humid   ustulatus    19.2  0.014
+ 8 humid   ustulatus    16.0  0.042
+ 9 arid    galapaganus  18.9  0.011
+10 humid   nux          26.6  0    
 # ℹ 213 more rows</code></pre>
 </div>
 </div>
@@ -596,60 +596,60 @@ Warning
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_delim</span>(<span class="st">"island-FL.tsv"</span>, <span class="at">delim =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 223 × 5
-   habitat species      size shape1 shape2
-   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
- 1 humid   ustulatus    17.1 -0.029  0.021
- 2 humid   ustulatus    20.1 -0.001  0.001
- 3 humid   ustulatus    16.3  0.014  0.009
- 4 arid    calvus       13.7 -0.043  0.017
- 5 humid   nux          21.9 -0.042  0.007
- 6 humid   ustulatus    16.8 -0.023 -0.005
- 7 humid   ustulatus    19.2  0.014  0.016
- 8 humid   ustulatus    16.0  0.042  0.002
- 9 arid    galapaganus  18.9  0.011 -0.025
-10 humid   nux          26.6  0     -0.014
+<pre><code># A tibble: 223 × 4
+   habitat species      size  shape
+   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;
+ 1 humid   ustulatus    17.1 -0.029
+ 2 humid   ustulatus    20.1 -0.001
+ 3 humid   ustulatus    16.3  0.014
+ 4 arid    calvus       13.7 -0.043
+ 5 humid   nux          21.9 -0.042
+ 6 humid   ustulatus    16.8 -0.023
+ 7 humid   ustulatus    19.2  0.014
+ 8 humid   ustulatus    16.0  0.042
+ 9 arid    galapaganus  18.9  0.011
+10 humid   nux          26.6  0    
 # ℹ 213 more rows</code></pre>
 </div>
 </div>
-<p>What happens if the wrong delimiter is specified—for instance, if we type <code>read_delim("island-FL.csv", delim = "$")</code>? In that case R will look for the <code>$</code> character to separate the columns, but since these do not occur anywhere, each row will be interpreted as a single column entry in its entirety:</p>
+<p>What happens if the wrong delimiter is specified—for instance, if we type <code>read_delim("island-FL.csv", delim = "%")</code>? In that case R will look for the <code>%</code> character to separate the columns, but since these do not occur anywhere, each row will be interpreted as a single column entry in its entirety:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_delim</span>(<span class="st">"island-FL.csv"</span>, <span class="at">delim =</span> <span class="st">"$"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_delim</span>(<span class="st">"island-FL.csv"</span>, <span class="at">delim =</span> <span class="st">"%"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 223 × 1
-   `habitat,species,size,shape1,shape2`
-   &lt;chr&gt;                               
- 1 humid,ustulatus,17.088,-0.029,0.021 
- 2 humid,ustulatus,20.06,-0.001,0.001  
- 3 humid,ustulatus,16.34,0.014,0.009   
- 4 arid,calvus,13.734,-0.043,0.017     
- 5 humid,nux,21.898,-0.042,0.007       
- 6 humid,ustulatus,16.848,-0.023,-0.005
- 7 humid,ustulatus,19.162,0.014,0.016  
- 8 humid,ustulatus,16.017,0.042,0.002  
- 9 arid,galapaganus,18.894,0.011,-0.025
-10 humid,nux,26.59,0,-0.014            
+   `habitat,species,size,shape` 
+   &lt;chr&gt;                        
+ 1 humid,ustulatus,17.088,-0.029
+ 2 humid,ustulatus,20.06,-0.001 
+ 3 humid,ustulatus,16.34,0.014  
+ 4 arid,calvus,13.734,-0.043    
+ 5 humid,nux,21.898,-0.042      
+ 6 humid,ustulatus,16.848,-0.023
+ 7 humid,ustulatus,19.162,0.014 
+ 8 humid,ustulatus,16.017,0.042 
+ 9 arid,galapaganus,18.894,0.011
+10 humid,nux,26.59,0            
 # ℹ 213 more rows</code></pre>
 </div>
 </div>
-<p>As seen, we have a tibble with a single column called <code>`habitat,species,size,shape1,shape2`</code>, which has the type <code>&lt;chr&gt;</code> (character string). One must beware of such mistakes, because the computer will not signal any errors: for all it cares, we <em>did</em> intend <code>$</code> to be the delimiter. However, one will not be able to properly work with the data subsequently if it gets loaded in this mistaken form.</p>
+<p>As seen, we have a tibble with a single column called <code>`habitat,species,size,shape1,shape2`</code>, which has the type <code>&lt;chr&gt;</code> (character string). One must beware of such mistakes, because the computer will not signal any errors: for all it cares, we <em>did</em> intend <code>%</code> to be the delimiter. However, one will not be able to properly work with the data subsequently if it gets loaded in this mistaken form.</p>
 <p>The CSV and TSV file formats are so common that there are shorthands available for loading them. Instead of writing <code>read_delim("island-FL.csv", delim = ",")</code>, one can equivalently type <code>read_csv("island-FL.csv")</code> for the same effect:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">"island-FL.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 223 × 5
-   habitat species      size shape1 shape2
-   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
- 1 humid   ustulatus    17.1 -0.029  0.021
- 2 humid   ustulatus    20.1 -0.001  0.001
- 3 humid   ustulatus    16.3  0.014  0.009
- 4 arid    calvus       13.7 -0.043  0.017
- 5 humid   nux          21.9 -0.042  0.007
- 6 humid   ustulatus    16.8 -0.023 -0.005
- 7 humid   ustulatus    19.2  0.014  0.016
- 8 humid   ustulatus    16.0  0.042  0.002
- 9 arid    galapaganus  18.9  0.011 -0.025
-10 humid   nux          26.6  0     -0.014
+<pre><code># A tibble: 223 × 4
+   habitat species      size  shape
+   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;
+ 1 humid   ustulatus    17.1 -0.029
+ 2 humid   ustulatus    20.1 -0.001
+ 3 humid   ustulatus    16.3  0.014
+ 4 arid    calvus       13.7 -0.043
+ 5 humid   nux          21.9 -0.042
+ 6 humid   ustulatus    16.8 -0.023
+ 7 humid   ustulatus    19.2  0.014
+ 8 humid   ustulatus    16.0  0.042
+ 9 arid    galapaganus  18.9  0.011
+10 humid   nux          26.6  0    
 # ℹ 213 more rows</code></pre>
 </div>
 </div>
@@ -657,19 +657,19 @@ Warning
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_tsv</span>(<span class="st">"island-FL.tsv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 223 × 5
-   habitat species      size shape1 shape2
-   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
- 1 humid   ustulatus    17.1 -0.029  0.021
- 2 humid   ustulatus    20.1 -0.001  0.001
- 3 humid   ustulatus    16.3  0.014  0.009
- 4 arid    calvus       13.7 -0.043  0.017
- 5 humid   nux          21.9 -0.042  0.007
- 6 humid   ustulatus    16.8 -0.023 -0.005
- 7 humid   ustulatus    19.2  0.014  0.016
- 8 humid   ustulatus    16.0  0.042  0.002
- 9 arid    galapaganus  18.9  0.011 -0.025
-10 humid   nux          26.6  0     -0.014
+<pre><code># A tibble: 223 × 4
+   habitat species      size  shape
+   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;
+ 1 humid   ustulatus    17.1 -0.029
+ 2 humid   ustulatus    20.1 -0.001
+ 3 humid   ustulatus    16.3  0.014
+ 4 arid    calvus       13.7 -0.043
+ 5 humid   nux          21.9 -0.042
+ 6 humid   ustulatus    16.8 -0.023
+ 7 humid   ustulatus    19.2  0.014
+ 8 humid   ustulatus    16.0  0.042
+ 9 arid    galapaganus  18.9  0.011
+10 humid   nux          26.6  0    
 # ℹ 213 more rows</code></pre>
 </div>
 </div>
@@ -677,33 +677,33 @@ Warning
 <section id="sec-rename" class="level2" data-number="4.5">
 <h2 data-number="4.5" class="anchored" data-anchor-id="sec-rename"><span class="header-section-number">4.5</span> Naming (and renaming) columns</h2>
 <p>All of the files we have looked at so far contained a <em>header</em> as their first row: instead of containing data, they contained the names of the data columns. Having such a header is good practice. Sometimes however, the header may be missing. For example, the file <a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL-nohead.csv"><code>islands-FL-nohead.csv</code></a> contains the same land snail data as the other files above, but it lacks a header. The first few lines of the file look like this:</p>
-<pre><code>humid,ustulatus,17.088,-0.029,0.021
-humid,ustulatus,20.06,-0.001,0.001
-humid,ustulatus,16.34,0.014,0.009
-arid,calvus,13.734,-0.043,0.017
-humid,nux,21.898,-0.042,0.007
-humid,ustulatus,16.848,-0.023,-0.005
-humid,ustulatus,19.162,0.014,0.016
-humid,ustulatus,16.017,0.042,0.002
-arid,galapaganus,18.894,0.011,-0.025
-humid,nux,26.59,0,-0.014</code></pre>
+<pre><code>humid,ustulatus,17.088,-0.029
+humid,ustulatus,20.06,-0.001
+humid,ustulatus,16.34,0.014
+arid,calvus,13.734,-0.043
+humid,nux,21.898,-0.042
+humid,ustulatus,16.848,-0.023
+humid,ustulatus,19.162,0.014
+humid,ustulatus,16.017,0.042
+arid,galapaganus,18.894,0.011
+humid,nux,26.59,0</code></pre>
 <p>If one tries to read this file either with <code>read_delim("island-FL-nohead.csv", delim = ",")</code> or the shorthand <code>read_csv("island-FL-nohead.csv")</code>, we get the following:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_delim</span>(<span class="st">"island-FL-nohead.csv"</span>, <span class="at">delim =</span> <span class="st">","</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 222 × 5
-   humid ustulatus   `17.088` `-0.029` `0.021`
-   &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
- 1 humid ustulatus       20.1   -0.001   0.001
- 2 humid ustulatus       16.3    0.014   0.009
- 3 arid  calvus          13.7   -0.043   0.017
- 4 humid nux             21.9   -0.042   0.007
- 5 humid ustulatus       16.8   -0.023  -0.005
- 6 humid ustulatus       19.2    0.014   0.016
- 7 humid ustulatus       16.0    0.042   0.002
- 8 arid  galapaganus     18.9    0.011  -0.025
- 9 humid nux             26.6    0      -0.014
-10 arid  calvus          17.9   -0.024   0.001
+<pre><code># A tibble: 222 × 4
+   humid ustulatus   `17.088` `-0.029`
+   &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt;    &lt;dbl&gt;
+ 1 humid ustulatus       20.1   -0.001
+ 2 humid ustulatus       16.3    0.014
+ 3 arid  calvus          13.7   -0.043
+ 4 humid nux             21.9   -0.042
+ 5 humid ustulatus       16.8   -0.023
+ 6 humid ustulatus       19.2    0.014
+ 7 humid ustulatus       16.0    0.042
+ 8 arid  galapaganus     18.9    0.011
+ 9 humid nux             26.6    0    
+10 arid  calvus          17.9   -0.024
 # ℹ 212 more rows</code></pre>
 </div>
 </div>
@@ -711,40 +711,40 @@ humid,nux,26.59,0,-0.014</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_delim</span>(<span class="st">"island-FL-nohead.csv"</span>, <span class="at">delim =</span> <span class="st">","</span>, <span class="at">col_names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 223 × 5
-   X1    X2             X3     X4     X5
-   &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
- 1 humid ustulatus    17.1 -0.029  0.021
- 2 humid ustulatus    20.1 -0.001  0.001
- 3 humid ustulatus    16.3  0.014  0.009
- 4 arid  calvus       13.7 -0.043  0.017
- 5 humid nux          21.9 -0.042  0.007
- 6 humid ustulatus    16.8 -0.023 -0.005
- 7 humid ustulatus    19.2  0.014  0.016
- 8 humid ustulatus    16.0  0.042  0.002
- 9 arid  galapaganus  18.9  0.011 -0.025
-10 humid nux          26.6  0     -0.014
+<pre><code># A tibble: 223 × 4
+   X1    X2             X3     X4
+   &lt;chr&gt; &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;
+ 1 humid ustulatus    17.1 -0.029
+ 2 humid ustulatus    20.1 -0.001
+ 3 humid ustulatus    16.3  0.014
+ 4 arid  calvus       13.7 -0.043
+ 5 humid nux          21.9 -0.042
+ 6 humid ustulatus    16.8 -0.023
+ 7 humid ustulatus    19.2  0.014
+ 8 humid ustulatus    16.0  0.042
+ 9 arid  galapaganus  18.9  0.011
+10 humid nux          26.6  0    
 # ℹ 213 more rows</code></pre>
 </div>
 </div>
 <p>While this works, the column names now default to the moderately informative labels <code>X1</code>, <code>X2</code>, and so on. In fact, one can use the <code>col_names</code> argument to explicitly specify a vector of character strings, which are then interpreted as the names to be given to the columns in case no header information exists within the file itself. For example:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_delim</span>(<span class="st">"island-FL-nohead.csv"</span>, <span class="at">delim =</span> <span class="st">","</span>,</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">"habitat"</span>, <span class="st">"species"</span>, <span class="st">"size"</span>, <span class="st">"shape1"</span>, <span class="st">"shape2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">"habitat"</span>, <span class="st">"species"</span>, <span class="st">"size"</span>, <span class="st">"shape"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 223 × 5
-   habitat species      size shape1 shape2
-   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
- 1 humid   ustulatus    17.1 -0.029  0.021
- 2 humid   ustulatus    20.1 -0.001  0.001
- 3 humid   ustulatus    16.3  0.014  0.009
- 4 arid    calvus       13.7 -0.043  0.017
- 5 humid   nux          21.9 -0.042  0.007
- 6 humid   ustulatus    16.8 -0.023 -0.005
- 7 humid   ustulatus    19.2  0.014  0.016
- 8 humid   ustulatus    16.0  0.042  0.002
- 9 arid    galapaganus  18.9  0.011 -0.025
-10 humid   nux          26.6  0     -0.014
+<pre><code># A tibble: 223 × 4
+   habitat species      size  shape
+   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;
+ 1 humid   ustulatus    17.1 -0.029
+ 2 humid   ustulatus    20.1 -0.001
+ 3 humid   ustulatus    16.3  0.014
+ 4 arid    calvus       13.7 -0.043
+ 5 humid   nux          21.9 -0.042
+ 6 humid   ustulatus    16.8 -0.023
+ 7 humid   ustulatus    19.2  0.014
+ 8 humid   ustulatus    16.0  0.042
+ 9 arid    galapaganus  18.9  0.011
+10 humid   nux          26.6  0    
 # ℹ 213 more rows</code></pre>
 </div>
 </div>
@@ -760,19 +760,19 @@ humid,nux,26.59,0,-0.014</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_excel</span>(<span class="st">"island-FL.xlsx"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 223 × 5
-   habitat species      size shape1 shape2
-   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
- 1 humid   ustulatus    17.1 -0.029  0.021
- 2 humid   ustulatus    20.1 -0.001  0.001
- 3 humid   ustulatus    16.3  0.014  0.009
- 4 arid    calvus       13.7 -0.043  0.017
- 5 humid   nux          21.9 -0.042  0.007
- 6 humid   ustulatus    16.8 -0.023 -0.005
- 7 humid   ustulatus    19.2  0.014  0.016
- 8 humid   ustulatus    16.0  0.042  0.002
- 9 arid    galapaganus  18.9  0.011 -0.025
-10 humid   nux          26.6  0     -0.014
+<pre><code># A tibble: 223 × 4
+   habitat species      size  shape
+   &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;
+ 1 humid   ustulatus    17.1 -0.029
+ 2 humid   ustulatus    20.1 -0.001
+ 3 humid   ustulatus    16.3  0.014
+ 4 arid    calvus       13.7 -0.043
+ 5 humid   nux          21.9 -0.042
+ 6 humid   ustulatus    16.8 -0.023
+ 7 humid   ustulatus    19.2  0.014
+ 8 humid   ustulatus    16.0  0.042
+ 9 arid    galapaganus  18.9  0.011
+10 humid   nux          26.6  0    
 # ℹ 213 more rows</code></pre>
 </div>
 </div>

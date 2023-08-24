@@ -330,3 +330,9 @@ Let us revisit the data of @Fauchaldetal2017 which we used in @sec-ggplot-exerci
 2. Create a similar plot, but do not filter for one single herd. Instead, have each herd occupy a different facet (sub-plot). Do this with the different herds making up a single row of facets, and then a single column of them.
 
 3. Since there are 11 different herds altogether, neither the row-wise nor the column-wise arrangement of the facets above is very satisfying: there are too many of them next to one another. Try re-plotting the results, but instead of `facet_grid`, use `facet_wrap(~ Herd)` which allows one to lay out the facets in several rows. (As usual, look up the help pages of `facet_wrap` if needed.)
+
+The remaining exercises use the Galápagos land snail data ([`island-FL.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.csv)).
+
+4. Create a plot with standardized `size` along the x-axis, standardized `shape` along the y-axis, each individual represented by a point colored by `species`, and with two facets corresponding to humid and arid `habitat` types. The facets should be side by side. How does this figure influence the interpretation you had in @sec-ggplot-exercises, exercise 15? That is: does the splitting of communities based on habitat type increase or decrease the overlap between different species?
+
+5. Re-create the previous plot with the two side-by-side facets, but in reverse order: the `humid` facet should be on the left and `arid` on the right. (Hint: convert `habitat` to factors!)

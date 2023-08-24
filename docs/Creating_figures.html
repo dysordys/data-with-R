@@ -555,7 +555,7 @@ Warning
 <p><img src="Creating_figures_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>It is now obvious that the two observations are distinct. Due to this problem, my recommendation is to avoid bar-and-whisker plots and simply use point-and-whisker ones instead.</p>
+<p>It is now obvious that the two observations are distinct. Due to this problem, my recommendation is to avoid bar-and-whisker plots and simply use point-and-whisker plots instead.</p>
 </div>
 </div>
 </section>
@@ -571,6 +571,16 @@ Warning
 <li><p>Instead of a histogram, make a density plot with the same data and display (look up <code>geom_density</code> if needed).</p></li>
 <li><p>Make box plots of the population size of each herd. Along the x-axis, each herd should be separately displayed; the y-axis should be population size. The box plots should summarize population sizes across all years.</p></li>
 <li><p>Let us go back to <code>sea_ice.tsv</code>. Make the following plot. Along the x-axis, have <code>Year</code>. Along the y-axis, <code>Month</code>. Then, for each month-year pair, color the given part of the plot darker for lower ice cover and lighter for more. (Hint: look up <code>geom_tile</code> if needed.) Finally, make sure to do all this only for the herd with the label <code>WAH</code> (filter the data before plotting).</p></li>
+</ol>
+<p>The following plotting exercises use the Galápagos land snail data (<a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.csv"><code>island-FL.csv</code></a>).</p>
+<ol start="9" type="1">
+<li><p>Create a density plot (<code>geom_density</code>) with shell size along the x-axis and the corresponding density of individuals along the y-axis. How much overlap is there between the sizes of the different species?</p></li>
+<li><p>Repeat the above exercise, but use the standardized size instead of the raw measurements. As a reminder, this means subtracting out the mean from each entry, and dividing the results by the standard deviation (<a href="Basic_data_wrangling.html#sec-mutate"><span>Section&nbsp;5.1.6</span></a>). Make sure to have clean, descriptive axis labels on the plot. What is the difference between this figure and the one obtained in the previous exercise using the non-standardized size values?</p></li>
+<li><p>Now do exercises 9-10 for shell shape instead of size.</p></li>
+<li><p>Create a scatterplot with <code>size</code> along the x-axis and <code>shape</code> along the y-axis. Each individual should be a point on the graph.</p></li>
+<li><p>Repeat the same, but use the standardized <code>size</code> and <code>shape</code> measurements along the axes. Compare the figures. In what do they differ?</p></li>
+<li><p>Create the same scatterplot with standardized <code>size</code> along the x-axis and <code>shape</code> along the y-axis, but with the points colored based on <code>habitat</code>. That is, individuals found in <code>humid</code> environments should all have one color, and those found in <code>arid</code> regions should have another. Do you see any patterns, in terms of whether certain shell sizes or shapes are more associated with a given type of habitat?</p></li>
+<li><p>Modify the previous plot by coloring the points based on species instead of habitat. How much trait overlap is there between individuals belonging to different species? How do you interpret this result, especially in light of what you previously saw in exercises 9-11?</p></li>
 </ol>
 
 

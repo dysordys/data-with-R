@@ -202,7 +202,7 @@ tibble(Species = c("species 1", "species 2"),
   theme_bw()
 ```
 
-It is now obvious that the two observations are distinct. Due to this problem, my recommendation is to avoid bar-and-whisker plots and simply use point-and-whisker ones instead.
+It is now obvious that the two observations are distinct. Due to this problem, my recommendation is to avoid bar-and-whisker plots and simply use point-and-whisker plots instead.
 :::
 
 
@@ -225,3 +225,19 @@ It is now obvious that the two observations are distinct. Due to this problem, m
 7. Make box plots of the population size of each herd. Along the x-axis, each herd should be separately displayed; the y-axis should be population size. The box plots should summarize population sizes across all years.
 
 8. Let us go back to `sea_ice.tsv`. Make the following plot. Along the x-axis, have `Year`. Along the y-axis, `Month`. Then, for each month-year pair, color the given part of the plot darker for lower ice cover and lighter for more. (Hint: look up `geom_tile` if needed.) Finally, make sure to do all this only for the herd with the label `WAH` (filter the data before plotting).
+
+The following plotting exercises use the Galápagos land snail data ([`island-FL.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.csv)).
+
+9. Create a density plot (`geom_density`) with shell size along the x-axis and the corresponding density of individuals along the y-axis. How much overlap is there between the sizes of the different species?
+
+10. Repeat the above exercise, but use the standardized size instead of the raw measurements. As a reminder, this means subtracting out the mean from each entry, and dividing the results by the standard deviation (@sec-mutate). Make sure to have clean, descriptive axis labels on the plot. What is the difference between this figure and the one obtained in the previous exercise using the non-standardized size values?
+
+11. Now do exercises 9-10 for shell shape instead of size.
+
+12. Create a scatterplot with `size` along the x-axis and `shape` along the y-axis. Each individual should be a point on the graph.
+
+13. Repeat the same, but use the standardized `size` and `shape` measurements along the axes. Compare the figures. In what do they differ?
+
+14. Create the same scatterplot with standardized `size` along the x-axis and `shape` along the y-axis, but with the points colored based on `habitat`. That is, individuals found in `humid` environments should all have one color, and those found in `arid` regions should have another. Do you see any patterns, in terms of whether certain shell sizes or shapes are more associated with a given type of habitat?
+
+15. Modify the previous plot by coloring the points based on species instead of habitat. How much trait overlap is there between individuals belonging to different species? How do you interpret this result, especially in light of what you previously saw in exercises 9-11?

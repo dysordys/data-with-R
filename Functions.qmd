@@ -12,7 +12,7 @@ flowchart LR
   F --> G([return value])
 ```
 
-We have already seen some functions at work in R: for example, `sqrt`, `log`, and `exp`, are all functions that take numbers and return some other number. In turn, the `paste` function (@sec-strings) takes one or more character strings and returns a single character string.
+We have already seen some functions at work in R: for example, `sqrt`, `log`, and `exp` are all functions that take numbers and return some other number. In turn, the `paste` function (@sec-strings) takes one or more character strings and returns a single character string.
 
 When we ask a function to do something, we are *calling* the function. The arguments of functions are always enclosed in parentheses. For example, executing `sqrt(9)`, calls the built-in square root function. Its argument (or input, or parameter) is 9, and its return value is the square root of 9, which is 3.
 
