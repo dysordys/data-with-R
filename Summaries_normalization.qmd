@@ -221,7 +221,7 @@ The first set of problems relies on the `iris` dataset---the same that we used i
 
 6. Finally, do it for both petal and sepal traits simultaneously, to obtain a fully tidy form of the `iris` data. That is, the key column (call it `Flower.Trait`) will have the values `Petal.Length`, `Petal.Width`, `Sepal.Length`, and `Sepal.Width`. And the value column (which you can call `Trait.Value`) will have the corresponding measurements.
 
-The subsequent exercises use the Galápagos land snail data from the previous two chapters ([`island-FL.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.csv)).
+The subsequent exercises use the Galápagos land snail data from the previous two chapters (see @sec-snail to review the description of the data).
 
 7. What is the average shell size of the whole community? What is its standard deviation? How about the average and standard deviation of shell shape?
 

@@ -52,7 +52,14 @@ And so on. Here the first row does not contain data, but instead contains the na
 
 ### The Galápagos land snail data {#sec-snail}
 
-It is worth explaining what this dataset represents, as we will be using it repeatedly in subsequent examples. Each row contains information on one land snail individual sampled from the Galápagos Islands. To simplify the data, the individuals have been restricted to just those that are from Floreana Island in the Galápagos. The information are `habitat` (this can be either "arid" or "humid"); `species` (which species the individual belongs to; the Genus is always *Naesiotus*, from the family Bulimulidae); `size` (a measurement of the absolute volume of the snail's shell); and finally, `shape` (a measurement for the shell's shape). Below are some pictures of these snails---courtesy of [Christine E. Parent](https://parentlab.weebly.com/) who took the photographs:
+It is worth explaining what the dataset in the file [`island-FL.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.csv) represents, as we will be using it repeatedly in subsequent examples. Each row contains information on one land snail individual sampled from the Galápagos Islands. To simplify the data, the individuals have been restricted to just those that are from Floreana Island in the Galápagos. The columns in the data are:
+
+-   `habitat`: This can be either "arid" or "humid".
+-   `species`: Which species the individual belongs to. The Genus is always *Naesiotus*, from the family Bulimulidae. The seven species in the data are *Naesiotus calvus*, *N. galapaganus*, *N. invalidus*, *N. nux*, *N. rugulosus*, *N. unifasciatus*, and *N. ustulatus*.
+-   `size`: A measurement of the absolute volume of the snail's shell. It is given in units we are not concerned with here, but larger values correspond to larger shells. See @ParentCrespi2009, @Kraemeretal2018, and @Kraemeretal2022 for more information.
+-   `shape`: A measurement for the shell's shape. Again, the units are not important for us here, but small values represent bulky and round shells, while large values represent long and slender shells.
+
+Below are some pictures of these snails (courtesy of [Dr. Christine E. Parent](https://parentlab.weebly.com/)):
 
 ![*Naesiotus ustulatus* -- a land snail from Floreana Island, Galápagos. Photo credits: Dr. Christine E. Parent.](N-ustulatus.jpg)
 
@@ -60,7 +67,7 @@ It is worth explaining what this dataset represents, as we will be using it repe
 
 ![*N. chemnitzioides* -- a land snail from San Cristóbal Island, Galápagos. Photo credits: Dr. Christine E. Parent.](N-chemnitzioides.jpg)
 
-The last two columns (`size` and `shape`) are given in units we are not concerned with here, but see @ParentCrespi2009, @Kraemeretal2018, and @Kraemeretal2022 for more information. The shape measurement, `shape`, has small values for bulky and round shells and large ones for long and slender shells. Shell morphology is an important indicator of microhabitat specialization in these snails: species with long slender shells (see the picture of *N. chemnitzioides* above for an example) are adaptations to arid environments due to their better surface-to-volume ratios, whereas species with round and bulky shells are better adapted to humid environments.
+Shell morphology is an important indicator of microhabitat specialization in these snails: species with long slender shells are adaptations to arid environments due to their better surface-to-volume ratios (see the picture of *N. chemnitzioides* above for an example), whereas species with round and bulky shells are better adapted to humid environments.
 
 ### Tabulator-separated and other delimited files
 

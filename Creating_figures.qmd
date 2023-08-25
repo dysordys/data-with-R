@@ -226,7 +226,7 @@ It is now obvious that the two observations are distinct. Due to this problem, m
 
 8. Let us go back to `sea_ice.tsv`. Make the following plot. Along the x-axis, have `Year`. Along the y-axis, `Month`. Then, for each month-year pair, color the given part of the plot darker for lower ice cover and lighter for more. (Hint: look up `geom_tile` if needed.) Finally, make sure to do all this only for the herd with the label `WAH` (filter the data before plotting).
 
-The following plotting exercises use the Galápagos land snail data ([`island-FL.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.csv)).
+The following plotting exercises use the Galápagos land snail data (@sec-snail).
 
 9. Create a density plot (`geom_density`) with shell size along the x-axis and the corresponding density of individuals along the y-axis. How much overlap is there between the sizes of the different species?
 

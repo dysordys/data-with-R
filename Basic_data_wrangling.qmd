@@ -1,6 +1,6 @@
 # Basic data manipulation {#sec-wrangling}
 
-## Selecting and manipulating data
+## Important functions for transforming data
 
 Let us start by loading the `tidyverse`:
 
