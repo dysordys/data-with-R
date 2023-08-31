@@ -179,19 +179,22 @@ We used the built-in color names `"steelblue"`, `"goldenrod"`, and `"forestgreen
 
 ## Reordering labels using factors {#sec-factors}
 
-In the previous examples, the order of text labels was always automatically determined. The basic rule in R is that the ordering follows the alphabet: the default is for `setosa` to precede `versicolor`, which will be followed by `virginica`. This default ordering can be inconvenient, however. Consider the following table of data, with hypothetical temperature measurements (in Celsius degrees) for each month of the year:
+In the previous examples, the order of text labels was always automatically determined. The basic rule in R is that the ordering follows the alphabet: the default is for `setosa` to precede `versicolor`, which will be followed by `virginica`. This default ordering can be inconvenient, however. Consider the data file [`temperature_Linkoping.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/temperature_Linkoping.csv) of average temperatures per month, measured in the town of Linköping, Sweden:
 
 ```{r}
-tibble(month = month.abb, temperature = 10 - 15*cos(seq(0, 2*pi, l=12)))
+#| message: false
+read_csv("temperature_Linkoping.csv")
 ```
 
-(`month.abb` is a built-in vector of character strings in R, with the abbreviations of the months' names from January to December.) So far so good. However, if we plot this with months along the x-axis and temperature along the y-axis, we run into trouble because R displays items by alphabetical instead of chronological order:
+The table has two columns: `month` and `average_temperature_C`, giving the mean temperature in each month across years 1991-2021.^[Data from <https://climate-data.org>.] So far so good. However, if we plot this with months along the x-axis and temperature along the y-axis, we run into trouble because R displays items by alphabetical instead of chronological order:
 
 ```{r}
-tibble(month = month.abb, temperature = 10 - 15*cos(seq(0, 2*pi, l=12))) |>
+#| message: false
+read_csv("temperature_Linkoping.csv") |>
   ggplot() +
-  aes(x = month, y = temperature) +
+  aes(x = month, y = average_temperature_C) +
   geom_point(colour = "steelblue") +
+  scale_y_continuous(name = "average temperature (Celsius)") +
   theme_bw()
 ```
 
@@ -200,23 +203,27 @@ To fix this, one must convert the type of `month` from a simple vector of charac
 One very convenient way of assigning factor levels is through the `tidyverse` function `as_factor`.^[There also exists a similarly-named function called `as.factor`, in addition to `as_factor`. It is the base R version of the same functionality. As usual, the `tidyverse` version offers improvements over the original, so it is recommended not to use `as.factor` at all, relying on just `as_factor` instead.] This function takes a vector of values and, if the values are numeric, assigns them levels based on those numerical values. However, if the values are character strings, then the levels are assigned in order of appearance within the vector. This is perfect for us, because the months are in proper order already within the tibble:
 
 ```{r}
-tibble(month = month.abb, temperature = 10 - 15*cos(seq(0, 2*pi, l=12))) |>
+#| message: false
+read_csv("temperature_Linkoping.csv") |>
   mutate(month = as_factor(month)) |>
   ggplot() +
-  aes(x = month, y = temperature) +
+  aes(x = month, y = average_temperature_C) +
   geom_point(colour = "steelblue") +
+  scale_y_continuous(name = "average temperature (Celsius)") +
   theme_bw()
 ```
 
-It is also possible to take a factor and reassign its factor levels manually. This can be done with the `fct_relevel` function:
+It is also possible to take a factor and reassign its levels manually. This can be done with the `fct_relevel` function:
 
 ```{r}
-tibble(month = month.abb, temperature = 10 - 15*cos(seq(0, 2*pi, l=12))) |>
+#| message: false
+read_csv("temperature_Linkoping.csv") |>
   mutate(month = fct_relevel(month, "Jan", "Feb", "Mar", "Apr", "May", "Jun",
                              "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")) |>
   ggplot() +
-  aes(x = month, y = temperature) +
+  aes(x = month, y = average_temperature_C) +
   geom_point(colour = "steelblue") +
+  scale_y_continuous(name = "average temperature (Celsius)") +
   theme_bw()
 ```
 
