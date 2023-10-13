@@ -63,11 +63,11 @@ One can check whether these assumptions hold with diagnostic plots. In this part
 
 ```{r}
 #| warning: false
-#| fig-height: 3
+#| fig-height: 6
 library(ggfortify)
 
 lm(Son ~ Father, data = heightDat) |>
-  autoplot(which=3:2, smooth.colour=NA, colour="steelblue", alpha=0.4) +
+  autoplot(smooth.colour = NA, colour = "steelblue", alpha = 0.3) +
   theme_bw()
 ```
 
@@ -103,10 +103,10 @@ The data have been carefully crafted so that the least-squares regression line h
 
 ```{r}
 #| warning: false
-#| fig-height: 3
+#| fig-height: 6
 lm(y ~ x, data = filter(ans_long, set == "1")) |> summary()
 lm(y ~ x, data = filter(ans_long, set == "1")) |>
-  autoplot(which = 3:2, smooth.colour = NA, colour = "steelblue") +
+  autoplot(smooth.colour = NA, colour = "steelblue") +
   theme_bw()
 ```
 
@@ -116,23 +116,23 @@ The situation changes for the other three sets. Let us look at set 2:
 
 ```{r}
 #| warning: false
-#| fig-height: 3
+#| fig-height: 6
 lm(y ~ x, data = filter(ans_long, set == "2")) |> summary()
 lm(y ~ x, data = filter(ans_long, set == "2")) |>
-  autoplot(which = 3:2, smooth.colour = NA, colour = "steelblue") +
+  autoplot(smooth.colour = NA, colour = "steelblue") +
   theme_bw()
 ```
 
-Blindly reading off the p-values without considering the diagnostic plots might lead one to take them seriously. This would be wrong however, as the assumptions of the linear regression are clearly not fulfilled based on the diagnostic plots. Especially the left one shows that the residuals are not independent, and certainly not identically and normally distributed.
+Blindly reading off the p-values without considering the diagnostic plots might lead one to take them seriously. This would be wrong however, as the assumptions of the linear regression are clearly not fulfilled based on the diagnostic plots. The left ones show that the residuals are not independent, and certainly not homoscedastic. The Q-Q plot additionally shows that they are not even normally distributed.
 
 In set 3, the trends are driven too much by a single outlier:
 
 ```{r}
 #| warning: false
-#| fig-height: 3
+#| fig-height: 6
 lm(y ~ x, data = filter(ans_long, set == "3")) |> summary()
 lm(y ~ x, data = filter(ans_long, set == "3")) |>
-  autoplot(which = 3:2, smooth.colour = NA, colour = "steelblue") +
+  autoplot(smooth.colour = NA, colour = "steelblue") +
   theme_bw()
 ```
 
@@ -140,10 +140,10 @@ As before, the diagnostic plots show that the independence of the residuals is v
 
 ```{r}
 #| warning: false
-#| fig-height: 3
+#| fig-height: 6
 lm(y ~ x, data = filter(ans_long, set == "4")) |> summary()
 lm(y ~ x, data = filter(ans_long, set == "4")) |>
-  autoplot(which = 3:2, smooth.colour = NA, colour = "steelblue") +
+  autoplot(smooth.colour = NA, colour = "steelblue") +
   theme_bw()
 ```
 

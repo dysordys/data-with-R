@@ -148,33 +148,34 @@ library(ggfortify)
 And now, we can simply give the result of the `lm` function as input to the function `autoplot`:
 
 ```{r}
+#| fig-height: 6
 lm(weight ~ group, data = PlantGrowth) |> autoplot()
 ```
 
-We see four plots above. The top left of these shows the residuals against the fitted values (notice that the three values along the x-axis correspond to the means of the three groups `ctrl`, `trt1`, and `trt2`). If the points have no trend of increase or decrease, and the spread of the points is roughly constant, then they adhere to ANOVA assumptions. The blue line is a moving regression line which helps decide whether there is a trend; in this case, it would be hard to argue that any trend is due to something else than chance.
+We see four plots above. The top left of these shows the residuals against the fitted values (notice that the three values along the x-axis correspond to the means of the three groups `ctrl`, `trt1`, and `trt2`). If the points have no trends of increase, decrease, valleys, or humps, and the spread of the points is roughly constant, then they adhere to ANOVA assumptions. The blue line is a moving regression line which helps decide whether there is a trend; in this case, it would be hard to argue that any trend is due to something else than chance.
 
-The bottom left plot is much the same as the top left one, except that it takes the absolute values of the residuals. This is done because, since residuals will by definition be more or less symmetrically distributed around zero, one can effectively double the precision of the diagnostic by focusing only on magnitudes. For statistical reasons that do not concern us here, the square roots of these absolute values tend to behave much better, which is why we see the square root being taken along the y-axis. The blue line is again a locally-weighted estimate, which ought to be as flat as possible. In this case, we see that it more or less is.
+The bottom left plot is much the same as the top left one, except it takes the absolute values of the residuals. This is done because, since residuals will by definition be more or less symmetrically distributed around zero, one can effectively double the precision of the diagnostic by focusing only on magnitudes. For statistical reasons that do not concern us here, the square roots of these absolute values tend to behave much better, which is why we see the square root being taken along the y-axis. This plot is good for spotting whether the variance of the residuals depends on the fitted values. To satisfy the requirements of ANOVA, there should be no such dependence.^[In technical terms, the variation should be *homoscedastic* (be approximately the same for all values of the predictor) as opposed to *heteroscedastic*.] The blue line is again a locally-weighted estimate, which ought to be as flat as possible.
 
-The top right graph offers a visualization of how well the residuals follow a normal distribution. The idea behind this *quantile-quantile plot* (Q--Q plot) is that if the residuals are indeed normally distributed, then we can line them up in increasing order along the x-axis, and for each of them, plot the theoretically expected value (based on normality) along the y-axis. If these observed vs. theoretically predicted values fall on the identity line, then there is a perfect match between theory and observation, and the residuals are normally distributed. The stronger the deviation from the dashed line indicating a perfect theoretical match,^[Since the comparison is against the *standard* normal distribution with variance 1, but the data might have any variance, the dashed line might not correspond to the identity line, but to some other straight line. It is still true that the closer the data fall to it, the more perfectly normal the residuals are.] the more non-normal the residuals are.
+The top right graph offers a visualization of how well the residuals follow a normal distribution. The idea behind this *quantile-quantile plot* (Q-Q plot) is that if the residuals are indeed normally distributed, then we can line them up in increasing order along the x-axis, and for each of them, plot the theoretically expected value (based on normality) along the y-axis. If these observed vs. theoretically predicted values fall on the dashed straight line, then there is a perfect match between theory and observation, and the residuals are normally distributed. The stronger the deviation from the dashed line indicating a perfect theoretical match, the more non-normal the residuals are.
 
 The bottom right graph measures the "leverage" of each point, which is a measure of how sensitively the regression reacts to removing one data point. We will not be concerned with this plot.
 
-In fact, we can remove this graph from the diagnostic plots. We may even remove the top left one, since the bottom left carries the same information in a better way. Further, we can also remove the blue lines, which often do more to confuse than to help. (For example, one can see a slight downward trend in the blue line in the bottom left graph. Looking at all points together reveals how little this trend means.) To select only the bottom-left and top-right diagnostic plots, one can pass the argument `which = 3:2` to `autoplot`, which chooses just the third and second of the graphs (in that order). In turn, the `smooth.colour = NA` argument will remove the blue lines:
+The blue smoother lines in the left two plots often do more to confuse than to help. For example, one can see a slight downward trend in the blue line in the bottom left graph, but looking at all points together reveals how little this trend means. The `smooth.colour = NA` argument removes the blue lines:
 
 ```{r}
 #| warning: false
-#| fig-height: 3
+#| fig-height: 6
 lm(weight ~ group, data = PlantGrowth) |>
-  autoplot(which = 3:2, smooth.colour = NA)
+  autoplot(smooth.colour = NA)
 ```
 
-One may can go even further. Since `autoplot` returns a standard `ggplot` object, we can add various theme options:
+One may can go even further. Since `autoplot` returns a `ggplot` object, we can add various theme options to make the plot prettier. We can also increase the transparency of the points to better see where and how much they overlap with one another:
 
 ```{r}
 #| warning: false
-#| fig-height: 3
+#| fig-height: 6
 lm(weight ~ group, data = PlantGrowth) |>
-  autoplot(which=3:2, smooth.colour=NA, colour="steelblue", alpha=0.7) +
+  autoplot(smooth.colour = NA, colour = "steelblue", alpha = 0.7) +
   theme_bw()
 ```
 

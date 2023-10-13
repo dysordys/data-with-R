@@ -49,15 +49,15 @@ In other words, the uptake rates are modeled via a combination of the effect of 
 
 ```{r}
 #| warning: false
-#| fig-height: 3
+#| fig-height: 6
 library(ggfortify)
 
 lm(uptake ~ conc + Type * Treatment, data = CO2) |>
-  autoplot(which=3:2, smooth.colour=NA, colour="steelblue", alpha=0.7) +
+  autoplot(smooth.colour = NA, colour = "steelblue", alpha = 0.7) +
   theme_bw()
 ```
 
-While the Q--Q plot could be better, there is not much reason not to trust the model---other than the fact, of course, that the data in fact depend on concentrations in a manifestly nonlinear way. We will come back to this point in @sec-nonlin-regression.
+The Q-Q plot is less than amazing. Otherwise, given that the data in fact depend on concentrations in a manifestly nonlinear way, the diagnostics look surprisingly good. We will come back to the point about nonlinearity in @sec-nonlin-regression.
 
 It is also informative to apply the function `summary` on the model fit in addition to `anova`, to obtain the regression slopes and intercept:
 
@@ -69,11 +69,11 @@ As good as this model looks, one can argue based on the plot of the data that th
 
 ```{r}
 #| warning: false
-#| fig-height: 3
+#| fig-height: 6
 lm(uptake ~ conc * Type * Treatment, data = CO2) |> anova()
 lm(uptake ~ conc * Type * Treatment, data = CO2) |> summary()
 lm(uptake ~ conc * Type * Treatment, data = CO2) |>
-  autoplot(which=3:2, smooth.colour=NA, colour="steelblue", alpha=0.7) +
+  autoplot(smooth.colour = NA, colour = "steelblue", alpha = 0.7) +
   theme_bw()
 ```
 

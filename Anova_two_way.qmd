@@ -67,13 +67,13 @@ As in the case of one-way ANOVA, diagnostic plots and post-hoc testing (Tukey te
 
 ```{r}
 #| warning: false
-#| fig-height: 3
+#| fig-height: 6
 library(ggfortify)
 
 ToothGrowth |>
   mutate(dose = as_factor(dose)) |>
   lm(len ~ dose * supp, data = _) |>
-  autoplot(which=3:2, smooth.colour=NA, colour="steelblue", alpha=0.7) +
+  autoplot(smooth.colour = NA, colour = "steelblue", alpha = 0.7) +
   theme_bw()
 ```
 
