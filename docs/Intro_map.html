@@ -339,6 +339,21 @@ trt2-trt1  0.865  0.1737839 1.5562161 0.0120064</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>tukeyTest <span class="ot">&lt;-</span> <span class="cf">function</span>(modelFit) modelFit <span class="sc">|&gt;</span> <span class="fu">aov</span>() <span class="sc">|&gt;</span> <span class="fu">TukeyHSD</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Two features in the definition of <code>tukeyTest</code> above may look unfamiliar. First, the body of the function was not enclosed between a pair of curly braces <code>{...}</code>. The rule in R is as follows: an arbitrary block of code between curly braces, potentially made up of several expressions, is treated as one single expression. Its value is by definition the final evaluated expression within the braces. This also means that the curly braces are superfluous whenever they contain only a single expression.</p>
+<p>Second, in this function the <code>return</code> keyword was not used. Like curly braces, <code>return</code> is optional. If omitted, the final expression evaluated within the body of the function automatically becomes the return value.</p>
+<p>Whether to use braces and <code>return</code> even in cases when they are not needed is largely a question of personal coding style. From now on, they will often be omitted whenever their absence does not hamper program readability.</p>
+</div>
+</div>
 <p>Using this function, we can now simply write:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span> <span class="fu">tukeyTest</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -355,30 +370,15 @@ trt2-ctrl  0.494 -0.1972161 1.1852161 0.1979960
 trt2-trt1  0.865  0.1737839 1.5562161 0.0120064</code></pre>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Two features in the definition of <code>tukeyTest</code> above may look unfamiliar. First, the body of the function was not enclosed between a pair of curly braces <code>{...}</code>. The rule in R is as follows: an arbitrary block of code between curly braces, potentially made up of several expressions, is treated as one single expression. Its value is by definition the final evaluated expression within the braces. This also means that the curly braces are superfluous whenever they contain only a single expression.</p>
-<p>Second, in this function the <code>return</code> keyword was not used. Like curly braces, <code>return</code> is optional. If omitted, the final expression evaluated within the body of the function automatically becomes the return value.</p>
-<p>Whether to use braces and <code>return</code> even in cases when they are not needed is largely a question of personal coding style. From now on, they will often be omitted whenever their absence does not hamper program readability.</p>
-</div>
-</div>
-<p>Another useful function we can write helps use statistical procedures within a pipeline. As we have seen, most statistical functions take a formula as their first argument and the data as their second (and then they may take further, method-specific arguments as well, like <code>conf.int</code> in the function <code>wilcox.test</code>). Since the pipe operator <code>|&gt;</code> is often used in conjunction with functions like <code>select</code>, <code>mutate</code>, <code>pivot_longer</code>, <code>summarise</code>, etc. which all return a data frame, it would be convenient to reverse the order of arguments in all statistical functions, with the data coming first and the formula coming second. In fact, such a function is easy to write. We could call it <code>stats</code>:</p>
+<p>Another useful function we can write helps use statistical procedures within a pipeline. As we have seen, most statistical functions take a formula as their first argument and the data as their second (and then they may take further, method-specific arguments as well, like <code>conf.int</code> in the function <code>wilcox.test</code>). Since the pipe operator <code>|&gt;</code> is often used in conjunction with functions like <code>select</code>, <code>mutate</code>, <code>pivot_longer</code>, <code>summarise</code>, etc. which all return a data frame, it would be convenient to reverse the order of arguments in all statistical functions, with the data coming first and the formula coming second. In fact, such a function is easy to write. We could call it <code>tidystat</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="cf">function</span>(data, formula, method) <span class="fu">method</span>(formula, data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>tidystat <span class="ot">&lt;-</span> <span class="cf">function</span>(data, formula, method) <span class="fu">method</span>(formula, data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here <code>method</code> is the statistical function we wish to use. For example:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"ctrl"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stats</span>(weight <span class="sc">~</span> group, wilcox.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidystat</span>(weight <span class="sc">~</span> group, wilcox.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Wilcoxon rank sum exact test
@@ -402,9 +402,9 @@ W = 16, p-value = 0.008931
 alternative hypothesis: true location shift is not equal to 0</code></pre>
 </div>
 </div>
-<p>We can add a further improvement to the <code>stats</code> function. As it is, it can only take the formula and the data as inputs, but not any other, function-specific arguments. In R, there is a way of passing arbitrary extra arguments, using the ellipsis (<code>...</code>). We can redefine <code>stats</code> this way:</p>
+<p>We can add a further improvement to the <code>tidystat</code> function. As it is, it can only take the formula and the data as inputs, but not any other, function-specific arguments. In R, there is a way of passing arbitrary extra arguments, using the ellipsis (<code>...</code>). We can redefine <code>tidystat</code> this way:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="cf">function</span>(data, formula, method, ...) {</span>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tidystat <span class="ot">&lt;-</span> <span class="cf">function</span>(data, formula, method, ...) {</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">method</span>(formula, data, ...) <span class="co"># The ... means "possibly more arguments"</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -412,7 +412,7 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"ctrl"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stats</span>(weight <span class="sc">~</span> group, wilcox.test, <span class="at">conf.int =</span> <span class="cn">TRUE</span>, <span class="at">conf.level =</span> <span class="fl">0.99</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidystat</span>(weight <span class="sc">~</span> group, wilcox.test, <span class="at">conf.int =</span> <span class="cn">TRUE</span>, <span class="at">conf.level =</span> <span class="fl">0.99</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Wilcoxon rank sum exact test
@@ -427,10 +427,10 @@ difference in location
                 -0.945 </code></pre>
 </div>
 </div>
-<p>From now on, we can use <code>stats</code> for performing various statistical procedures:</p>
+<p>From now on, we can use <code>tidystat</code> for performing various statistical procedures:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA) <span class="co"># For the Dunn test</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span> <span class="fu">stats</span>(weight <span class="sc">~</span> group, lm) <span class="sc">|&gt;</span> <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span> <span class="fu">tidystat</span>(weight <span class="sc">~</span> group, lm) <span class="sc">|&gt;</span> <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Analysis of Variance Table
 
@@ -441,7 +441,7 @@ Residuals 27 10.4921  0.3886
 ---
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span> <span class="fu">stats</span>(weight <span class="sc">~</span> group, lm) <span class="sc">|&gt;</span> <span class="fu">tukeyTest</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span> <span class="fu">tidystat</span>(weight <span class="sc">~</span> group, lm) <span class="sc">|&gt;</span> <span class="fu">tukeyTest</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  Tukey multiple comparisons of means
     95% family-wise confidence level
@@ -454,7 +454,7 @@ trt1-ctrl -0.371 -1.0622161 0.3202161 0.3908711
 trt2-ctrl  0.494 -0.1972161 1.1852161 0.1979960
 trt2-trt1  0.865  0.1737839 1.5562161 0.0120064</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span> <span class="fu">stats</span>(weight <span class="sc">~</span> group, kruskal.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span> <span class="fu">tidystat</span>(weight <span class="sc">~</span> group, kruskal.test)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Kruskal-Wallis rank sum test
@@ -462,7 +462,7 @@ trt2-trt1  0.865  0.1737839 1.5562161 0.0120064</code></pre>
 data:  weight by group
 Kruskal-Wallis chi-squared = 7.9882, df = 2, p-value = 0.01842</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span> <span class="fu">stats</span>(weight <span class="sc">~</span> group, dunnTest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span> <span class="fu">tidystat</span>(weight <span class="sc">~</span> group, dunnTest)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Comparison         Z    P.unadj      P.adj
 1 ctrl - trt1  1.117725 0.26368427 0.26368427
@@ -473,8 +473,8 @@ Kruskal-Wallis chi-squared = 7.9882, df = 2, p-value = 0.01842</code></pre>
 </section>
 <section id="higher-order-functions" class="level2" data-number="15.2">
 <h2 data-number="15.2" class="anchored" data-anchor-id="higher-order-functions"><span class="header-section-number">15.2</span> Higher-order functions</h2>
-<p>If we think about the <code>stats</code> function above, something strange has happened. We are used to the idea of functions taking numbers, character strings, logical values, or even data frames as their arguments. What we have not paid much attention to before is what happens if the input to a function is itself another function. Yet this is precisely what <code>stats</code> does: its <code>method</code> argument is a function object.</p>
-<p>In R, this is perfectly legal, and its use and interpretation is every bit as natural as it was in <code>stats</code>. Functions which take other functions as arguments are often called <em>higher-order functions</em>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> To emphasize again: there really is nothing special about such functions, and they can be used in much the same way as “ordinary” functions.</p>
+<p>If we think about the <code>tidystat</code> function above, something strange has happened. We are used to the idea of functions taking numbers, character strings, logical values, or even data frames as their arguments. What we have not paid much attention to before is what happens if the input to a function is itself another function. Yet this is precisely what <code>tidystat</code> does: its <code>method</code> argument is a function object.</p>
+<p>In R, this is perfectly legal, and its use and interpretation is every bit as natural as it was in <code>tidystat</code>. Functions which take other functions as arguments are often called <em>higher-order functions</em>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> To emphasize again: there really is nothing special about such functions, and they can be used in much the same way as “ordinary” functions.</p>
 <p>One very natural example for a higher-order function is integration. An integral (at least in simple cases) takes three inputs: a function to integrate, a lower limit of integration, and an upper limit of integration. The output is the (sign-weighted) area under the function’s curve, evaluated between the lower and upper limits. This is stressed even in the usual mathematical notation for integrals: when we write <span class="math display">\[ \int_0^1 x^2 \,\text{d} x = \frac{1}{3}\]</span> (a true statement), we show the lower and upper limits of 0 and 1 at the bottom and top of the integral sign, and the function to be integrated (in this case, <span class="math inline">\(f(x) = x^2\)</span>) in between the integral sign and <span class="math inline">\(\text{d} x\)</span>.</p>
 <p>If you do not know how integrals do their magic, there is no need to worry, because R has a built-in function called <code>integrate</code> to do the calculations for you. <code>integrate</code> takes the three arguments described above: the function to integrate, and the lower and upper limits of integration. To perform the above integral, we can write:</p>
 <div class="cell">
