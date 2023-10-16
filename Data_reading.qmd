@@ -52,7 +52,7 @@ And so on. Here the first row does not contain data, but instead contains the na
 
 ### The Galápagos land snail data {#sec-snail}
 
-It is worth explaining what the dataset in the file [`island-FL.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.csv) represents, as we will be using it repeatedly in subsequent examples. Each row contains information on one land snail individual sampled from the Galápagos Islands. To simplify the data, the individuals have been restricted to just those that are from Floreana Island in the Galápagos. The columns in the data are:
+It is worth explaining what the dataset in the file [`island-FL.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL.zip) represents, as we will be using it repeatedly in subsequent examples. Each row contains information on one land snail individual sampled from the Galápagos Islands. To simplify the data, the individuals have been restricted to just those that are from Floreana Island in the Galápagos. The columns in the data are:
 
 -   `habitat`: This can be either "arid" or "humid".
 -   `species`: Which species the individual belongs to. The Genus is always *Naesiotus*, from the family Bulimulidae. The seven species in the data are *Naesiotus calvus*, *N. galapaganus*, *N. invalidus*, *N. nux*, *N. rugulosus*, *N. unifasciatus*, and *N. ustulatus*.
