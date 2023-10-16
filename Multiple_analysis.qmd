@@ -2,7 +2,7 @@
 
 ## Motivating example
 
-This chapter is on performing statistical (or other) analyses *en masse*. To motivate the problem, let us start from a dataset, [`fruit_fly_wings.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/fruit_fly_wings.csv), that has been adapted from @Bolstadetal2015:
+This chapter is on performing statistical (or other) analyses *en masse*. To motivate the problem, let us start from a dataset, [`fruit_fly_wings.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/fruit_fly_wings.zip), that has been adapted from @Bolstadetal2015:
 
 ```{r}
 #| message: false
@@ -175,13 +175,13 @@ In summary, a very powerful way of analyzing data is to perform many analyses at
 
 ## Exercises
 
-1. Our analysis on the sex differences in the wing length of fruit flies ([`fruit_fly_wings.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/fruit_fly_wings.csv)) revealed whether there was a significant difference within each species. However, it did not say anything about which sex tends to have a longer wing. Perform this analysis here.
+1. Our analysis on the sex differences in the wing length of fruit flies ([`fruit_fly_wings.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/fruit_fly_wings.zip)) revealed whether there was a significant difference within each species. However, it did not say anything about which sex tends to have a longer wing. Perform this analysis here.
     * Create a graph with the difference between mean female and mean male wing lengths along the x-axis, and the species along the y-axis. You can represent the difference of means in each species by a point (`geom_point`).
     * How many species are there where females have longer wings on average? How many where males do?
     * Which species shows the largest degree of sexual dimorphism?
     * List the species where males have, on average, longer wings than females.
 
-2. The goal of the original study by Bolstad et al. (2015 PNAS) was to see the allometric relationship between wing length and the length of the L2 vein that runs across the wing, in different species of fruit flies.
+2. The goal of the original study by @Bolstadetal2015 was to see the allometric relationship between wing length and the length of the L2 vein that runs across the wing, in different species of fruit flies.
     * Obtain the slope from a linear regression between wing size and L2 vein length (which has been logged in the data) for each species and sex.
     * Create a histogram of the regression slopes. What is the (approximate) distribution of the slopes?
     * What is the mean and the standard deviation of the distribution of slopes? What is their range? Are the slopes all positive, all negative, or vary between the two? What does this tell you about the relationship between wing size and L2 vein length in general?

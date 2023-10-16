@@ -1,6 +1,6 @@
 # Simple linear regression {#sec-linreg}
 
-*Linear regression* was invented by Sir Francis Galton (half-cousin to Charles Darwin), in relation to a very specific problem. He was studying the relationship between the body heights of humans and their children. We can follow his lead and look at a dataset ([`Pearson.tsv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/Pearson.tsv)) which is similar to the one used by Sir Francis, but was in fact gathered by Karl Pearson in 1903. The fact that Pearson's data strictly focuses on fathers and their sons, excluding mothers and daughters, contributes an extra air of historical authenticity to the analysis:
+*Linear regression* was invented by Sir Francis Galton (half-cousin to Charles Darwin), in relation to a very specific problem. He was studying the relationship between the body heights of humans and their children. We can follow his lead and look at a dataset ([`Pearson.tsv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/Pearson.zip)) which is similar to the one used by Sir Francis, but was in fact gathered by Karl Pearson in 1903. The fact that Pearson's data strictly focuses on fathers and their sons, excluding mothers and daughters, contributes an extra air of historical authenticity to the analysis:
 
 ```{r}
 #| message: false
@@ -207,6 +207,6 @@ The Theil--Sen regression correctly recognizes the outlier for what it is, and r
 
 ## Exercises
 
-1. The file [`plant.growth.rate.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/plant.growth.rate.csv) contains individual plant growth data (mm/week), as a function of soil moisture content. Do plants grow better in more moist soils? Visualize the relationship, then perform and interpret a linear regression using both parametric and non-parametric methods. Use diagnostic plots to check whether the assumptions of the parametric test are satisfied.
+1. The file [`plant_growth_rate.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/plant_growth_rate.zip) contains individual plant growth data (mm/week), as a function of soil moisture content. Do plants grow better in more moist soils? Visualize the relationship, then perform and interpret a linear regression using both parametric and non-parametric methods. Use diagnostic plots to check whether the assumptions of the parametric test are satisfied.
 
 2. It is difficult to measure the height of a tree. By contrast, the diameter at breast height (DBH) is easy to measure. Can one infer the height of a tree by measuring its DBH? The built-in dataset `trees` contains DBH data (somewhat misleadingly labeled `Girth`), as well as measured height and timber volume of 31 felled black cherry trees. You can ignore timber volume, and focus instead on how well DBH predicts tree height. Plot the relationship, perform both parametric and non-parametric regression, and create diagnostic plots. Interpret the results, and summarize how reliable it is to use DBH to infer tree height.
