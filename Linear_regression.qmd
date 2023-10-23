@@ -152,7 +152,7 @@ Clearly, homoscedasticity (equality of residual variances across all values of t
 These examples are there to urge caution when interpreting regression statistics. This problem becomes much more acute when relying on *multiple regression*, where there are more than one predictor variables. Since high-dimensional data cannot be visualized as easily as the datasets above, often the diagnostic plots are the only way to tell whether the assumptions of regression hold or not.
 
 
-## A non-parametric method: Theil--Sen regression
+## A non-parametric method: Theil--Sen regression {#sec-theilsen}
 
 A nonparametric alternative to least-squares regression is the *Theil--Sen regression*. It is generally much more robust against outliers than the least-squares method. It also does not require that the residuals are normally distributed, or that they are homoscedastic. There are also two disadvantages, the main one being that it can only be used for simple regression (one single predictor). It can also be slower to compute, but with today's computers, this is rarely an issue.
 
@@ -160,7 +160,7 @@ The way Theil--Sen regression works is simple:
 
 * A line is fit between all possible pairs of points, and their slopes are recorded.
 * The overall regression slope *m* is the median of all these pairwise slopes.
-* The intercept *b* is the median of all *y*~*i*~ -- *m* *x*~*i*~ values, where *x*~*i*~ is the *i*th measurement of the predictor and *y*~*i*~ the *i*th the corresponding response.
+* The intercept *b* is the median of all *y*~*i*~ -- *m* *x*~*i*~ values, where *x*~*i*~ is the *i*th measurement of the predictor and *y*~*i*~ the corresponding response.
 
 To use the Theil--Sen regression, one has to install the package `mblm` ("median-based linear models"):
 
@@ -203,6 +203,13 @@ ans_long |>
 ```
 
 The Theil--Sen regression correctly recognizes the outlier for what it is, and remains unaffected by it.
+
+One small note: above, we relied on a function called `predict`. This simply returns the model-predicted results for each value of the predictor:
+
+```{r}
+predict(leastSquaresFit)
+predict(TheilSenFit)
+```
 
 
 ## Exercises
