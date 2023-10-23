@@ -154,13 +154,13 @@ These examples are there to urge caution when interpreting regression statistics
 
 ## A non-parametric method: Theil--Sen regression
 
-A nonparametric alternative to least-squares regression is the *Theil--Sen regression*. It is generally much more robust against outliers than the least-squares method. It also does not require that the residuals are normally distributed, or that they are homoscedastic. There are also two disadvantages, the main one being that it can only be used for simple regression (one single predictor). It can also be slower to compute, but with modern computers, this is rarely an issue.
+A nonparametric alternative to least-squares regression is the *Theil--Sen regression*. It is generally much more robust against outliers than the least-squares method. It also does not require that the residuals are normally distributed, or that they are homoscedastic. There are also two disadvantages, the main one being that it can only be used for simple regression (one single predictor). It can also be slower to compute, but with today's computers, this is rarely an issue.
 
 The way Theil--Sen regression works is simple:
 
 * A line is fit between all possible pairs of points, and their slopes are recorded.
 * The overall regression slope *m* is the median of all these pairwise slopes.
-* The intercept *b* is the median of all *y*~*i*~ -- *m* *x*~*i*~ values, where *x*~*i*~ is the *i*th predictor and *y*~*i*~ the *i*th measurement at that predictor.
+* The intercept *b* is the median of all *y*~*i*~ -- *m* *x*~*i*~ values, where *x*~*i*~ is the *i*th measurement of the predictor and *y*~*i*~ the *i*th the corresponding response.
 
 To use the Theil--Sen regression, one has to install the package `mblm` ("median-based linear models"):
 
@@ -186,8 +186,8 @@ mblm(y ~ x, dataframe = filter(ans_long, set == "3")) |> summary()
 As seen, the predicted intercept and slope are no longer 3 and 0.5, but 4 and 0.35 instead. Visualizing this, side by side with the ordinary least-squares regression:
 
 ```{r}
-leastSquaresFit <-lm(y ~ x, data = filter(ans_long, set == "3"))
-TheilSenFit <-mblm(y ~ x, dataframe = filter(ans_long, set == "3"))
+leastSquaresFit <- lm(y ~ x, data = filter(ans_long, set == "3"))
+TheilSenFit <- mblm(y ~ x, dataframe = filter(ans_long, set == "3"))
 
 ans_long |>
   filter(set == "3") |>
@@ -209,4 +209,4 @@ The Theil--Sen regression correctly recognizes the outlier for what it is, and r
 
 1. The file [`plant_growth_rate.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/plant_growth_rate.zip) contains individual plant growth data (mm/week), as a function of soil moisture content. Do plants grow better in more moist soils? Visualize the relationship, then perform and interpret a linear regression using both parametric and non-parametric methods. Use diagnostic plots to check whether the assumptions of the parametric test are satisfied.
 
-2. It is difficult to measure the height of a tree. By contrast, the diameter at breast height (DBH) is easy to measure. Can one infer the height of a tree by measuring its DBH? The built-in dataset `trees` contains DBH data (somewhat misleadingly labeled `Girth`), as well as measured height and timber volume of 31 felled black cherry trees. You can ignore timber volume, and focus instead on how well DBH predicts tree height. Plot the relationship, perform both parametric and non-parametric regression, and create diagnostic plots. Interpret the results, and summarize how reliable it is to use DBH to infer tree height.
+2. It is difficult to measure the height of a tree. By contrast, the diameter at breast height (DBH) is easy to measure. Can one infer the height of a tree by measuring its DBH? The built-in dataset `trees` contains DBH data (labeled `Girth`), as well as measured height and timber volume of 31 felled black cherry trees. You can ignore timber volume, and focus instead on how well DBH predicts tree height. Plot the relationship, perform both parametric and non-parametric regression, and create diagnostic plots. Interpret the results, and summarize how reliable it is to use DBH to infer tree height.

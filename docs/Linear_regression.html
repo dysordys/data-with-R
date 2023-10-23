@@ -606,12 +606,12 @@ F-statistic:    18 on 1 and 9 DF,  p-value: 0.002165</code></pre>
 </section>
 <section id="a-non-parametric-method-theilsen-regression" class="level2" data-number="13.2">
 <h2 data-number="13.2" class="anchored" data-anchor-id="a-non-parametric-method-theilsen-regression"><span class="header-section-number">13.2</span> A non-parametric method: Theil–Sen regression</h2>
-<p>A nonparametric alternative to least-squares regression is the <em>Theil–Sen regression</em>. It is generally much more robust against outliers than the least-squares method. It also does not require that the residuals are normally distributed, or that they are homoscedastic. There are also two disadvantages, the main one being that it can only be used for simple regression (one single predictor). It can also be slower to compute, but with modern computers, this is rarely an issue.</p>
+<p>A nonparametric alternative to least-squares regression is the <em>Theil–Sen regression</em>. It is generally much more robust against outliers than the least-squares method. It also does not require that the residuals are normally distributed, or that they are homoscedastic. There are also two disadvantages, the main one being that it can only be used for simple regression (one single predictor). It can also be slower to compute, but with today’s computers, this is rarely an issue.</p>
 <p>The way Theil–Sen regression works is simple:</p>
 <ul>
 <li>A line is fit between all possible pairs of points, and their slopes are recorded.</li>
 <li>The overall regression slope <em>m</em> is the median of all these pairwise slopes.</li>
-<li>The intercept <em>b</em> is the median of all <em>y</em><sub><em>i</em></sub> – <em>m</em> <em>x</em><sub><em>i</em></sub> values, where <em>x</em><sub><em>i</em></sub> is the <em>i</em>th predictor and <em>y</em><sub><em>i</em></sub> the <em>i</em>th measurement at that predictor.</li>
+<li>The intercept <em>b</em> is the median of all <em>y</em><sub><em>i</em></sub> – <em>m</em> <em>x</em><sub><em>i</em></sub> values, where <em>x</em><sub><em>i</em></sub> is the <em>i</em>th measurement of the predictor and <em>y</em><sub><em>i</em></sub> the <em>i</em>th the corresponding response.</li>
 </ul>
 <p>To use the Theil–Sen regression, one has to install the package <code>mblm</code> (“median-based linear models”):</p>
 <div class="cell">
@@ -643,8 +643,8 @@ Residual standard error: 1.415 on 9 degrees of freedom</code></pre>
 </div>
 <p>As seen, the predicted intercept and slope are no longer 3 and 0.5, but 4 and 0.35 instead. Visualizing this, side by side with the ordinary least-squares regression:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>leastSquaresFit <span class="ot">&lt;-</span><span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"3"</span>))</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>TheilSenFit <span class="ot">&lt;-</span><span class="fu">mblm</span>(y <span class="sc">~</span> x, <span class="at">dataframe =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"3"</span>))</span>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>leastSquaresFit <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"3"</span>))</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>TheilSenFit <span class="ot">&lt;-</span> <span class="fu">mblm</span>(y <span class="sc">~</span> x, <span class="at">dataframe =</span> <span class="fu">filter</span>(ans_long, set <span class="sc">==</span> <span class="st">"3"</span>))</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>ans_long <span class="sc">|&gt;</span></span>
 <span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(set <span class="sc">==</span> <span class="st">"3"</span>) <span class="sc">|&gt;</span></span>
@@ -667,7 +667,7 @@ Residual standard error: 1.415 on 9 degrees of freedom</code></pre>
 <h2 data-number="13.3" class="anchored" data-anchor-id="exercises"><span class="header-section-number">13.3</span> Exercises</h2>
 <ol type="1">
 <li><p>The file <a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/plant_growth_rate.zip"><code>plant_growth_rate.csv</code></a> contains individual plant growth data (mm/week), as a function of soil moisture content. Do plants grow better in more moist soils? Visualize the relationship, then perform and interpret a linear regression using both parametric and non-parametric methods. Use diagnostic plots to check whether the assumptions of the parametric test are satisfied.</p></li>
-<li><p>It is difficult to measure the height of a tree. By contrast, the diameter at breast height (DBH) is easy to measure. Can one infer the height of a tree by measuring its DBH? The built-in dataset <code>trees</code> contains DBH data (somewhat misleadingly labeled <code>Girth</code>), as well as measured height and timber volume of 31 felled black cherry trees. You can ignore timber volume, and focus instead on how well DBH predicts tree height. Plot the relationship, perform both parametric and non-parametric regression, and create diagnostic plots. Interpret the results, and summarize how reliable it is to use DBH to infer tree height.</p></li>
+<li><p>It is difficult to measure the height of a tree. By contrast, the diameter at breast height (DBH) is easy to measure. Can one infer the height of a tree by measuring its DBH? The built-in dataset <code>trees</code> contains DBH data (labeled <code>Girth</code>), as well as measured height and timber volume of 31 felled black cherry trees. You can ignore timber volume, and focus instead on how well DBH predicts tree height. Plot the relationship, perform both parametric and non-parametric regression, and create diagnostic plots. Interpret the results, and summarize how reliable it is to use DBH to infer tree height.</p></li>
 </ol>
 
 

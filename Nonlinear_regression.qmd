@@ -39,7 +39,7 @@ as_tibble(CO2) |>
   theme_bw()
 ```
 
-We see that there is also a clear, saturating relationship between CO~2~ concentration and uptake rates. It is definitely not a linear relationship, but a saturating one. This does not mean that a linear model is useless for analyzing these data: the trend of whether the data increase or decrease can still be captured (although it is not recommended to use the model for numerical prediction purposes). One model that may come to mind is as follows:
+We see that there is also a clear, saturating relationship between CO~2~ concentration and uptake rates that is definitely not linear. This does not mean that a linear model is useless for analyzing these data: the trend of whether the data increase or decrease can still be captured (although it is not recommended to use the model for numerical prediction purposes). One model that may come to mind is as follows:
 
 ```{r}
 lm(uptake ~ conc + Type * Treatment, data = CO2) |> anova()
@@ -57,7 +57,7 @@ lm(uptake ~ conc + Type * Treatment, data = CO2) |>
   theme_bw()
 ```
 
-The Q-Q plot is less than amazing. Otherwise, given that the data in fact depend on concentrations in a manifestly nonlinear way, the diagnostics look surprisingly good. We will come back to the point about nonlinearity in @sec-nonlin-regression.
+The Q-Q plot is less than amazing: in the lower quantiles, the realized residuals are consistently larger in magnitude than the theoretical expectation based on the assumption of normality. This, of course, is a consequence of the data depending on concentrations in a manifestly nonlinear way. Apart from the Q-Q plot however, the diagnostics look surprisingly good. We will come back to the point about nonlinearity in @sec-nonlin-regression.
 
 It is also informative to apply the function `summary` on the model fit in addition to `anova`, to obtain the regression slopes and intercept:
 
