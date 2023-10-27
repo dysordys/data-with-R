@@ -204,7 +204,7 @@ read_tsv("island-FL.tsv")
 
 ## Naming (and renaming) columns {#sec-rename}
 
-All of the files we have looked at so far contained a *header* as their first row: instead of containing data, they contained the names of the data columns. Having such a header is good practice. Sometimes however, the header may be missing. For example, the file [`islands-FL-nohead.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL-nohead.zip) contains the same land snail data as the other files above, but it lacks a header. The first few lines of the file look like this:
+All of the files we have looked at so far contained a *header* as their first row: instead of containing data, they contained the names of the data columns. Having such a header is good practice. Sometimes however, the header may be missing. For example, the file [`islands-FL-nohead.csv`](https://raw.githubusercontent.com/dysordys/data-with-R/main/data/island-FL-nh.zip) contains the same land snail data as the other files above, but it lacks a header. The first few lines of the file look like this:
 
 ```
 humid,ustulatus,17.088,-0.029
