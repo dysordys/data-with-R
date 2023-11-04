@@ -679,6 +679,7 @@ F-statistic: 4.846 on 2 and 27 DF,  p-value: 0.01591</code></pre>
 3 trt2       5.526</code></pre>
 </div>
 </div>
+<p>In general, the same procedure can be followed for any number of groups. For <span class="math inline">\(n\)</span> groups of data, we introduce <span class="math inline">\(n-1\)</span> indicator variables which take the value 1 if a data point belongs in the corresponding group, and the value 0 otherwise.</p>
 </section>
 <section id="sec-diagnostic-anova" class="level2" data-number="12.4">
 <h2 data-number="12.4" class="anchored" data-anchor-id="sec-diagnostic-anova"><span class="header-section-number">12.4</span> Using diagnostic plots on an ANOVA</h2>
@@ -693,7 +694,7 @@ F-statistic: 4.846 on 2 and 27 DF,  p-value: 0.01591</code></pre>
 <p><img src="Anova_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>The only difference is that, since the data are arranged in groups, the fitted values can only take on well-defined discrete values—the inferred means in each. Otherwise, the plots are read and evaluated just as before. In this case, we can see that the assumptions are fulfilled beautifully: the residuals have equal variance in the groups, there is no trend in them, and the quantile-quantile plot shows that the residuals lie where they should.</p>
+<p>The only difference is that, since the data are arranged in groups, the fitted values can only take on well-defined discrete values—the inferred means in each. Otherwise, the plots are read and evaluated just as before. In this case, we can see that the assumptions are fulfilled beautifully: the residuals have equal variance in the groups, there is no trend in them, and the quantile-quantile plot shows that they are normally distributed.</p>
 </section>
 <section id="exercises" class="level2" data-number="12.5">
 <h2 data-number="12.5" class="anchored" data-anchor-id="exercises"><span class="header-section-number">12.5</span> Exercises</h2>
