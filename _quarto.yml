@@ -21,9 +21,9 @@ book:
     - part: "Part II: Statistical inference"
       chapters:
       - Intro_statistics.qmd
+      - Linear_regression.qmd
       - Anova.qmd
       - Anova_two_way.qmd
-      - Linear_regression.qmd
       - Nonlinear_regression.qmd
       - Intro_map.qmd
       - Multiple_analysis.qmd

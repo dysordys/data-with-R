@@ -7,7 +7,7 @@
 library(tidyverse) # Loading the tidyverse, before doing anything else
 ```
 
-In @sec-functions we learned how to create user-defined functions. An example was provided in @sec-tukey, where we made our life easier by eliminating the need to always call `aov` before performing a Tukey test with `TukeyHSD`. Without the function, we must write:
+In @sec-functions we learned how to create user-defined functions. An example was provided in @sec-onewayanova, where we made our life easier by eliminating the need to always call `aov` before performing a Tukey test with `TukeyHSD`. Without the function, we must write:
 
 ```{r}
 lm(weight ~ group, data = PlantGrowth) |> aov() |> TukeyHSD()

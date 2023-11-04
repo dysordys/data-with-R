@@ -84,7 +84,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./Intro_map.html" rel="next">
-<link href="./Linear_regression.html" rel="prev">
+<link href="./Anova_two_way.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -242,20 +242,20 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./Linear_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Simple linear regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./Anova.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Anova_two_way.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Linear_regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Simple linear regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -337,8 +337,8 @@ div.csl-indent {
 
 <section id="sec-ancova" class="level2" data-number="14.1">
 <h2 data-number="14.1" class="anchored" data-anchor-id="sec-ancova"><span class="header-section-number">14.1</span> Combining categorical and continuous variables in linear models</h2>
-<p>So far we have used at most two predictors when dealing with linear models (<code>lm</code>). This was in <a href="Anova_two_way.html"><span>Chapter&nbsp;12</span></a>, where we looked the effects of two categorical variables, as well as their interaction. <a href="Linear_regression.html"><span>Chapter&nbsp;13</span></a> introduced the idea of using a continuous, instead of a categorical, predictor. But we have not been combining these.</p>
-<p>In fact, one can build arbitrarily complicated linear models from an arbitrary combination of continuous and categorical variables, and their interactions. Let us consider the built-in <code>CO2</code> dataset as an example, which was already used before in an exercise (<a href="Anova_two_way.html#sec-exercises-anova-two-way"><span>Section&nbsp;12.3</span></a>). Briefly, the data contain measurements from an experiment on the cold tolerance of the grass species <a href="https://en.wikipedia.org/wiki/Echinochloa_crus-galli"><em>Echinochloa crus-galli</em></a>. The dataset has five columns: <code>Plant</code> (a unique identifier for each plant individual), <code>Type</code> (either <code>Quebec</code> or <code>Mississippi</code> depending on the origin of the plant), <code>Treatment</code> (whether the plant individual was <code>chilled</code> or <code>nonchilled</code> for the experiment), <code>conc</code> (ambient carbon dioxide concentration), and <code>uptake</code> (carbon dioxide uptake rate by the plant).</p>
+<p>So far we have used at most two predictors when dealing with linear models (<code>lm</code>). This was in <a href="Anova_two_way.html"><span>Chapter&nbsp;13</span></a>, where we looked the effects of two categorical variables, as well as their interaction. <a href="Linear_regression.html"><span>Chapter&nbsp;11</span></a> introduced the idea of using a continuous, instead of a categorical, predictor. But we have not been combining these.</p>
+<p>In fact, one can build arbitrarily complicated linear models from an arbitrary combination of continuous and categorical variables, and their interactions. Let us consider the built-in <code>CO2</code> dataset as an example, which was already used before in an exercise (<a href="Anova_two_way.html#sec-exercises-anova-two-way"><span>Section&nbsp;13.3</span></a>). Briefly, the data contain measurements from an experiment on the cold tolerance of the grass species <a href="https://en.wikipedia.org/wiki/Echinochloa_crus-galli"><em>Echinochloa crus-galli</em></a>. The dataset has five columns: <code>Plant</code> (a unique identifier for each plant individual), <code>Type</code> (either <code>Quebec</code> or <code>Mississippi</code> depending on the origin of the plant), <code>Treatment</code> (whether the plant individual was <code>chilled</code> or <code>nonchilled</code> for the experiment), <code>conc</code> (ambient carbon dioxide concentration), and <code>uptake</code> (carbon dioxide uptake rate by the plant).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(CO2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -664,7 +664,7 @@ Achieved convergence tolerance: 9.728e-06</code></pre>
 </div>
 </div>
 <p>As in the case of linear regression, the statistical analysis will only be reliable if the assumptions of the independence, normality, and homoscedasticity of the residuals are maintained.</p>
-<p>To conclude this section, it can be useful to plot the data together with the fitted nonlinear curve, to make sure visually that the fit is reasonable. There are several possible ways of doing this; here we discuss two of them. First, one can rely on the <code>predict</code> function (<a href="Linear_regression.html#sec-theilsen"><span>Section&nbsp;13.2</span></a>) that will tell us, for each value of the predictor, what the model-predicted values are. In the same way as for models generated by <code>lm</code> or <code>mblm</code>,</p>
+<p>To conclude this section, it can be useful to plot the data together with the fitted nonlinear curve, to make sure visually that the fit is reasonable. There are several possible ways of doing this; here we discuss two of them. First, one can rely on the <code>predict</code> function (<a href="Linear_regression.html#sec-theilsen"><span>Section&nbsp;11.5</span></a>) that will tell us, for each value of the predictor, what the model-predicted values are. In the same way as for models generated by <code>lm</code> or <code>mblm</code>,</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(nonlinearFit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -983,8 +983,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./Linear_regression.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Simple linear regression</span></span>
+      <a href="./Anova_two_way.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

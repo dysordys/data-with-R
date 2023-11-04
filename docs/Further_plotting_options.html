@@ -240,20 +240,20 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./Linear_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Simple linear regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./Anova.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Anova_two_way.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Linear_regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Simple linear regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -303,7 +303,7 @@ div.csl-indent {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#smoothing-and-regression-lines" id="toc-smoothing-and-regression-lines" class="nav-link active" data-scroll-target="#smoothing-and-regression-lines"><span class="header-section-number">8.1</span> Smoothing and regression lines</a></li>
+  <li><a href="#sec-smooth" id="toc-sec-smooth" class="nav-link active" data-scroll-target="#sec-smooth"><span class="header-section-number">8.1</span> Smoothing and regression lines</a></li>
   <li><a href="#scales" id="toc-scales" class="nav-link" data-scroll-target="#scales"><span class="header-section-number">8.2</span> Scales</a></li>
   <li><a href="#sec-factors" id="toc-sec-factors" class="nav-link" data-scroll-target="#sec-factors"><span class="header-section-number">8.3</span> Reordering labels using factors</a></li>
   <li><a href="#sec-faceting" id="toc-sec-faceting" class="nav-link" data-scroll-target="#sec-faceting"><span class="header-section-number">8.4</span> Facets</a></li>
@@ -332,8 +332,8 @@ div.csl-indent {
 
 </header>
 
-<section id="smoothing-and-regression-lines" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="smoothing-and-regression-lines"><span class="header-section-number">8.1</span> Smoothing and regression lines</h2>
+<section id="sec-smooth" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="sec-smooth"><span class="header-section-number">8.1</span> Smoothing and regression lines</h2>
 <p>In <a href="Creating_figures.html"><span>Chapter&nbsp;7</span></a> we learned about aesthetic mappings and various <code>geom_</code> options such as <code>geom_point</code>, <code>geom_histogram</code>, and <code>geom_boxplot</code>. Let us explore another type of <code>geom_</code>, which approximates the trend of a set of data points with a line and an error bar that shows the confidence interval of the estimate at each point:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>

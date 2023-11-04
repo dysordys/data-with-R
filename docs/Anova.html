@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Introduction to data analysis and visualization with R - 11&nbsp; The Kruskal–Wallis test and one-way ANOVA</title>
+<title>Introduction to data analysis and visualization with R - 12&nbsp; The Kruskal–Wallis test and one-way ANOVA</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./Anova_two_way.html" rel="next">
-<link href="./Intro_statistics.html" rel="prev">
+<link href="./Linear_regression.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -110,7 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Intro_statistics.html">Part II: Statistical inference</a></li><li class="breadcrumb-item"><a href="./Anova.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Kruskal--Wallis test and one-way ANOVA</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./Intro_statistics.html">Part II: Statistical inference</a></li><li class="breadcrumb-item"><a href="./Anova.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">The Kruskal--Wallis test and one-way ANOVA</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -223,20 +223,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./Linear_regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Simple linear regression</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./Anova.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></span></a>
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./Anova_two_way.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./Linear_regression.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Simple linear regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -286,11 +286,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#the-kruskalwallis-and-dunn-tests" id="toc-the-kruskalwallis-and-dunn-tests" class="nav-link active" data-scroll-target="#the-kruskalwallis-and-dunn-tests"><span class="header-section-number">11.1</span> The Kruskal–Wallis and Dunn tests</a></li>
-  <li><a href="#one-way-anova" id="toc-one-way-anova" class="nav-link" data-scroll-target="#one-way-anova"><span class="header-section-number">11.2</span> One-way ANOVA</a></li>
-  <li><a href="#sec-diagnostics" id="toc-sec-diagnostics" class="nav-link" data-scroll-target="#sec-diagnostics"><span class="header-section-number">11.3</span> Diagnostic plots</a></li>
-  <li><a href="#sec-tukey" id="toc-sec-tukey" class="nav-link" data-scroll-target="#sec-tukey"><span class="header-section-number">11.4</span> Tukey’s honest significant differences</a></li>
-  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">11.5</span> Exercises</a></li>
+  <li><a href="#the-kruskalwallis-and-dunn-tests" id="toc-the-kruskalwallis-and-dunn-tests" class="nav-link active" data-scroll-target="#the-kruskalwallis-and-dunn-tests"><span class="header-section-number">12.1</span> The Kruskal–Wallis and Dunn tests</a></li>
+  <li><a href="#sec-onewayanova" id="toc-sec-onewayanova" class="nav-link" data-scroll-target="#sec-onewayanova"><span class="header-section-number">12.2</span> One-way ANOVA and Tukey’s test</a></li>
+  <li><a href="#sec-lmaov" id="toc-sec-lmaov" class="nav-link" data-scroll-target="#sec-lmaov"><span class="header-section-number">12.3</span> ANOVA and linear regression</a></li>
+  <li><a href="#sec-diagnostic-anova" id="toc-sec-diagnostic-anova" class="nav-link" data-scroll-target="#sec-diagnostic-anova"><span class="header-section-number">12.4</span> Using diagnostic plots on an ANOVA</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">12.5</span> Exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -299,7 +299,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-ANOVA" class="quarto-section-identifier"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></span></h1>
+<h1 class="title"><span id="sec-ANOVA" class="quarto-section-identifier"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">The Kruskal–Wallis test and one-way ANOVA</span></span></h1>
 </div>
 
 
@@ -314,10 +314,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="the-kruskalwallis-and-dunn-tests" class="level2" data-number="11.1">
-<h2 data-number="11.1" class="anchored" data-anchor-id="the-kruskalwallis-and-dunn-tests"><span class="header-section-number">11.1</span> The Kruskal–Wallis and Dunn tests</h2>
+<section id="the-kruskalwallis-and-dunn-tests" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="the-kruskalwallis-and-dunn-tests"><span class="header-section-number">12.1</span> The Kruskal–Wallis and Dunn tests</h2>
 <p>The tools of <a href="Intro_statistics.html"><span>Chapter&nbsp;10</span></a> allow us to compare two groups of data. But what do we do when we have more than two groups? For example, we might wish to know how different treatments influence plant growth, as measured by dry weight. If there are two treatments, then there will be three (instead of two) groups, because the treatments will be compared with a control group which does not receive treatment.</p>
-<p>Such a dataset is, in fact, built into R, and is called <code>PlantGrowth</code>. Here it is:</p>
+<p>Such a dataset is in fact built into R, and is called <code>PlantGrowth</code>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -370,12 +370,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="Anova_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Based on the figure, it is reasonable to expect there to be a real difference between treatment 1 and treatment 2. But whether there is good reason to think that the control truly differs from any of the treatments is unclear.</p>
-<p>One way of finding out could be to perform pairwise Wilcoxon rank sum tests between each pair of groups. This, in fact, would be quite feasible here, because there are only three comparisons to be made (control vs.&nbsp;treatment 1; control vs.&nbsp;treatment 2, and treatment 1 vs.&nbsp;treatment 2). Here are the results of doing this:</p>
+<p>There are two questions one can ask, and they naturally build on each other. First, we might wonder if the observed differences between the distribution of the data in the different groups is meaningful. Could it be that all data points are actually drawn from the same underlying distribution, and the observed differences are simply due to chance? If so, what is the likelihood of that situation? And second, provided we can reject the idea that the data in the different groups are not identically distributed, which groups are the ones that differ from one another? For example, based on the figure above, it appears reasonable to expect a real difference between treatment 1 and treatment 2, but it is unclear whether the control truly differs from any of the treatments.</p>
+<p>Starting with the first of these questions, there exists an analogue to the Wilcoxon rank sum test which works when there are more than two groups of data. This is the <em>Kruskal–Wallis test</em>, which can be used with any number of groups as long as those groups vary within a single factor.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> The Kruskal–Wallis test is non-parametric, and therefore does not rely on assumptions such as the normality of the residuals. Its implementation in R, <code>kruskal.test</code>, is analogous to <code>wilcox.test</code>, <code>t.test</code> <code>lm</code>, or <code>mblm</code>: it takes a formula and the data as inputs. Therefore, to perform the test on the <code>PlantGrowth</code> data, we write:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(PlantGrowth) <span class="sc">|&gt;</span> <span class="co"># The PlantGrowth dataset, converted to a tibble</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"trt2"</span>) <span class="sc">|&gt;</span> <span class="co"># Keep only the control and treatment 1</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> _, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kruskal.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Kruskal-Wallis rank sum test
+
+data:  weight by group
+Kruskal-Wallis chi-squared = 7.9882, df = 2, p-value = 0.01842</code></pre>
+</div>
+</div>
+<p>The null hypothesis of the Kruskal–Wallis test is that the observations from all groups were sampled from the same underlying distribution—that is, that there are no differences between the groups other than those attributed to random noise. Consequently, when the p-value is low (like above), this means that it is unlikely that the data in all groups come from the same distribution, and thus that <em>at least</em> one group differs from the others.</p>
+<p>Now that we can be reasonably confident about the first question (do all the data come from the same distribution or not?), we can go on to the second: are there differences between particular pairs of groups? One way of finding out could be to perform pairwise Wilcoxon rank sum tests between each pair of groups. This, in fact, would be quite feasible here, because there are only three comparisons to be made (control vs.&nbsp;treatment 1; control vs.&nbsp;treatment 2, and treatment 1 vs.&nbsp;treatment 2). Here are the results of doing this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(PlantGrowth) <span class="sc">|&gt;</span> <span class="co"># The PlantGrowth dataset, converted to a tibble</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"trt2"</span>) <span class="sc">|&gt;</span> <span class="co"># Keep only the control and treatment 1</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> _, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Wilcoxon rank sum test with continuity correction
@@ -389,9 +401,9 @@ sample estimates:
 difference in location 
              0.4213948 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(PlantGrowth) <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"trt1"</span>) <span class="sc">|&gt;</span> <span class="co"># Keep only the control and treatment 2</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> _, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(PlantGrowth) <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"trt1"</span>) <span class="sc">|&gt;</span> <span class="co"># Keep only the control and treatment 2</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> _, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Wilcoxon rank sum exact test
@@ -405,9 +417,9 @@ sample estimates:
 difference in location 
                  -0.49 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(PlantGrowth) <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"ctrl"</span>) <span class="sc">|&gt;</span> <span class="co"># Keep only treatments 1 and 2</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> _, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_tibble</span>(PlantGrowth) <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(group <span class="sc">!=</span> <span class="st">"ctrl"</span>) <span class="sc">|&gt;</span> <span class="co"># Keep only treatments 1 and 2</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">wilcox.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> _, <span class="at">conf.int =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Wilcoxon rank sum exact test
@@ -423,22 +435,10 @@ difference in location
 </div>
 </div>
 <p>As expected, the difference between the control and the two treatments is not particularly credible (especially in the case of treatment 1), but there is good indication that the difference between the two treatments is not just due to chance.</p>
-<p>While this method of using repeated Wilcoxon rank sum tests worked fine above, there are some problems with this approach. One is that it can quickly get out of hand, because having <span class="math inline">\(n\)</span> groups means there will be <span class="math inline">\(n (n - 1) / 2\)</span> pairs to consider. For instance, if the number of groups is 12 (not a particularly large number), then there are 66 unique pairs already. It would not be pleasant to perform this many tests, even if any single test is quite simple to run.</p>
-<p>The other problem has to do with <em>multiple testing</em> and its influence on the interpretation of p-values. Very simply put, the problem is that if sufficiently many groups are compared, then we might find at least one pair with a low p-value—not because the null hypothesis is false, but because across a large number of observations some p-values will turn out lower than others just by chance. Remember: p-values measure, in effect, the probability that the observed effect is too stark to be due to simple coincidence. But if we create sufficiently many opportunities for such a coincidence to arise, then of course one eventually will. One of the best explanations of this point is in the following cartoon by <a href="https://xkcd.com/">xkcd</a>:</p>
+<p>While this method of using repeated Wilcoxon rank sum tests works fine in our example, there are some problems with this approach. One is that it can quickly get out of hand, because having <span class="math inline">\(n\)</span> groups means there will be <span class="math inline">\(n (n - 1) / 2\)</span> pairs to consider. For instance, if the number of groups is 12 (not a particularly large number), then there are 66 unique pairs already. It would not be pleasant to perform this many tests, even if any single test is quite simple to run.</p>
+<p>The other problem has to do with <em>multiple testing</em> and its influence on the interpretation of p-values. Very simply put, the problem is that if sufficiently many groups are compared, then we might find at least one pair with a low p-value—not because the null hypothesis is false, but because across a large number of observations some p-values will turn out lower than others just by chance. The p-values measure, in effect, the probability that the observed differences are too stark to be due to simple coincidence. But if we create sufficiently many opportunities for such a coincidence to arise, then of course one eventually will. One of the best explanations of this point is in the following cartoon by <a href="https://xkcd.com/">xkcd</a>:</p>
 <p><img src="significant.png" class="img-fluid"></p>
-<p>Fortunately, there is no need to rely on repeated Wilcoxon rank sum tests when there are more than two groups, as other methods are available. One such method is the <em>Kruskal–Wallis test</em>, which can be used with any number of groups as long as those groups vary within a single factor.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> The Kruskal–Wallis test is non-parametric, and therefore does not rely on assumptions such as the normality of the residuals. Its application is precisely analogous to how the Wilcoxon rank sum test is implemented. Therefore, to perform the test on the <code>PlantGrowth</code> data:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kruskal.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-    Kruskal-Wallis rank sum test
-
-data:  weight by group
-Kruskal-Wallis chi-squared = 7.9882, df = 2, p-value = 0.01842</code></pre>
-</div>
-</div>
-<p>The null hypothesis of the Kruskal–Wallis test is that the observations from all groups were sampled from the same underlying distribution—that is, that there are no differences between the groups other than those attributed to random noise. Consequently, when the p-value is low (like above), this means that it is unlikely that the data in all groups come from the same distribution, and thus that <em>at least</em> one group differs from the others.</p>
-<p>While that is something, we want more: an actual comparison of the groups (like we have done with our repeated Wilcoxon rank sum tests). The way forward is to perform a <em>post hoc</em> (Latin “after this”) test. In this case, the <em>Dunn test</em> is one such post hoc test. This test is implemented in R, but not in any of the basic packages. To use it, one must first install the <code>FSA</code> package:</p>
+<p>Fortunately, there is a way of solving both the problem of automating many pairwise comparisons, as well as adjusting the p-values to account for multiple testing. The way forward is to perform a <em>post hoc</em> (Latin “after this”) test. In this case, the <em>Dunn test</em> is one such post hoc test. This test is implemented in R, but not in any of the basic packages. To use it, one must first install the <code>FSA</code> package:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"FSA"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -446,7 +446,7 @@ Kruskal-Wallis chi-squared = 7.9882, df = 2, p-value = 0.01842</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FSA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>And then, the Dunn test (<code>dunnTest</code>) follows the same syntax as <code>wilcox.test</code> or <code>kruskal.test</code>:</p>
+<p>And then, the Dunn test (<code>dunnTest</code>) follows the familiar syntax of receiving a formula and the data:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dunnTest</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
@@ -463,11 +463,11 @@ Kruskal-Wallis chi-squared = 7.9882, df = 2, p-value = 0.01842</code></pre>
 </div>
 </div>
 <p>The table above is the output of the test, and has four columns. The first column shows which two groups are being compared. The next column, called <code>Z</code>, is the value of the test statistic, which we need not concern ourselves with here. Next, we have the unadjusted p-values; and finally, the adjusted p-values (<code>P.adj</code>), which have been corrected to account for the multiple testing problem mentioned above. Therefore, the adjusted p-values will always be as large or larger than the unadjusted ones.</p>
-<p>What has the Dunn test revealed? Precisely what we have been suspecting: that the only difference worth noting is the one between the two treatments (last row of the table, where the adjusted p-value is sufficiently small to have a chance of meaning something).</p>
+<p>What has the post hoc Dunn test revealed? Precisely what we have been suspecting: that the only difference worth noting is the one between the two treatments (last row of the table, where the adjusted p-value is sufficiently small to have a chance of pointing at a real difference).</p>
 </section>
-<section id="one-way-anova" class="level2" data-number="11.2">
-<h2 data-number="11.2" class="anchored" data-anchor-id="one-way-anova"><span class="header-section-number">11.2</span> One-way ANOVA</h2>
-<p>The Kruskal–Wallis test is the non-parametric analogue of the <em>one-way ANOVA</em> (ANalysis Of VAriance). The “one-way” in the name refers to the property that there is a single factor indexing the groups, as discussed earlier. ANOVA relies on assumptions such as normality of the residuals and having the same number of observations in each group (balanced design). Otherwise, it is much like the Kruskal–Wallis test.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> The function in R that performs an ANOVA is <code>lm</code> (short for “linear model”):</p>
+<section id="sec-onewayanova" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="sec-onewayanova"><span class="header-section-number">12.2</span> One-way ANOVA and Tukey’s test</h2>
+<p>The Kruskal–Wallis test is the non-parametric analogue of <em>one-way ANOVA</em> (ANalysis Of VAriance). The “one-way” in the name refers to the property that there is a single factor indexing the groups, as discussed earlier. ANOVA relies on assumptions such as normality of the residuals and having the same number of observations in each group (balanced design). Otherwise, it is much like the Kruskal–Wallis test.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> Perhaps surprisingly, the function in R that performs an ANOVA is the same <code>lm</code> that we have used in <a href="Linear_regression.html"><span>Chapter&nbsp;11</span></a> for performing linear regression:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -480,7 +480,7 @@ Coefficients:
       5.032       -0.371        0.494  </code></pre>
 </div>
 </div>
-<p>The output is not particularly informative: it simply lists the regression coefficients without the requisite information to see whether those coefficients actually mean anything. To get more, one can pass the result of the <code>lm</code> function to one of two other functions: either <code>anova</code> or <code>summary</code>. The former generates an ANOVA or sum-of-squares table (thus, despite its name, it does not actually perform the anova, just formats its output in a specific way). In this table, each factor indexing the groups, as well as their interactions (if present), get one row:</p>
+<p>The output takes some care to interpret correctly: out of the three coefficients listed, <code>(Intercept)</code> is the mean weight in the control group; <code>grouptrt1</code> is the <em>difference</em> of the mean weight in treatment 1 from the control; and <code>grouptrt2</code> is the difference of the mean weight in treatment 2 from the control. (We will come back to this, as well as why the <code>lm</code> function was used, in <a href="#sec-lmaov"><span>Section&nbsp;12.3</span></a>.) To get more information, one can pass the result of <code>lm</code> to a function called <code>anova</code>. Despite its name, the role of this function is not to actually perform the ANOVA (that was done by <code>lm</code>), but to display its results using the sum-of-squares table, which is also known as the ANOVA table. In this table, each factor indexing the groups, as well as their interactions (if present), get one row:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span> <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -494,10 +494,154 @@ Residuals 27 10.4921  0.3886
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
-<p>The p-value above (in the row belonging to the factor <code>group</code>, under the column <code>Pr(&gt;F)</code>) is the analogue of the p-value calculated by the Kruskal–Wallis test (which was 0.01842). We can see that the two tests agree qualitatively.</p>
-<p>The latter, <code>summary</code> function focuses on the regression coefficients instead, listing all of them in a table, alongside other information:</p>
+<p>The p-value above, in the row belonging to the factor <code>group</code>, under the column <code>Pr(&gt;F)</code>, is the analogue of the p-value calculated by the Kruskal–Wallis test (which was 0.01842). We can see that the two tests agree qualitatively.</p>
+<p>Just as the Dunn test is a post-hoc test for the Kruskal–Wallis test, Tukey’s honest significance test is a post-hoc test for an ANOVA. The corresponding function in R is called <code>TukeyHSD</code>, and it should be applied to the result of the <code>lm</code> function—with one caveat. Tukey’s test requires the output of the ANOVA to be in a particular format. Therefore, before passing the result of <code>lm</code> to <code>TukeyHSD</code>, we first have to pass it to a helper function called <code>aov</code> (“analysis of variance”). Like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span> <span class="fu">aov</span>() <span class="sc">|&gt;</span> <span class="fu">TukeyHSD</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = lm(weight ~ group, data = PlantGrowth))
+
+$group
+            diff        lwr       upr     p adj
+trt1-ctrl -0.371 -1.0622161 0.3202161 0.3908711
+trt2-ctrl  0.494 -0.1972161 1.1852161 0.1979960
+trt2-trt1  0.865  0.1737839 1.5562161 0.0120064</code></pre>
+</div>
+</div>
+<p>The table is similar to the one produced by the Dunn test, with a few differences. The first column tells us which groups of data are compared. The second column is the raw difference between the group means, the third and fourth are the lower and upper limits of a 95% confidence interval for the difference, and the last one are the p-values (adjusted for multiple comparisons). In this case, the results from the Dunn test and the Tukey test are in agreement: only the difference between the two control groups stands out as having a reasonable chance of being real. The fact that the Kruskal–Wallis test and an ANOVA lead to the same conclusion increases the trust we can place in their results being correct.</p>
+<p>The <code>aov</code> function serves no purpose above, except to put the data in a format which <code>TukeyHSD</code> can work with. In case using this intermediary feels like a hassle, one can easily make life simpler, by writing a helper function which automatically calls it, together with the Tukey test:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>tukey.test <span class="ot">&lt;-</span> <span class="cf">function</span>(lmFit) {</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  lmFit <span class="sc">|&gt;</span> <span class="fu">aov</span>() <span class="sc">|&gt;</span> <span class="fu">TukeyHSD</span>()</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>(See <a href="Functions.html"><span>Chapter&nbsp;3</span></a> to review how functions are written.) Here <code>lmFit</code> is a model fit object returned by the <code>lm</code> function. Using this, we can rewrite the above more simply:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span> <span class="fu">tukey.test</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = lmFit)
+
+$group
+            diff        lwr       upr     p adj
+trt1-ctrl -0.371 -1.0622161 0.3202161 0.3908711
+trt2-ctrl  0.494 -0.1972161 1.1852161 0.1979960
+trt2-trt1  0.865  0.1737839 1.5562161 0.0120064</code></pre>
+</div>
+</div>
+</section>
+<section id="sec-lmaov" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="sec-lmaov"><span class="header-section-number">12.3</span> ANOVA and linear regression</h2>
+<p>At first glance, it appears strange that the function performing an ANOVA is the same as the one doing linear regression, <code>lm</code>. Aren’t the two methods very different from one another? After all, ANOVA compares data in different groups, whereas linear regression fits a line to a bunch of data points.</p>
+<p>As surprising as it may sound, the two are not different. There is a way of formulating an ANOVA which is exactly analogous to a linear model. To illustrate this idea, let us first consider a dataset with just two groups of data. The fictive bird data from <a href="Intro_statistics.html"><span>Chapter&nbsp;10</span></a> (<a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/fictive_bird_example.zip"><code>fictive_bird_example.csv</code></a>) will work well:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>bird <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"fictive_bird_example.csv"</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(bird, <span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 40 × 2
+   island  weight
+   &lt;chr&gt;    &lt;dbl&gt;
+ 1 smaller  21.8 
+ 2 smaller  19.0 
+ 3 smaller  19.0 
+ 4 smaller  21.2 
+ 5 smaller  15.8 
+ 6 smaller  14.3 
+ 7 smaller  19.9 
+ 8 smaller   9.68
+ 9 smaller  17.0 
+10 smaller  12.7 
+11 smaller  22.0 
+12 smaller  15.7 
+13 smaller  16.7 
+14 smaller  27.9 
+15 smaller  17.4 
+16 smaller  12.6 
+17 smaller  33.4 
+18 smaller  25.8 
+19 smaller  20.1 
+20 smaller  21.3 
+21 larger   20.4 
+22 larger   28.3 
+23 larger   19.2 
+24 larger   24.1 
+25 larger   27.7 
+26 larger   16.1 
+27 larger   17.3 
+28 larger   21.2 
+29 larger   28.8 
+30 larger   21.9 
+31 larger   17.4 
+32 larger   13.0 
+33 larger   26.6 
+34 larger   27.0 
+35 larger   19.0 
+36 larger   25.2 
+37 larger   16.5 
+38 larger   25.2 
+39 larger   24.4 
+40 larger   24.7 </code></pre>
+</div>
+</div>
+<p>Let us denote the <code>weight</code> of individual <span class="math inline">\(i\)</span> by <span class="math inline">\(y_i\)</span>. We wish to predict this based on whether the island is large or small, using a linear model. This can be done in full analogy with <a href="Linear_regression.html#eq-linreg">Equation&nbsp;<span>11.1</span></a>, using the following equation:</p>
+<p><span id="eq-aov1way"><span class="math display">\[
+y_i
+= \beta_0 + \beta_1 x_i + \epsilon_i
+\tag{12.1}\]</span></span></p>
+<p>On the surface, this is exactly the same equation as <a href="Linear_regression.html#eq-linreg">Equation&nbsp;<span>11.1</span></a>. But there is one important difference: in an ANOVA, we give a different meaning to the <span class="math inline">\(x_i\)</span>. <strong>This variable should take on the value 1 if individual <em>i</em> is from the smaller island and the value 0 if it is from the larger island.</strong> (It could also be the other way round; it does not matter as long as we choose one convention and stay consistent.) The <span class="math inline">\(\epsilon_i\)</span> are still the residuals, measuring the deviation of the points from the ideal prediction. What is the “ideal” prediction here? Well, without the <span class="math inline">\(\epsilon_i\)</span> term, <a href="#eq-aov1way">Equation&nbsp;<span>12.1</span></a> reads <span class="math inline">\(y_i = \beta_0 + \beta_1 x_i\)</span>. If individual <span class="math inline">\(i\)</span> is from the larger island, <span class="math inline">\(x_i = 0\)</span>, and we have <span class="math inline">\(y_i = \beta_0\)</span>. So the intercept <span class="math inline">\(\beta_0\)</span> corresponds to the mean prediction for the weight of the birds in the larger island. Conversely, if individual <span class="math inline">\(i\)</span> is from the smaller island, then <span class="math inline">\(x_i = 1\)</span>, and so <span class="math inline">\(y_i = \beta_0 + \beta_1 \cdot 1 = \beta_0 + \beta_1\)</span>. In other words, <span class="math inline">\(\beta_1\)</span> is the <em>difference</em> in mean weight between the smaller and the larger island.</p>
+<p>We can see this in action by running <code>lm</code> and then <code>summary</code> on these data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> island, <span class="at">data =</span> bird) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = weight ~ island, data = bird)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-9.478 -3.390 -0.199  2.856 14.212 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     22.185      1.143   19.41   &lt;2e-16 ***
+islandsmaller   -3.024      1.617   -1.87   0.0691 .  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 5.112 on 38 degrees of freedom
+Multiple R-squared:  0.08431,   Adjusted R-squared:  0.06021 
+F-statistic: 3.499 on 1 and 38 DF,  p-value: 0.06914</code></pre>
+</div>
+</div>
+<p>The intercept, 22.185, is the mean weight on the larger island. To get the mean weight on the smaller one, we must add the intercept to the other coefficient, labelled <code>islandsmaller</code> in the table. That sum is 19.161. Indeed, if we compute the means of the two groups, we get exactly the same answers:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>bird <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(island) <span class="sc">|&gt;</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(weight)) <span class="sc">|&gt;</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  island    mean
+  &lt;chr&gt;    &lt;dbl&gt;
+1 larger  22.185
+2 smaller 19.161</code></pre>
+</div>
+</div>
+<p>The rest of the regression table now reads exactly as it would in performing simple linear regression. For example, the p-values are the probability of getting coefficients at least as large as the inferred ones just by chance (assuming normal and independent residuals with equal variance across the groups).</p>
+<p>There is just one question left: why was the <code>"larger"</code> island automatically designated as the one corresponding to the intercept? The reason is that R proceeds in alphabetical order, and since <code>"larger"</code> comes before <code>"smaller"</code> alphabetically, it is automatically treated as the intercept (that is, the group corresponding to <span class="math inline">\(x_i = 0\)</span> instead of <span class="math inline">\(x_i = 1\)</span>). One can override this by using factors (<a href="Further_plotting_options.html#sec-factors"><span>Section&nbsp;8.3</span></a>), in which case the lowest factor level will correspond to the intercept.</p>
+<p>So now we have established an analogy between linear regression and ANOVA for the special case when there are only two groups to compare. What to do when there are more groups—say, in the <code>PlantGrowth</code> data where we have three? In that case, we have to introduce one more indicator variable. Say, we could have <span class="math inline">\(T_i\)</span> and <span class="math inline">\(U_i\)</span>, instead of <span class="math inline">\(x_i\)</span> that we used above. So let <span class="math inline">\(T_i=1\)</span> and <span class="math inline">\(U_i=0\)</span> if observation <span class="math inline">\(i\)</span> is in treatment 1, and <span class="math inline">\(T_i=0\)</span> and <span class="math inline">\(U_i=1\)</span> if observation <span class="math inline">\(i\)</span> is in treatment 2. If the observation is in the control, then both <span class="math inline">\(T_i\)</span> and <span class="math inline">\(U_i\)</span> are zero. We can then write the following equation:</p>
+<p><span id="eq-aov1way3group"><span class="math display">\[
+y_i
+= \beta_0 + \beta_T T_i + \beta_U U_i + \epsilon_i
+\tag{12.2}\]</span></span></p>
+<p>The coefficients are now labelled <span class="math inline">\(\beta_T\)</span> and <span class="math inline">\(\beta_U\)</span> for simplicity. We can get the usual statistics on them by using <code>summary</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -520,13 +664,12 @@ Multiple R-squared:  0.2641,    Adjusted R-squared:  0.2096
 F-statistic: 4.846 on 2 and 27 DF,  p-value: 0.01591</code></pre>
 </div>
 </div>
-<p>The output first prints the function call to <code>lm</code> we used. Then it gives a quick overview of the residuals: the minimum and maximum values, the point of the first and third quantiles, and the median—in other words, it contains the same information one would use to create a box plot with. This ought to give a quick and rough idea of whether the residuals are violently skewed, or have at least a chance of being normally distributed, which is a key assumption behind ANOVA. (We will discuss a better method for assessing the normality of the residuals in <a href="#sec-diagnostics"><span>Section&nbsp;11.3</span></a>.) The next item in the output is the table of fitted regression coefficients. Here we can find the estimated values of the coefficients, their standard error, the associated t-statistic, and the p-values (the <code>Pr(&gt;|t|)</code> column). Here the p-values refer to the likelihood that the observed difference from zero is due to chance.</p>
-<p>To interpret the coefficients, note that R computes them relative to some reference group—which, unless specified otherwise, is the factor that comes first in the alphabet. From <code>ctrl</code>, <code>trt1</code>, and <code>trt2</code>, it is <code>ctrl</code> that comes first, and therefore the control serves as the baseline. The row called <code>(Intercept)</code> tells us the estimated value made by the regression, assuming that all non-baseline variables are set to zero. In this context, this means that both <code>trt1</code> and <code>trt2</code> are zeroed out, and therefore <code>(Intercept)</code> simply measures the average value within the group <code>ctrl</code>. The estimates in the rows <code>grouptrt1</code> and <code>grouptrt2</code> (these names were created by mushing together the name of the column in which the factor is found with the factors’ names themselves) are the <em>deviations</em> from the baseline provided by <code>(Intercept)</code>—that is, from the mean within the control. So we can surmise that the estimated mean of <code>trt1</code> is 5.032 - 0.371 = 4.661, and that of <code>trt2</code> is 5.032 + 0.494 = 5.526. Indeed, this is what we find relying on simple summaries computing the means in each group:</p>
+<p>Since <code>ctrl</code> comes earliest in the alphabet, it serves as the intercept. Its estimated value, 5.032, is the mean plant weight in the control group. The estimates in the rows <code>grouptrt1</code> and <code>grouptrt2</code> (these names were created by mushing together the name of the column in which the factor is found with the factors’ names themselves) are the <span class="math inline">\(\beta_T\)</span> and <span class="math inline">\(\beta_U\)</span> coefficients, respectively. That is, they are the deviations from the baseline provided by <code>(Intercept)</code>. So we can surmise that the estimated mean of <code>trt1</code> is 5.032 - 0.371 = 4.661, and that of <code>trt2</code> is 5.032 + 0.494 = 5.526. Indeed, this is what we find relying on simple summaries computing the means in each group:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(group) <span class="sc">|&gt;</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanWeight =</span> <span class="fu">mean</span>(weight)) <span class="sc">|&gt;</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="co"># Not necessary here, strictly speaking, but does not hurt</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>PlantGrowth <span class="sc">|&gt;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(group) <span class="sc">|&gt;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">meanWeight =</span> <span class="fu">mean</span>(weight)) <span class="sc">|&gt;</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   group meanWeight
@@ -536,98 +679,31 @@ F-statistic: 4.846 on 2 and 27 DF,  p-value: 0.01591</code></pre>
 3 trt2       5.526</code></pre>
 </div>
 </div>
-<p>After the table of regression coefficients, we get some information on the residual standard error, degrees of freedom, the coefficient of determination R<sup>2</sup> (a value between 0 and 1; the closer it is to 1, the more tightly the data fit the model), the adjusted R<sup>2</sup> (which is like the regular R<sup>2</sup> but with a penalty for using too many fitting parameters), the F-statistic, and the overall p-value—this is the same as the one in the ANOVA table earlier, created with the <code>anova</code> function.</p>
 </section>
-<section id="sec-diagnostics" class="level2" data-number="11.3">
-<h2 data-number="11.3" class="anchored" data-anchor-id="sec-diagnostics"><span class="header-section-number">11.3</span> Diagnostic plots</h2>
-<p>Since ANOVA is a parametric method relying on equal variances in each group and the normality of the residuals, it is important to check whether these assumptions in fact hold. There is a convenient way to do so, via <em>diagnostic plots</em>. Such plots can be created via the <code>autoplot</code> function of the <code>ggfortify</code> package. We can therefore install this package first, in case we do not have it already:</p>
+<section id="sec-diagnostic-anova" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="sec-diagnostic-anova"><span class="header-section-number">12.4</span> Using diagnostic plots on an ANOVA</h2>
+<p>Since ANOVA is just linear regression in disguise, the same assumptions must be fulfilled about the residuals: their variance should not depend on the group, they should be independent, and they should be normally distributed. We can use the same diagnostic plots as we did in <a href="Linear_regression.html#sec-diagnostics"><span>Section&nbsp;11.3</span></a>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"ggfortify"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>And then load it:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggfortify)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>And now, we can simply give the result of the <code>lm</code> function as input to the function <code>autoplot</code>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span> <span class="fu">autoplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggfortify)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="at">smooth.colour =</span> <span class="cn">NA</span>, <span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Anova_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+<p><img src="Anova_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>We see four plots above. The top left of these shows the residuals against the fitted values (notice that the three values along the x-axis correspond to the means of the three groups <code>ctrl</code>, <code>trt1</code>, and <code>trt2</code>). If the points have no trends of increase, decrease, valleys, or humps, and the spread of the points is roughly constant, then they adhere to ANOVA assumptions. The blue line is a moving regression line which helps decide whether there is a trend; in this case, it would be hard to argue that any trend is due to something else than chance.</p>
-<p>The bottom left plot is much the same as the top left one, except it takes the absolute values of the residuals. This is done because, since residuals will by definition be more or less symmetrically distributed around zero, one can effectively double the precision of the diagnostic by focusing only on magnitudes. For statistical reasons that do not concern us here, the square roots of these absolute values tend to behave much better, which is why we see the square root being taken along the y-axis. This plot is good for spotting whether the variance of the residuals depends on the fitted values. To satisfy the requirements of ANOVA, there should be no such dependence.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> The blue line is again a locally-weighted estimate, which ought to be as flat as possible.</p>
-<p>The top right graph offers a visualization of how well the residuals follow a normal distribution. The idea behind this <em>quantile-quantile plot</em> (Q-Q plot) is that if the residuals are indeed normally distributed, then we can line them up in increasing order along the x-axis, and for each of them, plot the theoretically expected value (based on normality) along the y-axis. If these observed vs.&nbsp;theoretically predicted values fall on the dashed straight line, then there is a perfect match between theory and observation, and the residuals are normally distributed. The stronger the deviation from the dashed line indicating a perfect theoretical match, the more non-normal the residuals are.</p>
-<p>The bottom right graph measures the “leverage” of each point, which is a measure of how sensitively the regression reacts to removing one data point. We will not be concerned with this plot.</p>
-<p>The blue smoother lines in the left two plots often do more to confuse than to help. For example, one can see a slight downward trend in the blue line in the bottom left graph, but looking at all points together reveals how little this trend means. The <code>smooth.colour = NA</code> argument removes the blue lines:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="at">smooth.colour =</span> <span class="cn">NA</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="Anova_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>One may can go even further. Since <code>autoplot</code> returns a <code>ggplot</code> object, we can add various theme options to make the plot prettier. We can also increase the transparency of the points to better see where and how much they overlap with one another:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="at">smooth.colour =</span> <span class="cn">NA</span>, <span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="Anova_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
+<p>The only difference is that, since the data are arranged in groups, the fitted values can only take on well-defined discrete values—the inferred means in each. Otherwise, the plots are read and evaluated just as before. In this case, we can see that the assumptions are fulfilled beautifully: the residuals have equal variance in the groups, there is no trend in them, and the quantile-quantile plot shows that the residuals lie where they should.</p>
 </section>
-<section id="sec-tukey" class="level2" data-number="11.4">
-<h2 data-number="11.4" class="anchored" data-anchor-id="sec-tukey"><span class="header-section-number">11.4</span> Tukey’s honest significant differences</h2>
-<p>Just as the Dunn test is a post-hoc test for the Kruskal–Wallis test, the Tukey test (or Tukey’s honest significant test) is a post-hoc test for an ANOVA. The corresponding function in R is called <code>TukeyHSD</code>, and it should be applied to the result of the <code>lm</code> function—with one caveat. The Tukey test requires the output of the ANOVA to be in a particular format. Therefore, before passing the result of <code>lm</code> to <code>TukeyHSD</code>, we first have to pass it to a helper function called <code>aov</code> (“analysis of variance”). Like this:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span> <span class="fu">aov</span>() <span class="sc">|&gt;</span> <span class="fu">TukeyHSD</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  Tukey multiple comparisons of means
-    95% family-wise confidence level
-
-Fit: aov(formula = lm(weight ~ group, data = PlantGrowth))
-
-$group
-            diff        lwr       upr     p adj
-trt1-ctrl -0.371 -1.0622161 0.3202161 0.3908711
-trt2-ctrl  0.494 -0.1972161 1.1852161 0.1979960
-trt2-trt1  0.865  0.1737839 1.5562161 0.0120064</code></pre>
-</div>
-</div>
-<p>The table is similar to the one produced by the Dunn test, with a few differences. The first column tells us which groups of data are compared. The second column is the raw difference between the group means, the third and fourth are the lower and upper limits of a 95% confidence interval for the difference, and the last one are the p-values (adjusted for multiple comparisons). In this case, the results from the Dunn test and the Tukey test are in agreement: only the difference between the two control groups stands a reasonable chance of being real. The fact that multiple methods lead to the same conclusion increases the trust we can place in their results being correct.</p>
-<p>The <code>aov</code> function serves no purpose above, except to put the data in a format which <code>TukeyHSD</code> can work with. In case using this intermediary feels like a hassle, one can easily make life simpler, by writing a helper function which automatically calls it, together with the Tukey test:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>tukey.test <span class="ot">&lt;-</span> <span class="cf">function</span>(lmFit) {</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  lmFit <span class="sc">|&gt;</span> <span class="fu">aov</span>() <span class="sc">|&gt;</span> <span class="fu">TukeyHSD</span>()</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Here <code>lmFit</code> is a model fit object returned by the <code>lm</code> function. Using this, we can rewrite the above more simply:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span> <span class="fu">tukey.test</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  Tukey multiple comparisons of means
-    95% family-wise confidence level
-
-Fit: aov(formula = lmFit)
-
-$group
-            diff        lwr       upr     p adj
-trt1-ctrl -0.371 -1.0622161 0.3202161 0.3908711
-trt2-ctrl  0.494 -0.1972161 1.1852161 0.1979960
-trt2-trt1  0.865  0.1737839 1.5562161 0.0120064</code></pre>
-</div>
-</div>
-</section>
-<section id="exercises" class="level2" data-number="11.5">
-<h2 data-number="11.5" class="anchored" data-anchor-id="exercises"><span class="header-section-number">11.5</span> Exercises</h2>
+<section id="exercises" class="level2" data-number="12.5">
+<h2 data-number="12.5" class="anchored" data-anchor-id="exercises"><span class="header-section-number">12.5</span> Exercises</h2>
 <ol type="1">
 <li>The file <a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/daphnia_growth.zip"><code>daphnia_growth.csv</code></a> contains data on the growth rate of <em>Daphnia</em> populations that are infected with various parasites. There are four groups of observations: the control (no parasites), infection with <em>Metschnikowia bicuspidata</em>, infection with <em>Pansporella perplexa</em>, and finally, infection with <em>Pasteuria ramosa</em>. Each group has ten replicate observations. Are growth rates affected by parasite load?
 <ul>
 <li>Before doing any tests, visualize and explore the data, and make sure you have a solid expectation for the results of any statistical analysis.</li>
 <li>Answer the question whether growth rates affected by parasite load by first applying a non-parametric test (and a subsequent non-parametric post-hoc test if needed).</li>
 <li>Next, apply a parametric test in the same way: by applying the test and running post-hoc tests if needed.</li>
-<li>Do not forget to create <em>diagnostic plots</em>, to see if the assumptions behind the parametric test are satisfied to an acceptable degree. Is that the case? And do the results from the parametric and non-parametric tests agree with one another?</li>
+<li>Do not forget to create diagnostic plots, to see if the assumptions behind the parametric test are satisfied to an acceptable degree. Is that the case? And do the results from the parametric and non-parametric tests agree with one another?</li>
 </ul></li>
 <li>In <a href="https://raw.githubusercontent.com/dysordys/data-with-R/main/data/ponds.zip"><code>ponds.csv</code></a>, measured acidity data (pH) is reported from four different ponds. Do the ponds differ in acidity, and if so, which ones from which others? Answer using both non-parametric and parametric tests, with appropriate post-hoc analyses. Check whether these different methods of analysis agree, and make sure that the assumptions behind the parametric test are satisfied using diagnostic plots. (Note: in this dataset, some values are missing.)</li>
 </ol>
@@ -637,9 +713,8 @@ trt2-trt1  0.865  0.1737839 1.5562161 0.0120064</code></pre>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>In <a href="Anova_two_way.html"><span>Chapter&nbsp;12</span></a> we will see examples where multiple independent factors are varied, and each possible combination results in a separate group. For example, if the effects of three different dosages of vitamin C are examined on the tooth growth of Guinea pigs, and the vitamin is also supplied in two distinct forms of either orange juice or raw ascorbic acid, then there will be <span class="math inline">\(3 \cdot 2 = 6\)</span> groups, defined by the two factors of dosage and form of supplement.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>In <a href="Anova_two_way.html"><span>Chapter&nbsp;13</span></a> we will see examples where multiple independent factors are varied, and each possible combination results in a separate group. For example, if the effects of three different dosages of vitamin C are examined on the tooth growth of Guinea pigs, and the vitamin is also supplied in two distinct forms of either orange juice or raw ascorbic acid, then there will be <span class="math inline">\(3 \cdot 2 = 6\)</span> groups, defined by the two factors of dosage and form of supplement.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>The Kruskal–Wallis test is sometimes referred to as “non-parametric ANOVA”. While this is perfectly fine as a label, one should be aware that it is, strictly speaking, a misnomer: the Kruskal–Wallis test does not rely on computing variances at all.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>In technical terms, the variation should be <em>homoscedastic</em> (be approximately the same for all values of the predictor) as opposed to <em>heteroscedastic</em>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 
@@ -879,13 +954,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./Intro_statistics.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Introducing statistical inference</span></span>
+      <a href="./Linear_regression.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Simple linear regression</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./Anova_two_way.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Two-way ANOVA and the Scheirer–Ray–Hare test</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

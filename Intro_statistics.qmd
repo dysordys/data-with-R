@@ -34,7 +34,8 @@ Furthermore, the computed difference between the means and medians of the two sa
 ```{r}
 bird |>
   group_by(island) |>
-  summarise(mean = mean(weight), median = median(weight))
+  summarise(mean = mean(weight), median = median(weight)) |>
+  ungroup()
 ```
 
 Can we conclude that the two samples are indeed different, and birds on the smaller island tend to be smaller, supporting the insular dwarfism hypothesis? As mentioned above, the data are fictive---they are not based on actual measurements. **In fact, these "observations" were created by sampling each data point from the same distribution, regardless of island**: a normal distribution with mean 20 and standard deviation 5. This means that any supposedly observed difference between the samples must be accidental. Would various statistical methods detect a difference? One thing we can do is what we have learned in @sec-CI: compute the 95% confidence intervals of the means, and see whether and how much they overlap.

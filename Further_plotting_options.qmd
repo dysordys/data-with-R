@@ -1,6 +1,6 @@
 # Some further plotting options; introducing factors {#sec-moreggplot}
 
-## Smoothing and regression lines
+## Smoothing and regression lines {#sec-smooth}
 
 In @sec-ggplot we learned about aesthetic mappings and various `geom_` options such as `geom_point`, `geom_histogram`, and `geom_boxplot`. Let us explore another type of `geom_`, which approximates the trend of a set of data points with a line and an error bar that shows the confidence interval of the estimate at each point:
 
