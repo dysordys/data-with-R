@@ -195,7 +195,7 @@ PlantGrowth |>
 options(pillar.sigfig = 3)
 ```
 
-It may be clear from the above, but it is good to point out nevertheless, that one does not need to specify the indicator variables ($T_i$ and $U_i$ in @eq-aov1way3group) by hand. Instead, when defining the model formula as `weight ~ group`, R will automatically assign them based on the entries of `group`, and call them `grouptrt1` and `grouptrt2`. This is very convenient, but it is important to be aware that under the hood, R introduces coefficients for all values of the predictor (except the baseline value, which is instead captured by the intercept $\beta_0$).
+It may be clear from the above, but it is good to point out nevertheless, that one does not need to specify the indicator variables ($T_i$ and $U_i$ in @eq-aov1way3group) by hand. Instead, when defining the model formula as `weight ~ group`, R will automatically assign them based on the entries of `group`, and call the corresponding coefficients $\beta_T$ and $\beta_U$ by the names `grouptrt1` and `grouptrt2`. This is very convenient, but it is important to be aware of what really goes on under the hood when performing an ANOVA.
 
 More generally, the same procedure is followed for any number of values the predictor may assume For $n$ groups of data, we introduce $n-1$ indicator variables which take the value 1 if a data point belongs in the corresponding group, and the value 0 otherwise.
 
