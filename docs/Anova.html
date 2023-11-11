@@ -679,7 +679,8 @@ F-statistic: 4.846 on 2 and 27 DF,  p-value: 0.01591</code></pre>
 3 trt2       5.526</code></pre>
 </div>
 </div>
-<p>In general, the same procedure can be followed for any number of groups. For <span class="math inline">\(n\)</span> groups of data, we introduce <span class="math inline">\(n-1\)</span> indicator variables which take the value 1 if a data point belongs in the corresponding group, and the value 0 otherwise.</p>
+<p>It may be clear from the above, but it is good to point out nevertheless, that one does not need to specify the indicator variables (<span class="math inline">\(T_i\)</span> and <span class="math inline">\(U_i\)</span> in <a href="#eq-aov1way3group">Equation&nbsp;<span>12.2</span></a>) by hand. Instead, when defining the model formula as <code>weight ~ group</code>, R will automatically assign them based on the entries of <code>group</code>, and call them <code>grouptrt1</code> and <code>grouptrt2</code>. This is very convenient, but it is important to be aware that under the hood, R introduces coefficients for all values of the predictor (except the baseline value, which is instead captured by the intercept <span class="math inline">\(\beta_0\)</span>).</p>
+<p>More generally, the same procedure is followed for any number of values the predictor may assume For <span class="math inline">\(n\)</span> groups of data, we introduce <span class="math inline">\(n-1\)</span> indicator variables which take the value 1 if a data point belongs in the corresponding group, and the value 0 otherwise.</p>
 </section>
 <section id="sec-diagnostic-anova" class="level2" data-number="12.4">
 <h2 data-number="12.4" class="anchored" data-anchor-id="sec-diagnostic-anova"><span class="header-section-number">12.4</span> Using diagnostic plots on an ANOVA</h2>
