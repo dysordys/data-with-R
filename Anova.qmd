@@ -140,9 +140,9 @@ Let us denote the `weight` of individual $i$ by $y_i$. We wish to predict this b
 $$
 y_i
 = \beta_0 + \beta_1 x_i + \epsilon_i
-$$ {#eq-aov1way}
+$$ {#eq-aov1way-basic}
 
-On the surface, this is exactly the same equation as @eq-linreg. But there is one important difference: in an ANOVA, we give a different meaning to the $x_i$. **This variable should take on the value 1 if individual *i* is from the smaller island and the value 0 if it is from the larger island.** (It could also be the other way round; it does not matter as long as we choose one convention and stay consistent.) The $\epsilon_i$ are still the residuals, measuring the deviation of the points from the ideal prediction. What is the "ideal" prediction here? Well, without the $\epsilon_i$ term, @eq-aov1way reads $y_i = \beta_0 + \beta_1 x_i$. If individual $i$ is from the larger island, $x_i = 0$, and we have $y_i = \beta_0$. So the intercept $\beta_0$ corresponds to the mean prediction for the weight of the birds in the larger island. Conversely, if individual $i$ is from the smaller island, then $x_i = 1$, and so $y_i = \beta_0 + \beta_1 \cdot 1 = \beta_0 + \beta_1$. In other words, $\beta_1$ is the *difference* in mean weight between the smaller and the larger island.
+On the surface, this is exactly the same equation as @eq-linreg. But there is one important difference: in an ANOVA, we give a different meaning to the $x_i$. **This variable should take on the value 1 if individual *i* is from the smaller island and the value 0 if it is from the larger island.** (It could also be the other way round; it does not matter as long as we choose one convention and stay consistent.) The $\epsilon_i$ are still the residuals, measuring the deviation of the points from the ideal prediction. What is the "ideal" prediction here? Well, without the $\epsilon_i$ term, @eq-aov1way-basic reads $y_i = \beta_0 + \beta_1 x_i$. If individual $i$ is from the larger island, $x_i = 0$, and we have $y_i = \beta_0$. So the intercept $\beta_0$ corresponds to the mean prediction for the weight of the birds in the larger island. Conversely, if individual $i$ is from the smaller island, then $x_i = 1$, and so $y_i = \beta_0 + \beta_1 \cdot 1 = \beta_0 + \beta_1$. In other words, $\beta_1$ is the *difference* in mean weight between the smaller and the larger island.
 
 We can see this in action by running `lm` and then `summary` on these data:
 
@@ -168,20 +168,30 @@ The rest of the regression table now reads exactly as it would in performing sim
 
 There is just one question left: why was the `"larger"` island automatically designated as the one corresponding to the intercept? The reason is that R proceeds in alphabetical order, and since `"larger"` comes before `"smaller"` alphabetically, it is automatically treated as the intercept (that is, the group corresponding to $x_i = 0$ instead of $x_i = 1$). One can override this by using factors (@sec-factors), in which case the lowest factor level will correspond to the intercept.
 
-So now we have established an analogy between linear regression and ANOVA for the special case when there are only two groups to compare. What to do when there are more groups---say, in the `PlantGrowth` data where we have three? In that case, we have to introduce one more indicator variable. Say, we could have $T_i$ and $U_i$, instead of $x_i$ that we used above. So let $T_i=1$ and $U_i=0$ if observation $i$ is in treatment 1, and $T_i=0$ and $U_i=1$ if observation $i$ is in treatment 2. If the observation is in the control, then both $T_i$ and $U_i$ are zero. We can then write the following equation:
+So now we have established an analogy between linear regression and ANOVA for the special case when there are only two groups to compare. The main idea was to introduce the indicator variable $x_i$ which is 1 if observation $i$ belongs in `larger` and 0 otherwise. We can rewrite @eq-aov1way-basic with a more expressive notation, to make this idea more transparent:
+
+$$
+(\text{weight})_i
+= \beta_0 + \beta_1 (\text{bird is from larger island})_i + \epsilon_i
+$$ {#eq-aov1way}
+
+What to do when there are more than two groups---say, in the `PlantGrowth` data where we have three? In that case, we have to introduce one more indicator variable. Say, we could have $(\text{group is trt1})_i$ and $(\text{group is trt2})_i$; the first is 1 if the observation is from treatment 1 (and 0 otherwise), and the second is 1 only if the observation is from treatment 2. If the observation is in the control, then both indicator variables are zero. We can thus write the following equation:
 
 $$
 y_i
-= \beta_0 + \beta_T T_i + \beta_U U_i + \epsilon_i
+= \beta_0
++ \beta_1 (\text{group is trt1})_i
++ \beta_2 (\text{group is trt2})_i
++ \epsilon_i
 $$ {#eq-aov1way3group}
 
-The coefficients are now labelled $\beta_T$ and $\beta_U$ for simplicity. We can get the usual statistics on them by using `summary`:
+We can get the usual statistics on them by using `summary`:
 
 ```{r}
 lm(weight ~ group, data = PlantGrowth) |> summary()
 ```
 
-Since `ctrl` comes earliest in the alphabet, it serves as the intercept. Its estimated value, 5.032, is the mean plant weight in the control group. The estimates in the rows `grouptrt1` and `grouptrt2` (these names were created by mushing together the name of the column in which the factor is found with the factors' names themselves) are the $\beta_T$ and $\beta_U$ coefficients, respectively. That is, they are the deviations from the baseline provided by `(Intercept)`. So we can surmise that the estimated mean of `trt1` is 5.032 - 0.371 = 4.661, and that of `trt2` is 5.032 + 0.494 = 5.526. Indeed, this is what we find relying on simple summaries computing the means in each group:
+Since `ctrl` comes earliest in the alphabet, it serves as the intercept. Its estimated value, 5.032, is the mean plant weight in the control group. The estimates in the rows `grouptrt1` and `grouptrt2` (these names were created by mushing together the name of the column in which the factor is found with the factors' names themselves) are the $\beta_1$ and $\beta_2$ coefficients of @eq-aov1way3group, respectively. That is, they are the deviations from the baseline provided by `(Intercept)`. So we can surmise that the estimated mean of `trt1` is 5.032 - 0.371 = 4.661, and that of `trt2` is 5.032 + 0.494 = 5.526. Indeed, this is what we find relying on simple summaries computing the means in each group:
 
 ```{r}
 PlantGrowth |>
@@ -195,9 +205,9 @@ PlantGrowth |>
 options(pillar.sigfig = 3)
 ```
 
-It may be clear from the above, but it is good to point out nevertheless, that one does not need to specify the indicator variables ($T_i$ and $U_i$ in @eq-aov1way3group) by hand. Instead, when defining the model formula as `weight ~ group`, R will automatically assign them based on the entries of `group`, and call the corresponding coefficients $\beta_T$ and $\beta_U$ by the names `grouptrt1` and `grouptrt2`. This is very convenient, but it is important to be aware of what really goes on under the hood when performing an ANOVA.
+It may be clear from the above, but it is good to point out nevertheless, that one does not need to specify the individual indicator variables $(\text{group is trt1})_i$, $(\text{group is trt2})_i$, etc. by hand. Instead, when defining the model formula as `weight ~ group`, R automatically assigns them based on the entries of `group`, and call the corresponding coefficients $\beta_1$ and $\beta_2$ by the names `grouptrt1` and `grouptrt2`. This is very convenient, but it is important to be aware that this substitution is what really goes on under the hood when performing an ANOVA.
 
-More generally, the same procedure is followed for any number of values the predictor may assume For $n$ groups of data, we introduce $n-1$ indicator variables which take the value 1 if a data point belongs in the corresponding group, and the value 0 otherwise.
+More generally, the same procedure can be followed for any number of groups the predictor may come from. For $n$ groups of data, we introduce $n-1$ indicator variables which take the value 1 if a data point belongs in the corresponding group, and the value 0 otherwise. Again, R will create these variables automatically, so we do not need to worry about them when defining a linear model.
 
 
 ## Using diagnostic plots on an ANOVA {#sec-diagnostic-anova}
