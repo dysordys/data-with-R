@@ -168,7 +168,7 @@ The rest of the regression table now reads exactly as it would in performing sim
 
 There is just one question left: why was the `"larger"` island automatically designated as the one corresponding to the intercept? The reason is that R proceeds in alphabetical order, and since `"larger"` comes before `"smaller"` alphabetically, it is automatically treated as the intercept (that is, the group corresponding to $x_i = 0$ instead of $x_i = 1$). One can override this by using factors (@sec-factors), in which case the lowest factor level will correspond to the intercept.
 
-So now we have established an analogy between linear regression and ANOVA for the special case when there are only two groups to compare. The main idea was to introduce the indicator variable $x_i$ which is 1 if observation $i$ belongs in `larger` and 0 otherwise. We can rewrite @eq-aov1way-basic with a more expressive notation, to make this idea more transparent:
+So now we have established an analogy between linear regression and ANOVA for the special case when there are only two groups to compare. The main idea was to introduce the indicator variable $x_i$ which is 1 if observation $i$ belongs in `larger` and 0 otherwise. We can rewrite @eq-aov1way-basic with more expressive notation for $x_i$ and $y_i$, to make this idea more transparent:
 
 $$
 (\text{weight})_i
@@ -178,7 +178,7 @@ $$ {#eq-aov1way}
 What to do when there are more than two groups---say, in the `PlantGrowth` data where we have three? In that case, we have to introduce one more indicator variable. Say, we could have $(\text{group is trt1})_i$ and $(\text{group is trt2})_i$; the first is 1 if the observation is from treatment 1 (and 0 otherwise), and the second is 1 only if the observation is from treatment 2. If the observation is in the control, then both indicator variables are zero. We can thus write the following equation:
 
 $$
-y_i
+(\text{weight})_i
 = \beta_0
 + \beta_1 (\text{group is trt1})_i
 + \beta_2 (\text{group is trt2})_i
@@ -205,7 +205,7 @@ PlantGrowth |>
 options(pillar.sigfig = 3)
 ```
 
-It may be clear from the above, but it is good to point out nevertheless, that one does not need to specify the individual indicator variables $(\text{group is trt1})_i$, $(\text{group is trt2})_i$, etc. by hand. Instead, when defining the model formula as `weight ~ group`, R automatically assigns them based on the entries of `group`, and call the corresponding coefficients $\beta_1$ and $\beta_2$ by the names `grouptrt1` and `grouptrt2`. This is very convenient, but it is important to be aware that this substitution is what really goes on under the hood when performing an ANOVA.
+It may be clear from the above, but it is good to point out nevertheless, that one does not need to specify the individual indicator variables $(\text{group is trt1})_i$ and $(\text{group is trt2})_i$ and so on by hand. Instead, when defining the model formula as `weight ~ group`, R automatically assigns them based on the entries of `group`. It will also automatically name the corresponding coefficients: $\beta_1$ will instead be `grouptrt1` and $\beta_2$ `grouptrt2`, in this example. This is very convenient, but it is important to be aware that this substitution is what really goes on under the hood when performing an ANOVA.
 
 More generally, the same procedure can be followed for any number of groups the predictor may come from. For $n$ groups of data, we introduce $n-1$ indicator variables which take the value 1 if a data point belongs in the corresponding group, and the value 0 otherwise. Again, R will create these variables automatically, so we do not need to worry about them when defining a linear model.
 
