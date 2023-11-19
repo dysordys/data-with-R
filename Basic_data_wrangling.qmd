@@ -34,25 +34,45 @@ select(snailDat, -species)
 
 Now we are left with only the columns `habitat`, `size`, and `shape`. One can also select and deselect multiple columns in a similar vein. For example, `select(snailDat, -species, -habitat)` removes both columns and leaves only `size`, and `shape` (try it).
 
-There are several other options within `select`, which mostly help with selecting several columns at a time fulfilling certain criteria. The collection of these options and methods is called *tidy selection*. A few examples follow. First, one can use logical operations to select columns. `select(snailDat, !species)` means "select all columns that are not `species`":
-
-```{r}
-select(snailDat, !species)
-```
-
-One can also specify, as character strings, what the column names should start or end with, using `starts_with` and `ends_with`:
+There are several other options within `select`, which mostly help with selecting several columns at a time fulfilling certain criteria. The collection of these options and methods is called *tidy selection*. First of all, tidy selection allows one to specify, as character strings, what the column names should start or end with, using `starts_with` and `ends_with`:
 
 ```{r}
 select(snailDat, starts_with("s"))
 select(snailDat, starts_with("sh"))
 select(snailDat, ends_with("e"))
-select(snailDat, ends_with("es"))
+select(snailDat, ends_with("pe"))
 ```
 
-Finally, the function `contains` can select columns which contain some string anywhere in their names:
+Similarly, the function `contains` can select columns which contain some string anywhere in their names. For example, `select(snailDat, ends_with("pe"))` above only selected the `shape` column, but
 
 ```{r}
 select(snailDat, contains("pe"))
+```
+
+additionally selects `species`.
+
+One can combine these selection methods using the `&` ("and"), `|` ("or"), and `!` ("not") logical operators. To select all columns which start with `"s"` but do not contain the letter `"z"` in their names:
+
+```{r}
+select(snailDat, starts_with("s") & !contains("z"))
+```
+
+The following selects columns that either contain `"ha"` in their names, or end with the letter `"s"`:
+
+```{r}
+select(snailDat, contains("ha") | ends_with("s"))
+```
+
+Finally, it is possible to select a range of columns, using the colon (`:`) operator. To select the columns `species` and `shape`, along with any columns in between them, we write:
+
+```{r}
+select(snailDat, species:shape)
+```
+
+Such range selection can also be combined with the logical operations above. For instance, to select the range from `habitat` to `species`, as well as any columns whose name contains the letter `"z"`:
+
+```{r}
+select(snailDat, habitat:species | contains("z"))
 ```
 
 ### `filter`
