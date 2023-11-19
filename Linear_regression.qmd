@@ -42,7 +42,7 @@ To go further and obtain the best-fitting line to a set of points, we have to ag
 
 $$
 y_i
-= \beta_0 + \beta_1 x_i + \epsilon_i
+= \beta_0 + \beta_1 \cdot x_i + \epsilon_i
 $$ {#eq-linreg}
 
 Here $x_i$ is the $x$-coordinate of the $i$th data point, and $y_i$ is its $y$-coordinate (these quantities are therefore known from the data). Then, since it is unlikely that the line will go through any one point exactly, one has to also add the error that is the distance of the line from the point---that is what $\epsilon_i$ does.

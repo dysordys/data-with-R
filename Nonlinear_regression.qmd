@@ -45,7 +45,21 @@ We see that there is also a clear, saturating relationship between CO~2~ concent
 lm(uptake ~ conc + Type * Treatment, data = CO2) |> anova()
 ```
 
-In other words, the uptake rates are modeled via a combination of the effect of concentration (a continuous variable) plus the interaction of type and treatment (two categorical variables). Recall that `Type * Treatment` is shorthand for `Type + Treatment + Type:Treatment`, the sum of the main effects and the interaction between them. The rationale for choosing this model is that the boxplot above reveals a potential interaction between the two factors `Type` and `Treatment` (the effect of changing `Treatment` from chilled to nonchilled depends on whether the `Type` was Quebec or Mississippi), and on top of this, we also want to capture the positive dependence on CO~2~ concentration. The ANOVA table above concurs: each of these categories come out with low p-values, indicating that what we see is unlikely to be due to just chance. To make sure that the assumptions on which this interpretation rests are held, we look at the diagnostic plots:
+In other words, the uptake rates are modeled via a combination of the effect of concentration (a continuous variable) plus the interaction of type and treatment (two categorical variables). Recall that `Type * Treatment` is shorthand for `Type + Treatment + Type:Treatment`, the sum of the main effects and the interaction between them. Mathematically, the equation for the model reads:
+$$
+\begin{split}
+(\text{uptake})_i &
+= \beta_0
++ \beta_1 \cdot (\text{conc})_i
++ \beta_2 \cdot (\text{Type is Mississippi})_i \\ &
++ \beta_3 \cdot (\text{Treatment is chilled})_i \\ &
++ \beta_4 \cdot (\text{Type is Mississippi})_i \cdot(\text{Treatment is chilled})_i
++ \epsilon_i
+\end{split}
+$$ {#eq-linreg-multiway}
+where $(\text{conc})_i$ is a continuous predictor and not an indicator variable---that is, it takes on the actual value of the CO~2~ concentration in observation $i$. By contrast, $(\text{Type is Mississippi})_i$ and $(\text{Treatment is chilled})_i$ are indicator variables that take on the value 1 if data point $i$ belongs in their category and 0 otherwise.
+
+The rationale for having chosen the model `uptake ~ conc + Type * Treatment` is that the box plots above reveal a potential interaction between the two factors `Type` and `Treatment` (the effect of changing `Treatment` from chilled to nonchilled depends on whether the `Type` was Quebec or Mississippi), and on top of this, we also want to capture the positive dependence on CO~2~ concentration. The ANOVA table above concurs: each of these categories come out with low p-values, indicating that what we see is unlikely to be due to just chance. To make sure that the assumptions on which this interpretation rests are held, we look at the diagnostic plots:
 
 ```{r}
 #| warning: false
@@ -57,15 +71,32 @@ lm(uptake ~ conc + Type * Treatment, data = CO2) |>
   theme_bw()
 ```
 
-The Q-Q plot is less than amazing: in the lower quantiles, the realized residuals are consistently larger in magnitude than the theoretical expectation based on the assumption of normality. This, of course, is a consequence of the data depending on concentrations in a manifestly nonlinear way. Apart from the Q-Q plot however, the diagnostics look surprisingly good. We will come back to the point about nonlinearity in @sec-nonlin-regression.
+The Q-Q plot is not good: in the lower quantiles, the realized residuals are consistently larger in magnitude than the theoretical expectation based on the assumption of normality. This, of course, is a consequence of the data depending on concentrations in a manifestly nonlinear way. Apart from the Q-Q plot however, the diagnostics look surprisingly good. We will come back to the point about nonlinearity in @sec-nonlin-regression.
 
-It is also informative to apply the function `summary` on the model fit in addition to `anova`, to obtain the regression slopes and intercept:
+It is also informative to apply the function `summary` on the model fit in addition to `anova`, to obtain the regression slopes and intercept (the $\beta$ parameters of @eq-linreg-multiway):
 
 ```{r}
 lm(uptake ~ conc + Type * Treatment, data = CO2) |> summary()
 ```
 
-As good as this model looks, one can argue based on the plot of the data that there could also be an interaction between `conc` and the other two factors. After all, the saturation levels of the uptake rate are always higher in Quebec than in Mississippi, and the effect of chilling also depends on `Type`. A model which accounts for all these effects and their interactions is `uptake ~ conc * Type * Treatment`:
+Regardless of how good this model looks, one can argue based on the plot of the data that there could also be an interaction between `conc` and the other two factors. After all, the saturation levels of the uptake rate are always higher in Quebec than in Mississippi, and the effect of chilling also depends on `Type`. A model which accounts for all these effects and their interactions is `uptake ~ conc * Type * Treatment`. Mathematically:
+$$
+\begin{split}
+(\text{uptake})_i &
+= \beta_0
++ \beta_1 \cdot (\text{conc})_i
++ \beta_2 \cdot (\text{Type is Mississippi})_i \\ &
++ \beta_3 \cdot (\text{Treatment is chilled})_i \\ &
++ \beta_4 \cdot (\text{conc})_i \cdot (\text{Type is Mississippi})_i \\ &
++ \beta_5 \cdot (\text{conc})_i \cdot (\text{Treatment is chilled})_i \\ &
++ \beta_6 \cdot (\text{Type is Mississippi})_i \cdot (\text{Treatment is chilled})_i \\ &
++ \beta_7 \cdot (\text{conc})_i \cdot (\text{Type is Mississippi})_i
+\cdot (\text{Treatment is chilled})_i
++ \epsilon_i
+\end{split}
+$$ {#eq-linreg-multiway-2}
+
+(The $\beta_7$ term is multiplied by a three-way interaction of concentration, type, and treatment.) Fitting the model and creating diagnostic plots:
 
 ```{r}
 #| warning: false

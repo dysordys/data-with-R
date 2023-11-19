@@ -591,7 +591,7 @@ trt2-trt1  0.865  0.1737839 1.5562161 0.0120064</code></pre>
 <p>Let us denote the <code>weight</code> of individual <span class="math inline">\(i\)</span> by <span class="math inline">\(y_i\)</span>. We wish to predict this based on whether the island is large or small, using a linear model. This can be done in full analogy with <a href="Linear_regression.html#eq-linreg">Equation&nbsp;<span>11.1</span></a>, using the following equation:</p>
 <p><span id="eq-aov1way-basic"><span class="math display">\[
 y_i
-= \beta_0 + \beta_1 x_i + \epsilon_i
+= \beta_0 + \beta_1 \cdot x_i + \epsilon_i
 \tag{12.1}\]</span></span></p>
 <p>On the surface, this is exactly the same equation as <a href="Linear_regression.html#eq-linreg">Equation&nbsp;<span>11.1</span></a>. But there is one important difference: in an ANOVA, we give a different meaning to the <span class="math inline">\(x_i\)</span>. <strong>This variable should take on the value 1 if individual <em>i</em> is from the smaller island and the value 0 if it is from the larger island.</strong> (It could also be the other way round; it does not matter as long as we choose one convention and stay consistent.) The <span class="math inline">\(\epsilon_i\)</span> are still the residuals, measuring the deviation of the points from the ideal prediction. What is the “ideal” prediction here? Well, without the <span class="math inline">\(\epsilon_i\)</span> term, <a href="#eq-aov1way-basic">Equation&nbsp;<span>12.1</span></a> reads <span class="math inline">\(y_i = \beta_0 + \beta_1 x_i\)</span>. If individual <span class="math inline">\(i\)</span> is from the larger island, <span class="math inline">\(x_i = 0\)</span>, and we have <span class="math inline">\(y_i = \beta_0\)</span>. So the intercept <span class="math inline">\(\beta_0\)</span> corresponds to the mean prediction for the weight of the birds in the larger island. Conversely, if individual <span class="math inline">\(i\)</span> is from the smaller island, then <span class="math inline">\(x_i = 1\)</span>, and so <span class="math inline">\(y_i = \beta_0 + \beta_1 \cdot 1 = \beta_0 + \beta_1\)</span>. In other words, <span class="math inline">\(\beta_1\)</span> is the <em>difference</em> in mean weight between the smaller and the larger island.</p>
 <p>We can see this in action by running <code>lm</code> and then <code>summary</code> on these data:</p>
@@ -637,14 +637,16 @@ F-statistic: 3.499 on 1 and 38 DF,  p-value: 0.06914</code></pre>
 <p>So now we have established an analogy between linear regression and ANOVA for the special case when there are only two groups to compare. The main idea was to introduce the indicator variable <span class="math inline">\(x_i\)</span> which is 1 if observation <span class="math inline">\(i\)</span> belongs in <code>larger</code> and 0 otherwise. We can rewrite <a href="#eq-aov1way-basic">Equation&nbsp;<span>12.1</span></a> with more expressive notation for <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i\)</span>, to make this idea more transparent:</p>
 <p><span id="eq-aov1way"><span class="math display">\[
 (\text{weight})_i
-= \beta_0 + \beta_1 (\text{bird is from larger island})_i + \epsilon_i
+= \beta_0
++ \beta_1 \cdot (\text{bird is from larger island})_i
++ \epsilon_i
 \tag{12.2}\]</span></span></p>
 <p>What to do when there are more than two groups—say, in the <code>PlantGrowth</code> data where we have three? In that case, we have to introduce one more indicator variable. Say, we could have <span class="math inline">\((\text{group is trt1})_i\)</span> and <span class="math inline">\((\text{group is trt2})_i\)</span>; the first is 1 if the observation is from treatment 1 (and 0 otherwise), and the second is 1 only if the observation is from treatment 2. If the observation is in the control, then both indicator variables are zero. We can thus write the following equation:</p>
 <p><span id="eq-aov1way3group"><span class="math display">\[
 (\text{weight})_i
 = \beta_0
-+ \beta_1 (\text{group is trt1})_i
-+ \beta_2 (\text{group is trt2})_i
++ \beta_1 \cdot (\text{group is trt1})_i
++ \beta_2 \cdot (\text{group is trt2})_i
 + \epsilon_i
 \tag{12.3}\]</span></span></p>
 <p>We can get the usual statistics on them by using <code>summary</code>:</p>

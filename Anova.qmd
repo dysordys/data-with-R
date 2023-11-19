@@ -139,7 +139,7 @@ Let us denote the `weight` of individual $i$ by $y_i$. We wish to predict this b
 
 $$
 y_i
-= \beta_0 + \beta_1 x_i + \epsilon_i
+= \beta_0 + \beta_1 \cdot x_i + \epsilon_i
 $$ {#eq-aov1way-basic}
 
 On the surface, this is exactly the same equation as @eq-linreg. But there is one important difference: in an ANOVA, we give a different meaning to the $x_i$. **This variable should take on the value 1 if individual *i* is from the smaller island and the value 0 if it is from the larger island.** (It could also be the other way round; it does not matter as long as we choose one convention and stay consistent.) The $\epsilon_i$ are still the residuals, measuring the deviation of the points from the ideal prediction. What is the "ideal" prediction here? Well, without the $\epsilon_i$ term, @eq-aov1way-basic reads $y_i = \beta_0 + \beta_1 x_i$. If individual $i$ is from the larger island, $x_i = 0$, and we have $y_i = \beta_0$. So the intercept $\beta_0$ corresponds to the mean prediction for the weight of the birds in the larger island. Conversely, if individual $i$ is from the smaller island, then $x_i = 1$, and so $y_i = \beta_0 + \beta_1 \cdot 1 = \beta_0 + \beta_1$. In other words, $\beta_1$ is the *difference* in mean weight between the smaller and the larger island.
@@ -172,7 +172,9 @@ So now we have established an analogy between linear regression and ANOVA for th
 
 $$
 (\text{weight})_i
-= \beta_0 + \beta_1 (\text{bird is from larger island})_i + \epsilon_i
+= \beta_0
++ \beta_1 \cdot (\text{bird is from larger island})_i
++ \epsilon_i
 $$ {#eq-aov1way}
 
 What to do when there are more than two groups---say, in the `PlantGrowth` data where we have three? In that case, we have to introduce one more indicator variable. Say, we could have $(\text{group is trt1})_i$ and $(\text{group is trt2})_i$; the first is 1 if the observation is from treatment 1 (and 0 otherwise), and the second is 1 only if the observation is from treatment 2. If the observation is in the control, then both indicator variables are zero. We can thus write the following equation:
@@ -180,8 +182,8 @@ What to do when there are more than two groups---say, in the `PlantGrowth` data 
 $$
 (\text{weight})_i
 = \beta_0
-+ \beta_1 (\text{group is trt1})_i
-+ \beta_2 (\text{group is trt2})_i
++ \beta_1 \cdot (\text{group is trt1})_i
++ \beta_2 \cdot (\text{group is trt2})_i
 + \epsilon_i
 $$ {#eq-aov1way3group}
 

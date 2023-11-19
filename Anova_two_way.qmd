@@ -10,10 +10,10 @@ A good example is provided by the built-in dataset `ToothGrowth`, which contains
 #| message: false
 library(tidyverse)
 
-as_tibble(ToothGrowth)
+as_tibble(ToothGrowth) |> print(n = Inf)
 ```
 
-Exploring the data more closely, it turns out that there are three dosage levels (0.5, 1, and 2) and two types of supplement (`VC` for raw vitamin C or ascorbic acid, and `OJ` for orange juice). As usual, we first visualize the data. In doing so, it is useful to convert `dose` to a factor (@sec-factors): the three dosage levels play the role of a categorical variable ("low", "medium" ,and "high" levels of vitamin C dosage), and we are not so interested in the actual magnitudes of those dosages.
+As seen, there are three dosage levels (0.5, 1, and 2) and two types of supplement (`VC` for vitamin C in the form of raw ascorbic acid, and `OJ` for orange juice). As usual, we first visualize the data. In doing so, it is useful to convert `dose` to a factor (@sec-factors): the three dosage levels play the role of a categorical variable ("low", "medium" ,and "high" levels of vitamin C dosage), and we are not so interested in the actual magnitudes of those dosages.
 
 ```{r}
 as_tibble(ToothGrowth) |>
@@ -23,7 +23,7 @@ as_tibble(ToothGrowth) |>
   geom_boxplot(alpha = 0.2, outlier.shape = NA,
                colour = "steelblue", fill = "steelblue") +
   geom_jitter(alpha = 0.4, width = 0.05, colour = "steelblue") +
-  labs(x = "vitamin C dosage [mg / day]", y = "tooth length [mm]") +
+  labs(x = "vitamin C dosage [mg/day]", y = "tooth length [mm]") +
   facet_grid(. ~ dose, labeller = label_both) +
   theme_bw()
 ```
@@ -37,9 +37,20 @@ ToothGrowth |>
   anova()
 ```
 
-The new feature above is the inclusion of `dose + supp` as the predictor, instead of just a single one. As seen from the ANOVA table, both the effects of dosage and supplement type appear to be real.
+The new feature above is the inclusion of `dose + supp` as the predictor, instead of just a single one. Mathematically, this translates to the following model:
+$$
+\begin{split}
+(\text{length})_i &
+= \beta_0
++ \beta_1 \cdot (\text{dose is 1})_i
++ \beta_2 \cdot (\text{dose is 2})_i \\ &
++ \beta_3 \cdot (\text{supplement is VC})_i
++ \epsilon_i
+\end{split}
+$$ {#eq-anova2way-noint}
+where the coefficients $\beta_1$, $\beta_2$, and $\beta_3$ are all multiplied by indicator variables which take on the value 1 if a data point belongs in that category and 0 otherwise. As seen from the ANOVA table above, both dosage and supplement type appear to have a real effect on tooth growth.
 
-However, this model ignores something that might be potentially relevant: the *interaction* between the two factors. This means that the nature of the relationship between tooth length and one of the predictors depends on the value of the other predictor. For the Guinea pig data, a case can be made that the effect of the supplement type depends on dosage: when the dosage level is either 0.5 or 1 mg/day, orange juice leads to longer teeth than ascorbic acid---but this benefit disappears at the highest dosage level of 2 mg/day.
+However, this model ignores something that might be potentially relevant: the *interaction* between the two factors. This means that the nature of the relationship between tooth length and one of the predictors depends on the value of the other predictor. For the Guinea pig data, a case can be made based on the plot above that the effect of the supplement type depends on dosage: when the dosage level is either 0.5 or 1 mg/day, orange juice leads to longer teeth than ascorbic acid---but this benefit disappears at the highest dosage level of 2 mg/day.
 
 Accounting for interaction terms in a statistical model is easy. All one needs to do is add one more term to the formula, denoted `dose:supp`:
 
@@ -50,7 +61,20 @@ ToothGrowth |>
   anova()
 ```
 
-The model result confirms that our intuition was likely correct: there does appear to be a real interaction effect between the two factors.
+The model result confirms that our intuition was likely correct: there does appear to be a real interaction effect between the two factors. Mathematically, the model reads
+$$
+\begin{split}
+(\text{length})_i &
+= \beta_0
++ \beta_1 \cdot (\text{dose is 1})_i
++ \beta_2 \cdot (\text{dose is 2})_i
++ \beta_3 \cdot (\text{supplement is VC})_i \\ &
++ \beta_4 \cdot (\text{dose is 1})_i \cdot(\text{supplement is VC})_i \\ &
++ \beta_5 \cdot (\text{dose is 2})_i \cdot(\text{supplement is VC})_i
++ \epsilon_i
+\end{split}
+$$ {#eq-anova2way-int}
+where $\beta_4$ and $\beta_5$ are multiplied by products of indicator variables. In other words, the $\beta_4$ term only shows up in the equation if data point $i$ both has a dose of 1 mg/day and a supplement of VC, and $\beta_5$ only appears if data point $i$ has a 2 mg/day dose and VC supplement.
 
 The inclusion of two factors with their interaction is so common in linear models that there is a shorthand notation to make it easier. Writing `dose * supp` is exactly the same as the above `dose + supp + dose:supp`. Let us see this in action:
 
@@ -61,7 +85,7 @@ ToothGrowth |>
   anova()
 ```
 
-The two results are identical.
+The result is identical to what we had before.
 
 As in the case of one-way ANOVA, diagnostic plots and post-hoc testing (Tukey test) are useful tools. The diagnostic plots look excellent, so we can be confident about interpreting the p-values and other statistics of the linear model correctly:
 
@@ -97,7 +121,7 @@ as_tibble(ToothGrowth) |>
   geom_boxplot(alpha = 0.2, outlier.shape = NA,
                colour = "steelblue", fill = "steelblue") +
   geom_jitter(alpha = 0.4, width = 0.05, colour = "steelblue") +
-  labs(x = "vitamin C dosage [mg / day]", y = "tooth length [mm]") +
+  labs(x = "vitamin C dosage [mg/day]", y = "tooth length [mm]") +
   theme_bw()
 ```
 
@@ -110,13 +134,13 @@ as_tibble(ToothGrowth) |>
   geom_boxplot(alpha = 0.2, outlier.shape = NA,
                colour = "steelblue", fill = "steelblue") +
   geom_jitter(alpha = 0.4, width = 0.05, colour = "steelblue") +
-  labs(x = "vitamin C dosage [mg / day]", y = "tooth length [mm]") +
+  labs(x = "vitamin C dosage [mg/day]", y = "tooth length [mm]") +
   theme_bw()
 ```
 
 Finally, in the `` $`dose:supp` `` part of the table, one can compare every particular experimental group (indexed by both `dose` and `supp`) with every other.
 
-It is possible to use the `summary` function instead of `anova` when running the linear model. However, this table is likely not what we are looking for, because instead of having one row per factor and their interaction, it prints one row per fitted parameter. In case one is curious, here is what it looks like:
+It is possible to use the `summary` function instead of `anova` when running the linear model. However, this table is likely not what we are looking for, because instead of having one row per factor and their interaction, it prints one row per fitted parameter. That said, this can sometimes also be useful:
 
 ```{r}
 ToothGrowth |>
@@ -124,6 +148,8 @@ ToothGrowth |>
   lm(len ~ dose * supp, data = _) |>
   summary()
 ```
+
+The named coefficients above correspond to the $\beta$ parameters of @eq-anova2way-int: `(Intercept)` is $\beta_0$, `dose1` is $\beta_1$, `dose2` is $\beta_2$, `suppVC` is $\beta_3$, `dose1:suppVC` is $\beta_4$, and `dose2:suppVC` is $\beta_5$.
 
 
 ## The Scheirer--Ray--Hare test
