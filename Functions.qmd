@@ -22,68 +22,88 @@ While such effects are important to keep in mind (and can be useful), below we w
 
 ## User-defined functions
 
-Thus far, we have been using many built-in functions in R, such as `exp`, `log`, `sqrt`, `seq`, `paste`, and others. However, it is also possible to define our own functions, which can then be used just like any built-in function. The way to do this is to use the `function` keyword, followed by the function's arguments in parentheses, and then the R code comprising the function's body enclosed in curly braces `{}`. For example, here is a function which calculates the area of a circle with radius `r`:
+### How to define functions {#sec-f1arg}
+
+Thus far, we have been using many built-in functions in R, such as `exp`, `log`, `sqrt`, `seq`, `paste`, and others. However, it is also possible to define our own functions, which can then be used just like any built-in function. The way to do this is to first give a name to the function. The naming rules for functions are exactly the same as the naming rules for variables (@sec-assignment). Then we assign to this name the `function` keyword, followed by the function's arguments in parentheses, and then the R code comprising the function's body enclosed in curly braces `{}`. For example, here is a function which calculates the area of a circle with given radius:
 
 ```{r}
-circleArea <- function(r) {
-  area <- r^2 * pi
+circleArea <- function(radius) {
+  area <- radius^2 * pi
   return(area)
 }
 ```
 
 The function implements the formula that the area of a circle is equal to $\pi$ times its radius squared. The `return` keyword determines what result the function will output when it finishes executing. In this case, the function returns the value of `area` that is created within the function. After running the above lines, the computer now knows and remembers the function. Calling `circleArea(3)` will, for example, calculate the area of a circle with radius 3, which is approximately 28.27433.
 
-One can define functions with more than one argument. For instance, here is a function that calculates the volume of a cylinder with radius `r` and height `h`:
+One very important property of functions is that any variables defined within them (such as `area` above) are *local* to that function. This means that they are not visible from outside: even after calling the function, the variable `area` will not be accessible to the rest of the program, despite the fact that it was declared in the function. This helps us create programs with modular structure, where functions operate as black boxes: we can use them without looking inside.
+
+Two things are good to be aware of. First, the `return` keyword is optional in functions. If omitted, the final expression evaluated within the body of the function automatically becomes the return value. Second, the curly braces used in defining functions are not in fact specific to functions *per se*. Instead, the rule is as follows: an arbitrary block of code between curly braces, potentially made up of several expressions, is always treated as if it was one single expression. Its value is then by definition the final evaluated expression within the braces. This also means that the curly braces are superfluous whenever they contain only a single expression.
+
+This means that the definition of `circleArea` could be written in alternative forms as well, some being shorter than the one above. For starters, since a variable evaluates to the value it contains (naturally), one could simply remove `return` and have the same effect:
 
 ```{r}
-cylinderVol <- function(r, h) {
-  baseArea <- circleArea(r)
-  volume <- baseArea * h
+circleArea <- function(radius) {
+  area <- radius^2 * pi
+  area
+}
+```
+
+But then, one may also think that it is not worth defining `area` just for the sake of being able to return it. One might as well simply return `radius^2 * pi` to begin with:
+
+```{r}
+circleArea <- function(radius) {
+  radius^2 * pi # Or, equivalently: return(radius^2 * pi)
+}
+```
+
+While the previous version of the function has better self-documentation (because by having named the intermediate variable `area`, we clarified its intended meaning and purpose), the latest one is more concise. Often, it is a question of taste which version one prefers. But there is an opportunity to compress even further. Since the purpose of the curly braces is to pretend that several expressions are just one single expression (its value being the last evaluated expression inside the braces), but the above function consists of just one expression anyway, the braces can be omitted:
+
+```{r}
+circleArea <- function(radius) radius^2 * pi
+```
+
+The four versions of `circleArea` are all equivalent from the point of view of the computer.
+
+### Functions with more than one argument
+
+One can define functions with more than one argument. For instance, here is a function that calculates the volume of a cylinder with given radius and height:
+
+```{r}
+cylinderVol <- function(radius, height) {
+  baseArea <- circleArea(radius)
+  volume <- baseArea * height
   return(volume)
 }
 ```
 
-Here we used the fact that the volume of a cylinder is the area of its base circle, times its height. Notice also that we made use of our earlier `circleArea` function within the body of `cylinderVol`. While this was not a necessity and we could have simply written `volume <- r^2 * pi * h` above, this is generally speaking good practice: by constructing functions to solve smaller problems, one can write slightly more complicated functions which make use of those simpler ones. Then, one will be able to write even more complex functions using the slightly more complex ones in turn---and so on. We will discuss this principle in more detail below, in @sec-funccomp.
+Here we used the fact that the volume of a cylinder is the area of its base circle, times its height. Notice also that we made use of our earlier `circleArea` function within the body of `cylinderVol`. While this was not a necessity and we could have simply written `volume <- radius^2 * pi * height` above, this is generally speaking good practice: by constructing functions to solve smaller problems, one can write slightly more complicated functions which make use of those simpler ones. Then, one will be able to write even more complex functions using the slightly more complex ones in turn---and so on. We will discuss this principle in more detail below, in @sec-funccomp.
 
-One very important property of functions is that any variables defined within them (such as `volume` above) are *local* to that function. This means that they are not visible from outside: even after calling the function, the variable `volume` will not be accessible to the rest of the program, despite the fact that it was declared in the function. This helps us create programs with modular structure, where functions operate as black boxes: we can use them without looking inside.
+When calling a function with multiple arguments, the default convention is that their order should follow the same pattern as in the function's definition. The function call `cylinderVol(2, 3)` means that `radius` will be set to 2 and `height` to 3, because that is the order in which the arguments were defined in `function(radius, height)`. But one can override this default ordering by explicitly naming arguments, as explained below.
 
-When calling a function with multiple arguments, the default convention is that their order should follow the same pattern as in the function's definition. The function call `cylinderVol(2, 3)` means that `r` will be set to 2 and `h` to 3, because that is the order in which the arguments were defined in `function(r, h)`. But one can override this default ordering by explicitly naming arguments, as explained below.
+It is optional but possible to name the arguments explicitly. This means that calling `circleArea(3)` is the same as calling `circleArea(radius = 3)`, and calling `cylinderVol(2, 3)` is the same as calling `cylinderVol(radius = 2, height = 3)`. Even more is true: since naming the arguments removes any ambiguity about which argument is which, one may even call `cylinderVol(height = 3, radius = 2)`, with the arguments in reverse order, and this will still be equivalent to `cylinderVol(2, 3)`.
 
-It is optional but possible to name the arguments explicitly. This means that calling `circleArea(3)` is the same as calling `circleArea(r = 3)`, and calling `cylinderVol(2, 3)` is the same as calling `cylinderVol(r = 2, h = 3)`. Even more is true: since naming the arguments removes any ambiguity about which argument is which, one may even call `cylinderVol(h = 3, r = 2)`, with the arguments in reverse order, and this will still be equivalent to `cylinderVol(2, 3)`. As mentioned, naming arguments this way is optional, but it can be useful to do so, because it can increase the clarity of our programs. To give an example from a built-in function in R, take `rep(5, 3)`. Does this function create a vector with 5 entries, each equal to 3, or does it make a vector with 3 entries, each equal to 5? While reading the documentation (or simply executing these two function calls and comparing the outputs) reveals that it is the latter, one can clarify this easily, because the second argument of `rep` is called `times`, as seen from reading the help after typing `?rep`. We can then write `rep(5, times = 3)`, which is now easy to interpret: it is a vector with the number 5 repeated 3 times.
+While naming arguments this way is optional, doing so can increase the clarity of our programs. To give an example from a built-in function in R, take `log(5, 3)`. Does this function compute the base-5 logarithm of 3, or the base-3 logarithm of 5? While reading the documentation reveals that it is the latter, one can clarify this easily, because the second argument of `log` is called `base`, as seen from reading the help after typing `?log`. We can then write `log(5, base = 3)`, which is now easy to interpret: it is the base-3 logarithm of 5.
 
 ```{r}
-rep(5, times = 3)
+log(5, base = 3)
 ```
 
-One may even define default values for one or more of the arguments to any function. If defaults are given, the user does not have to specify the value for that argument. It will then automatically be set to the default value instead. For example, one could rewrite the `cylinderVol` function to specify default values for `r` and `h`. Making these defaults be 1 means we can write:
+It is also possible to define default values for one or more of the arguments to any function. If defaults are given, the user does not have to specify the value for that argument. It will then automatically be set to the default value instead. For example, one could rewrite the `cylinderVol` function to specify default values for `radius` and `height`. Making these defaults be 1 means we can write:
 
 ```{r}
-cylinderVol <- function(r = 1, h = 1) {
-  baseArea <- circleArea(r)
-  volume <- baseArea * h
+cylinderVol <- function(radius = 1, height = 1) {
+  baseArea <- circleArea(radius)
+  volume <- baseArea * height
   return(volume)
 }
 ```
 
-If we now call `cylinderVol()` without specifying arguments, the defaults will be substituted for `r` and `h`. Since both are equal to 1, the cylinder volume will simply be $\pi$ (about 3.14159), which is the result we will get back. Alternatively, if we call `cylinderVol(r = 2)`, then the function returns $4\pi$ (approximately 12.56637), because the default value of 1 is substituted in place of the unspecified height argument `h`. Importantly, if we *don't* define default values and yet omit to specify one or more of those parameters, we get back an error message. For example, our earlier `circleArea` function had no default value for its argument `r`, so leaving it unspecified throws an error:
+If we now call `cylinderVol()` without specifying arguments, the defaults will be substituted for `radius` and `height`. Since both are equal to 1, the cylinder volume will simply be $\pi$ (about 3.14159), which is the result we get back. Alternatively, if we call `cylinderVol(radius = 2)`, then the function returns $4\pi$ (approximately 12.56637), because the default value of 1 is substituted in place of the unspecified `height` argument. Importantly, if we *don't* define default values and yet omit to specify one or more of those parameters, we get back an error message. For example, our earlier `circleArea` function had no default value for its argument `radius`, so leaving it unspecified throws an error:
 
 ```{r}
 #| error: true
 circleArea()
 ```
-
-
-## Naming rules for functions and the concept of syntactic sugar
-
-The rules for naming functions is the same as for naming variables. A valid function name is a combination of letters, numbers, and underscores (`_`), as long as the first character is not a number or underscore. Additionally, a function's name cannot be one of the reserved words (see `?Reserved`). Just like in the case of variables, one can override this and give any name whatsoever to functions if one encloses the name between back ticks. So while `crowns to $` is not a valid function name, `` `crowns to $` `` is.
-
-One thing to know about R is that even elementary operations are treated as function calls internally. When we write down something as innocuous as `2 + 5`, what really happens is that R calls the *function* called `+`, with arguments 2 and 5. In fact, we can write it that way too: `2 + 5` is completely equivalent to writing `` `+`(2, 5) ``. Note the back ticks around `` `+` ``: these are required because `+` is not a letter, number, or underscore. Whenever we write down `2 + 5`, the system internally converts it into `` `+`(2, 5) `` first, and then proceeds with the execution. Thus, the fact that we can add two numbers by writing `2 + 5` is just a convenience, to help with writing addition in a way that we tend to be more used to. Such constructions have a name: they are called *syntactic sugar*. Writing `2 + 5` is therefore syntactic sugar for the actual internal form `` `+`(2, 5) ``. The former exists only because `` `+`(2, 5) `` looks strange given our existing arithmetic notational conventions.
-
-As might be guessed from the above, the same holds for all other elementary operations: `` `-` ``, `` `*` ``, `` `/` ``, and `` `^` `` are also functions in R. This means that, e.g., writing `` `-`(`^`(2, 3), `*`(4, 2)) `` is the same as `2^3 - 4*2`. To the computer, they are equivalent---but for humans, the latter form is much more comprehensible.
-
-:::{.callout-note}
-Another example for the fact that internally R treats all operations as functions is the subsetting of vectors and matrices. As we have learned, given the vector `x`, typing `x[3]` will extract the third entry of the vector. In fact, this is syntactic sugar for `` `[`(x, 3) ``. The function `` `[` `` takes two arguments: a vector, and the index (or indices) of the entries which we request from that vector. While generally speaking, one would never actually want to type `` `[`(x, 3) `` instead of `x[3]` (the reason we have the syntactic sugar is to make our lives easier!), there are situations where being aware of the alternative form can be helpful.
-:::
 
 
 ## Function composition {#sec-funccomp}

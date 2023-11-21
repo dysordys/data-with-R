@@ -20,11 +20,7 @@ tukeyTest <- function(modelFit) modelFit |> aov() |> TukeyHSD()
 ```
 
 :::{.callout-note}
-Two features in the definition of `tukeyTest` above may look unfamiliar. First, the body of the function was not enclosed between a pair of curly braces `{...}`. The rule in R is as follows: an arbitrary block of code between curly braces, potentially made up of several expressions, is treated as one single expression. Its value is by definition the final evaluated expression within the braces. This also means that the curly braces are superfluous whenever they contain only a single expression.
-
-Second, in this function the `return` keyword was not used. Like curly braces, `return` is optional. If omitted, the final expression evaluated within the body of the function automatically becomes the return value.
-
-Whether to use braces and `return` even in cases when they are not needed is largely a question of personal coding style. From now on, they will often be omitted whenever their absence does not hamper program readability.
+Make sure to review @sec-functions, especially @sec-f1arg, if you need a refresher on how to define functions in R.
 :::
 
 Using this function, we can now simply write:

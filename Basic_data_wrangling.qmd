@@ -43,13 +43,11 @@ select(snailDat, ends_with("e"))
 select(snailDat, ends_with("pe"))
 ```
 
-Similarly, the function `contains` can select columns which contain some string anywhere in their names. For example, `select(snailDat, ends_with("pe"))` above only selected the `shape` column, but
+Similarly, the function `contains` can select columns which contain some string anywhere in their names. For example, `select(snailDat, ends_with("pe"))` above only selected the `shape` column, but `select(snailDat, contains("pe"))` additionally selects `species`:
 
 ```{r}
 select(snailDat, contains("pe"))
 ```
-
-additionally selects `species`.
 
 One can combine these selection methods using the `&` ("and"), `|` ("or"), and `!` ("not") logical operators. To select all columns which start with `"s"` but do not contain the letter `"z"` in their names:
 
