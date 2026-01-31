@@ -92,13 +92,15 @@ As in the case of one-way ANOVA, diagnostic plots and post-hoc testing (Tukey te
 ```{r}
 #| warning: false
 #| fig-height: 6
-library(ggfortify)
+
+# Loading the diagnosticPlots() function, assuming it is saved
+# in a file called diagnostics.R in your working directory:
+source("diagnostics.R")
 
 ToothGrowth |>
   mutate(dose = as_factor(dose)) |>
   lm(len ~ dose * supp, data = _) |>
-  autoplot(smooth.colour = NA, colour = "steelblue", alpha = 0.7) +
-  theme_bw()
+  diagnosticPlots(alpha = 0.7)
 ```
 
 The Tukey test can be used to compare each factor in isolation, as well as their combinations:

@@ -738,11 +738,12 @@ F-statistic: 4.846 on 2 and 27 DF,  p-value: 0.01591</code></pre>
 <h2 data-number="12.4" class="anchored" data-anchor-id="sec-diagnostic-anova"><span class="header-section-number">12.4</span> Using diagnostic plots on an ANOVA</h2>
 <p>Since ANOVA is just linear regression in disguise, the same assumptions must be fulfilled about the residuals: their variance should not depend on the group, they should be independent, and they should be normally distributed. We can use the same diagnostic plots as we did in <a href="11_Linear_regression.html#sec-diagnostics" class="quarto-xref"><span>Section 11.3</span></a>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggfortify)</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>(<span class="at">smooth.colour =</span> <span class="cn">NA</span>, <span class="at">colour =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loading the diagnosticPlots() function, assuming it is saved</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="co"># in a file called diagnostics.R in your working directory:</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"diagnostics.R"</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth) <span class="sc">|&gt;</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">diagnosticPlots</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">

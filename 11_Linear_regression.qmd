@@ -142,61 +142,92 @@ There is some further information at the bottom of the output. The "residual sta
 
 ## Diagnostic plots {#sec-diagnostics}
 
-As advertised, it is possible (and important) to check whether the assumptions behind linear regression actually hold. There is a convenient way to do so, via *diagnostic plots*. Such plots can be created via the `autoplot` function of the `ggfortify` package. We can therefore install this package first, in case we do not have it already:
+As advertised, it is possible (and important) to check whether the assumptions behind linear regression actually hold. There is a convenient way to do so, via *diagnostic plots*. Such plots can be created in many ways, but here we will rely on a hand-crafted custom function (see the box below for its source code).
+
+:::{.callout-note}
+Below is the function we will use to generate diagnostic plots. You can copy and save it in a file (say, `diagnostics.R`) in your working directory, and load it via `source("diagnostics.R")` at the top of any script. That way you will not need to type it in every time. What the `source()` function does is simply run the specified R script, which will then put the function in the computer's memory and ready to be used.
 
 ```{r}
-#| eval: false
-install.packages("ggfortify")
+#' Custom function that generates diagnostic plots.
+#' @param model A fitted model object of class "lm".
+#' @param alpha Defines the opacity of the points (0-1).
+#' @param bins  Defines the number of bins in the histogram.
+#' @param scaleLocation Logical: should a scale location graph be added?
+
+diagnosticPlots <- function(model, alpha=0.7, bins=10, scaleLocation=FALSE) {
+  # First, some error checking, making sure all inputs make sense:
+  if (model |> class() != "lm") stop("model must be an lm object")
+  if (alpha < 0 | alpha > 1) stop("alpha must be between 0 and 1")
+  if (bins <= 0) stop("bins must be a positive number")
+  # Summarize residuals, observed, and fitted values in a tibble:
+  residualData <- 
+    dplyr::tibble(
+      residuals = residuals(model),
+      # The response variable is the first column in the model's model field:
+      y = model$model[,1],
+      yHat = fitted(model)
+    )
+  # Generate histogram for assessing normality:
+  p1 <- 
+    ggplot2::ggplot(residualData) + 
+    ggplot2::aes(x = residuals, y = after_stat(density)) +
+    ggplot2::geom_histogram(bins = bins, fill = "steelblue", color = "black") +
+    ggplot2::theme_bw() + 
+    ggplot2::labs(x = "Residuals", y = "Density")
+  # Generate scatter plot for assessing constant variance:
+  p2 <- 
+    ggplot2::ggplot(residualData) + 
+    ggplot2::aes(x = yHat, y = residuals) + 
+    ggplot2::geom_hline(aes(yintercept = 0)) + 
+    ggplot2::geom_point(color = "steelblue", alpha = alpha) + 
+    ggplot2::theme_bw() +
+    ggplot2::labs(x = "Estimated Values", y = "Residuals")
+  # Generate Q-Q plot for assessing normality:
+  p3 <- 
+    ggplot2::ggplot(residualData) + 
+    # Use standardized residuals
+    ggplot2::aes(sample = scale(residuals)) + 
+    ggplot2::geom_qq_line() + 
+    ggplot2::geom_qq(color = "steelblue", alpha = alpha) +
+    ggplot2::theme_bw() + 
+    ggplot2::labs(x= "Theoretical Quantiles", y = "Observed Quantiles")
+  # If scaleLocation is TRUE, add a scale-location plot in lower right corner:
+  if (scaleLocation) {
+    p4 <- 
+      ggplot2::ggplot(residualData) + 
+      ggplot2::aes(x = yHat, y = sqrt(abs(residuals))) + 
+      ggplot2::geom_point(color = "steelblue", alpha = alpha) + 
+      ggplot2::theme_bw() +
+      ggplot2::labs(x = "Estimated Values", y = expression(sqrt("|Residuals|")))
+    
+    cowplot::plot_grid(p1, p2, p3, p4, nrow = 2)
+  # Otherwise, generate plot with just three panels:
+  } else {
+    cowplot::plot_grid(p1, p2, p3, nrow = 2)  
+  }
+}
 ```
+:::
 
-And then load it:
-
-```{r}
-library(ggfortify)
-```
-
-And now, we can simply give the result of the `lm` function as input to the function `autoplot`:
+The `diagnosticPlots` function takes the result produced by the `lm` function as input, and produces a set of plots as its output:
 
 ```{r}
 #| fig-height: 6
 snails |>
   filter(species == "nux") |>
   lm(shape ~ size, data = _) |>
-  autoplot()
+  diagnosticPlots()
 ```
 
-We see four plots above. The top left of these shows the residuals against the fitted values. If the points have no trends of increase, decrease, valleys, or humps, and the spread of the points is roughly constant, then they adhere to the assumptions of linear regression. The blue line attempts to capture whether there is an overall trend in the data; in this case, it would be hard to argue that any trend is due to something else than chance.
+We see three plots above. In the top left, we see the distribution of the residuals, displayed as a histogram. This can reveal at a glance whether the residuals are (i) centered at zero, and (ii) follow a symmetric, approximately bell-shaped curve (normal distribution).
 
-The bottom left plot is much the same as the top left one, except it takes the absolute values of the residuals. This is done because, since residuals will by definition be more or less symmetrically distributed around zero, one can effectively double the precision of the diagnostic by focusing only on magnitudes. For statistical reasons that do not concern us here, the square roots of these absolute values tend to behave much better, which is why we see the square root being taken along the y-axis. This plot is good for spotting whether the variance of the residuals depends on the fitted values. To satisfy the requirements of linear regression, there should be no such dependence.^[In technical terms, the variation should be *homoscedastic* (be approximately the same for all values of the predictor) as opposed to *heteroscedastic*. This is the same as saying that the variance of the residuals $\epsilon_i$ should be independent of $i$.] The blue line is again a locally-weighted estimate, which ought to be as flat as possible.
+The bottom left plot serves the same purpose, but through a different kind of visualization. The idea behind this *quantile-quantile plot* (Q-Q plot) is that if the residuals are indeed normally distributed, then we can line them up in increasing order along the x-axis, and for each of them, plot the theoretically expected value (based on normality) along the y-axis. If these observed vs. theoretically predicted values fall on the dashed straight line, then there is a perfect match between theory and observation, and the residuals are normally distributed. The stronger the deviation from the dashed line indicating a perfect theoretical match, the more non-normal the residuals are. The Q-Q plot can be much more useful than the histogram when we have few data points: as a rough rule, the histogram usually only serves as a quick sanity check unless we have at least around 100 or so observations.
 
-The top right graph offers a visualization of how well the residuals follow a normal distribution. The idea behind this *quantile-quantile plot* (Q-Q plot) is that if the residuals are indeed normally distributed, then we can line them up in increasing order along the x-axis, and for each of them, plot the theoretically expected value (based on normality) along the y-axis. If these observed vs. theoretically predicted values fall on the dashed straight line, then there is a perfect match between theory and observation, and the residuals are normally distributed. The stronger the deviation from the dashed line indicating a perfect theoretical match, the more non-normal the residuals are.
+The top right plot shows the residuals against the fitted values. If the points have no trends of increase, decrease, valleys, or humps, and the spread of the points is roughly constant, then they adhere to the assumptions of linear regression. In this case, it would be hard to argue that any trend is due to something else than chance.
 
-The bottom right graph measures the "leverage" of each point, which is a measure of how sensitively the regression reacts to removing one data point. We will not be concerned with this plot.
+The bottom right part is empty. It can be filled with yet another plot though, by specifying `scaleLocation = TRUE` when calling `diagnosticPlots`. This graph is much the same as the top right one, except it takes the absolute values of the residuals. This is done because, since residuals will by definition be more or less symmetrically distributed around zero, one can effectively double the precision of the diagnostic by focusing only on magnitudes. For statistical reasons that do not concern us here, the square roots of these absolute values tend to behave much better, which is why we see the square root being taken along the y-axis. This plot is good for spotting whether the variance of the residuals depends on the fitted values. To satisfy the requirements of linear regression, there should be no such dependence.^[In technical terms, the variation should be *homoscedastic* (be approximately the same for all values of the predictor) as opposed to *heteroscedastic*. This is the same as saying that the variance of the residuals $\epsilon_i$ should be independent of $i$.] The blue line is again a locally-weighted estimate, which ought to be as flat as possible.
 
-The blue smoother lines often do more to confuse than to help. For example, one can see a slight dip in the blue line in the bottom left graph, but looking at all points together reveals how little this trend means. The `smooth.colour = NA` argument removes the blue lines:
-
-```{r}
-#| warning: false
-#| fig-height: 6
-snails |>
-  filter(species == "nux") |>
-  lm(shape ~ size, data = _) |>
-  autoplot(smooth.colour = NA)
-```
-
-One may go even further. Since `autoplot` returns a `ggplot` object, we can add various theme options to make the plot prettier. We can also increase the transparency of the points to better see where and how much they overlap with one another:
-
-```{r}
-#| warning: false
-#| fig-height: 6
-snails |>
-  filter(species == "nux") |>
-  lm(shape ~ size, data = _) |>
-  autoplot(smooth.colour = NA, colour = "steelblue", alpha = 0.7) +
-  theme_bw()
-```
-
-Now that we have a cleaner plot, how do we interpret it. Let us proceed one by one. The top left plot is as good as it can get: there is a blurb of points scattered around zero, with no systematic increase or decrease. Similarly, the bottom left plot is excellent, revealing that the spread of the residuals does not depend on the fitted values. Finally, the top right quantile-quantile plot reveals that the residuals follow the theoretically expected normal distribution beautifully. In short, these diagnostics show that the assumptions behind the linear regression model are nicely fulfilled.
+How do we interpret the diagnostic plots we obtained above? Let us proceed one by one. The top left plot is as good as it can get: there is a blurb of points scattered around zero, with no systematic increase or decrease. Similarly, the bottom left plot is excellent, revealing that the spread of the residuals does not depend on the fitted values. Finally, the top right quantile-quantile plot reveals that the residuals follow the theoretically expected normal distribution beautifully. In short, these diagnostics show that the assumptions behind the linear regression model are nicely fulfilled.
 
 To give an example of what not-so-good diagnostics might look like, let us repeat the procedure for a different species: *N. galapaganus* instead of *N. nux*. Here are the raw data together with the fitted line:
 
@@ -218,8 +249,7 @@ And the corresponding diagnostic plots:
 snails |>
   filter(species == "galapaganus") |>
   lm(shape ~ size, data = _) |>
-  autoplot(smooth.colour = NA, colour = "steelblue", alpha = 0.7) +
-  theme_bw()
+  diagnosticPlots()
 ```
 
 Looking at the top left, one gets at the very least somewhat suspicious that there is a trend in these points, first going down, then up, then down again at the end. Next, while the bottom left plot is not disastrous, it again might suggest that the variance of the residuals is higher for smaller fitted values than for larger ones. Finally, the quantile-quantile plot is clearly no good: small residuals are consistently overestimated (the theoretical values are larger than the actual ones), and large residuals are underestimated. This means that any results obtained from a linear regression ought to be treated with caution. Possibly, methods other than linear regression are needed to understand these data.
@@ -262,8 +292,7 @@ The data have been carefully crafted so that the least-squares regression line h
 #| fig-height: 6
 lm(y ~ x, data = filter(ans_long, set == "1")) |> summary()
 lm(y ~ x, data = filter(ans_long, set == "1")) |>
-  autoplot(smooth.colour = NA, colour = "steelblue") +
-  theme_bw()
+  diagnosticPlots()
 ```
 
 While the number of data points is small, there is otherwise nothing to suggest in these diagnostic plots that there is anything wrong with the regression.
@@ -275,8 +304,7 @@ The situation changes for the other three sets. Let us look at set 2:
 #| fig-height: 6
 lm(y ~ x, data = filter(ans_long, set == "2")) |> summary()
 lm(y ~ x, data = filter(ans_long, set == "2")) |>
-  autoplot(smooth.colour = NA, colour = "steelblue") +
-  theme_bw()
+  diagnosticPlots()
 ```
 
 Blindly reading off the p-values without considering the diagnostic plots might lead one to take them seriously. This would be wrong however, as the assumptions of the linear regression are clearly not fulfilled. The left two diagnostics show that the residuals are not independent, and certainly not homoscedastic. The Q-Q plot additionally shows that they are not even normally distributed.
@@ -288,8 +316,7 @@ In set 3, the trends are driven too much by a single outlier:
 #| fig-height: 6
 lm(y ~ x, data = filter(ans_long, set == "3")) |> summary()
 lm(y ~ x, data = filter(ans_long, set == "3")) |>
-  autoplot(smooth.colour = NA, colour = "steelblue") +
-  theme_bw()
+  diagnosticPlots()
 ```
 
 As before, the left two diagnostic plots show that the independence of the residuals is violated. Finally, in set 4, the whole regression is based on a single point whose predictor `x` is different from that of the rest:
@@ -299,8 +326,7 @@ As before, the left two diagnostic plots show that the independence of the resid
 #| fig-height: 6
 lm(y ~ x, data = filter(ans_long, set == "4")) |> summary()
 lm(y ~ x, data = filter(ans_long, set == "4")) |>
-  autoplot(smooth.colour = NA, colour = "steelblue") +
-  theme_bw()
+  diagnosticPlots()
 ```
 
 Clearly, the assumption that the residual variances are independent of the predictor is heavily violated.
