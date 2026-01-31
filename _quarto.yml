@@ -9,24 +9,24 @@ book:
     - index.qmd
     - part: "Part I: Processing and visualizing data with R"
       chapters:
-      - Intro_R_RStudio.qmd
-      - R_programming_basics.qmd
-      - Functions.qmd
-      - Data_reading.qmd
-      - Basic_data_wrangling.qmd
-      - Summaries_normalization.qmd
-      - Creating_figures.qmd
-      - Further_plotting_options.qmd
-      - Joining_data.qmd
+      - 01_Intro_R_RStudio.qmd
+      - 02_R_programming_basics.qmd
+      - 03_Functions.qmd
+      - 04_Data_reading.qmd
+      - 05_Basic_data_wrangling.qmd
+      - 06_Summaries_normalization.qmd
+      - 07_Creating_figures.qmd
+      - 08_Further_plotting_options.qmd
+      - 09_Joining_data.qmd
     - part: "Part II: Statistical inference"
       chapters:
-      - Intro_statistics.qmd
-      - Linear_regression.qmd
-      - Anova.qmd
-      - Anova_two_way.qmd
-      - Nonlinear_regression.qmd
-      - Intro_map.qmd
-      - Multiple_analysis.qmd
+      - 10_Intro_statistics.qmd
+      - 11_Linear_regression.qmd
+      - 12_Anova.qmd
+      - 13_Anova_two_way.qmd
+      - 14_Nonlinear_regression.qmd
+      - 15_Intro_map.qmd
+      - 16_Multiple_analysis.qmd
     - part: "References"
       chapters:
       - References.qmd
