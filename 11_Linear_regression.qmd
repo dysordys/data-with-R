@@ -225,9 +225,19 @@ The bottom left plot serves the same purpose, but through a different kind of vi
 
 The top right plot shows the residuals against the fitted values. If the points have no trends of increase, decrease, valleys, or humps, and the spread of the points is roughly constant, then they adhere to the assumptions of linear regression. In this case, it would be hard to argue that any trend is due to something else than chance.
 
-The bottom right part is empty. It can be filled with yet another plot though, by specifying `scaleLocation = TRUE` when calling `diagnosticPlots`. This graph is much the same as the top right one, except it takes the absolute values of the residuals. This is done because, since residuals will by definition be more or less symmetrically distributed around zero, one can effectively double the precision of the diagnostic by focusing only on magnitudes. For statistical reasons that do not concern us here, the square roots of these absolute values tend to behave much better, which is why we see the square root being taken along the y-axis. This plot is good for spotting whether the variance of the residuals depends on the fitted values. To satisfy the requirements of linear regression, there should be no such dependence.^[In technical terms, the variation should be *homoscedastic* (be approximately the same for all values of the predictor) as opposed to *heteroscedastic*. This is the same as saying that the variance of the residuals $\epsilon_i$ should be independent of $i$.] The blue line is again a locally-weighted estimate, which ought to be as flat as possible.
+The bottom right part is empty. It can be filled with yet another plot though, by specifying `scaleLocation = TRUE` when calling `diagnosticPlots`:
 
-How do we interpret the diagnostic plots we obtained above? Let us proceed one by one. The top left plot is as good as it can get: there is a blurb of points scattered around zero, with no systematic increase or decrease. Similarly, the bottom left plot is excellent, revealing that the spread of the residuals does not depend on the fitted values. Finally, the top right quantile-quantile plot reveals that the residuals follow the theoretically expected normal distribution beautifully. In short, these diagnostics show that the assumptions behind the linear regression model are nicely fulfilled.
+```{r}
+#| fig-height: 6
+snails |>
+  filter(species == "nux") |>
+  lm(shape ~ size, data = _) |>
+  diagnosticPlots(scaleLocation = TRUE)
+```
+
+This graph is much the same as the top right one, except it takes the absolute values of the residuals. This is done because, since residuals will by definition be more or less symmetrically distributed around zero, one can effectively double the precision of the diagnostic by focusing only on magnitudes. For statistical reasons that do not concern us here, the square roots of these absolute values tend to behave much better, which is why we see the square root being taken along the y-axis. This plot is good for spotting whether the variance of the residuals depends on the fitted values. To satisfy the requirements of linear regression, there should be no such dependence.^[In technical terms, the variation should be *homoscedastic* (be approximately the same for all values of the predictor) as opposed to *heteroscedastic*. This is the same as saying that the variance of the residuals $\epsilon_i$ should be independent of $i$.] The blue line is again a locally-weighted estimate, which ought to be as flat as possible.
+
+How do we interpret the diagnostic plots we obtained above? Let us proceed one by one. The top left histogram does not raise any alarms: it peaks at zero and has an approximately symmetric bell shape. Going beyond this, the bottom left quantile-quantile plot reveals that the residuals follow the theoretically expected normal distribution beautifully, across the full range of its values. The top right plot is as good as it can get: there is a blurb of points scattered around zero, with no systematic increase or decrease. Similarly, the bottom right plot is excellent, revealing that the spread of the residuals does not depend on the fitted values. In short, these diagnostics show that the assumptions behind the linear regression model are nicely fulfilled.
 
 To give an example of what not-so-good diagnostics might look like, let us repeat the procedure for a different species: *N. galapaganus* instead of *N. nux*. Here are the raw data together with the fitted line:
 
@@ -252,7 +262,7 @@ snails |>
   diagnosticPlots()
 ```
 
-Looking at the top left, one gets at the very least somewhat suspicious that there is a trend in these points, first going down, then up, then down again at the end. Next, while the bottom left plot is not disastrous, it again might suggest that the variance of the residuals is higher for smaller fitted values than for larger ones. Finally, the quantile-quantile plot is clearly no good: small residuals are consistently overestimated (the theoretical values are larger than the actual ones), and large residuals are underestimated. This means that any results obtained from a linear regression ought to be treated with caution. Possibly, methods other than linear regression are needed to understand these data.
+Looking at the top left, we see that the histogram appears to have a local minimum around zero, with two flanking peaks. It therefore does not have a nice bell-shape. The suspicion that the residuals do not follow a normal distribution is further confirmed by the bottom left (Q-Q) plot: as seen, small residuals are consistently overestimated (the theoretical values are larger than the actual ones), and large residuals are underestimated. Finally, the residual plot in the top right suggests that the variance of the residuals is higher for smaller fitted values than for larger ones. Taken together, this means that any results obtained from a linear regression ought to be treated with caution. Possibly, other methods would be needed to understand these data.
 
 
 ## More on diagnostics: Anscombe's quartet {#sec-anscombe}
@@ -292,7 +302,7 @@ The data have been carefully crafted so that the least-squares regression line h
 #| fig-height: 6
 lm(y ~ x, data = filter(ans_long, set == "1")) |> summary()
 lm(y ~ x, data = filter(ans_long, set == "1")) |>
-  diagnosticPlots()
+  diagnosticPlots(bins = 5)
 ```
 
 While the number of data points is small, there is otherwise nothing to suggest in these diagnostic plots that there is anything wrong with the regression.
@@ -304,10 +314,10 @@ The situation changes for the other three sets. Let us look at set 2:
 #| fig-height: 6
 lm(y ~ x, data = filter(ans_long, set == "2")) |> summary()
 lm(y ~ x, data = filter(ans_long, set == "2")) |>
-  diagnosticPlots()
+  diagnosticPlots(bins = 5)
 ```
 
-Blindly reading off the p-values without considering the diagnostic plots might lead one to take them seriously. This would be wrong however, as the assumptions of the linear regression are clearly not fulfilled. The left two diagnostics show that the residuals are not independent, and certainly not homoscedastic. The Q-Q plot additionally shows that they are not even normally distributed.
+Blindly reading off the p-values without considering the diagnostic plots might lead one to take them seriously. This would be wrong however, as the assumptions of the linear regression are clearly not fulfilled. The top right diagnostic shows that the residuals are not independent, and certainly not homoscedastic. The left two ones additionally show that the residuals are not even normally distributed.
 
 In set 3, the trends are driven too much by a single outlier:
 
@@ -316,17 +326,17 @@ In set 3, the trends are driven too much by a single outlier:
 #| fig-height: 6
 lm(y ~ x, data = filter(ans_long, set == "3")) |> summary()
 lm(y ~ x, data = filter(ans_long, set == "3")) |>
-  diagnosticPlots()
+  diagnosticPlots(bins = 5)
 ```
 
-As before, the left two diagnostic plots show that the independence of the residuals is violated. Finally, in set 4, the whole regression is based on a single point whose predictor `x` is different from that of the rest:
+As before, the top right diagnostic plot shows that independence of the residuals is violated. Finally, in set 4, the whole regression is based on a single point whose predictor `x` is different from that of the rest:
 
 ```{r}
 #| warning: false
 #| fig-height: 6
 lm(y ~ x, data = filter(ans_long, set == "4")) |> summary()
 lm(y ~ x, data = filter(ans_long, set == "4")) |>
-  diagnosticPlots()
+  diagnosticPlots(bins = 5)
 ```
 
 Clearly, the assumption that the residual variances are independent of the predictor is heavily violated.

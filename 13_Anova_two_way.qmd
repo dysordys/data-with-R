@@ -100,7 +100,7 @@ source("diagnostics.R")
 ToothGrowth |>
   mutate(dose = as_factor(dose)) |>
   lm(len ~ dose * supp, data = _) |>
-  diagnosticPlots(alpha = 0.7)
+  diagnosticPlots()
 ```
 
 The Tukey test can be used to compare each factor in isolation, as well as their combinations:

@@ -470,7 +470,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"diagnostics.R"</span>)</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">+</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">|&gt;</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">diagnosticPlots</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">diagnosticPlots</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -479,7 +479,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
 </div>
-<p>The Q-Q plot is not good: in the lower quantiles, the realized residuals are consistently larger in magnitude than the theoretical expectation based on the assumption of normality. This, of course, is a consequence of the data depending on concentrations in a manifestly nonlinear way. Apart from the Q-Q plot however, the diagnostics look surprisingly good. We will come back to the point about nonlinearity in <a href="#sec-nonlin-regression" class="quarto-xref"><span>Section 14.2</span></a>.</p>
+<p>The histogram and Q-Q plot in the left are not good: in the lower quantiles, the realized residuals are consistently larger in magnitude than the theoretical expectation based on the assumption of normality. This is seen in the skewed, nonsymmetric nature of the histogram as well. This, of course, is a consequence of the data depending on concentrations in a manifestly nonlinear way. Apart from the Q-Q plot however, the diagnostics look surprisingly good. We will come back to the point about nonlinearity in <a href="#sec-nonlin-regression" class="quarto-xref"><span>Section 14.2</span></a>.</p>
 <p>It is also informative to apply the function <code>summary</code> on the model fit in addition to <code>anova</code>, to obtain the regression slopes and intercept (the <span class="math inline">\(\beta\)</span> parameters of <a href="#eq-linreg-multiway" class="quarto-xref">Equation&nbsp;<span>14.1</span></a>):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">+</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -568,7 +568,7 @@ Residual standard error: 5.789 on 76 degrees of freedom
 Multiple R-squared:  0.7376,    Adjusted R-squared:  0.7134 
 F-statistic: 30.52 on 7 and 76 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">*</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">|&gt;</span> <span class="fu">diagnosticPlots</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(uptake <span class="sc">~</span> conc <span class="sc">*</span> Type <span class="sc">*</span> Treatment, <span class="at">data =</span> CO2) <span class="sc">|&gt;</span> <span class="fu">diagnosticPlots</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">

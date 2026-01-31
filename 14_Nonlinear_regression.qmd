@@ -70,10 +70,10 @@ The rationale for having chosen the model `uptake ~ conc + Type * Treatment` is 
 source("diagnostics.R")
 
 lm(uptake ~ conc + Type * Treatment, data = CO2) |>
-  diagnosticPlots(alpha = 0.7)
+  diagnosticPlots()
 ```
 
-The Q-Q plot is not good: in the lower quantiles, the realized residuals are consistently larger in magnitude than the theoretical expectation based on the assumption of normality. This, of course, is a consequence of the data depending on concentrations in a manifestly nonlinear way. Apart from the Q-Q plot however, the diagnostics look surprisingly good. We will come back to the point about nonlinearity in @sec-nonlin-regression.
+The histogram and Q-Q plot in the left are not good: in the lower quantiles, the realized residuals are consistently larger in magnitude than the theoretical expectation based on the assumption of normality. This is seen in the skewed, nonsymmetric nature of the histogram as well. This, of course, is a consequence of the data depending on concentrations in a manifestly nonlinear way. Apart from the Q-Q plot however, the diagnostics look surprisingly good. We will come back to the point about nonlinearity in @sec-nonlin-regression.
 
 It is also informative to apply the function `summary` on the model fit in addition to `anova`, to obtain the regression slopes and intercept (the $\beta$ parameters of @eq-linreg-multiway):
 
@@ -105,7 +105,7 @@ $$ {#eq-linreg-multiway-2}
 #| fig-height: 6
 lm(uptake ~ conc * Type * Treatment, data = CO2) |> anova()
 lm(uptake ~ conc * Type * Treatment, data = CO2) |> summary()
-lm(uptake ~ conc * Type * Treatment, data = CO2) |> diagnosticPlots(alpha = 0.7)
+lm(uptake ~ conc * Type * Treatment, data = CO2) |> diagnosticPlots()
 ```
 
 This confirms what we saw on the plot of the data: that the basic shape of the relationship between concentration and uptake is unaffected by either `Type` or `Treatment` (i.e., the term `conc:Type:Treatment` in the ANOVA table has a high associated p-value). It also illustrates the general point that there are very often multiple candidate models, and choosing between them is a question of judgment, trial-and-error, and successively improving the model structure based on results from earlier modeling attempts.
