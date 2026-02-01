@@ -73,7 +73,7 @@ lm(uptake ~ conc + Type * Treatment, data = CO2) |>
   diagnosticPlots()
 ```
 
-The histogram and Q-Q plot in the left are not good: in the lower quantiles, the realized residuals are consistently larger in magnitude than the theoretical expectation based on the assumption of normality. This is seen in the skewed, nonsymmetric nature of the histogram as well. This, of course, is a consequence of the data depending on concentrations in a manifestly nonlinear way. Apart from the Q-Q plot however, the diagnostics look surprisingly good. We will come back to the point about nonlinearity in @sec-nonlin-regression.
+The histogram and Q-Q plot at the top are not good: in the lower quantiles, the residuals are consistently larger in magnitude than the theoretical expectation based on the assumption of normality. This, of course, is a consequence of the data depending on concentrations in a manifestly nonlinear way. Apart from the histogram and Q-Q plot however, the diagnostics look surprisingly good. We will come back to the point about nonlinearity in @sec-nonlin-regression.
 
 It is also informative to apply the function `summary` on the model fit in addition to `anova`, to obtain the regression slopes and intercept (the $\beta$ parameters of @eq-linreg-multiway):
 

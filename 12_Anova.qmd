@@ -228,7 +228,7 @@ lm(weight ~ group, data = PlantGrowth) |>
   diagnosticPlots()
 ```
 
-The only difference is that, since the data are arranged in groups, the fitted values can only take on well-defined discrete values---the inferred means in each. Otherwise, the plots are read and evaluated just as before. In this case, we can see that the assumptions are fulfilled beautifully: the residuals have equal variance in the groups, there is no trend in them, and the quantile-quantile plot plus histogram both show that they are approximately normally distributed.
+The only difference is that, since the data are arranged in groups, the fitted values can only take on well-defined discrete values---the inferred means in each. Otherwise, the plots are read and evaluated just as before. In this case, we can see that the assumptions are fulfilled beautifully: the residuals have equal variance in the groups, there is no trend in them, and the quantile-quantile plot plus histogram both show that they are approximately normally distributed (with a handful of large-valued outliers which will not invalidate the results).
 
 
 ## Exercises

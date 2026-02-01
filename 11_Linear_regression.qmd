@@ -127,10 +127,12 @@ If being able to do so sounds a bit too good to be true, then there are some bad
 We should not fool ourselves: these assumptions *are* restrictive. But they hold often enough to have some use. We will see shortly how one can ascertain that they do in fact hold (@sec-diagnostics). Before doing that however, let us see how we can get the information about whether the inferred parameters are reliably different from zero. This is achieved using the function `summary`, which takes a fitted linear model (created by `lm`) and returns a table:
 
 ```{r}
-snails |>
+nuxModel <-
+  snails |>
   filter(species == "nux") |>
-  lm(shape ~ size, data = _) |> # Fit linear model
-  summary() # Obtain regression table
+  lm(shape ~ size, data = _) # Fit linear model
+
+summary(nuxModel) # Obtain regression table
 ```
 
 The output first prints the function call to `lm` we used. Then it gives a quick overview of the residuals: the minimum and maximum values, the point of the first and third quantiles, and the median---in other words, it contains the same information one would use to create a box plot with. This ought to give a quick and rough idea of whether the residuals are violently skewed, or have at least a chance of being normally distributed, which was one of the key assumption behind linear regression above. (We will discuss a better method for assessing the normality of the residuals in @sec-diagnostics.) The next item in the output is the most important part: the table of fitted regression coefficients (intercept and slope). Here we can find the estimated values of the coefficients, their standard error, an associated t-statistic (ignore this for now), and the p-values (the `Pr(>|t|)` column).
@@ -142,74 +144,144 @@ There is some further information at the bottom of the output. The "residual sta
 
 ## Diagnostic plots {#sec-diagnostics}
 
-As advertised, it is possible (and important) to check whether the assumptions behind linear regression actually hold. There is a convenient way to do so, via *diagnostic plots*. Such plots can be created in many ways, but here we will rely on a hand-crafted custom function (see the box below for its source code).
+As advertised, it is possible (and important) to check whether the assumptions behind linear regression actually hold. There is a convenient visual way to do so, via *diagnostic plots*. Here we will be looking at the most commonly used diagnostics.
+
+The simplest one is to look at a histogram of the residuals. This can reveal at a glance whether the residuals are centered at zero, and whether they follow a symmetric, approximately bell-shaped curve (normal distribution):
+
+```{r}
+residuals(nuxModel) |>
+  as_tibble() |>
+  ggplot(aes(x = value)) +
+  geom_histogram(color = "black", fill = "steelblue", bins = 10) +
+  labs(x = "Residuals", y = "Count") +
+  theme_bw()
+```
+
+The `residuals` function extracts the residuals from a model object created by `lm`. It returns them as a vector of values---that is why we then feed the result to `as_tibble`, which converts this vector into a tibble with a single column called `value`.
+
+There is also a very different way of visualizing essentially the same information. The idea behind a *quantile-quantile plot* (Q-Q plot) is that if the residuals are indeed normally distributed, then we can line them up in increasing order along the x-axis, and for each of them, plot the theoretically expected value (based on normality) along the y-axis. If the observed vs. the theoretically predicted values fall on the one-to-one line, then there is a perfect match between theory and observation, and the residuals are normally distributed. The stronger the deviation from the one-to-one line indicating a perfect theoretical match, the more non-normal the residuals are. Below is the residual Q-Q plot for the linear regression on *Naesiotus nux:*
+
+```{r}
+nuxResidualData <-
+  tibble(
+    residuals = residuals(nuxModel),
+    # The response variable is the first column in the model field of nuxModel:
+    y = nuxModel$model[,1],
+    # Add also the fitted values as a separate column (for future convenience):
+    yHat = fitted(nuxModel)
+  )
+
+ggplot(nuxResidualData) +
+  aes(sample = scale(residuals)) +
+  geom_qq_line() +
+  geom_qq(color = "steelblue", alpha = 0.7) +
+  labs(x = "Theoretical Quantiles", y = "Observed Quantiles") +
+  theme_bw()
+```
+
+The Q-Q plot can be *much* more revealing than the histogram when we have limited data. As a rough rule, the histogram will only be able to serve as a quick sanity check unless we have at least around 100 or so observations.
+
+Next, it is very useful to display the residuals against the fitted values. If the points have no trends of increase, decrease, valleys, or humps, and the spread of the points is roughly constant, then they adhere to the assumptions of linear regression. In this case, it would be hard to argue that any trend is due to something else than chance:
+
+```{r}
+ggplot(nuxResidualData) +
+  aes(x = yHat, y = residuals) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_point(color = "steelblue", alpha = 0.7) +
+  labs(x = "Estimated Values", y = "Residuals") +
+  theme_bw()
+```
+
+Finally, there is a diagnostic plot that is a slight variation on the above. The difference is that it works with the absolute values of the residuals. This is done because, since residuals will by definition be more or less symmetrically distributed around zero, one can effectively double the precision of the diagnostic by focusing only on magnitudes. For statistical reasons that do not concern us here, the square roots of these absolute values tend to behave much better, which is why we see the square root being taken along the y-axis:
+
+```{r}
+ggplot(nuxResidualData) +
+  aes(x = yHat, y = sqrt(abs(residuals))) +
+  geom_point(color = "steelblue", alpha = 0.7) +
+  labs(x = "Estimated Values", y = expression(sqrt("|Residuals|"))) +
+  theme_bw()
+```
+
+This plot is good for spotting whether the variance of the residuals depends on the fitted values. To satisfy the requirements of linear regression, there should be no such dependence.^[In technical terms, the variation should be *homoscedastic* (be approximately the same for all values of the predictor) as opposed to *heteroscedastic*. This is the same as saying that the variance of the residuals $\epsilon_i$ should be independent of $i$.]
+
+Combining the plots above, we can write a hand-crafted custom function which takes a linear model object and generates all four plots (see the box below for its source code). We will be relying on this function from here on.
 
 :::{.callout-note}
 Below is the function we will use to generate diagnostic plots. You can copy and save it in a file (say, `diagnostics.R`) in your working directory, and load it via `source("diagnostics.R")` at the top of any script. That way you will not need to type it in every time. What the `source()` function does is simply run the specified R script, which will then put the function in the computer's memory and ready to be used.
+
+The function uses the `patchwork` package to arrange the four plots in a grid. In case you do not yet have it installed, you can get it via `install.packages("patchwork")`.
 
 ```{r}
 #' Custom function that generates diagnostic plots.
 #' @param model A fitted model object of class "lm".
 #' @param alpha Defines the opacity of the points (0-1).
 #' @param bins  Defines the number of bins in the histogram.
-#' @param scaleLocation Logical: should a scale location graph be added?
+diagnosticPlots <- function(model, alpha = 0.7, bins = 10) {
 
-diagnosticPlots <- function(model, alpha=0.7, bins=10, scaleLocation=FALSE) {
-  # First, some error checking, making sure all inputs make sense:
-  if (model |> class() != "lm") stop("model must be an lm object")
-  if (alpha < 0 | alpha > 1) stop("alpha must be between 0 and 1")
-  if (bins <= 0) stop("bins must be a positive number")
-  # Summarize residuals, observed, and fitted values in a tibble:
-  residualData <- 
+  # First, make sure the patchwork and ggplot2 packages are installed
+  if (!requireNamespace("patchwork", quietly = TRUE)) {
+    stop("Package 'patchwork' needed but not installed.")
+  }
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
+    stop("Package 'ggplot2' needed but not installed.")
+  }
+
+  # then, some error checking, making sure all inputs make sense
+  if (model |> class() != "lm") {
+    stop("model must be an lm object")
+  }
+  if (alpha < 0 | alpha > 1) {
+    stop("alpha must be between 0 and 1")
+  }
+  if (bins <= 0) {
+    stop("bins must be a positive number")
+  }
+
+  # Summarize residuals, observed, and fitted values in a tibble
+  residualData <-
     dplyr::tibble(
-      residuals = residuals(model),
+      residuals = stats::residuals(model),
       # The response variable is the first column in the model's model field:
       y = model$model[,1],
-      yHat = fitted(model)
+      yHat = stats::fitted(model)
     )
-  # Generate histogram for assessing normality:
-  p1 <- 
-    ggplot2::ggplot(residualData) + 
-    ggplot2::aes(x = residuals, y = after_stat(density)) +
+
+  # Generate histogram for assessing normality
+  p1 <- ggplot2::ggplot(residualData, ggplot2::aes(x = residuals)) +
     ggplot2::geom_histogram(bins = bins, fill = "steelblue", color = "black") +
-    ggplot2::theme_bw() + 
-    ggplot2::labs(x = "Residuals", y = "Density")
-  # Generate scatter plot for assessing constant variance:
-  p2 <- 
-    ggplot2::ggplot(residualData) + 
-    ggplot2::aes(x = yHat, y = residuals) + 
-    ggplot2::geom_hline(aes(yintercept = 0)) + 
-    ggplot2::geom_point(color = "steelblue", alpha = alpha) + 
-    ggplot2::theme_bw() +
-    ggplot2::labs(x = "Estimated Values", y = "Residuals")
-  # Generate Q-Q plot for assessing normality:
-  p3 <- 
-    ggplot2::ggplot(residualData) + 
-    # Use standardized residuals
-    ggplot2::aes(sample = scale(residuals)) + 
-    ggplot2::geom_qq_line() + 
+    ggplot2::labs(x = "Residuals", y = "Count") +
+    ggplot2::theme_bw()
+
+  # Generate Q-Q plot for assessing normality
+  p2 <- ggplot2::ggplot(residualData,
+                        # Use standardized residuals:
+                        ggplot2::aes(sample = scale(residuals))) +
+    ggplot2::geom_qq_line() +
     ggplot2::geom_qq(color = "steelblue", alpha = alpha) +
-    ggplot2::theme_bw() + 
-    ggplot2::labs(x= "Theoretical Quantiles", y = "Observed Quantiles")
-  # If scaleLocation is TRUE, add a scale-location plot in lower right corner:
-  if (scaleLocation) {
-    p4 <- 
-      ggplot2::ggplot(residualData) + 
-      ggplot2::aes(x = yHat, y = sqrt(abs(residuals))) + 
-      ggplot2::geom_point(color = "steelblue", alpha = alpha) + 
-      ggplot2::theme_bw() +
-      ggplot2::labs(x = "Estimated Values", y = expression(sqrt("|Residuals|")))
-    
-    cowplot::plot_grid(p1, p2, p3, p4, nrow = 2)
-  # Otherwise, generate plot with just three panels:
-  } else {
-    cowplot::plot_grid(p1, p2, p3, nrow = 2)  
-  }
+    ggplot2::theme_bw() +
+    ggplot2::labs(x = "Theoretical Quantiles", y = "Observed Quantiles")
+
+  # Generate scatter plot for assessing constant variance
+  p3 <- ggplot2::ggplot(residualData, ggplot2::aes(x = yHat, y = residuals)) +
+    ggplot2::geom_hline(aes(yintercept = 0)) +
+    ggplot2::geom_point(color = "steelblue", alpha = alpha) +
+    ggplot2::labs(x = "Estimated Values", y = "Residuals") +
+    ggplot2::theme_bw()
+
+  # Generate scale-location plot
+  p4 <- ggplot2::ggplot(residualData,
+                        ggplot2::aes(x = yHat, y = sqrt(abs(residuals)))) +
+    ggplot2::geom_point(color = "steelblue", alpha = alpha) +
+    ggplot2::theme_bw() +
+    ggplot2::labs(x = "Estimated Values", y = expression(sqrt("|Residuals|")))
+
+  # Merge plots
+  patchwork::wrap_plots(p1, p2, p3, p4, ncol = 2)
 }
 ```
 :::
 
-The `diagnosticPlots` function takes the result produced by the `lm` function as input, and produces a set of plots as its output:
+Using this new `diagnosticPlots` function, we can recreate all four plots in one:
 
 ```{r}
 #| fig-height: 6
@@ -219,25 +291,7 @@ snails |>
   diagnosticPlots()
 ```
 
-We see three plots above. In the top left, we see the distribution of the residuals, displayed as a histogram. This can reveal at a glance whether the residuals are (i) centered at zero, and (ii) follow a symmetric, approximately bell-shaped curve (normal distribution).
-
-The bottom left plot serves the same purpose, but through a different kind of visualization. The idea behind this *quantile-quantile plot* (Q-Q plot) is that if the residuals are indeed normally distributed, then we can line them up in increasing order along the x-axis, and for each of them, plot the theoretically expected value (based on normality) along the y-axis. If these observed vs. theoretically predicted values fall on the dashed straight line, then there is a perfect match between theory and observation, and the residuals are normally distributed. The stronger the deviation from the dashed line indicating a perfect theoretical match, the more non-normal the residuals are. The Q-Q plot can be much more useful than the histogram when we have few data points: as a rough rule, the histogram usually only serves as a quick sanity check unless we have at least around 100 or so observations.
-
-The top right plot shows the residuals against the fitted values. If the points have no trends of increase, decrease, valleys, or humps, and the spread of the points is roughly constant, then they adhere to the assumptions of linear regression. In this case, it would be hard to argue that any trend is due to something else than chance.
-
-The bottom right part is empty. It can be filled with yet another plot though, by specifying `scaleLocation = TRUE` when calling `diagnosticPlots`:
-
-```{r}
-#| fig-height: 6
-snails |>
-  filter(species == "nux") |>
-  lm(shape ~ size, data = _) |>
-  diagnosticPlots(scaleLocation = TRUE)
-```
-
-This graph is much the same as the top right one, except it takes the absolute values of the residuals. This is done because, since residuals will by definition be more or less symmetrically distributed around zero, one can effectively double the precision of the diagnostic by focusing only on magnitudes. For statistical reasons that do not concern us here, the square roots of these absolute values tend to behave much better, which is why we see the square root being taken along the y-axis. This plot is good for spotting whether the variance of the residuals depends on the fitted values. To satisfy the requirements of linear regression, there should be no such dependence.^[In technical terms, the variation should be *homoscedastic* (be approximately the same for all values of the predictor) as opposed to *heteroscedastic*. This is the same as saying that the variance of the residuals $\epsilon_i$ should be independent of $i$.] For simplicity, we will not be relying on this plot from now on, but it is there in case it is needed.
-
-How do we interpret the diagnostic plots we obtained above? Let us proceed one by one. The top left histogram does not raise any alarms: it peaks at zero and has an approximately symmetric bell shape. Going beyond this, the bottom left quantile-quantile plot reveals that the residuals follow the theoretically expected normal distribution beautifully, across the full range of its values. The top right plot is as good as it can get: there is a blurb of points scattered around zero, with no systematic increase or decrease. Similarly, the bottom right plot is excellent, revealing that the spread of the residuals does not depend on the fitted values. In short, these diagnostics show that the assumptions behind the linear regression model are nicely fulfilled.
+How do we interpret these diagnostics? Let us proceed one by one. The top left histogram does not raise any alarms: it peaks at zero and has an approximately symmetric bell shape. Going beyond this, the top right quantile-quantile plot reveals that the residuals follow the theoretically expected normal distribution beautifully, across the full range of its values. The bottom left plot is as good as it can get: there is a blurb of points scattered around zero, with no systematic increase or decrease. Similarly, the bottom right plot is excellent, revealing that the spread of the residuals does not depend on the fitted values. In short, these diagnostics show that the assumptions behind the linear regression model are nicely fulfilled.
 
 To give an example of what not-so-good diagnostics might look like, let us repeat the procedure for a different species: *N. galapaganus* instead of *N. nux*. Here are the raw data together with the fitted line:
 
@@ -262,7 +316,7 @@ snails |>
   diagnosticPlots()
 ```
 
-Looking at the top left, we see that the histogram appears to have a local minimum around zero, with two flanking peaks. It therefore does not have a nice bell-shape. The suspicion that the residuals do not follow a normal distribution is further confirmed by the bottom left (Q-Q) plot: as seen, small residuals are consistently overestimated (the theoretical values are larger than the actual ones), and large residuals are underestimated. Finally, the residual plot in the top right suggests that the variance of the residuals is higher for smaller fitted values than for larger ones. Taken together, this means that any results obtained from a linear regression ought to be treated with caution. Possibly, other methods would be needed to understand these data.
+Looking at the top left, we see that the histogram appears to have a local minimum around zero, with two flanking peaks. It therefore does not have a nice bell-shape. The suspicion that the residuals do not follow a normal distribution is further confirmed by the top right (Q-Q) plot: as seen, small residuals are consistently overestimated (the theoretical values are larger than the actual ones), and large residuals are underestimated. The residual plot in the bottom left suggests that the variance of the residuals is higher for smaller fitted values than for larger ones---and this is reinforced by the scale-location plot in the bottom right. Taken together, this means that any results obtained from a linear regression ought to be treated with caution. Possibly, other methods would be needed to understand these data.
 
 
 ## More on diagnostics: Anscombe's quartet {#sec-anscombe}
@@ -317,7 +371,7 @@ lm(y ~ x, data = filter(ans_long, set == "2")) |>
   diagnosticPlots(bins = 5)
 ```
 
-Blindly reading off the p-values without considering the diagnostic plots might lead one to take them seriously. This would be wrong however, as the assumptions of the linear regression are clearly not fulfilled. The top right diagnostic shows that the residuals are not independent, and certainly not homoscedastic. The left two ones additionally show that the residuals are not even normally distributed.
+Blindly reading off the p-values without considering the diagnostic plots might lead one to take them seriously. This would be wrong however, as the assumptions of the linear regression are clearly not fulfilled. The bottom plots show that the residuals are not independent, and certainly not homoscedastic. The top two ones additionally show that the residuals are not even normally distributed.
 
 In set 3, the trends are driven too much by a single outlier:
 
@@ -329,7 +383,7 @@ lm(y ~ x, data = filter(ans_long, set == "3")) |>
   diagnosticPlots(bins = 5)
 ```
 
-As before, the top right diagnostic plot shows that independence of the residuals is violated. Finally, in set 4, the whole regression is based on a single point whose predictor `x` is different from that of the rest:
+As before, the bottom two diagnostic plots show that the residuals are not at all independent. Finally, in set 4, the whole regression is based on a single point whose predictor `x` is different from that of the rest:
 
 ```{r}
 #| warning: false
