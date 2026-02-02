@@ -159,7 +159,7 @@ residuals(nuxModel) |>
 
 The `residuals` function extracts the residuals from a model object created by `lm`. It returns them as a vector of values---that is why we then feed the result to `as_tibble`, which converts this vector into a tibble with a single column called `value`.
 
-There is also a very different way of visualizing essentially the same information. The idea behind a *quantile-quantile plot* (Q-Q plot) is that if the residuals are indeed normally distributed, then we can line them up in increasing order along the x-axis, and for each of them, plot the theoretically expected value (based on normality) along the y-axis. If the observed vs. the theoretically predicted values fall on the one-to-one line, then there is a perfect match between theory and observation, and the residuals are normally distributed. The stronger the deviation from the one-to-one line indicating a perfect theoretical match, the more non-normal the residuals are. Below is the residual Q-Q plot for the linear regression on *Naesiotus nux:*
+There is also a very different way of visualizing essentially the same information. The idea behind a *quantile-quantile plot* (Q-Q plot) is that if the residuals are indeed normally distributed, then we can line them up in increasing order along the x-axis, and for each of them, plot the theoretically expected value (based on normality) along the y-axis. If the observed vs. the theoretically predicted values fall on the line matching their values, then there is a perfect correspondence between theory and observation, and the residuals are normally distributed. The stronger the deviation from the line, the more non-normal the residuals are. Below is the residual Q-Q plot for the linear regression on *Naesiotus nux:*
 
 ```{r}
 nuxResidualData <-
@@ -226,7 +226,7 @@ diagnosticPlots <- function(model, alpha = 0.7, bins = 10) {
     stop("Package 'ggplot2' needed but not installed.")
   }
 
-  # then, some error checking, making sure all inputs make sense
+  # Then some error checking, making sure all inputs make sense
   if (model |> class() != "lm") {
     stop("model must be an lm object")
   }

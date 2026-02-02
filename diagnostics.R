@@ -12,7 +12,7 @@ diagnosticPlots <- function(model, alpha = 0.7, bins = 10) {
     stop("Package 'ggplot2' needed but not installed.")
   }
 
-  # then, some error checking, making sure all inputs make sense
+  # Then some error checking, making sure all inputs make sense
   if (model |> class() != "lm") {
     stop("model must be an lm object")
   }
